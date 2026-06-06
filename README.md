@@ -10,7 +10,7 @@
   * Gale Kanegae Penha 
 
 ---
-[Link to our Milestone 1](https://github.students.cs.ubc.ca/CPSC455-2026S/team07/blob/6da382147949de1533825af396c92e8e898ec2f9/doc/CPSC-455-Milestone%201.pdf)
+
 ## Project Description
  **Smart Apartments** provides comprehensive apartment building and facilities management functions. The application delivers core operational capabilities across a single unified dashboard:
 
@@ -29,3 +29,5 @@ The platform is built intentionally for residents and staff of apartment buildin
 ---
 
 ## Milestone 1
+
+[Link to our Milestone 1](https://github.students.cs.ubc.ca/CPSC455-2026S/team07/blob/6da382147949de1533825af396c92e8e898ec2f9/doc/CPSC-455-Milestone%201.pdf)
