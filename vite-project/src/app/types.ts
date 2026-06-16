@@ -1,0 +1,1 @@
+export type UserType = "RESIDENT" | "BUILDING_MANAGER";
