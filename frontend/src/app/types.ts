@@ -1,0 +1,1 @@
+export type UserType = "UNAUTHENTICATED" | "RESIDENT" | "BUILDING_MANAGER";
