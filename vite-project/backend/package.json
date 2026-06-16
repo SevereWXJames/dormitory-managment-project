@@ -1,0 +1,12 @@
+{
+  "name": "smartapt-backend",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "tsx": "^4.18.0"
+  }
+}
