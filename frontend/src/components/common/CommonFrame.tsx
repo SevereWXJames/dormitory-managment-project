@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { UserType } from "../../app/types";
+import type { CommonFrameType } from "../../app/types";
 import { AppBar, Avatar, Button, Divider, Drawer, List } from "@mui/material";
 import { NavBarButton } from "./NavBarButton";
 import logo from "../../assets/common/logo.svg";
 
-type CommonFrameProps = {userType: UserType};
+type CommonFrameProps = {commonFrameType: CommonFrameType};
 
 /**
  * React component for the “common frame”, consisting of the page header and
@@ -13,8 +13,8 @@ type CommonFrameProps = {userType: UserType};
  * @returns JSX for the “common frame”.
  */
 export function CommonFrame(props: CommonFrameProps) {
-	const headerUserTypeMessage = (props.userType == "BUILDING_MANAGER") ? "Building manager view" : "";
-	const avatar = (props.userType == "UNAUTHENTICATED") ? <Button id="log-in-button" variant="contained">Log in</Button> : <Avatar id="header-avatar"></Avatar>;
+	const headerUserTypeMessage = (props.commonFrameType == "BUILDING_MANAGER") ? "Building manager view" : "";
+	const avatar = (props.commonFrameType == "UNAUTHENTICATED") ? <Button id="log-in-button" variant="contained">Log in</Button> : <Avatar id="header-avatar"></Avatar>;
 
 	const [navBarOpen, setNavBarOpen] = useState(false);
 
@@ -23,7 +23,7 @@ export function CommonFrame(props: CommonFrameProps) {
 	}
 
 	var buttons = <></>;
-	switch (props.userType) {
+	switch (props.commonFrameType) {
 		case "RESIDENT":
 			buttons = <>
 				<NavBarButton id="dashboard-nav-bar-button" label="Dashboard" href="#"/>
@@ -59,7 +59,7 @@ export function CommonFrame(props: CommonFrameProps) {
 
 	return (
 		<>
-			<AppBar className="header-appbar" position="sticky" sx={{ display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center" }}>
+			<AppBar className="header-appbar" position="sticky" sx={{ display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center", padding: "4px" }}>
 				<Button id="open-nav-bar-button" variant="contained" onClick={toggleNavBar(true)}>Menu</Button>
 				<img id="header-logo" className="header-logo" src={logo} style={{ height: 48 }}/>
 				<div id="header-user-type-message" className="header-user-type" style={{ flex: 1, textAlign: "left" }}>{headerUserTypeMessage}</div>
