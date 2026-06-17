@@ -1,3 +1,4 @@
+
 export function LogoutPage() {
     return (
         <>

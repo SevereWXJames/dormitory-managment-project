@@ -10,7 +10,7 @@ type CommonFrameProps = {commonFrameType: CommonFrameType};
 /**
  * React component for the “common frame”, consisting of the page header and
  * navigation sidebar common to all pages.
- * 
+ *
  * @returns JSX for the “common frame”.
  */
 export function CommonFrame(props: CommonFrameProps) {
@@ -27,34 +27,34 @@ export function CommonFrame(props: CommonFrameProps) {
 	switch (props.commonFrameType) {
 		case "RESIDENT":
 			buttons = <>
-				<NavBarButton id="dashboard-nav-bar-button" label="Dashboard" href="#"/>
-				<NavBarButton id="facilities-nav-bar-button" label="Facilities" href="#"/>
-				<NavBarButton id="maintenance-nav-bar-button" label="Maintenance" href="#"/>
-				<NavBarButton id="notices-nav-bar-button" label="Notices" href="#"/>
-				<NavBarButton id="credits-nav-bar-button" label="Credits" href="#"/>
+				<NavBarButton id="dashboard-nav-bar-button" label="Dashboard" to="/dashboard" />
+				<NavBarButton id="facilities-nav-bar-button" label="Facilities" to="/facilities"/>
+				<NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="/maintenance"/>
+				<NavBarButton id="notices-nav-bar-button" label="Notices" to="/notices"/>
+				<NavBarButton id="credits-nav-bar-button" label="Credits" to="/credits"/>
 				<Divider />
-				<NavBarButton id="settings-nav-bar-button" label="Settings" href="#"/>
-				<NavBarButton id="help-nav-bar-button" label="Help" href="#"/>
-				<NavBarButton id="logout-nav-bar-button" label="Logout" href="#"/>
+				<NavBarButton id="settings-nav-bar-button" label="Settings" to="/settings"/>
+				<NavBarButton id="help-nav-bar-button" label="Help" to="/help"/>
+				<NavBarButton id="logout-nav-bar-button" label="Logout" to="#"/>
 			</>;
 			break;
 		case "BUILDING_MANAGER":
 			buttons = <>
-				<NavBarButton id="dashboard-nav-bar-button" label="Dashboard" href="#"/>
-				<NavBarButton id="facilities-nav-bar-button" label="Facilities" href="#"/>
-				<NavBarButton id="maintenance-nav-bar-button" label="Maintenance" href="#"/>
-				<NavBarButton id="notices-nav-bar-button" label="Notices" href="#"/>
-				<NavBarButton id="residents-nav-bar-button" label="Residents" href="#"/>
+				<NavBarButton id="dashboard-nav-bar-button" label="Dashboard" to="#"/>
+				<NavBarButton id="facilities-nav-bar-button" label="Facilities" to="#"/>
+				<NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="#"/>
+				<NavBarButton id="notices-nav-bar-button" label="Notices" to="#"/>
+				<NavBarButton id="residents-nav-bar-button" label="Residents" to="#"/>
 				<Divider />
-				<NavBarButton id="settings-nav-bar-button" label="Settings" href="#"/>
-				<NavBarButton id="help-nav-bar-button" label="Help" href="#"/>
-				<NavBarButton id="logout-nav-bar-button" label="Logout" href="#"/>
+				<NavBarButton id="settings-nav-bar-button" label="Settings" to="#"/>
+				<NavBarButton id="help-nav-bar-button" label="Help" to="#"/>
+				<NavBarButton id="logout-nav-bar-button" label="Logout" to="#"/>
 			</>;
 			break;
 		default:
 			buttons = <>
-				<NavBarButton id="settings-nav-bar-button" label="Settings" href="#"/>
-				<NavBarButton id="help-nav-bar-button" label="Help" href="#"/>
+				<NavBarButton id="settings-nav-bar-button" label="Settings" to="#"/>
+				<NavBarButton id="help-nav-bar-button" label="Help" to="#"/>
 			</>;
 	}
 

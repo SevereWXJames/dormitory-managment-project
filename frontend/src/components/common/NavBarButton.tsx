@@ -1,6 +1,7 @@
 import { ListItemButton, ListItemText } from "@mui/material";
+import { Link } from "react-router-dom";
 
-type NavBarButtonProps = {id: string, label: string, href: string};
+type NavBarButtonProps = {id: string, label: string, to: string};
 
 /**
  * Navigation sidebar button React component.
@@ -12,7 +13,7 @@ type NavBarButtonProps = {id: string, label: string, href: string};
  */
 export function NavBarButton(props: NavBarButtonProps) {
 	return (
-		<ListItemButton id={props.id} className="nav-bar-button" href={props.href}>
+		<ListItemButton component={Link} id={props.id} className="nav-bar-button" to={props.to}>
 			<ListItemText primary={props.label}/>
 		</ListItemButton>
 	);
