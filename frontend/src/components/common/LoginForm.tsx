@@ -1,5 +1,7 @@
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { logIn } from "../../context/authenticationSlice";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -12,9 +14,13 @@ import { useState } from "react";
  * @returns JSX for the login form
  */
 export function LoginForm() {
-	const emailFieldID = "email-field";
+const emailFieldID = "email-field";
 	const passwordFieldID = "password-field";
+	
+	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -27,11 +33,16 @@ export function LoginForm() {
 	};
 
 	/**
-	 * TODO. Intended to handle the log in process, sending login information 
+	 * TODO. For M2, redirects to the building manager view if the
+	 * provided e-mail has the word “admin” in it, and to the resident view
+	 * otherwise.
+	 * 
+	 * Intended to handle the log in process, sending login information 
 	 * over for authentication.
 	 */
 	const handleLogIn = () => {
-
+		logIn({email, password});
+		navigate("/dashboard");
 	}
 
 	return (
@@ -42,6 +53,7 @@ export function LoginForm() {
 					id={`${emailFieldID}-input`}
 					type='text'
 					label="E-mail"
+					onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
 				/>
 			</FormControl>
 			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
@@ -58,6 +70,7 @@ export function LoginForm() {
 						onClick={handleClickShowPassword}
 						onMouseDown={handleMouseDownPassword}
 						onMouseUp={handleMouseUpPassword}
+						onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
 						edge="end"
 						>
 						{showPassword ? <span>Hide</span>: <span>Show</span>}
