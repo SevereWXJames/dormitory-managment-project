@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, Link as RouterLink } from 'react-router-dom';
 import type { CommonFrameType } from "../../app/types";
 import { AppBar, Avatar, Button, Divider, Drawer, List } from "@mui/material";
 import { NavBarButton } from "./NavBarButton";
@@ -14,7 +15,7 @@ type CommonFrameProps = {commonFrameType: CommonFrameType};
  */
 export function CommonFrame(props: CommonFrameProps) {
 	const headerUserTypeMessage = (props.commonFrameType == "BUILDING_MANAGER") ? "Building manager view" : "";
-	const avatar = (props.commonFrameType == "UNAUTHENTICATED") ? <Button id="log-in-button" variant="contained">Log in</Button> : <Avatar id="header-avatar"></Avatar>;
+	const avatar = (props.commonFrameType == "UNAUTHENTICATED") ? <Button id="log-in-button" variant="contained" component={RouterLink} to="/login">Log in</Button> : <Avatar id="header-avatar"></Avatar>;
 
 	const [navBarOpen, setNavBarOpen] = useState(false);
 
@@ -61,7 +62,7 @@ export function CommonFrame(props: CommonFrameProps) {
 		<>
 			<AppBar className="header-appbar" position="sticky" sx={{ display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center", padding: "4px" }}>
 				<Button id="open-nav-bar-button" variant="contained" onClick={toggleNavBar(true)}>Menu</Button>
-				<img id="header-logo" className="header-logo" src={logo} style={{ height: 48 }}/>
+				<Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{ height: 48 }}/></Link>
 				<div id="header-user-type-message" className="header-user-type" style={{ flex: 1, textAlign: "left" }}>{headerUserTypeMessage}</div>
 				{avatar}
 			</AppBar>
