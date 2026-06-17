@@ -1,8 +1,8 @@
-import type { UserType } from '../../../../app/types';
+import type { CommonFrameType } from '../../../../app/types';
 import { CommonFrame } from '../../../../components/common/CommonFrame';
 export interface DashboardProps {
     name: string,
-    userType: UserType,
+    userType: CommonFrameType,
     credit_balance: number,
     recent_activity: object,
     upcoming_bookings: object,

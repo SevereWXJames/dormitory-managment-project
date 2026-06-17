@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { UserType } from "../../app/types";
+import type { CommonFrameType } from "../../app/types";
 import { AppBar, Avatar, Button, Divider, Drawer, List } from "@mui/material";
 import { NavBarButton } from "./NavBarButton";
 import logo from "../../assets/common/logo.svg";
 
-type CommonFrameProps = {userType: UserType};
+type CommonFrameProps = {userType: CommonFrameType};
 
 /**
  * React component for the “common frame”, consisting of the page header and

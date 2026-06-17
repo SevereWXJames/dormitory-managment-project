@@ -1,3 +1,10 @@
+export interface CreditsPageProps{
+    credit_balance : number,
+    transactions: object
+}
+
+
+
 export function CreditsPage(){
     return (<>
     <div className="creditsPage">
