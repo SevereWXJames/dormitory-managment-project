@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 export type LogoutDialogProps = {
@@ -21,8 +20,6 @@ export function LogoutDialog({open, onClose} : LogoutDialogProps) {
                 <DialogTitle id="alert-dialog-title" sx={{ color: "black" }}>
                     {"Are you sure you want to log out?"}
                 </DialogTitle>
-                <DialogContent>
-                </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose} autoFocus>
                         Cancel
