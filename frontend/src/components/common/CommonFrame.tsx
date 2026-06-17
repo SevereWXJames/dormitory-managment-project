@@ -22,7 +22,7 @@ export function CommonFrame(props: CommonFrameProps) {
 		setNavBarOpen(openValue);
 	}
 
-	var buttons = <></>;
+	let buttons;
 	switch (props.userType) {
 		case "RESIDENT":
 			buttons = <>
