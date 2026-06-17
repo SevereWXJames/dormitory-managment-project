@@ -1,1 +1,1 @@
-export type UserType = "UNAUTHENTICATED" | "RESIDENT" | "BUILDING_MANAGER";
+export type CommonFrameType = "UNAUTHENTICATED" | "LOGIN" | "RESIDENT" | "BUILDING_MANAGER";
