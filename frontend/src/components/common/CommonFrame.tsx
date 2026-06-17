@@ -1,16 +1,27 @@
-import { Divider, Drawer, List } from "@mui/material";
+import { useState } from "react";
 import type { UserType } from "../../app/types";
+import { AppBar, Avatar, Button, Divider, Drawer, List } from "@mui/material";
 import { NavBarButton } from "./NavBarButton";
+import logo from "../../assets/common/logo.svg";
 
-type NavBarProps = {userType: UserType};
+type CommonFrameProps = {userType: UserType};
 
 /**
- * Navigation sidebar React component.
+ * React component for the “common frame”, consisting of the page header and
+ * navigation sidebar common to all pages.
  * 
- * @param props Properties: buttons, a series of NavBarButtons.
- * @returns JSX for the navigation sidebar.
+ * @returns JSX for the “common frame”.
  */
-export function NavBar(props: NavBarProps) {
+export function CommonFrame(props: CommonFrameProps) {
+	const headerUserTypeMessage = (props.userType == "BUILDING_MANAGER") ? "Building manager view" : "";
+	const avatar = (props.userType == "UNAUTHENTICATED") ? <Button id="log-in-button" variant="contained">Log in</Button> : <Avatar id="header-avatar"></Avatar>;
+
+	const [navBarOpen, setNavBarOpen] = useState(false);
+
+	const toggleNavBar = (openValue: boolean) => () => {
+		setNavBarOpen(openValue);
+	}
+
 	var buttons = <></>;
 	switch (props.userType) {
 		case "RESIDENT":
@@ -47,10 +58,18 @@ export function NavBar(props: NavBarProps) {
 	}
 
 	return (
-		<Drawer id="nav-bar-drawer">
-			<List id="nav-bar-list">
-				{buttons}
-			</List>
-		</Drawer>
+		<>
+			<AppBar className="header-appbar" position="sticky" sx={{ display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center" }}>
+				<Button id="open-nav-bar-button" variant="contained" onClick={toggleNavBar(true)}>Menu</Button>
+				<img id="header-logo" className="header-logo" src={logo} style={{ height: 48 }}/>
+				<div id="header-user-type-message" className="header-user-type" style={{ flex: 1, textAlign: "left" }}>{headerUserTypeMessage}</div>
+				{avatar}
+			</AppBar>
+			<Drawer id="nav-bar-drawer" open={navBarOpen} onClose={toggleNavBar(false)}>
+				<List id="nav-bar-list">
+					{buttons}
+				</List>
+			</Drawer>
+		</>
 	);
 }

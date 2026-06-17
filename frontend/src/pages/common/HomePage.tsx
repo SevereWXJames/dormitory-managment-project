@@ -1,5 +1,4 @@
-import { Header } from "../../components/common/Header";
-import { NavBar } from "../../components/common/NavBar";
+import { CommonFrame } from "../../components/common/CommonFrame";
 
 /**
  * Home page React component, for unauthenticated users.
@@ -9,8 +8,7 @@ import { NavBar } from "../../components/common/NavBar";
 export function HomePage() {
 	return (
 		<>
-			<Header userType="UNAUTHENTICATED"/>
-			<NavBar userType="UNAUTHENTICATED"/>
+			<CommonFrame userType="RESIDENT"></CommonFrame>
 			<main>
 				<h1>SmartAPT</h1>
 				<p>Log in to access your building's portal.</p>
