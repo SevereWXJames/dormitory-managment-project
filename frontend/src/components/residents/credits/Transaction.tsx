@@ -13,10 +13,10 @@ export function Transaction(props: TransactionCardProps) {
 	const id = "transaction-" + useId();
 
 	return (
-		<Box id={id}>
-			<div className="transaction-card-card-number">{props.cardNumber}</div>
-			<div className="transaction-card-date">{props.date}</div>
-			<div className="transaction-card-amount">{props.amount}</div>
+		<Box id={id} sx={{textAlign: "left"}}>
+			<div className="transaction-card-card-number">Card: {props.cardNumber}</div>
+			<div className="transaction-card-date">Date: {props.date}</div>
+			<div className="transaction-card-amount">Amount: ${Number(props.amount).toFixed(2)}</div>
 		</Box>
 	);
 }
