@@ -16,6 +16,7 @@ import {AdminNoticesPage} from "./pages/common/buildingManager/AdminNoticesPage.
 import {AdminResidentsPage} from "./pages/common/buildingManager/AdminResidentsPage.tsx";
 import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPage.tsx";
 import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
+import {AdminAccessCodesPage} from "./pages/common/buildingManager/AdminAccessCodesPage.tsx";
 
 /**
  * App React component, containing routes to other pages.
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/admin/maintenance" element={<AdminMaintenancePage/>}/>
                 <Route path="/admin/notices" element={<AdminNoticesPage/>}/>
                 <Route path="/admin/residents" element={<AdminResidentsPage/>}/>
+                <Route path="/admin/access-codes" element={<AdminAccessCodesPage/>}/>
                 <Route path="/admin/settings" element={<AdminSettingsPage/>}/>
                 <Route path="/admin/help" element={<AdminHelpPage/>}/>
             </Routes>
