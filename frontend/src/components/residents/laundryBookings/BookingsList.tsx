@@ -11,6 +11,7 @@ export type bookingData = {
     start_time: string,
     end_time: string,
     date: string,
+    machine_num: number,
 }
 
 export type BookingsTableProps = {
@@ -26,20 +27,24 @@ export default function BookingsTable({rows} : BookingsTableProps) {
                         <TableCell/>
                         <TableCell align="right">Event Title</TableCell>
                         <TableCell align="right">Date</TableCell>
+                        <TableCell align="right">Machine</TableCell>
                         <TableCell align="right">Start Time</TableCell>
                         <TableCell align="right">End Time</TableCell>
+
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
                         <TableRow
-                            key={row.date}
+                            key={row.event_title}
                             sx={{'&:last-child td, &:last-child th': {border: 0}}}
                         >
                             <TableCell component="th" scope="row">
                                 {row.date}
                             </TableCell>
                             <TableCell align="right">{row.event_title}</TableCell>
+                            <TableCell align="right">{row.date}</TableCell>
+                            <TableCell align="right">{row.machine_num}</TableCell>
                             <TableCell align="right">{row.start_time}</TableCell>
                             <TableCell align="right">{row.end_time}</TableCell>
                         </TableRow>

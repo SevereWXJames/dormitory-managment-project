@@ -16,22 +16,26 @@ export type DropDownMenuProps = {
 }
 
 export default function MachineMenu() {
-    const [age, setAge] = React.useState('');
+    const [machine, setMachine] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
+        setMachine(event.target.value as string);
     };
 
     return (
         <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                <InputLabel id="demo-simple-select-label"
+                            sx={{ color: 'white' }}>Select Machine</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={age}
+                    value={machine}
                     label="Machine Options"
                     onChange={handleChange}
+                    sx={{
+                        color: 'white',
+                    }}
                 >
                     <MenuItem value={"machine_1"}>Machine 1</MenuItem>
                     <MenuItem value={"machine_2"}>Machine 2</MenuItem>
