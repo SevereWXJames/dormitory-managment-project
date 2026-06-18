@@ -182,3 +182,41 @@
     border-right-color: var(--border);
   }
 }
+
+/*Added css styling*/
+.settingsPage{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.settingsPage .content{
+    flex-direction: column;
+    position: relative;
+    left: 100px;
+    gap: 30px;
+
+}
+
+.settingsPage .profile-settings{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin: 30px;
+    text-align: left;
+}
+
+.settingsPage .notifications-settings {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin: 30px;
+    text-align: left;
+}
+
+.settingsPage .security-settings{
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+    margin: 30px;
+    text-align: left;
+}
