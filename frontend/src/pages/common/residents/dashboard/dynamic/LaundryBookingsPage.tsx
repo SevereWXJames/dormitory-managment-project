@@ -5,6 +5,7 @@ import BasicTimePicker, {
 } from "../../../../../components/residents/laundryBookings/BasicTimePicker.tsx";
 import MachineMenu from "../../../../../components/residents/laundryBookings/MachineMenu.tsx";
 import BookingsTable, {type bookingData} from "../../../../../components/residents/laundryBookings/BookingsList.tsx";
+import {MachineList} from "../../../../../components/residents/laundryBookings/MachineList.tsx";
 
 export type Bookings = {
     date: Date,
@@ -45,6 +46,7 @@ export function BookingForm() {
                     }}
                 />
             </Box>
+            <LaundryMachinesMenu/>
             <button>Submit</button>
         </div>
     )
@@ -77,7 +79,16 @@ export function PastBookingsList() {
 
 }
 
-export function LaundryMachinesList() {
+export function LaundryMachinesList(){
+    const machines : string[] = ["Machine 1", "Machine 2", "Machine 3"]
+    return(
+        <div>
+            <MachineList machine_ids={machines}/>
+        </div>
+    )
+}
+
+export function LaundryMachinesMenu() {
     return (
         <div>
             <MachineMenu/>
