@@ -189,19 +189,25 @@
     justify-content: flex-start;
 }
 
-.settingsPage .content{
+.settingsPage .contents{
+    display: flex;
     flex-direction: column;
     position: relative;
     left: 100px;
-    gap: 30px;
 
 }
 
-.settingsPage .profile-settings{
+.settingsPage .contents > * {
+    padding: 30px;
+    border: 1px solid deepskyblue;
+    border-radius: 30px;
+    margin: 15px;
+}
+
+.settingsPage .profile-settings {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-    margin: 30px;
     text-align: left;
 }
 
@@ -209,7 +215,6 @@
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-    margin: 30px;
     text-align: left;
 }
 
@@ -217,6 +222,5 @@
     display: flex;
     align-self: flex-start;
     flex-direction: column;
-    margin: 30px;
     text-align: left;
 }
