@@ -9,6 +9,13 @@ import {NoticesPage} from "./pages/common/residents/dashboard/dynamic/NoticesPag
 import {CreditsPage} from "./pages/common/residents/dashboard/dynamic/CreditsPage.tsx";
 import {SettingsPage} from "./pages/common/residents/dashboard/static/SettingsPage.tsx";
 import {HelpPage} from "./pages/common/residents/dashboard/static/HelpPage.tsx";
+import {AdminDashboardPage} from "./pages/common/buildingManager/AdminDashboardPage.tsx";
+import {AdminFacilitiesPage} from "./pages/common/buildingManager/AdminFacilitiesPage.tsx";
+import {AdminMaintenancePage} from "./pages/common/buildingManager/AdminMaintenancePage.tsx";
+import {AdminNoticesPage} from "./pages/common/buildingManager/AdminNoticesPage.tsx";
+import {AdminResidentsPage} from "./pages/common/buildingManager/AdminResidentsPage.tsx";
+import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPage.tsx";
+import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
 
 /**
  * App React component, containing routes to other pages.
@@ -20,17 +27,25 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomePage/>}/>
-                //Resident-only:
+                {/* Resident-only: */}
                 <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/dashboard/" element={<DashboardPage/>}/>
+                <Route path="/dashboard" element={<DashboardPage/>}/>
                 <Route path="/facilities" element={<LaundryBookingsPage/>}/>
                 <Route path="/maintenance" element={<MaintenanceRequestsPage/>}/>
                 <Route path="/help" element={<HelpPage/>}/>
                 <Route path="/notices" element={<NoticesPage/>}/>
                 <Route path="/credits" element={<CreditsPage/>}/>
                 <Route path="/settings" element={<SettingsPage/>}/>
-                <Route path="/login" element={<LoginPage/>}/>
 
+                {/* Building manager routes */}
+                <Route path="/admin" element={<AdminDashboardPage/>}/>
+                <Route path="/admin/dashboard" element={<AdminDashboardPage/>}/>
+                <Route path="/admin/facilities" element={<AdminFacilitiesPage/>}/>
+                <Route path="/admin/maintenance" element={<AdminMaintenancePage/>}/>
+                <Route path="/admin/notices" element={<AdminNoticesPage/>}/>
+                <Route path="/admin/residents" element={<AdminResidentsPage/>}/>
+                <Route path="/admin/settings" element={<AdminSettingsPage/>}/>
+                <Route path="/admin/help" element={<AdminHelpPage/>}/>
             </Routes>
         </BrowserRouter>
     );
