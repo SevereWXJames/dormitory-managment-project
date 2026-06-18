@@ -1,7 +1,14 @@
-import {BaseCalendar} from "./BaseCalendar.tsx";
+import {BaseCalendar, type CalendarEvent} from "./BaseCalendar.tsx";
 
-export function BaseSchedule(){
-    const events = [
+export type BaseScheduleProps = {
+    events: CalendarEvent[]
+}
+
+export function BaseSchedule({events} : BaseScheduleProps){
+    /*
+    Example of events:
+
+      const events = [
         {
             id: '1',
             title: 'Morning Meeting',
@@ -17,6 +24,6 @@ export function BaseSchedule(){
             color: '#2ecc71'
         }
     ];
-
+    * */
     return <BaseCalendar events={events} />;
 }

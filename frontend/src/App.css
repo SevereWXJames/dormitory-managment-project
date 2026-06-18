@@ -183,6 +183,9 @@
   }
 }
 
+/*CALENDAR*/
+.fc .fc-toolbar-title { color: black; } /* time labels */
+
 /*LAUNDRY_BOOKINGs_PAGE*/
 
 .laundryBookingsPage{

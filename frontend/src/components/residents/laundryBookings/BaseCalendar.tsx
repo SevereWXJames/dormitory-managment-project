@@ -16,19 +16,22 @@ export type BaseCalendarProps = {
 
 export function BaseCalendar({ events }: BaseCalendarProps) {
     return (
-        <FullCalendar
-            plugins={[timeGridPlugin, dayGridPlugin]}
-            initialView="timeGridWeek"
-            headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }}
-            slotMinTime="07:00:00"
-            slotMaxTime="18:00:00"
-            allDaySlot={false}
-            events={events}
-            height="500px"
-        />
+        <div className={"fullCalendar"} style={{color: 'black'}}>
+            <FullCalendar
+                plugins={[timeGridPlugin, dayGridPlugin]}
+                initialView="timeGridWeek"
+                headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }}
+                slotMinTime="07:00:00"
+                slotMaxTime="18:00:00"
+                allDaySlot={false}
+                events={events}
+                height="500px"
+            />
+        </div>
+
     );
 }

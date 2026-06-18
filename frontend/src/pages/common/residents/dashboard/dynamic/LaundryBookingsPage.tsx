@@ -6,7 +6,6 @@ import BasicTimePicker, {
 import MachineMenu from "../../../../../components/residents/laundryBookings/MachineMenu.tsx";
 import BookingsTable, {type bookingData} from "../../../../../components/residents/laundryBookings/BookingsList.tsx";
 import {MachineList} from "../../../../../components/residents/laundryBookings/MachineList.tsx";
-import {BaseSchedule} from "../../../../../components/residents/laundryBookings/BaseSchedule.tsx";
 
 export type Bookings = {
     date: Date,
@@ -103,9 +102,6 @@ export function LaundryBookingsPage() {
             <CommonFrame commonFrameType={"RESIDENT"}/>
             <div className={"laundryBookingsPage"}>
                 <div className={"contents"}>
-                    <div className={"schedule"}>
-                        <BaseSchedule/>
-                    </div>
                     <div className={"machineList"}>
                         <strong>Laundry Machines</strong>
                         <LaundryMachinesList/>
