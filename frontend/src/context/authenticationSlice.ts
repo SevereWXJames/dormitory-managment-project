@@ -1,12 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { AuthenticationState } from '../app/types';
 
-const initialState: {
-	authenticationState: AuthenticationState
-} = {
-	authenticationState: "UNAUTHENTICATED"
+type AuthenticationSliceState = {
+	authenticationState: AuthenticationState,
+	email: string
 };
 
+const initialState: AuthenticationSliceState = {
+	authenticationState: "UNAUTHENTICATED",
+	email: ""
+};
+
+/**
+ * Redux slice for the authentication state.
+ * This should be reviewed when authentication is implemented.
+ */
 export const authenticationSlice = createSlice({
 	name: 'authentication',
 	initialState,
@@ -21,6 +29,8 @@ export const authenticationSlice = createSlice({
 			else {
 				state.authenticationState = "RESIDENT";
 			}
+
+			state.email = email;
 		},
 		logOut: (state) => {
 			state.authenticationState = "UNAUTHENTICATED";
@@ -29,5 +39,13 @@ export const authenticationSlice = createSlice({
 });
 
 export const { logIn, logOut } = authenticationSlice.actions;
+
+export const getEmail = (state: AuthenticationSliceState) => {
+	return state.email;
+}
+
+export const getAuthenticationState = (state: AuthenticationSliceState) => {
+	return state.authenticationState;
+}
 
 export default authenticationSlice.reducer;
