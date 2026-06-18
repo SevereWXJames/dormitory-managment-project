@@ -1,0 +1,15 @@
+export class ReservationSlot {
+    public _id: string;
+    public serviceId: string;
+    public booked: boolean;
+    public bookedBy: string | null;
+    public time: number;
+
+    constructor({_id, serviceId, booked, bookedBy, time}: {_id: string, serviceId: string, booked: boolean, bookedBy: string | null, time: number}) {
+        this._id = _id;
+        this.serviceId = serviceId;
+        this.booked = booked;
+        this.bookedBy = bookedBy;
+        this.time = time;
+    }
+}
