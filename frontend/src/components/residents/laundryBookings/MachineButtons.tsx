@@ -4,6 +4,8 @@ import {BaseCalendar} from "./BaseCalendar.tsx";
 import {ReservationForm} from "./reservationForm/ReservationForm.tsx";
 import type {Booking} from "../../../types/residents/types.tsx";
 import {useState} from "react";
+import {useSelector} from "react-redux";
+import {getBookingsByMachine} from "../../../context/residents/bookingsSlice.ts";
 
 export type MachineOptionsProps = { machine_ids: string[] }
 
