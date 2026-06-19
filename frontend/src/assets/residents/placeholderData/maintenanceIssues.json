@@ -1,0 +1,66 @@
+[
+	{
+		"category_id": "structural",
+		"category_name": "Structural",
+		"issues": [
+			{
+				"id": "damaged_paint",
+				"name": "Damaged paint or wallpaper"
+			},
+			{
+				"id": "cracks",
+				"name": "Cracks on walls, floors or ceilings"
+			},
+			{
+				"id": "infiltration",
+				"name": "Infiltration"
+			}
+		]
+	},
+	{
+		"category_id": "hvac",
+		"category_name": "HVAC",
+		"issues": [
+			{
+				"id": "air_conditioner_broken",
+				"name": "Air conditioner not cooling"
+			},
+			{
+				"id": "heater_broken",
+				"name": "Heater not heating"
+			},
+			{
+				"id": "thermostat_broken",
+				"name": "Thermostat broken"
+			}
+		]
+	},
+	{
+		"category_id": "water",
+		"category_name": "Water",
+		"issues": [
+			{
+				"id": "no_water",
+				"name": "No water"
+			},
+			{
+				"id": "clogged_drain",
+				"name": "Clogged drain"
+			}
+		]
+	},
+	{
+		"category_id": "electricity",
+		"category_name": "Electricity",
+		"issues": [
+			{
+				"id": "no_electricity",
+				"name": "No electricity"
+			},
+			{
+				"id": "broken_outlet",
+				"name": "Broken outlet"
+			}
+		]
+	}
+]
