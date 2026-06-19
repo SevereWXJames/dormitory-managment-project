@@ -1,8 +1,8 @@
 import BasicTimePicker, {type BasicTimePickerProps} from "./BasicTimePicker.tsx";
 import {Box, TextField} from "@mui/material";
-import {LaundryMachinesMenu} from "../../../pages/common/residents/dashboard/dynamic/LaundryBookingsPage.tsx";
+import MachineMenu from "./menuOptions/MachineMenu.tsx";
 
-export function BookingForm() {
+export function ReservationForm() {
     const startTimeProps: BasicTimePickerProps = {label: "Start Time"}
 
     return (
@@ -30,7 +30,7 @@ export function BookingForm() {
                     }}
                 />
             </Box>
-            <LaundryMachinesMenu/>
+            <MachineMenu/>
             <button>Submit</button>
         </div>
     )
