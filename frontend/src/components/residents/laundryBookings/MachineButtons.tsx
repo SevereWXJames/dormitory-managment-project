@@ -1,17 +1,19 @@
 import {Button, List, ListItemButton, ListItemText} from "@mui/material";
-import * as React from "react";
 import {ResponsiveDialog} from "../../common/ResponsiveDialog.tsx";
 import {BaseCalendar} from "./BaseCalendar.tsx";
 import {ReservationForm} from "./reservationForm/ReservationForm.tsx";
-import {useSelector} from "react-redux";
-import {getAllBookings} from "../../../context/residents/bookingsSlice.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {addBooking, getBookingsByMachine} from "../../../context/residents/bookingsSlice.ts";
 import type {Booking} from "../../../types/residents/types.tsx";
+import {useState} from "react";
+import {createBooking} from "./reservationForm/reservationUtils.tsx";
+import {useReservationForm} from "./reservationForm/useReservationForm.tsx";
 
 export type MachineOptionsProps = { machine_ids: string[] }
 
 export type MachineButtonsProps = {
     machine_ids: string[],
-    onClick: () => void
+    onClick: (id: string) => void
 }
 
 export function MachineButtons({machine_ids, onClick}: MachineButtonsProps) {
@@ -22,7 +24,7 @@ export function MachineButtons({machine_ids, onClick}: MachineButtonsProps) {
                     <ListItemButton
                         key={id}
                         sx={{border: '1px solid white'}}
-                        onClick={onClick}>
+                        onClick={() => onClick(id)}>
                         <ListItemText primary={id}/>
                     </ListItemButton>)
             })}
@@ -31,21 +33,24 @@ export function MachineButtons({machine_ids, onClick}: MachineButtonsProps) {
 }
 
 export function MachineOptions({machine_ids}: MachineOptionsProps) {
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => {
+    const [open, setOpen] = useState(false);
+    const [machine, setMachine] = useState("");
+    const handleClickOpen = (id: string) => {
+        setMachine(id);
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
     };
+
     //Example of events:
-    const bookings: Booking[] = useSelector(getAllBookings);
+    const bookings: Booking[] = useSelector(getBookingsByMachine(machine));
     const events = bookings.map((elm) =>
         ({
             id: elm._id,
             title: elm.eventName,
-            startDate: elm.startTime?.toISOString() ?? "",
-            endDate: elm.startTime?.add(1, "hour").toISOString() ?? "",
+            start: elm.startTime ?? "",
+            end: elm.startTime ?? "",
             color: '#3498db'
         }))
 
@@ -53,9 +58,6 @@ export function MachineOptions({machine_ids}: MachineOptionsProps) {
     const dialogContent = <div>
         <BaseCalendar events={events}/>
         <ReservationForm/>
-        <Button autoFocus onClick={handleClose}>
-            Confirm
-        </Button>
         <Button autoFocus onClick={handleClose}>
             Cancel
         </Button>

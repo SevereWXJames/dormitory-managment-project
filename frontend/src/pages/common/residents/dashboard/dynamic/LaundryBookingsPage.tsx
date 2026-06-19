@@ -17,7 +17,7 @@ export type Bookings = {
 }
 
 export function LaundryMachinesList() {
-    const machines: string[] = ["Machine 1", "Machine 2", "Machine 3"]
+    const machines: string[] = ["machine_1", "machine_2", "machine_3"]
     return (
         <div>
             <MachineOptions machine_ids={machines}/>

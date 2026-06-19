@@ -39,12 +39,12 @@ export default function BookingsTable({rows} : BookingsTableProps) {
                             key={row.eventName}
                             sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                             <TableCell component="th" scope="row">
-                                {row.date?.format(("MMM D, YYYY"))?? "_"}
+                                {row.date}
                             </TableCell>
                             <TableCell align="right">{row.eventName}</TableCell>
-                            <TableCell align="right">{row.date?.format(("MMM D, YYYY"))?? "_"}</TableCell>
+                            <TableCell align="right">{row.date}</TableCell>
                             <TableCell align="right">{row.serviceId}</TableCell>
-                            <TableCell align="right">{row.startTime?.format("HH:mm") ?? "—"}</TableCell>
+                            <TableCell align="right">{row.startTime}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

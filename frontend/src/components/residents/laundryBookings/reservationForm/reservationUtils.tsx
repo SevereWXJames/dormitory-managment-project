@@ -6,17 +6,17 @@ interface CreateBookingParams {
     eventName: string;
     startTime: Dayjs | null;
     date: Dayjs | null;
-    user_id: string;
+    userId: string;
 }
 
-export function createBooking({ machine, eventName, startTime, date, user_id }: CreateBookingParams): Booking {
+export function createBooking({ machine, eventName, startTime, date, userId }: CreateBookingParams): Booking {
     return {
         _id: crypto.randomUUID(),
         eventName: eventName,
         serviceId: machine,
         booked: true,
-        bookedBy: user_id, // replace with auth context later
-        startTime,
-        date
+        bookedBy: userId, // replace with auth context later
+        startTime: startTime?.toISOString() ?? "",
+        date: date?.toISOString() ?? ""
     };
 }

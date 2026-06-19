@@ -47,11 +47,11 @@ export const getAllBookings = (state: RootState) => {
 }
 
 export const getBookingsByUser = (user: string) => (state: RootState) => {
-    return state.bookings.bookings.filter((elm) => (elm.bookedBy == user));
+    return state.bookings.bookings.filter((elm) => (elm.bookedBy === user));
 }
 
 export const getBookingsByMachine = (machineId: string) => (state: RootState) => {
-    return state.bookings.bookings.filter((elm) => (elm.serviceId = machineId));
+    return state.bookings.bookings.filter((elm) => (elm.serviceId === machineId));
 }
 
 

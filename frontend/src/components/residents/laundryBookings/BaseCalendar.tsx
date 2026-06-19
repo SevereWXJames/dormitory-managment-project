@@ -5,8 +5,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 export type CalendarEvent = {
     id: string;
     title: string;
-    startDate: string;
-    endDate: string;
+    start: string;
+    end: string;
     color?: string;
 }
 
