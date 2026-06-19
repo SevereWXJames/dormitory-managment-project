@@ -5,9 +5,8 @@ import {
     CancelBookingButton
 } from "../../../../../components/residents/laundryBookings/removeBookings/CancelBookingButton.tsx";
 import {
-    PastBookings,
     RecentBookings
-} from "../../../../../components/residents/laundryBookings/bookingHistory/Bookings.tsx";
+} from "../../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
 
 export type Bookings = {
     date: Date,
@@ -48,12 +47,7 @@ export function LaundryBookingsPage() {
                                 <strong>Recent bookings</strong>
                                 <RecentBookings/>
                             </div>
-                            <div className={"pastBookings"}>
-                                <strong>Past bookings</strong>
-                                <PastBookings/>
-                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>

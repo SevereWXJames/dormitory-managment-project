@@ -5,6 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import type {Booking} from "../../../../types/residents/types.tsx";
 
 export type bookingData = {
     event_title: string,
@@ -15,7 +16,7 @@ export type bookingData = {
 }
 
 export type BookingsTableProps = {
-    rows : bookingData[];
+    rows : Booking[];
 }
 
 export default function BookingsTable({rows} : BookingsTableProps) {
@@ -29,24 +30,21 @@ export default function BookingsTable({rows} : BookingsTableProps) {
                         <TableCell align="right">Date</TableCell>
                         <TableCell align="right">Machine</TableCell>
                         <TableCell align="right">Start Time</TableCell>
-                        <TableCell align="right">End Time</TableCell>
 
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
                         <TableRow
-                            key={row.event_title}
-                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                        >
+                            key={row.eventName}
+                            sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                             <TableCell component="th" scope="row">
-                                {row.date}
+                                {row.date?.format(("MMM D, YYYY"))?? "_"}
                             </TableCell>
-                            <TableCell align="right">{row.event_title}</TableCell>
-                            <TableCell align="right">{row.date}</TableCell>
-                            <TableCell align="right">{row.machine_num}</TableCell>
-                            <TableCell align="right">{row.start_time}</TableCell>
-                            <TableCell align="right">{row.end_time}</TableCell>
+                            <TableCell align="right">{row.eventName}</TableCell>
+                            <TableCell align="right">{row.date?.format(("MMM D, YYYY"))?? "_"}</TableCell>
+                            <TableCell align="right">{row.serviceId}</TableCell>
+                            <TableCell align="right">{row.startTime?.format("HH:mm") ?? "—"}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

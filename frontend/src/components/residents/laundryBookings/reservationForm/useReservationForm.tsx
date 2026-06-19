@@ -1,16 +1,18 @@
 // useReservationForm.ts
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import type { Dayjs } from "dayjs";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import { addBooking } from "../../../../context/residents/bookingsSlice";
 import { createBooking } from "./reservationUtils";
+import {getUsername} from "../../../../context/authenticationSlice.ts";
 
 export function useReservationForm() {
     const [eventName, setEventName] = useState("");
     const [startTime, setStartTime] = useState<Dayjs | null>(null);
     const [machine, setMachine] = useState("");
     const [date, setDate] = useState<Dayjs | null>(null);
+    const user_id = useSelector(getUsername);
 
     const dispatch = useDispatch();
 
@@ -19,7 +21,7 @@ export function useReservationForm() {
     };
 
     const handleSubmit = () => {
-        const booking = createBooking({ machine, startTime, date, user_id:"user_1"});
+        const booking = createBooking({ machine,eventName, startTime, date, user_id});
         dispatch(addBooking(booking));
     };
 
