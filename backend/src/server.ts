@@ -7,14 +7,20 @@ import userRouter from "./routes/user.ts";
 import maintenanceRequestRouter from "./routes/maintenance-request.ts";
 import creditRouter from "./routes/credits.ts";
 import roomsRouter from "./routes/rooms.ts";
+import servicesRouter from "./routes/services.ts";
+import noticeRouter from "./routes/notices.ts";
+import reservationRouter from "./routes/reservation.ts";
 
 dotenv.config();
 
 const app = express();
-const port: number = 5000;
+const port: number = 3000;
 
 app.use(json());
 
+app.use("/reservations", reservationRouter);
+app.use("/services", servicesRouter);
+app.use("/notices", noticeRouter)
 app.use("/rooms", roomsRouter);
 app.use("/credits", creditRouter);
 app.use("/maintenance-request", maintenanceRequestRouter)
