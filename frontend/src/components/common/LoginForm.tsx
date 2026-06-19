@@ -1,8 +1,8 @@
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logIn } from "../../context/authenticationSlice";
-import {useDispatch} from "react-redux";
+import {getAuthenticationState, logIn} from "../../context/authenticationSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -25,6 +25,7 @@ export function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
     const dispatch = useDispatch();
+    const role = useSelector(getAuthenticationState);
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -46,7 +47,11 @@ export function LoginForm() {
 	 */
 	const handleLogIn = () => {
 		dispatch(logIn([username, email, password]));
-		navigate("/dashboard");
+        if(role === "BUILDING_MANAGER"){
+            navigate('/admin/dashboard');
+        }else if(role === "RESIDENT"){
+            navigate('/dashboard');
+        }
 	}
 
 	return (

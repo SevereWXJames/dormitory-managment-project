@@ -54,7 +54,7 @@ export const getUsername = (state: RootState) => {
 }
 
 export const getAuthenticationState = (state: RootState) => {
-	return state.authentication.email;
+	return state.authentication.authenticationState;
 }
 
 export default authenticationSlice.reducer;
