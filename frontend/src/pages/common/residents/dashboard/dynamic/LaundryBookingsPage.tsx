@@ -20,7 +20,12 @@ export function LaundryMachinesList() {
     const machines: string[] = ["machine_1", "machine_2", "machine_3"]
     return (
         <div>
-            <MachineOptions machine_ids={machines}/>
+            <div className={"machine-options"}>
+                <MachineOptions machine_ids={machines}/>
+            </div>
+            <div className={"check-machine-status"}>
+                <strong>Check Machine status</strong>
+            </div>
         </div>
     )
 }
