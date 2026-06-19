@@ -3,11 +3,13 @@ import BasicTimePicker from "./BasicTimePicker";
 import MachineMenu from "./MachineMenu";
 import { whiteInputSx } from "./reservationStyles";
 import {useReservationForm} from "./useReservationForm";
+import BasicDatePicker from "./DatePicker.tsx";
 
 export function ReservationForm() {
     const {
         setEventName,
         setStartTime,
+        setDate,
         machine,
         handleMachineChange,
         handleSubmit,
@@ -25,6 +27,7 @@ export function ReservationForm() {
                     label="Start Time"
                     onChange={setStartTime}
                 />
+                <BasicDatePicker onChange={setDate}/>
                 <TextField
                     required
                     id="outlined-required"

@@ -10,6 +10,7 @@ export function useReservationForm() {
     const [eventName, setEventName] = useState("");
     const [startTime, setStartTime] = useState<Dayjs | null>(null);
     const [machine, setMachine] = useState("");
+    const [date, setDate] = useState<Dayjs | null>(null);
 
     const dispatch = useDispatch();
 
@@ -18,13 +19,14 @@ export function useReservationForm() {
     };
 
     const handleSubmit = () => {
-        const booking = createBooking({ machine, startTime });
+        const booking = createBooking({ machine, startTime, date});
         dispatch(addBooking(booking));
     };
 
     return {
         eventName, setEventName,
         startTime, setStartTime,
+        date, setDate,
         machine,
         handleMachineChange,
         handleSubmit,
