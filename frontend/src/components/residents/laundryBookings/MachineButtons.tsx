@@ -2,12 +2,8 @@ import {Button, List, ListItemButton, ListItemText} from "@mui/material";
 import {ResponsiveDialog} from "../../common/ResponsiveDialog.tsx";
 import {BaseCalendar} from "./BaseCalendar.tsx";
 import {ReservationForm} from "./reservationForm/ReservationForm.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {addBooking, getBookingsByMachine} from "../../../context/residents/bookingsSlice.ts";
 import type {Booking} from "../../../types/residents/types.tsx";
 import {useState} from "react";
-import {createBooking} from "./reservationForm/reservationUtils.tsx";
-import {useReservationForm} from "./reservationForm/useReservationForm.tsx";
 
 export type MachineOptionsProps = { machine_ids: string[] }
 
