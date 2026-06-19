@@ -16,7 +16,7 @@ export type BaseCalendarProps = {
 
 export function BaseCalendar({ events }: BaseCalendarProps) {
     return (
-        <div className={"fullCalendar"} style={{color: 'black'}}>
+        <div className={"fullCalendar"}>
             <FullCalendar
                 plugins={[timeGridPlugin, dayGridPlugin]}
                 initialView="timeGridWeek"

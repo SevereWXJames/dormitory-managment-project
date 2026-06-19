@@ -2,6 +2,7 @@ import {Button, List, ListItemButton, ListItemText} from "@mui/material";
 import * as React from "react";
 import {ResponsiveDialog} from "../../common/ResponsiveDialog.tsx";
 import {BaseCalendar} from "./BaseCalendar.tsx";
+import {BookingForm} from "./BookingForm.tsx";
 
 export type MachineListProps = { machine_ids: string[] }
 
@@ -26,7 +27,7 @@ export function OptionButtons({machine_ids, onClick}: OptionButtonsProps) {
     )
 }
 
-export function MachineList({machine_ids}: MachineListProps) {
+export function MachineOptions({machine_ids}: MachineListProps) {
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
@@ -55,6 +56,7 @@ export function MachineList({machine_ids}: MachineListProps) {
 
     const dialogContent = <div>
         <BaseCalendar events={events}/>
+        <BookingForm/>
         <Button autoFocus onClick={handleClose}>
             Confirm
         </Button>
@@ -63,9 +65,9 @@ export function MachineList({machine_ids}: MachineListProps) {
         </Button>
     </div>
 
-    return (<>
+    return (<div className={"bookings_dialog"}>
         <OptionButtons machine_ids={machine_ids} onClick={handleClickOpen}/>
         <ResponsiveDialog open={open} handleClose={handleClose}
                           content={dialogContent}/>
-    </>)
+    </div>)
 }

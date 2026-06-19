@@ -1,11 +1,12 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
-import {Box, TextField} from "@mui/material";
-import BasicTimePicker, {
-    type BasicTimePickerProps
-} from "../../../../../components/residents/laundryBookings/BasicTimePicker.tsx";
 import MachineMenu from "../../../../../components/residents/laundryBookings/MachineMenu.tsx";
-import BookingsTable, {type bookingData} from "../../../../../components/residents/laundryBookings/BookingsList.tsx";
-import {MachineList} from "../../../../../components/residents/laundryBookings/MachineList.tsx";
+import BookingsTable, {type bookingData} from "../../../../../components/residents/laundryBookings/BookingsTable.tsx";
+import {MachineOptions} from "../../../../../components/residents/laundryBookings/MachineOptions.tsx";
+import {BookingForm} from "../../../../../components/residents/laundryBookings/BookingForm.tsx";
+import {useState} from "react";
+import {ResponsiveDialog} from "../../../../../components/common/ResponsiveDialog.tsx";
+import {Button} from "@mui/material";
+import BasicSelect from "../../../../../components/residents/laundryBookings/BasicSelect.tsx";
 
 export type Bookings = {
     date: Date,
@@ -18,41 +19,31 @@ export type BookingsListProps = {
     bookings: Bookings[]
 }
 
-export function BookingForm() {
-    const startTimeProps: BasicTimePickerProps = {label: "Start Time"}
+export function CancelBookingButton() {
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const content = <div><strong>Cancel Booking?</strong></div>
+    const actions = <div>
+        <BasicSelect/>
+        <Button onClick={handleClose}>Confirm</Button>
+        <Button onClick={handleClose}>Cancel</Button>
+    </div>
 
     return (
         <div>
-            <Box
-                component="form"
-                sx={{'& .MuiTextField-root': {m: 1, width: '25ch'}}}
-                noValidate
-                autoComplete="off"
-            >
-                <BasicTimePicker label={startTimeProps.label}/>
-                <TextField
-                    required
-                    id="outlined-required"
-                    label="Required"
-                    defaultValue="event-name"
-                    sx={{
-                        '& .MuiInputBase-input': {color: 'white'},
-                        '& .MuiInputLabel-root': {
-                            color: 'white',
-                        },
-                        '& .MuiOutlinedInput-Input': {
-                            color: 'white',
-                        }
-                    }}
-                />
-            </Box>
-            <LaundryMachinesMenu/>
-            <button>Submit</button>
+            <Button onClick={handleClickOpen}>Cancel Booking</Button>
+            <ResponsiveDialog open={open} handleClose={handleClose} content={content} actions={actions}/>
         </div>
     )
 }
 
-export function RecentBookingsList() {
+export function RecentBookings() {
     const rows: bookingData[] = [{
         event_title: 'Washing hoodie',
         start_time: '11:00', end_time: '12:00', date: '06/17/26', machine_num: 1
@@ -65,7 +56,7 @@ export function RecentBookingsList() {
     )
 }
 
-export function PastBookingsList() {
+export function PastBookings() {
     const rows: bookingData[] = [{
         event_title: 'Washing me socks',
         start_time: '13:00', end_time: '14:00', date: '06/10/26', machine_num: 3
@@ -79,11 +70,11 @@ export function PastBookingsList() {
 
 }
 
-export function LaundryMachinesList(){
-    const machines : string[] = ["Machine 1", "Machine 2", "Machine 3"]
-    return(
+export function LaundryMachinesList() {
+    const machines: string[] = ["Machine 1", "Machine 2", "Machine 3"]
+    return (
         <div>
-            <MachineList machine_ids={machines}/>
+            <MachineOptions machine_ids={machines}/>
         </div>
     )
 }
@@ -110,15 +101,17 @@ export function LaundryBookingsPage() {
                         <div className={"bookingForm"}>
                             <strong>Make a booking</strong>
                             <BookingForm/>
+                            <strong>Cancel a booking</strong>
+                            <CancelBookingButton/>
                         </div>
                         <div className={"tables"}>
-                            <div className={"pastBookings"}>
-                                <strong>Past bookings</strong>
-                                <PastBookingsList/>
-                            </div>
                             <div className={"recentBookings"}>
                                 <strong>Recent bookings</strong>
-                                <RecentBookingsList/>
+                                <RecentBookings/>
+                            </div>
+                            <div className={"pastBookings"}>
+                                <strong>Past bookings</strong>
+                                <PastBookings/>
                             </div>
                         </div>
 

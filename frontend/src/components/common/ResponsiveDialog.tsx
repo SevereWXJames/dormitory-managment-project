@@ -19,7 +19,7 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-    return (<div>
+    return (<div className={"dialog"}>
             <Dialog fullScreen={fullScreen}
                     open={props.open}
                     onClose={props.handleClose}
