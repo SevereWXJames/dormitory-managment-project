@@ -1,0 +1,16 @@
+{
+  "maintenanceRequestTypes": [
+    {
+      "_id": "plumbing",
+      "text": "Plumbing"
+    },
+    {
+      "_id": "electrical",
+      "text": "Electrical"
+    },
+    {
+      "_id": "misc",
+      "text": "Miscellaneous"
+    }
+  ]
+}
