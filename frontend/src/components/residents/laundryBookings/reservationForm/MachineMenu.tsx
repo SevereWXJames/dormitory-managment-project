@@ -28,6 +28,7 @@ export default function MachineMenu({machine, handleChange}: MachineMenuProps) {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
+                    required
                     value={machine}
                     label="Machine Options"
                     onChange={handleChange}

@@ -22,6 +22,7 @@ export function useReservationForm() {
     };
 
     const handleSubmit = () => {
+        if (!startTime || !date || eventName === "" || machine === "") return;  // guard here
         const booking = createBooking({ machine,eventName, startTime, date, userId});
         dispatch(addBooking(booking));
         dispatch(removeCredits(1));
