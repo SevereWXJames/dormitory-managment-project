@@ -7,6 +7,8 @@ import userRouter from "./routes/user.ts";
 import maintenanceRequestRouter from "./routes/maintenance-request.ts";
 import creditRouter from "./routes/credits.ts";
 import roomsRouter from "./routes/rooms.ts";
+import noticeRouter from "./routes/notices.ts";
+import residentsRouter from "./routes/residents.ts";
 import type {Room} from "./dataTypes/room.ts";
 
 dotenv.config();
@@ -21,6 +23,8 @@ app.use("/credits", creditRouter);
 app.use("/maintenance-request", maintenanceRequestRouter)
 app.use("/IoT", IoTRouter);
 app.use("/user", userRouter);
+app.use("/notices", noticeRouter);
+app.use("/residents", residentsRouter);
 app.use("/", loginRouter);
 
 app.listen(port, () => {

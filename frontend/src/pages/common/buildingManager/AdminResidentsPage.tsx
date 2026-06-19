@@ -1,12 +1,33 @@
+import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
+import { fetchJson } from "../../../utils/api";
 
-const residents = [
-    { name: "Ava Lee", unit: "102", status: "Active", moveIn: "2025-09-01" },
-    { name: "Noah Patel", unit: "208", status: "Active", moveIn: "2026-01-15" },
-    { name: "Mia Chen", unit: "315", status: "Pending renewal", moveIn: "2024-08-20" },
-];
+interface ResidentRecord {
+    _id: string;
+    userId: string;
+    roomId: string;
+}
 
 export function AdminResidentsPage() {
+    const [residents, setResidents] = useState<ResidentRecord[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadResidents = async () => {
+            try {
+                const residentList = await fetchJson<ResidentRecord[]>("/residents/");
+                setResidents(residentList);
+            } catch (fetchError) {
+                setError(fetchError instanceof Error ? fetchError.message : "Unable to load residents.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadResidents();
+    }, []);
+
     return (
         <>
             <CommonFrame commonFrameType="BUILDING_MANAGER" />
@@ -14,29 +35,32 @@ export function AdminResidentsPage() {
                 <h1>Residents Management</h1>
                 <p>Admin tools for viewing and managing resident information.</p>
 
-                <section>
-                    <h2>Current residents</h2>
-                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                        <thead>
-                            <tr>
-                                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Name</th>
-                                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Unit</th>
-                                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Status</th>
-                                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Move-in</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {residents.map((resident) => (
-                                <tr key={resident.name}>
-                                    <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident.name}</td>
-                                    <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident.unit}</td>
-                                    <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident.status}</td>
-                                    <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident.moveIn}</td>
+                {loading && <p>Loading residents...</p>}
+                {error && <p style={{ color: "red" }}>{error}</p>}
+
+                {!loading && !error && (
+                    <section>
+                        <h2>Residents</h2>
+                        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                            <thead>
+                                <tr>
+                                    <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Resident ID</th>
+                                    <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>User ID</th>
+                                    <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Room ID</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
+                            </thead>
+                            <tbody>
+                                {residents.map((resident) => (
+                                    <tr key={resident._id}>
+                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident._id}</td>
+                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident.userId}</td>
+                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{resident.roomId}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
+                )}
             </div>
         </>
     );
