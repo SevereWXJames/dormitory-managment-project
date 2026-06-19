@@ -7,6 +7,9 @@ import {
 import {
     RecentBookings
 } from "../../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
+import {
+    CheckMachineStatus
+} from "../../../../../components/residents/laundryBookings/reservationForm/CheckMachineStatus.tsx";
 
 export type Bookings = {
     date: Date,
@@ -25,6 +28,7 @@ export function LaundryMachinesList() {
             </div>
             <div className={"check-machine-status"}>
                 <strong>Check Machine status</strong>
+                <CheckMachineStatus/>
             </div>
         </div>
     )
