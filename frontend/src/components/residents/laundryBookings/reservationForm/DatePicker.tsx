@@ -12,6 +12,7 @@ export default function BasicDatePicker({onChange}: BasicTimePickerProps) {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker label="Basic date picker"
                         onChange={onChange}
+                        disablePast
                         slotProps={{textField: {required: true}}}/>
         </LocalizationProvider>
     );

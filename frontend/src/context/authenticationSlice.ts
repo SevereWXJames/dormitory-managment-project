@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { AuthenticationState } from '../app/types';
+import type {RootState} from "./store.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
@@ -44,16 +45,16 @@ export const authenticationSlice = createSlice({
 
 export const { logIn, logOut } = authenticationSlice.actions;
 
-export const getEmail = (state: AuthenticationSliceState) => {
-	return state.email;
+export const getEmail = (state: RootState) => {
+    return state.authentication.email;
 }
 
-export const getUsername = (state: AuthenticationSliceState) => {
-    return state.username;
+export const getUsername = (state: RootState) => {
+    return state.authentication.email;
 }
 
-export const getAuthenticationState = (state: AuthenticationSliceState) => {
-	return state.authenticationState;
+export const getAuthenticationState = (state: RootState) => {
+	return state.authentication.email;
 }
 
 export default authenticationSlice.reducer;

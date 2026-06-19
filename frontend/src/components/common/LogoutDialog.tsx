@@ -2,12 +2,24 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
+import {useDispatch} from "react-redux";
+import {logOut} from "../../context/authenticationSlice.ts";
+import {useNavigate} from "react-router-dom";
 
 export type LogoutDialogProps = {
     open: boolean,
     onClose: () => void,
 }
 export function LogoutDialog({open, onClose} : LogoutDialogProps) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const onSubmit = ()=>{
+        dispatch(logOut());
+        onClose();
+        navigate("/login");  // redirect here
+    }
+
     return (
         <>
             <Dialog
@@ -24,7 +36,7 @@ export function LogoutDialog({open, onClose} : LogoutDialogProps) {
                     <Button onClick={onClose} autoFocus>
                         Cancel
                     </Button>
-                    <Button onClick={onClose}>Yes, log out</Button>
+                    <Button onClick={onSubmit}>Yes, log out</Button>
                 </DialogActions>
             </Dialog>
         </>

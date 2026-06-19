@@ -2,6 +2,7 @@ import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedIn
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../context/authenticationSlice";
+import {useDispatch} from "react-redux";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -23,6 +24,7 @@ export function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -43,7 +45,7 @@ export function LoginForm() {
 	 * over for authentication.
 	 */
 	const handleLogIn = () => {
-		logIn({username, email, password});
+		dispatch(logIn([username, email, password]));
 		navigate("/dashboard");
 	}
 

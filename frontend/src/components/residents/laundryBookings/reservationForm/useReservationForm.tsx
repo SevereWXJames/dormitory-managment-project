@@ -3,10 +3,11 @@ import { useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import type { Dayjs } from "dayjs";
 import type { SelectChangeEvent } from "@mui/material/Select";
-import { addBooking } from "../../../../context/residents/bookingsSlice";
-import { createBooking } from "./reservationUtils";
+import {addBooking, getAllBookings} from "../../../../context/residents/bookingsSlice";
+import {createBooking, hasConflict, hasEnoughCredits} from "./reservationUtils";
 import {getUsername} from "../../../../context/authenticationSlice.ts";
-import {removeCredits} from "../../../../context/residents/creditsSlice.ts";
+import {getCreditsCents, removeCredits} from "../../../../context/residents/creditsSlice.ts";
+import type {Booking} from "../../../../types/residents/types.tsx";
 
 export function useReservationForm() {
     const [eventName, setEventName] = useState("");
@@ -16,6 +17,8 @@ export function useReservationForm() {
     const userId = useSelector(getUsername);
 
     const dispatch = useDispatch();
+    const bookings: Booking[] = useSelector(getAllBookings);
+    const balance = useSelector(getCreditsCents);
 
     const handleMachineChange = (event: SelectChangeEvent) => {
         setMachine(event.target.value as string);
@@ -23,9 +26,22 @@ export function useReservationForm() {
 
     const handleSubmit = () => {
         if (!startTime || !date || eventName === "" || machine === "") return;  // guard here
+        const isoStart = startTime.toISOString();
+
+        if (hasConflict(isoStart, machine, bookings)) {
+            alert("This time slot is already booked for this machine.");
+            return;
+        }
+
+        const cost: number = 100;
+        if(!hasEnoughCredits({balance, cost})){
+            alert("You do not have enough credits");
+            return;
+        }
+
         const booking = createBooking({ machine,eventName, startTime, date, userId});
         dispatch(addBooking(booking));
-        dispatch(removeCredits(1));
+        dispatch(removeCredits(cost));
     };
 
     return {
