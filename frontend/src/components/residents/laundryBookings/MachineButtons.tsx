@@ -3,6 +3,9 @@ import * as React from "react";
 import {ResponsiveDialog} from "../../common/ResponsiveDialog.tsx";
 import {BaseCalendar} from "./BaseCalendar.tsx";
 import {ReservationForm} from "./reservationForm/ReservationForm.tsx";
+import {useSelector} from "react-redux";
+import {getAllBookings} from "../../../context/residents/bookingsSlice.ts";
+import type {Booking} from "../../../types/residents/types.tsx";
 
 export type MachineOptionsProps = { machine_ids: string[] }
 
@@ -36,23 +39,15 @@ export function MachineOptions({machine_ids}: MachineOptionsProps) {
         setOpen(false);
     };
     //Example of events:
-
-    const events = [
-        {
-            id: '1',
-            title: 'Morning Meeting',
-            start: '2026-06-18T08:00:00',
-            end: '2026-06-18T09:00:00',
+    const bookings: Booking[] = useSelector(getAllBookings);
+    const events = bookings.map((elm) =>
+        ({
+            id: elm._id,
+            title: elm.eventName,
+            startDate: elm.startTime?.toISOString() ?? "",
+            endDate: elm.startTime?.add(1, "hour").toISOString() ?? "",
             color: '#3498db'
-        },
-        {
-            id: '2',
-            title: 'Project Work',
-            start: '2026-06-18T09:00:00',
-            end: '2026-06-18T12:00:00',
-            color: '#2ecc71'
-        }
-    ];
+        }))
 
     //Dialog Content
     const dialogContent = <div>
