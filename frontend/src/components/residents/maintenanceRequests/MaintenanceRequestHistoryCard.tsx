@@ -16,7 +16,7 @@ export function MaintenanceRequestHistoryCard() {
 	);
 
 	return (
-		<Card id="maintenance-request-history-card">
+		<Card id="maintenance-request-history-card" className="card">
 			<CardContent id="maintenance-request-history-card-content">
 				{requestsElems}
 			</CardContent>

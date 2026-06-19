@@ -5,7 +5,8 @@ export function LoginPage() {
 	return (
 		<>
 			<CommonFrame commonFrameType="LOGIN"></CommonFrame>
-			<main>
+			<main className="login-page">
+				<h1>Log in</h1>
 				<LoginForm />
 			</main>
 		</>

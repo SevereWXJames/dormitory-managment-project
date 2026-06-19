@@ -2,6 +2,10 @@ import { Button, Card, CardContent, FormControl, InputLabel, OutlinedInput } fro
 import { useDispatch } from "react-redux";
 import { addCredits, addTransactionHistoryEntry } from "../../../context/residents/creditsSlice";
 import { useState } from "react";
+import { DateField } from '@mui/x-date-pickers/DateField';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/en-ca';
 
 /**
  * React components for the Add Credits display.
@@ -40,8 +44,8 @@ export function AddCreditsCard() {
 	}
 
 	return (
-		<Card id="add-credits-card">
-			<CardContent id="add-credits-card-content" sx={{display: "flex", flexDirection: "column"}}>
+		<Card id="add-credits-card" className="card">
+			<CardContent id="add-credits-card-content">
 				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
 					<InputLabel htmlFor={`${cardNumberID}-input`}>Card number</InputLabel>
 					<OutlinedInput
@@ -52,13 +56,18 @@ export function AddCreditsCard() {
 					/>
 				</FormControl>
 				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
-					<InputLabel htmlFor={`${expirationDateID}-input`}>Expiration date</InputLabel>
-					<OutlinedInput
-						id={`${expirationDateID}-input`}
-						label="Expiration date"
-						type='date'
-						onInput={(e) => setExpirationDate((e.target as HTMLInputElement).value)}
-					/>
+					{/* <InputLabel htmlFor={`${expirationDateID}-input`}>Expiration date</InputLabel> */}
+					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-ca">
+						<DateField
+							id={`${expirationDateID}-input`}
+							label="Expiration date"
+							format="MM/YY"
+							onChange={(value) => {
+								const date = value?.toISOString();
+								setExpirationDate((date == null) ? "" : date);
+							}}
+						/>
+					</LocalizationProvider>
 				</FormControl>
 				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
 					<InputLabel htmlFor={`${securityCodeID}-input`}>Security code</InputLabel>

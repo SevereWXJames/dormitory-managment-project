@@ -14,7 +14,7 @@ export function TransactionHistoryCard() {
 		<Transaction key={t.id} cardNumber={t.cardNumber} date={t.date} amount={t.amount} />);
 
 	return (
-		<Card id="transaction-history-card">
+		<Card id="transaction-history-card" className="card">
 			<CardContent id="transaction-history-card-content">
 				{transactionCards}
 			</CardContent>

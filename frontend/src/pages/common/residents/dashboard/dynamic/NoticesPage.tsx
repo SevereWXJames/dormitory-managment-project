@@ -1,6 +1,7 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import { NoticeCard } from "../../../../../components/residents/notices/NoticeCard.tsx";
 import data from "../../../../../assets/residents/placeholderData/notices.json";
+import { Box } from "@mui/material";
 
 export interface NoticesPageProps {
     read_notices: object[],
@@ -13,11 +14,15 @@ export function NoticesPage() {
     return (
         <>
             <CommonFrame commonFrameType={"RESIDENT"}/>
-            <div className="noticesPage">
+            <div className="notices-page">
                 <h1>Notices</h1>
-                <h1>Unread</h1>
+                <Box className="card-container">
+                    <h2>Unread</h2>
                     {noticeCards}
-                <h1>Read</h1>
+                </Box>
+                <Box className="card-container">
+                    <h2>Read</h2>
+                </Box>
             </div>
         </>
     )
