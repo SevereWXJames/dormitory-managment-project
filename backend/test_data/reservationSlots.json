@@ -4,41 +4,47 @@
       "_id": "slot0",
       "serviceId": "service0",
       "booked": false,
-      "time": 0
+      "startTime": 0,
+      "durationSeconds": 3600
     },
     {
       "_id": "slot1",
       "serviceId": "service0",
       "booked": true,
       "bookedBy": "user0",
-      "time": 3600
+      "startTime": 3600,
+      "durationSeconds": 3600
     },
     {
       "_id": "slot2",
       "serviceId": "service0",
       "booked": true,
       "bookedBy": "user1",
-      "time": 7200
+      "startTime": 7200,
+      "durationSeconds": 3600
     },
     {
       "_id": "slot3",
       "serviceId": "service1",
       "booked": false,
-      "time": 0
+      "startTime": 0,
+      "durationSeconds": 3600
     },
     {
       "_id": "slot4",
       "serviceId": "service1",
       "booked": true,
       "bookedBy": "user1",
-      "time": 3600
+      "startTime": 3600,
+      "durationSeconds": 3600
     },
     {
       "_id": "slot5",
       "serviceId": "service1",
       "booked": true,
       "bookedBy": "user2",
-      "time": 7200
+      "startTime": 7200,
+      "durationSeconds": 3600
     }
   ]
 }
