@@ -8,7 +8,7 @@ export type CheckMachineStatusProps = {
 
 export function CheckMachineStatus(){
     const {machine, handleChange, onSubmit, onClose, open} = useCheckMachineStatus();
-    const dialogContent = <div>Status of {machine}: OK</div>
+    const dialogContent = <div>Status of {machine}: Idle</div>
     const actions = <div>
         <button onClick={onClose}>Exit</button>
     </div>
