@@ -7,7 +7,6 @@ import userRouter from "./routes/user.ts";
 import maintenanceRequestRouter from "./routes/maintenance-request.ts";
 import creditRouter from "./routes/credits.ts";
 import roomsRouter from "./routes/rooms.ts";
-import type {Room} from "./dataTypes/room.ts";
 
 dotenv.config();
 
