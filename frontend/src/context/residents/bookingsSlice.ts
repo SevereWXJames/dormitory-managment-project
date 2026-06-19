@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {RootState} from '../store/store.ts';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 /**
  * State for the creditsSlice.
@@ -29,13 +30,13 @@ export const bookingsSlice = createSlice({
     name: 'credits',
     initialState,
     reducers: {
-        addBooking: (state, parameters) => {
-            state.bookings.push(parameters.payload);
+        addBooking: (state, action: PayloadAction<Booking>) => {
+            state.bookings.push(action.payload);
             console.log("Added Booking!");
         },
-        removeBooking: (state, parameters) => {
+        removeBooking: (state, action:PayloadAction<string>) => {
             const toRemove = state.bookings.find((elm) =>
-                (elm._id == parameters.payload._id))
+                (elm._id == action.payload))
             if (toRemove != undefined) {
                 const index = state.bookings.indexOf(toRemove);
                 state.bookings.splice(index, 1);

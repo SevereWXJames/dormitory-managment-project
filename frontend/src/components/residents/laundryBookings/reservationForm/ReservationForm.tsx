@@ -1,6 +1,6 @@
 import BasicTimePicker, {type BasicTimePickerProps} from "./BasicTimePicker.tsx";
 import {Box, TextField} from "@mui/material";
-import MachineMenu from "./menuOptions/MachineMenu.tsx";
+import MachineMenu from "./MachineMenu.tsx";
 
 export function ReservationForm() {
     const startTimeProps: BasicTimePickerProps = {label: "Start Time"}
