@@ -182,3 +182,91 @@
     border-right-color: var(--border);
   }
 }
+
+/*LAUNDRY_BOOKINGs_PAGE*/
+
+.laundryBookingsPage{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.laundryBookingsPage .contents{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    left: 100px;
+}
+
+.laundryBookingsPage .contents > * {
+    padding: 30px;
+    border: 1px solid deepskyblue;
+    border-radius: 30px;
+    margin: 15px;
+}
+
+.laundryBookingsPage .machineList > * {
+    align-self: flex-start;
+    margin: 10px;
+}
+
+.laundryBookingsPage .bookingsColumn{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    text-align: left;
+    width: 50%;
+}
+
+.laundryBookingsPage .bookingForm > * {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin: 5px;
+    width: 50%
+}
+
+.bookingsColumn .tables {
+    margin: 10px;
+}
+
+    /*SETTINGS_PAGE*/
+.settingsPage{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.settingsPage .contents{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 100px;
+
+}
+
+.settingsPage .contents > * {
+    padding: 30px;
+    border: 1px solid deepskyblue;
+    border-radius: 30px;
+    margin: 15px;
+}
+
+.settingsPage .profile-settings {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.settingsPage .notifications-settings {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.settingsPage .security-settings{
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+    text-align: left;
+}
