@@ -15,9 +15,6 @@ export type Bookings = {
     machine_id: string,
     event_title: string,
 }
-export type BookingsListProps = {
-    bookings: Bookings[]
-}
 
 export function CancelBookingButton() {
     const [open, setOpen] = useState(false);
