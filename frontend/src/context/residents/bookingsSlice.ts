@@ -1,21 +1,22 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {RootState} from '../store/store.ts';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type {Dayjs} from "dayjs";
 
 /**
  * State for the creditsSlice.
  * @property credits {number} Credits represented as a number of cents.
  */
-type Booking = {
+export type Booking = {
     _id: string;
     serviceId: string;
     booked: boolean;
     bookedBy: string | null;
-    startTime: number;
-    durationSeconds: number;
+    startTime: Dayjs | null;
+    durationSeconds?: number;
 }
 
-type BookingsSliceState = {
+export type BookingsSliceState = {
     bookings: Booking[]
 };
 
