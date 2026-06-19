@@ -1,13 +1,11 @@
 import express, {type Request, type Response, type NextFunction} from "express";
-import {getExistingUserFromId} from "../services/usersServices.ts";
-import {getAllMaintenanceRequests} from "../services/maintenanceRequestServices.ts";
-import {getRoomById, getRoomByUserId} from "../services/roomServices.ts";
+import {getAllRooms, getRoomById, getRoomByUserId} from "../services/roomServices.ts";
 
 const roomsRouter = express.Router();
 
 roomsRouter.get("/", async (req: Request, res: Response)=> {
     try {
-        const rooms = await getAllMaintenanceRequests();
+        const rooms = await getAllRooms();
         return res.status(200).json({success: true, data: rooms});
     } catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
