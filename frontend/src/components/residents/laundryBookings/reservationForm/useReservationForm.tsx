@@ -19,7 +19,7 @@ export function useReservationForm() {
     };
 
     const handleSubmit = () => {
-        const booking = createBooking({ machine, startTime, date});
+        const booking = createBooking({ machine, startTime, date, user_id:"user_1"});
         dispatch(addBooking(booking));
     };
 

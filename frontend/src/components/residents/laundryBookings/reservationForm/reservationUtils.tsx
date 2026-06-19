@@ -5,14 +5,15 @@ interface CreateBookingParams {
     machine: string;
     startTime: Dayjs | null;
     date: Dayjs | null;
+    user_id: string;
 }
 
-export function createBooking({ machine, startTime, date }: CreateBookingParams): Booking {
+export function createBooking({ machine, startTime, date, user_id }: CreateBookingParams): Booking {
     return {
         _id: crypto.randomUUID(),
         serviceId: machine,
         booked: true,
-        bookedBy: "user_id_1", // replace with auth context later
+        bookedBy: user_id, // replace with auth context later
         startTime,
         date
     };

@@ -14,10 +14,12 @@ import { logIn } from "../../context/authenticationSlice";
  * @returns JSX for the login form
  */
 export function LoginForm() {
-const emailFieldID = "email-field";
+    const emailFieldID = "email-field";
 	const passwordFieldID = "password-field";
+    const usernameFieldID="username-field";
 	
 	const navigate = useNavigate();
+    const [username, setUsername] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -41,12 +43,21 @@ const emailFieldID = "email-field";
 	 * over for authentication.
 	 */
 	const handleLogIn = () => {
-		logIn({email, password});
+		logIn({username, email, password});
 		navigate("/dashboard");
 	}
 
 	return (
 		<div id="login-form" style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', width: '25ch' }}>
+            <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+                <InputLabel htmlFor={`${usernameFieldID}-input`}>username</InputLabel>
+                <OutlinedInput
+                    id={`${usernameFieldID}-input`}
+                    type='text'
+                    label="username"
+                    onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
+                />
+            </FormControl>
 			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
 				<InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
 				<OutlinedInput
