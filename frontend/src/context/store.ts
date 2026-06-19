@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authenticationReducer from './authenticationSlice';
 import creditsReducer from './residents/creditsSlice';
+import maintenanceRequestsSliceReducer from './residents/maintenanceRequestsSlice';
 
 export const store = configureStore({
 	reducer: {
 		authentication: authenticationReducer,
-		credits: creditsReducer
+		credits: creditsReducer,
+		maintenanceRequests: maintenanceRequestsSliceReducer
 	}
 });
 

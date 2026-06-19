@@ -1,6 +1,6 @@
 import { Button, Card, CardContent, FormControl, InputLabel, OutlinedInput } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { addCredits, addTransactionHistoryEntry, getCreditsString } from "../../../context/residents/creditsSlice";
+import { useDispatch } from "react-redux";
+import { addCredits, addTransactionHistoryEntry } from "../../../context/residents/creditsSlice";
 import { useState } from "react";
 
 /**

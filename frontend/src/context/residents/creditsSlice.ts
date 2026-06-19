@@ -44,7 +44,7 @@ export const creditsSlice = createSlice({
 export const { addCredits, addTransactionHistoryEntry } = creditsSlice.actions;
 
 /**
- *  Returns the amount of credits as a number of cents.
+ * Returns the amount of credits as a number of cents.
  * 
  * @param state {CreditsSliceState} State for the creditsSlice.
  * @returns Amount of credits as a number of cents.
