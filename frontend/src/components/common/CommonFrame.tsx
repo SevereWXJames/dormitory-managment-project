@@ -47,14 +47,15 @@ export function CommonFrame(props: CommonFrameProps) {
             break;
         case "BUILDING_MANAGER":
             buttons = <>
-                <NavBarButton id="dashboard-nav-bar-button" label="Dashboard" to="#"/>
-                <NavBarButton id="facilities-nav-bar-button" label="Facilities" to="#"/>
-                <NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="#"/>
-                <NavBarButton id="notices-nav-bar-button" label="Notices" to="#"/>
-                <NavBarButton id="residents-nav-bar-button" label="Residents" to="#"/>
+                <NavBarButton id="dashboard-nav-bar-button" label="Dashboard" to="/admin/dashboard"/>
+                <NavBarButton id="facilities-nav-bar-button" label="Facilities" to="/admin/facilities"/>
+                <NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="/admin/maintenance"/>
+                <NavBarButton id="notices-nav-bar-button" label="Notices" to="/admin/notices"/>
+                <NavBarButton id="residents-nav-bar-button" label="Residents" to="/admin/residents"/>
+                <NavBarButton id="access-codes-nav-bar-button" label="Access Codes" to="/admin/access-codes"/>
                 <Divider/>
-                <NavBarButton id="settings-nav-bar-button" label="Settings" to="#"/>
-                <NavBarButton id="help-nav-bar-button" label="Help" to="#"/>
+                <NavBarButton id="settings-nav-bar-button" label="Settings" to="/admin/settings"/>
+                <NavBarButton id="help-nav-bar-button" label="Help" to="/admin/help"/>
                 <NavBarButton id="logout-nav-bar-button" label="Logout" to="#"
                               onClick={() => {
                                   console.log("Dialog opens!");
