@@ -6,6 +6,7 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import { addBooking } from "../../../../context/residents/bookingsSlice";
 import { createBooking } from "./reservationUtils";
 import {getUsername} from "../../../../context/authenticationSlice.ts";
+import {removeCredits} from "../../../../context/residents/creditsSlice.ts";
 
 export function useReservationForm() {
     const [eventName, setEventName] = useState("");
@@ -23,6 +24,7 @@ export function useReservationForm() {
     const handleSubmit = () => {
         const booking = createBooking({ machine,eventName, startTime, date, userId});
         dispatch(addBooking(booking));
+        dispatch(removeCredits(1));
     };
 
     return {
