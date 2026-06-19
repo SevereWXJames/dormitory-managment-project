@@ -13,9 +13,9 @@ type NoticeCardProps = {
  */
 export function NoticeCard(props: NoticeCardProps) {
 	return (
-		<Card className="notice-card">
-			<CardHeader title={props.title}></CardHeader>
-			<CardContent>
+		<Card className="notice-card card">
+			<CardHeader className="notice-card-header" title={props.title}></CardHeader>
+			<CardContent className="notice-card-content">
 				{props.children}
 			</CardContent>
 		</Card>

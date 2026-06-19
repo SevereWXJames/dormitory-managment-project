@@ -11,7 +11,7 @@ export function CreditsBalanceCard() {
 	const credits = useSelector(getCreditsString);
 
 	return (
-		<Card id="credits-balance-card">
+		<Card id="credits-balance-card" className="card">
 			<CardContent id="credits-balance-card-content" sx={{fontSize: 'x-large'}}>
 				{credits}
 			</CardContent>

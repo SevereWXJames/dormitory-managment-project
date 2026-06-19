@@ -48,13 +48,13 @@ export function LoginForm() {
 	}
 
 	return (
-		<div id="login-form" style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', width: '25ch' }}>
+		<div className="login-form">
             <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
-                <InputLabel htmlFor={`${usernameFieldID}-input`}>username</InputLabel>
+                <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
                 <OutlinedInput
                     id={`${usernameFieldID}-input`}
                     type='text'
-                    label="username"
+                    label="Username"
                     onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
@@ -84,7 +84,7 @@ export function LoginForm() {
 						onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
 						edge="end"
 						>
-						{showPassword ? <span>Hide</span>: <span>Show</span>}
+						{showPassword ? <span className="password-field-edge-button">Hide</span>: <span className="password-field-edge-button">Show</span>}
 						</IconButton>
 					</InputAdornment>
 					}

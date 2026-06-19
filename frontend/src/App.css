@@ -273,3 +273,62 @@
     flex-direction: column;
     text-align: left;
 }
+
+/* LOG IN PAGE */
+
+.login-page {
+  & .login-form {
+    margin: 0 auto;
+    width: 25ch;
+  }
+
+  & .password-field-edge-button {
+    font-size: medium;
+  }
+}
+
+/* COMMON STYLE FOR CARDS IN RESIDENT CREDITS, NOTICES AND MAINTENANCE REQUEST PAGES */
+
+.credits-page, .notices-page, .maintenance-requests-page {
+  & .cards-row {
+    display: flex;
+    >* {
+      flex: 1;
+    }
+  }
+
+  & .card {
+    padding: 30px;
+    border: 1px solid deepskyblue;
+    border-radius: 30px;
+    margin: 15px;
+  }
+}
+
+/* RESIDENT MAINTENANCE REQUESTS PAGE */
+.maintenance-requests-page {
+  & #create-maintenance-request-card-content {
+    margin: 0 auto;
+    width: 50ch;
+  }
+}
+
+/* RESIDENT NOTICES PAGE */
+
+.notices-page {
+  & .notice-card-header {
+    border-bottom: 1px solid deepskyblue;
+  }
+  & .notice-card-content {
+    text-align: left;
+  }
+}
+
+/* RESIDENT CREDITS PAGE */
+
+.credits-page {
+  & #add-credits-card-content {
+    margin: 0 auto;
+    width: 25ch;
+  }
+}
