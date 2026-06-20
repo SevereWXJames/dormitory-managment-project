@@ -48,9 +48,12 @@ export function LaundryBookingsPage() {
                         <div className={"bookingForm"}>
                             <strong>Make a booking</strong>
                             <ReservationForm/>
+                        </div>
+                        <div className={"cancel-booking"}>
                             <strong>Cancel a booking</strong>
                             <CancelBookingButton/>
                         </div>
+
                         <div className={"tables"}>
                             <div className={"recentBookings"}>
                                 <strong>Recent bookings</strong>

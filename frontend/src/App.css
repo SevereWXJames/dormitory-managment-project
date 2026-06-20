@@ -205,6 +205,8 @@
     border: 1px solid deepskyblue;
     border-radius: 30px;
     margin: 15px;
+    background-color: #f3f3f3;
+    color: black;
 }
 
 .laundryBookingsPage .machineList > * {
@@ -218,13 +220,13 @@
     align-self: flex-start;
     text-align: left;
     width: 50%;
+    margin: 10px;
 }
 
-.laundryBookingsPage .bookingForm > * {
+.bookingsColumn .bookingForm > * {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-    margin: 5px;
     width: 50%
 }
 
