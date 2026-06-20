@@ -1,22 +1,26 @@
-import {useMemo} from "react";
+import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
-
-interface AccessCodeItem {
-    RoomId: string;
-    verificationCode: string;
-}
-
-function generateVerificationCode(): string {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-}
+import {fetchJson} from "../../../utils/api.ts";
+import type {Room} from "../../../dataTypes/room.ts";
 
 export function AdminAccessCodesPage() {
-    const accessCodes = useMemo<AccessCodeItem[]>(() => [
-        { RoomId: "room0", verificationCode: generateVerificationCode() },
-        { RoomId: "room1", verificationCode: generateVerificationCode() },
-        { RoomId: "room2", verificationCode: generateVerificationCode() },
-    ], []);
+    const [rooms, setRooms] = useState<Room[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadRequests = async () => {
+            try {
+                setRooms(await fetchJson<[Room]>("/rooms/"));
+            } catch (fetchError) {
+                setError(fetchError instanceof Error ? fetchError.message : "Unable to load maintenance requests.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadRequests();
+    }, []);
 
     return (
         <>
@@ -24,6 +28,11 @@ export function AdminAccessCodesPage() {
             <div className="adminAccessCodesPage">
                 <h1>Access Codes Management</h1>
                 <p>Manage building access codes and resident permissions here.</p>
+
+                {loading && <p>Loading dashboard data...</p>}
+                {error && <p style={{ color: "red" }}>{error}</p>}
+
+                {!loading && !error && (
 
                 <section>
                     <h2>Access codes</h2>
@@ -35,15 +44,15 @@ export function AdminAccessCodesPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {accessCodes.map((item) => (
-                                <tr key={item.RoomId}>
-                                    <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{item.RoomId}</td>
+                            {rooms.map((item) => (
+                                <tr key={item._id}>
+                                    <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{item._id}</td>
                                     <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{item.verificationCode}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                </section>
+                </section> )}
             </div>
         </>
     );

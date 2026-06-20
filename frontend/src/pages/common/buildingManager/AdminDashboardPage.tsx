@@ -1,6 +1,9 @@
 import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { fetchJson } from "../../../utils/api";
+import type {Notice} from "../../../dataTypes/notice.ts";
+import type {User} from "../../../dataTypes/user.ts";
+import {MaintenanceRequest} from "../../../dataTypes/maintenanceRequest.ts";
 
 interface NoticeItem {
     notice_id: string | number;
@@ -34,9 +37,9 @@ export function AdminDashboardPage() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const manager = await fetchJson<{ _id: string; username: string }>("/user/get-by-id/admin0");
-                const maintenanceRequests = await fetchJson<Array<{ _id: string }>>("/maintenance-request/");
-                const notices = await fetchJson<Array<{ _id: string; title: string; createdAt?: string; created_at?: number }>>("/notices/");
+                const manager = await fetchJson<User>("/user/get-by-id/admin0");
+                const maintenanceRequests = await fetchJson<[MaintenanceRequest]>("/maintenance-request/");
+                const notices = await fetchJson<[Notice]>("/notices/");
 
                 setDashboardData({
                     ...initialDashboardData,
@@ -45,7 +48,7 @@ export function AdminDashboardPage() {
                     recent_published_notices: notices.slice(0, 3).map((notice) => ({
                         notice_id: notice._id,
                         title: notice.title,
-                        created_at: notice.created_at ?? Date.now(),
+                        created_at: notice.createAt ?? Date.now(),
                     })),
                 });
             } catch (fetchError) {
