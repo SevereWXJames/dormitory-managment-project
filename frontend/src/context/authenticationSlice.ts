@@ -25,6 +25,8 @@ export const authenticationSlice = createSlice({
 		logIn: (state, parameters) => {
             const username = parameters.payload[0];
 			const email = parameters.payload[1];
+            console.log(username);
+            console.log(email);
 			// const password = parameters.payload[2];
 
 			if (email.includes("admin")) {
@@ -33,9 +35,8 @@ export const authenticationSlice = createSlice({
 			else {
 				state.authenticationState = "RESIDENT";
 			}
-
-			state.email = email;
             state.username = username;
+            state.email = email;
 		},
 		logOut: (state) => {
 			state.authenticationState = "UNAUTHENTICATED";
@@ -50,7 +51,7 @@ export const getEmail = (state: RootState) => {
 }
 
 export const getUsername = (state: RootState) => {
-    return state.authentication.email;
+    return state.authentication.username;
 }
 
 export const getAuthenticationState = (state: RootState) => {
