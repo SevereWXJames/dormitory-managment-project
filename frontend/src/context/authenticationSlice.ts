@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { AuthenticationState } from '../app/types';
+import type {RootState} from "./store.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
-	email: string
+	email: string,
+    username: string,
 };
 
 const initialState: AuthenticationSliceState = {
 	authenticationState: "UNAUTHENTICATED",
-	email: ""
+	email: "",
+    username: "",
 };
 
 /**
@@ -20,8 +23,9 @@ export const authenticationSlice = createSlice({
 	initialState,
 	reducers: {
 		logIn: (state, parameters) => {
-			const email = parameters.payload[0];
-			// const password = parameters.payload[1];
+            const username = parameters.payload[0];
+			const email = parameters.payload[1];
+			// const password = parameters.payload[2];
 
 			if (email.includes("admin")) {
 				state.authenticationState = "BUILDING_MANAGER";
@@ -31,6 +35,7 @@ export const authenticationSlice = createSlice({
 			}
 
 			state.email = email;
+            state.username = username;
 		},
 		logOut: (state) => {
 			state.authenticationState = "UNAUTHENTICATED";
@@ -40,12 +45,16 @@ export const authenticationSlice = createSlice({
 
 export const { logIn, logOut } = authenticationSlice.actions;
 
-export const getEmail = (state: AuthenticationSliceState) => {
-	return state.email;
+export const getEmail = (state: RootState) => {
+    return state.authentication.email;
 }
 
-export const getAuthenticationState = (state: AuthenticationSliceState) => {
-	return state.authenticationState;
+export const getUsername = (state: RootState) => {
+    return state.authentication.email;
+}
+
+export const getAuthenticationState = (state: RootState) => {
+	return state.authentication.authenticationState;
 }
 
 export default authenticationSlice.reducer;

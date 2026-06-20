@@ -1,7 +1,8 @@
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logIn } from "../../context/authenticationSlice";
+import {getAuthenticationState, logIn} from "../../context/authenticationSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -14,13 +15,17 @@ import { logIn } from "../../context/authenticationSlice";
  * @returns JSX for the login form
  */
 export function LoginForm() {
-const emailFieldID = "email-field";
+    const emailFieldID = "email-field";
 	const passwordFieldID = "password-field";
+    const usernameFieldID="username-field";
 	
 	const navigate = useNavigate();
+    const [username, setUsername] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const role = useSelector(getAuthenticationState);
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -41,12 +46,25 @@ const emailFieldID = "email-field";
 	 * over for authentication.
 	 */
 	const handleLogIn = () => {
-		logIn({email, password});
-		navigate("/dashboard");
+		dispatch(logIn([username, email, password]));
+        if(role === "BUILDING_MANAGER"){
+            navigate('/admin/dashboard');
+        }else if(role === "RESIDENT"){
+            navigate('/dashboard');
+        }
 	}
 
 	return (
-		<div id="login-form" style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', width: '25ch' }}>
+		<div className="login-form">
+            <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+                <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
+                <OutlinedInput
+                    id={`${usernameFieldID}-input`}
+                    type='text'
+                    label="Username"
+                    onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
+                />
+            </FormControl>
 			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
 				<InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
 				<OutlinedInput
@@ -73,7 +91,7 @@ const emailFieldID = "email-field";
 						onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
 						edge="end"
 						>
-						{showPassword ? <span>Hide</span>: <span>Show</span>}
+						{showPassword ? <span className="password-field-edge-button">Hide</span>: <span className="password-field-edge-button">Show</span>}
 						</IconButton>
 					</InputAdornment>
 					}

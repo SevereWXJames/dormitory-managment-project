@@ -47,8 +47,8 @@ export function CreateMaintenanceRequestCard() {
 	}
 
 	return (
-		<Card id="add-credits-card">
-			<CardContent id="add-credits-card-content" sx={{display: "flex", flexDirection: "column"}}>
+		<Card id="add-credits-card" className="card">
+			<CardContent id="create-maintenance-request-card-content">
 				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
 					<InputLabel htmlFor={`${priorityID}-input`}>Priority</InputLabel>
 					<Select
@@ -93,7 +93,7 @@ export function CreateMaintenanceRequestCard() {
 						onInput={(e) => setLocation((e.target as HTMLInputElement).value)}
 					/>
 				</FormControl>
-				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
+				<FormControl sx={{m: 1, width: '50ch'}} variant="filled">
 					<InputLabel htmlFor={`${descriptionID}-input`}>Description</InputLabel>
 					<OutlinedInput
 						id={`${descriptionID}-input`}

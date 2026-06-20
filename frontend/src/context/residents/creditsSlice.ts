@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import type { RootState } from '../store/store.ts';
 
 /**
  * State for the creditsSlice.
@@ -30,7 +30,12 @@ export const creditsSlice = createSlice({
 		addCredits: (state, parameters) => {
 			state.credits += parameters.payload.amount;
 		},
-		addTransactionHistoryEntry: (state, parameters) => {
+
+        removeCredits: (state, parameters) => {
+            state.credits -= parameters.payload;
+        },
+
+        addTransactionHistoryEntry: (state, parameters) => {
 			const id = state.transactionHistory.length + 1;
 			const cardNumber = parameters.payload.cardNumber;
 			const date = new Date(Date.now()).toISOString();
@@ -41,7 +46,7 @@ export const creditsSlice = createSlice({
 	}
 });
 
-export const { addCredits, addTransactionHistoryEntry } = creditsSlice.actions;
+export const { addCredits, addTransactionHistoryEntry, removeCredits } = creditsSlice.actions;
 
 /**
  * Returns the amount of credits as a number of cents.

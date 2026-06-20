@@ -1,14 +1,17 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import {FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
+import {useSelector} from "react-redux";
+import {getEmail, getUsername} from "../../../../../context/authenticationSlice.ts";
 
 
 export type FieldProps = {
     input: string
 }
 export type ProfileFieldProps = {
-    name: string,
-    email: string,
-    phone: string
+    name: string;
+    username: string;
+    email: string;
+    phone: string;
 }
 
 export function NotificationControls() {
@@ -40,10 +43,11 @@ export function ProfileField({input}: FieldProps) {
     )
 }
 
-export function ProfileFields({name, email, phone}: ProfileFieldProps) {
+export function ProfileFields({name, username, email, phone}: ProfileFieldProps) {
     return (
         <div>
             <ProfileField input={name}/>
+            <ProfileField input={username}/>
             <ProfileField input={email}/>
             <ProfileField input={phone}/>
         </div>
@@ -51,7 +55,10 @@ export function ProfileFields({name, email, phone}: ProfileFieldProps) {
 }
 
 export function SettingsPage() {
-    const user: ProfileFieldProps = {name: "Lem Lemmings", email: "lemmings@gmail.com", phone: "12345678"};
+    const email = useSelector(getEmail);
+    const username = useSelector(getUsername);
+    console.log("email:", email, "username:", username);
+    const user: ProfileFieldProps = {name: "Lem Lemmings", username, email, phone: "12345678"};
     return (
         <div>
             <CommonFrame commonFrameType={"RESIDENT"}/>
@@ -60,6 +67,7 @@ export function SettingsPage() {
                     <div className={"profile-settings"}>
                         <h1>Profile</h1>
                         <ProfileFields name={user.name}
+                                       username={user.username}
                                        email={user.email} phone={user.phone}/>
                     </div>
                     <div className={"notifications-settings"}>
