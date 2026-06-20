@@ -8,13 +8,7 @@ This test plan supports the Milestone 2 submission for SmartAPT. It describes ho
 
 1. Ensure Docker Desktop is installed and running.
 2. Clone this repository from GitHub.
-3. Copy the provided environment template:
-
-```bash
-cp frontend/.env.example frontend/.env
-```
-
-4. Place the actual `.env` file from Canvas into `frontend/.env` if needed.
+3. Place `.env` file from Canvas into the main folder of the project.
 
 ## Manual Tests
 
@@ -24,20 +18,14 @@ cp frontend/.env.example frontend/.env
 
 Steps:
 
-1. Open a terminal and change to the frontend folder:
-
-```bash
-cd frontend
-```
-
-2. Start the containers:
+1. Start the containers:
 
 ```bash
 docker compose up --build
 ```
 
-3. Verify the Docker Compose start process finishes without errors.
-4. Confirm the following containers are running:
+2. Verify the Docker Compose start process finishes without errors.
+3. Confirm the following containers are running:
    - frontend
    - backend
    - mongo
