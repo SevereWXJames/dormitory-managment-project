@@ -6,20 +6,26 @@ import dayjs from "dayjs";
 
 export type BasicTimePickerProps = {
     label: string
-    onChange: (value: Dayjs | null)=>void
+    onChange: (value: Dayjs | null) => void
 }
 
 export default function BasicTimePicker({label, onChange}: BasicTimePickerProps) {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker label={label}
-                            minTime={dayjs().hour(7).minute(0)}
-                            maxTime={dayjs().hour(18).minute(0)}
-                            slotProps={{textField: {required: true,}}}
-                            sx={{'& .MuiInputLabel-root': {color: 'white'},
-                                '& .MuiPickersInputBase-colorPrimary': {color: 'white'},
-                                '& .MuiButtonBase-root': {color: 'white'}}}
-                onChange={onChange}/>
+            <TimePicker label={label}
+                        minTime={dayjs().hour(7).minute(0)}
+                        maxTime={dayjs().hour(18).minute(0)}
+                        slotProps={{
+                            textField: {
+                                required: true,
+                                sx: {
+                                    '& .MuiOutlinedInput-root': {
+                                        backgroundColor: 'white',
+                                    },
+                                },
+                            }
+                        }}
+                        onChange={onChange}/>
         </LocalizationProvider>
     );
 }

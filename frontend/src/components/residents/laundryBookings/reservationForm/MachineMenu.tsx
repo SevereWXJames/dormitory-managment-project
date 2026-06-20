@@ -21,21 +21,16 @@ export type MachineMenuProps = {
 
 export default function MachineMenu({machine, handleChange}: MachineMenuProps) {
     return (
-        <Box sx={{ minWidth: 120 }}>
+        <Box sx={{ minWidth: 120}}>
             <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label"
-                            sx={{ color: 'white' }}>Select Machine</InputLabel>
+                <InputLabel id="demo-simple-select-label">Select Machine</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     required
                     value={machine}
                     label="Machine Options"
-                    onChange={handleChange}
-                    sx={{
-                        color: 'white',
-                    }}
-                >
+                    onChange={handleChange}>
                     <MenuItem value={"machine_1"}>Machine 1</MenuItem>
                     <MenuItem value={"machine_2"}>Machine 2</MenuItem>
                     <MenuItem value={"machine_3"}>Machine 3</MenuItem>

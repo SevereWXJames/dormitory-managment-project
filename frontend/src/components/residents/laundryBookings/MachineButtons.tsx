@@ -21,7 +21,6 @@ export function MachineButtons({machine_ids, onClick}: MachineButtonsProps) {
                 return (
                     <ListItemButton
                         key={id}
-                        sx={{border: '1px solid white'}}
                         onClick={() => onClick(id)}>
                         <ListItemText primary={id}/>
                     </ListItemButton>)
