@@ -392,7 +392,8 @@ Expected result:
 
 ## Bugs
 
-No bugs have been reported as of the M2 submission date.
+Bugs that have been found before the M2 submission date have been recorded as github issues.
+Please view them for instructions on how to reproduce them.
 
 ## Automated Tests
 
