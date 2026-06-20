@@ -1,12 +1,13 @@
 FROM node:24-alpine
 WORKDIR /app
-ARG VITE_API_URL
-ENV VITE_API_URL=${VITE_API_URL}
+ARG VITE_API_URL=http://localhost:3000
 COPY package*.json ./
 RUN npm install
 COPY . .
+# Generate .env from build args for Vite to read
+RUN echo "VITE_API_URL=${VITE_API_URL}" > .env
 EXPOSE 5173
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--", "--host"]
 
 #FROM node:24-alpine AS builder
 #WORKDIR /app
