@@ -1,22 +1,17 @@
 import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { fetchJson } from "../../../utils/api";
-
-interface ResidentRecord {
-    _id: string;
-    userId: string;
-    roomId: string;
-}
+import {Resident} from "../../../dataTypes/user.ts";
 
 export function AdminResidentsPage() {
-    const [residents, setResidents] = useState<ResidentRecord[]>([]);
+    const [residents, setResidents] = useState<Resident[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const loadResidents = async () => {
             try {
-                const residentList = await fetchJson<ResidentRecord[]>("/residents/");
+                const residentList = await fetchJson<Resident[]>("/residents/");
                 setResidents(residentList);
             } catch (fetchError) {
                 setError(fetchError instanceof Error ? fetchError.message : "Unable to load residents.");

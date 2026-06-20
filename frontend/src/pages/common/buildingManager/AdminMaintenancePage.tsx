@@ -1,38 +1,21 @@
 import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { fetchJson } from "../../../utils/api";
-
-interface MaintenanceRequestItem {
-    request_id: string;
-    roomId: string;
-    type: string;
-    status: string;
-    created_at: number;
-    priority?: string;
-    location?: string | null;
-    description?: string;
-}
+import {type MaintenanceRequest, MaintenanceRequestType, MaintenanceRequestStatus} from "../../../dataTypes/maintenanceRequest.ts";
 
 export function AdminMaintenancePage() {
-    const [requests, setRequests] = useState<MaintenanceRequestItem[]>([]);
+    const [requests, setRequests] = useState<MaintenanceRequest[]>([]);
+    const [requestsTypes, setRequestTypes] = useState<MaintenanceRequestType[]>([]);
+    const [requestsStatus, setRequestStatus] = useState<MaintenanceRequestStatus[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const loadRequests = async () => {
             try {
-                const backendRequests = await fetchJson<Array<{ _id: string; type: string; status: string; description?: string; priority?: string; location?: string | null }>>("/maintenance-request/");
-                const mapped = backendRequests.map((request) => ({
-                    request_id: request._id,
-                    roomId: "",
-                    type: request.type,
-                    status: request.status === "completed" ? "Resolved" : request.status === "inProgress" ? "InProgress" : "New",
-                    created_at: Date.now() - Math.floor(Math.random() * 1000000000),
-                    priority: request.priority,
-                    location: request.location,
-                    description: request.description,
-                }));
-                setRequests(mapped);
+                setRequests(await fetchJson<[MaintenanceRequest]>("/maintenance-request/"));
+                setRequestTypes(await fetchJson<[MaintenanceRequestType]>("/maintenance-request/get-types/"));
+                setRequestStatus(await fetchJson<[MaintenanceRequestStatus]>("/maintenance-request/get-statuses/"));
             } catch (fetchError) {
                 setError(fetchError instanceof Error ? fetchError.message : "Unable to load maintenance requests.");
             } finally {
@@ -62,16 +45,18 @@ export function AdminMaintenancePage() {
                                     <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Request ID</th>
                                     <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Type</th>
                                     <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Status</th>
-                                    <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Created</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {requests.map((request) => (
-                                    <tr key={request.request_id}>
-                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{request.request_id}</td>
-                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{request.type}</td>
-                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{request.status}</td>
-                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{new Date(request.created_at).toLocaleDateString()}</td>
+                                    <tr key={request._id}>
+                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{request._id}</td>
+                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{requestsTypes.find((type) => {
+                                            return type._id === request.type;
+                                        })?.text }</td>
+                                        <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{requestsStatus.find((status) => {
+                                            return status._id === request.status;
+                                        })?.text}</td>
                                     </tr>
                                 ))}
                             </tbody>
