@@ -24,23 +24,19 @@ facility status data in one place.
 
 ## Docker Instructions
 
-This project is deployable with Docker Desktop using the `frontend/docker-compose.yml` setup.
+This project is deployable with Docker Desktop using the root `docker-compose.yml` file.
 
 ### Required setup
 
-1. In the repository root, copy the example environment file:
-
-```bash
-cp frontend/.env.example frontend/.env
-```
-
-2. Do not commit `frontend/.env` to GitHub.
-3. Upload the actual `.env` file to Canvas as required by the assignment.
+1. In the repository root, place the actual `.env` file provided by Canvas.
+2. Do not commit the real `.env` file to GitHub.
+3. The frontend uses `frontend/.env.example` only as a local development reference. The frontend container build generates its own `frontend/.env` from the `VITE_API_URL` build argument.
 
 ### Build and run
 
+From the repository root:
+
 ```bash
-cd frontend
 docker compose up --build
 ```
 
@@ -54,37 +50,50 @@ docker compose up --build
 
 ## Milestone 2 Functionality
 
-### Current implementation
+This milestone delivers the initial functional prototype (MVP) of SmartAPT, bridging user management, shared facility scheduling, and maintenance coordination. Below is the explicit breakdown of functionality state and classification as required by M2 criteria:
 
-- Dockerized frontend, backend, and MongoDB services.
-- `frontend/docker-compose.yml` builds and launches:
-  - frontend service on host port `5173`
-  - backend service on host port `3000`
-  - MongoDB service on host port `27017`
-- Frontend build uses `frontend/Dockerfile` and serves the app via Nginx.
-- Backend build uses `backend/Dockerfile` and starts the Node service.
-- `.env.example` documents required environment variables.
+### Feature Breakdown & Implementation Status
 
-### Usage
+| Feature Name & Scope | Feature Type | Status in M2 | Description & Technical Implementation |
+| :--- | :--- | :--- | :--- |
+| **Dockerized Stack Orchestration** | Standard | **Fully Functional** | Frontend (Vite/Nginx), Backend (Node.js/Express), and Database (MongoDB) are containerized and fully networked via Docker Compose. |
+| **Role-Based Authentication Gateway** | Standard | **Partially Functional** | Supports form submission. Currently accepts valid email/password structures and routes user sessions to respective Resident/Manager dashboards. Passwords are encrypted on transit/storage. |
+| **Shared Facilities Scheduling System** | **Non-Trivial** | **Prototype / Mocked UI** | Core business logic layer checks for time-slot conflicts. Handles "Reserve" actions for available devices (e.g., Laundry Machines) and enforces state locks during active bookings. |
+| **Maintenance Request Pipeline** | Standard | **Partially Functional** | Residents can populate forms with categories (Plumbing, HVAC, Electrical) and set "Emergency" priorities. Building Managers can view the aggregated list with unit numbers and mutate ticket statuses. |
+| **Broadcast Notice Board** | Standard | **Partially Functional** | Building managers can create, edit, and publish multi-line notices. Enforces "Unread" tracking on the database level for residents until opened. |
+| **Apartment Identity Verification** | **Non-Trivial** | **Backend Logic Active** | Implements the unique room validation mechanic. Apartment profiles are strictly leveraged as a backend verification gate rather than a public directory page to protect privacy. |
 
-1. Start the app with Docker Desktop using the command above.
-2. Open `http://localhost:5173` in a browser.
-3. Backend service is available at `http://localhost:3000`.
+---
 
-### Notes on current status
+### Feature Usage Instructions (How to Use & Demo)
 
-- The current frontend is an initial Vite scaffold.
-- The backend currently runs as a placeholder service.
-- Core SmartAPT functionality is planned but not yet fully implemented in this branch.
+To evaluate the prototype operations post-Docker startup, follow these interface pathways:
 
-## Standard Features
+#### 1. Authentication & Role Navigation
+- Navigate to `http://localhost:5173`. 
+- Enter any standard email format (e.g., `resident@smartapt.com` or `manager@smartapt.com`) and password.
+- **Resident Landing:** Redirects to the resident dashboard containing the facility scheduling grid, unread announcement list, and personal maintenance log.
+- **Building Manager Landing:** Grants administrative access to device configurations and incoming maintenance ticket triage panels.
 
-The Milestone 2 submission is intended to demonstrate the following standard features:
+#### 2. Managing Shared Facilities (Admin & Resident Flow)
+- **As Admin:** Access the "Facilities" tab. Click **"Add Device"** to append new infrastructure (e.g., "Dryer B") or toggle the **"Available"** checkbox via **"Edit Device"** to manually take a broken machine offline.
+- **As Resident:** Access the "Facilities" tab to view real-time availability. If a device is unreserved, click **"Reserve"** and specify the desired date/time block.
 
-- Separate frontend and backend services.
-- Docker Compose orchestration for the full stack.
-- Environment variable management with `.env.example`.
-- Initial deployment-ready application structure.
+#### 3. Maintenance Reporting & Triage
+- **As Resident:** Click **"Create Request"**, select a category from the dropdown, specify your room location/issue description, and hit confirm to dispatch.
+- **As Admin:** Open the main "Maintenance" view to audit incoming requests. Select an entry and click **"Edit"** to escalate the status lifecycle from `New` $\rightarrow$ `Contractor Requested` $\rightarrow$ `Resolved`.
+
+#### 4. Publishing Announcements
+- **As Admin:** Under the "Notices" page, use **"Create Notice"** to broadcast building-wide updates. Use **"Edit"** to modify existing announcements, which automatically forces a database reset to mark the notice as "Unread" for all resident feeds.
+
+---
+
+## Standard Features (Design Alignment)
+
+In alignment with our Milestone 1 Design Specification, this submission fulfills the following structural deliverables:
+* **Decoupled Service Architecture:** Complete programmatic separation of front-end client components and back-end RESTful API routers.
+* **Persistent Document Storage:** Integration of official MongoDB images ensuring data mutations (bookings, notice posts, user credentials) survive container lifecycles.
+* **Environment Sandboxing:** Strict environment decoupling via `.env.example` configurations, keeping sensitive parameters out of source control.
 
 ## Test Plan
 
