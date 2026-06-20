@@ -1,9 +1,9 @@
 node_modules
 dist
-.env
+../.env
 .git
 .gitignore
-docker-compose.yml
+../docker-compose.yml
 Dockerfile
 backend/node_modules
 backend/package-lock.json

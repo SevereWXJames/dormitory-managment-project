@@ -21,9 +21,9 @@ export function AddCreditsCard() {
 
 	const dispatch = useDispatch();
 	const [cardNumber, setCardNumber] = useState("");
-	const [expirationDate, setExpirationDate] = useState("");
-	const [securityCode, setsecurityCode] = useState("");
-	const [name, setName] = useState("");
+	const [_expirationDate, setExpirationDate] = useState("");
+	const [_securityCode, setsecurityCode] = useState("");
+	const [_name, setName] = useState("");
 	const [amount, setAmount] = useState("");
 
 	/**

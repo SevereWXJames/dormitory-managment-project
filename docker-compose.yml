@@ -1,7 +1,7 @@
 services:
   frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL}
@@ -14,6 +14,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      #dockerfile: frontend/Dockerfile
     ports:
       - "3000:3000"
     env_file:
