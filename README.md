@@ -26,7 +26,7 @@ facility status data in one place.
 
 This project is deployable with Docker Desktop using the root `docker-compose.yml` file.
 
-### Required setup
+### Required setup (Docker instructions)
 
 1. In the repository root, place the actual `.env` file provided by Canvas.
 2. Do not commit the real `.env` file to GitHub.
