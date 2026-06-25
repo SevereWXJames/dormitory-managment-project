@@ -44,8 +44,12 @@ export function LoginForm() {
 	 */
 	const handleLogIn = async () => {
         setLoginError(null);
-        if (!username || !password) {
-            setLoginError("Username and password are required.");
+        if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
+            setLoginError("Username or email is required.");
+            return;
+        }
+        if (!password) {
+            setLoginError("Password is required.");
             return;
         }
 
@@ -55,11 +59,11 @@ export function LoginForm() {
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password }),
+                    body: JSON.stringify({ username: username || undefined, email: email || undefined, password }),
                 }
             );
 
-            dispatch(logIn({ username, email, userId: data._id, roles: data.roles }));
+            dispatch(logIn({ username: data.username, email: data.email, userId: data._id, roles: data.roles }));
             const targetPath = (data.roles ?? []).some((role) => role === "Admin" || role === "Staff") ? "/admin/dashboard" : "/dashboard";
             navigate(targetPath);
         } catch (error) {
@@ -75,16 +79,18 @@ export function LoginForm() {
                     id={`${usernameFieldID}-input`}
                     type='text'
                     label="Username"
-                    onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
+                    value={username}
+                    onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
 			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
 				<InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
 				<OutlinedInput
 					id={`${emailFieldID}-input`}
-					type='text'
+					type='email'
 					label="E-mail"
-					onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
+					value={email}
+					onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
 				/>
 			</FormControl>
 			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
