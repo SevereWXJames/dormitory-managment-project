@@ -1,8 +1,15 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import type {CommonFrameType} from '../../../../app/types';
 import {CommonFrame} from '../../../../components/common/CommonFrame';
 import {RecentBookings} from "../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
 import Paper from "@mui/material/Paper";
 import {List, ListItemText} from "@mui/material";
+import { getUserId } from '../../../../context/authenticationSlice.ts';
+import { fetchJson } from '../../../../utils/api.ts';
+import type { CreditBalance } from '../../../../dataTypes/creditBalance.ts';
+import type { Notice } from '../../../../dataTypes/notice.ts';
+import type { ReservationSlot } from '../../../../dataTypes/reservationSlot.ts';
 
 export interface DashboardProps {
     name: string,
@@ -26,23 +33,70 @@ export function RecentActivity() {
 }
 
 export function DashboardPage() {
+    const userId = useSelector(getUserId);
+    const [creditBalance, setCreditBalance] = useState<CreditBalance | null>(null);
+    const [bookings, setBookings] = useState<ReservationSlot[]>([]);
+    const [notices, setNotices] = useState<Notice[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const loadDashboard = async () => {
+            if (!userId) {
+                setError("Resident is not authenticated.");
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const [balance, booked, userNotices] = await Promise.all([
+                    fetchJson<CreditBalance>(`/credits/get-for-user/${encodeURIComponent(userId)}`),
+                    fetchJson<ReservationSlot[]>(`/reservations/get-booked-by-user/${encodeURIComponent(userId)}`),
+                    fetchJson<Notice[]>(`/notices/get-for-user/${encodeURIComponent(userId)}`),
+                ]);
+
+                setCreditBalance(balance);
+                setBookings(booked);
+                setNotices(userNotices);
+            } catch (fetchError) {
+                setError(fetchError instanceof Error ? fetchError.message : "Unable to load dashboard data.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadDashboard();
+    }, [userId]);
+
+    const formattedBalance = creditBalance ? `$${(creditBalance.balanceCents / 100).toFixed(2)}` : "N/A";
+
     return (
         <>
             <CommonFrame commonFrameType="RESIDENT"/>
             <div className="dashboardPage">
                 <h1>Resident Dashboard</h1>
-                <div className={"rent-due"}>
-                    <strong>Rent Due</strong>
-                    <p>$1420.00</p>
-                </div>
-                <div className={"recent-activity"}>
-                    <strong>Recent activity</strong>
-                    <RecentActivity/>
-                </div>
-                <div className={"upcoming-bookings"}>
-                    <strong>Upcoming bookings</strong>
-                    <RecentBookings/>
-                </div>
+                {loading && <p>Loading dashboard data...</p>}
+                {error && <p style={{ color: "red" }}>{error}</p>}
+                {!loading && !error && (
+                    <>
+                        <div className={"rent-due"}>
+                            <strong>Credit Balance</strong>
+                            <p>{formattedBalance}</p>
+                        </div>
+                        <div className={"dashboard-summary"}>
+                            <div><strong>Upcoming bookings</strong><p>{bookings.length}</p></div>
+                            <div><strong>Notices</strong><p>{notices.length}</p></div>
+                        </div>
+                        <div className={"recent-activity"}>
+                            <strong>Recent activity</strong>
+                            <RecentActivity/>
+                        </div>
+                        <div className={"upcoming-bookings"}>
+                            <strong>Upcoming bookings</strong>
+                            <RecentBookings/>
+                        </div>
+                    </>
+                )}
             </div>
         </>
     )

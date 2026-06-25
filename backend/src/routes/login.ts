@@ -35,6 +35,8 @@ loginRouter.post("/login", async (req: Request, res: Response)=> {
        data: {
            _id: existingUser._id,
            username: username,
+           email: existingUser.email,
+           roles: existingUser.roles,
            token: token
        }
     });

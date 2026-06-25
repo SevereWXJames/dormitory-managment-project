@@ -5,8 +5,8 @@ import type { Dayjs } from "dayjs";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import {addBooking, getAllBookings} from "../../../../context/residents/bookingsSlice";
 import {createBooking, hasConflict, hasEnoughCredits} from "./reservationUtils";
-import {getUsername} from "../../../../context/authenticationSlice.ts";
-import {getCreditsCents, removeCredits} from "../../../../context/residents/creditsSlice.ts";
+import {getUserId} from "../../../../context/authenticationSlice.ts";
+import {getCreditsCents, removeCredits} from "../../../../context/residents/creditsSlice";
 import type {Booking} from "../../../../types/residents/types.tsx";
 
 export function useReservationForm() {
@@ -14,7 +14,7 @@ export function useReservationForm() {
     const [startTime, setStartTime] = useState<Dayjs | null>(null);
     const [machine, setMachine] = useState("");
     const [date, setDate] = useState<Dayjs | null>(null);
-    const userId = useSelector(getUsername);
+    const userId = useSelector(getUserId);
 
     const dispatch = useDispatch();
     const bookings: Booking[] = useSelector(getAllBookings);
