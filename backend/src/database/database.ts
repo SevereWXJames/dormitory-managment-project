@@ -1,4 +1,4 @@
-import { Collection, Db, MongoClient, type Document } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 import { MONGODB_URL, DATABASE_NAME, type CollectionName } from './databaseConstants.ts';
 
 /**
@@ -7,13 +7,6 @@ import { MONGODB_URL, DATABASE_NAME, type CollectionName } from './databaseConst
 export class Database {
 	client: MongoClient;
 	database: Db;
-	facilties: Collection<Document>;
-	bookings: Collection<Document>;
-	maintenanceRequests: Collection<Document>;
-	notices: Collection<Document>;
-	credits: Collection<Document>;
-	units: Collection<Document>;
-	users: Collection<Document>;
 
 	/**
 	 * Constructor. Must not be called by external code.
@@ -24,14 +17,6 @@ export class Database {
 	private constructor (client: MongoClient) {
 		this.client = client;
 		this.database = this.client.db(DATABASE_NAME);
-
-		this.facilties = this.database.collection("facilities" as CollectionName);
-		this.bookings = this.database.collection("bookings" as CollectionName);
-		this.maintenanceRequests = this.database.collection("maintenance_requests" as CollectionName);
-		this.notices = this.database.collection("notices" as CollectionName);
-		this.credits = this.database.collection("credits" as CollectionName);
-		this.units = this.database.collection("units" as CollectionName);
-		this.users = this.database.collection("users" as CollectionName);
 	}
 
 	/**
@@ -57,6 +42,7 @@ export class Database {
 	 * @returns A Promise, to either be resolved with void or be rejected.
 	 */
 	public async load(collectionName: CollectionName, data: any[]) : Promise<void> {
+		console.log(`load(${collectionName})`);
 		try {
 			return this.database.collection(collectionName).insertMany(data).then((result) => {
 				Promise.resolve();
