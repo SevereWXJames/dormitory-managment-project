@@ -1,4 +1,4 @@
-export const MONGODB_URL = "mongodb://localhost:27017";
+export const MONGODB_URL = "mongodb://mongo:27017";
 export const DATABASE_NAME = "SmartAPT";
 
 export type CollectionName = "credit_balances" | "transactions" | "maintenance_requests" | "maintenance_request_types" |
