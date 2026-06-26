@@ -1,12 +1,12 @@
 export class User {
-    public _id: string;
+    public id: string;
     public username: string;
     public email: string;
     public phoneNumber: string;
     public roles: [string];
 
-    constructor({_id, username, email, phoneNumber, roles}: {_id: string, username: string, email: string, phoneNumber: string, roles: [string]}) {
-        this._id = _id;
+    constructor({id, username, email, phoneNumber, roles}: {id: string, username: string, email: string, phoneNumber: string, roles: [string]}) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -15,12 +15,12 @@ export class User {
 }
 
 export class Resident {
-    public _id: string;
+    public id: string;
     public userId: string;
     public roomId: string;
 
-    constructor({_id, userId, roomId}: {_id: string, userId: string, roomId: string}) {
-        this._id = _id;
+    constructor({id, userId, roomId}: {id: string, userId: string, roomId: string}) {
+        this.id = id;
         this.userId = userId;
         this.roomId = roomId;
     }

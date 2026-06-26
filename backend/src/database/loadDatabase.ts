@@ -11,6 +11,14 @@ import roomJSON from "../../test_data/rooms.json" with {type: "json"};
 import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import serviceJSON from "../../test_data/services.json" with {type: "json"};
 
+/**
+ * Loads the sample data from the backend/test_data folder into the SmartAPT
+ * database in MongoDB. If the database already exists in MongoDB, then it is
+ * dropped and the data is loaded in again.
+ * 
+ * @returns A promise of void, which resolves if the data has been loaded into
+ * the database correctly.
+ */
 export default function loadSampleData(): Promise<void> {
 	console.debug("loadSampleData(): Loading sample data");
 

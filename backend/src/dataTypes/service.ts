@@ -1,5 +1,5 @@
   export class Service {
-    public _id: string;
+    public id: string;
       public name: string;
       public description: string;
       public hasIoT: boolean;
@@ -10,7 +10,7 @@
 
 
       constructor({
-                      _id,
+                      id,
                       name,
                       description,
                       hasIoT,
@@ -20,7 +20,7 @@
                       reservationEndHour
                   }:
                   {
-                      _id: string,
+                      id: string,
                       name: string,
                       description: string,
                       hasIoT: boolean,
@@ -29,7 +29,7 @@
                       reservationStartHour: number,
                       reservationEndHour: number
                   }) {
-          this._id = _id;
+          this.id = id;
           this.name = name;
           this.description = description;
           this.hasIoT = hasIoT;

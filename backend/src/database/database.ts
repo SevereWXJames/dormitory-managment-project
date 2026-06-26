@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb';
+import { Collection, Db, MongoClient, type Document } from 'mongodb';
 import { MONGODB_URL, DATABASE_NAME, type CollectionName } from './databaseConstants.ts';
 
 /**
@@ -51,6 +51,17 @@ export class Database {
 		} catch (e) {
 			return Promise.reject(`Database: Failed to initialize Database: ${(e as Error).message}`);
 		}
+	}
+	
+	/**
+	 * Returns a collection in the SmartAPT database.
+	 * Shorthand for database.database.collection(collectionName).
+	 * 
+	 * @param collectionName Name of the collection.
+	 * @returns Corresponding collection.
+	 */
+	public getCollection(collectionName: CollectionName) : Collection<Document> {
+		return this.database.collection(collectionName);
 	}
 }
 
