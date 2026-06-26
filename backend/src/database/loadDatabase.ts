@@ -12,20 +12,21 @@ import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import serviceJSON from "../../test_data/services.json" with {type: "json"};
 
 export default function loadSampleData(): Promise<void> {
-	console.log("loadSampleData(): Loading sample data");
+	console.debug("loadSampleData(): Loading sample data");
 
-	return Promise.all([database.load("credit_balances", creditBalanceJSON.creditBalances),
-		database.load("transactions", transactionHistoryJSON.transactions),
-		database.load("maintenance_requests", requestJSON.maintenanceRequests),
-		database.load("maintenance_request_types", requestTypeJSON.maintenanceRequestTypes),
-		database.load("maintenance_request_statuses", requestStatusJSON.maintenanceRequestStatuses),
-		database.load("maintenance_request_priorities", requestPriorityJSON.maintenanceRequestPriorities),
-		database.load("notices", noticeJSON.notices),
-		database.load("reservation_slots", reservationJSON.reservationSlots),
-		database.load("rooms", roomJSON.rooms),
-		database.load("residents", residentJSON.residents),
-		database.load("services", serviceJSON.services)])
-		.then((value) => {
+	return database.database.dropDatabase().then((value) =>
+		Promise.all([database.load("credit_balances", creditBalanceJSON.creditBalances),
+			database.load("transactions", transactionHistoryJSON.transactions),
+			database.load("maintenance_requests", requestJSON.maintenanceRequests),
+			database.load("maintenance_request_types", requestTypeJSON.maintenanceRequestTypes),
+			database.load("maintenance_request_statuses", requestStatusJSON.maintenanceRequestStatuses),
+			database.load("maintenance_request_priorities", requestPriorityJSON.maintenanceRequestPriorities),
+			database.load("notices", noticeJSON.notices),
+			database.load("reservation_slots", reservationJSON.reservationSlots),
+			database.load("rooms", roomJSON.rooms),
+			database.load("residents", residentJSON.residents),
+			database.load("services", serviceJSON.services)])
+		).then((value) => {
 			Promise.resolve();
 		})
 		.catch((e) => {
