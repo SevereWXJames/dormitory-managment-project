@@ -20,7 +20,7 @@ import serviceJSON from "../../test_data/services.json" with {type: "json"};
  * the database correctly.
  */
 export default function loadSampleData(): Promise<void> {
-	console.debug("loadSampleData(): Loading sample data");
+	// console.debug("loadSampleData(): Loading sample data");
 
 	return database.database.dropDatabase().then((value) =>
 		Promise.all([database.load("credit_balances", creditBalanceJSON.creditBalances),
@@ -38,6 +38,6 @@ export default function loadSampleData(): Promise<void> {
 			Promise.resolve();
 		})
 		.catch((e) => {
-			Promise.reject(`loadDatabase.ts: Error while loading sample data into MongoDB ${(e as Error).message}`);
+			Promise.reject(e);
 		});
 };

@@ -25,12 +25,12 @@ export class Database {
 	 * @returns A promise, to either be resolved with a Database or be rejected.
 	 */
 	public static async create() : Promise<Database> {
-		console.debug(`Database.create()`);
+		// console.debug(`Database.create()`);
 		try {
 			const client = await MongoClient.connect(MONGODB_URL);
 			return Promise.resolve(new Database(client));
 		} catch (e) {
-			return Promise.reject(`Database: Failed to initialize Database: ${(e as Error).message}`);
+			return Promise.reject(e);
 		}
 	}
 
@@ -43,13 +43,13 @@ export class Database {
 	 * @returns A Promise, to either be resolved with void or be rejected.
 	 */
 	public async load(collectionName: CollectionName, data: any[]) : Promise<void> {
-		console.debug(`database.load(${collectionName})`);
+		// console.debug(`database.load(${collectionName})`);
 		try {
 			return this.database.collection(collectionName).insertMany(data).then((result) => {
 				Promise.resolve();
 			});
 		} catch (e) {
-			return Promise.reject(`Database: Failed to initialize Database: ${(e as Error).message}`);
+			return Promise.reject(e);
 		}
 	}
 	

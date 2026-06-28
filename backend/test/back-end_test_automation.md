@@ -12,17 +12,17 @@ COMPOSE_PROFILES=production
 
 ## Running Tests
 
-To run the back-end tests, run the docker compose command with the `--profiles test` attribute, as follows:
+To run the back-end tests, run the docker compose command with the `--profile test` attribute, as follows:
 
 ```bash
-docker compose --profiles test up --build
+docker compose --profile test up --build
 ```
 
 This runs the MongoDB container as well as a second back-end container called “backend-test”. This container will run the back-end Mocha tests (i.e. all files with names ending in `.test.ts`) specified in the subfolders of the `backend/test` folder. 
 
 ## Writing Tests
 
-Tests can be written using Mocha and Chai. Refer to their documentations for more information.
+Tests can be written using Mocha, Chai and Chai as Promised. Refer to their documentations for more information.
 
 ## Implementation Notes
 
