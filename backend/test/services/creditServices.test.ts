@@ -27,10 +27,6 @@ describe("creditServices", function () {
 	});
 
 	describe("getTransactionHistoryByUserId()", function () {
-		before(async function() {
-			await loadSampleData();
-		});
-
 		it("Existing userId", async function () {
 			const userId = "user1";
 			const expectedLength = 1;
