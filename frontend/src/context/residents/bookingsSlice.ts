@@ -31,10 +31,13 @@ export const bookingsSlice = createSlice({
             }
             console.log("Removed Booking!");
         },
+        setBookings: (state, action: PayloadAction<Booking[]>) => {
+            state.bookings = action.payload;
+        }
     }
 });
 
-export const {addBooking, removeBooking} = bookingsSlice.actions;
+export const {addBooking, removeBooking, setBookings} = bookingsSlice.actions;
 
 /**
  *  Returns the amount of credits as a number of cents.
