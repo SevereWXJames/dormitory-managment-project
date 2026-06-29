@@ -1,5 +1,5 @@
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {getAuthenticationState, logIn} from "../../context/authenticationSlice";
 import {useDispatch, useSelector} from "react-redux";
@@ -47,12 +47,15 @@ export function LoginForm() {
 	 */
 	const handleLogIn = () => {
 		dispatch(logIn([username, email, password]));
-        if(role === "BUILDING_MANAGER"){
+	}
+
+    useEffect(() => {
+        if (role === "BUILDING_MANAGER") {
             navigate('/admin/dashboard');
-        }else if(role === "RESIDENT"){
+        } else if (role === "RESIDENT") {
             navigate('/dashboard');
         }
-	}
+    }, [role, navigate]);
 
 	return (
 		<div className="login-form flex flex-col gap-4 m-4 items-center mx-auto" style={{ width: 'fit-content', margin: '0 auto' }}>
