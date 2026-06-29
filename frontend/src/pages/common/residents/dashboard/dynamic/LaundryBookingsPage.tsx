@@ -1,68 +1,14 @@
-import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
-import {MachineOptions} from "../../../../../components/residents/laundryBookings/MachineButtons.tsx";
-import {ReservationForm} from "../../../../../components/residents/laundryBookings/reservationForm/ReservationForm.tsx";
-import {
-    CancelBookingButton
-} from "../../../../../components/residents/laundryBookings/removeBookings/CancelBookingButton.tsx";
-import {
-    RecentBookings
-} from "../../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
-import {
-    CheckMachineStatus
-} from "../../../../../components/residents/laundryBookings/reservationForm/CheckMachineStatus.tsx";
-
-export type Bookings = {
-    date: Date,
-    start_time: string,
-    end_time: string,
-    machine_id: string,
-    event_title: string,
-}
-
-export function LaundryMachinesList() {
-    const machines: string[] = ["machine_1", "machine_2", "machine_3"]
-    return (
-        <div>
-            <div className={"machine-options"}>
-                <MachineOptions machine_ids={machines}/>
-            </div>
-            <div className={"check-machine-status"}>
-                <strong>Check Machine status</strong>
-                <CheckMachineStatus/>
-            </div>
+export function LaundryBookingsPage(){
+    return (<div className={"laundryBookingsPage"}>
+        <div className={"machineList"}>
+            <strong>Book a machine</strong>
+            <p>List of machines</p>
         </div>
-    )
-}
-
-export function LaundryBookingsPage() {
-    return (
-        <>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
-            <div className={"laundryBookingsPage"}>
-                <div className={"contents"}>
-                    <div className={"machineList"}>
-                        <strong>Laundry Machines</strong>
-                        <LaundryMachinesList/>
-                    </div>
-                    <div className={"bookingsColumn"}>
-                        <div className={"bookingForm"}>
-                            <strong>Make a booking</strong>
-                            <ReservationForm/>
-                        </div>
-                        <div className={"cancel-booking"}>
-                            <strong>Cancel a booking</strong>
-                            <CancelBookingButton/>
-                        </div>
-
-                        <div className={"tables"}>
-                            <div className={"recentBookings"}>
-                                <strong>Recent bookings</strong>
-                                <RecentBookings/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+        <div className={"balance"}>
+            <p>Balance: 100 credits</p>
+        </div>
+        <div className={"current-bookings"}>
+            <p>Table of current bookings</p>
+        </div>
+    </div>)
 }
