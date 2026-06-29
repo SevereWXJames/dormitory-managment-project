@@ -72,8 +72,8 @@ export function LoginForm() {
 	}
 
 	return (
-		<div className="login-form">
-            <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+		<div className="login-form flex flex-col gap-4 m-4 items-center mx-auto" style={{ width: 'fit-content', margin: '0 auto' }}>
+            <FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
                 <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
                 <OutlinedInput
                     id={`${usernameFieldID}-input`}
@@ -83,7 +83,7 @@ export function LoginForm() {
                     onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
-			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+			<FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
 				<InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
 				<OutlinedInput
 					id={`${emailFieldID}-input`}
@@ -93,7 +93,7 @@ export function LoginForm() {
 					onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
 				/>
 			</FormControl>
-			<FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+			<FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
 				<InputLabel htmlFor={`${passwordFieldID}-input`}>Password</InputLabel>
 				<OutlinedInput
 					id={`${passwordFieldID}-input`}
