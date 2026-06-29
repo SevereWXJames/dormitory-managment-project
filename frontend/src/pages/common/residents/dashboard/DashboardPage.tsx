@@ -2,6 +2,11 @@ import type {CommonFrameType} from '../../../../app/types';
 import {CommonFrame} from '../../../../components/common/CommonFrame';
 import Paper from "@mui/material/Paper";
 import {List, ListItemText} from "@mui/material";
+import {
+    Card,
+    CardContent,
+    CardTitle,
+} from "@/components/ui/card"
 
 export interface DashboardProps {
     name: string,
@@ -29,18 +34,24 @@ export function DashboardPage() {
         <>
             <CommonFrame commonFrameType="RESIDENT"/>
             <div className="dashboardPage">
-                <h1>Resident Dashboard</h1>
-                <div className={"rent-due"}>
-                    <strong>Rent Due</strong>
-                    <p>$1420.00</p>
-                </div>
-                <div className={"recent-activity"}>
-                    <strong>Recent activity</strong>
-                    <RecentActivity/>
-                </div>
-                <div className={"upcoming-bookings"}>
-                    <strong>Upcoming bookings</strong>
-                </div>
+                <h2>Resident Dashboard</h2>
+                <Card>
+                    <CardTitle>Finances</CardTitle>
+                    <CardContent>
+                        <strong>Application for Winter: Sept 2026</strong>
+                        <strong>Laundry Credit Balance: 400 credits</strong>
+                        <strong>Meal Card Balance: 300 credits</strong>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardTitle>Recent Activity:</CardTitle>
+                    <CardContent>
+                        <RecentActivity/>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardTitle>Reminders for upcoming bookings:</CardTitle>
+                </Card>
             </div>
         </>
     )
