@@ -1,9 +1,8 @@
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { logIn } from "../../context/authenticationSlice";
-import { useDispatch } from "react-redux";
-import { fetchJson } from "../../utils/api.ts";
+import {getAuthenticationState, logIn} from "../../context/authenticationSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -25,8 +24,8 @@ export function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-    const [loginError, setLoginError] = useState<string | null>(null);
     const dispatch = useDispatch();
+    const role = useSelector(getAuthenticationState);
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -39,37 +38,24 @@ export function LoginForm() {
 	};
 
 	/**
-	 * Sends login information to the backend and routes based on the
-	 * authenticated user role from the server.
+	 * TODO. For M2, redirects to the building manager view if the
+	 * provided e-mail has the word “admin” in it, and to the resident view
+	 * otherwise.
+	 * 
+	 * Intended to handle the log in process, sending login information 
+	 * over for authentication.
 	 */
-	const handleLogIn = async () => {
-        setLoginError(null);
-        if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
-            setLoginError("Username or email is required.");
-            return;
-        }
-        if (!password) {
-            setLoginError("Password is required.");
-            return;
-        }
-
-        try {
-            const data = await fetchJson<{ _id: string, username: string, email: string, roles: string[] }>(
-                "/login",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username: username || undefined, email: email || undefined, password }),
-                }
-            );
-
-            dispatch(logIn({ username: data.username, email: data.email, userId: data._id, roles: data.roles }));
-            const targetPath = (data.roles ?? []).some((role) => role === "Admin" || role === "Staff") ? "/admin/dashboard" : "/dashboard";
-            navigate(targetPath);
-        } catch (error) {
-            setLoginError(error instanceof Error ? error.message : "Login failed.");
-        }
+	const handleLogIn = () => {
+		dispatch(logIn([username, email, password]));
 	}
+
+    useEffect(() => {
+        if (role === "BUILDING_MANAGER") {
+            navigate('/admin/dashboard');
+        } else if (role === "RESIDENT") {
+            navigate('/dashboard');
+        }
+    }, [role, navigate]);
 
 	return (
 		<div className="login-form flex flex-col gap-4 m-4 items-center mx-auto" style={{ width: 'fit-content', margin: '0 auto' }}>
@@ -79,18 +65,16 @@ export function LoginForm() {
                     id={`${usernameFieldID}-input`}
                     type='text'
                     label="Username"
-                    value={username}
-                    onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
+                    onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
 			<FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
 				<InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
 				<OutlinedInput
 					id={`${emailFieldID}-input`}
-					type='email'
+					type='text'
 					label="E-mail"
-					value={email}
-					onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+					onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
 				/>
 			</FormControl>
 			<FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
@@ -98,7 +82,6 @@ export function LoginForm() {
 				<OutlinedInput
 					id={`${passwordFieldID}-input`}
 					type={showPassword ? 'text' : 'password'}
-					onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
 					endAdornment={
 					<InputAdornment position="end">
 						<IconButton
@@ -108,6 +91,7 @@ export function LoginForm() {
 						onClick={handleClickShowPassword}
 						onMouseDown={handleMouseDownPassword}
 						onMouseUp={handleMouseUpPassword}
+						onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
 						edge="end"
 						>
 						{showPassword ? <span className="password-field-edge-button">Hide</span>: <span className="password-field-edge-button">Show</span>}
@@ -120,7 +104,6 @@ export function LoginForm() {
 			<FormControl>
 				<Button id="open-nav-bar-button" variant="contained" onClick={handleLogIn}>Log in</Button>
 			</FormControl>
-                {loginError && <p style={{ color: "red" }}>{loginError}</p>}
 		</div>
 	)
 }
