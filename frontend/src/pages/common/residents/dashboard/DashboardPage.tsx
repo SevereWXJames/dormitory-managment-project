@@ -1,6 +1,5 @@
 import type {CommonFrameType} from '../../../../app/types';
 import {CommonFrame} from '../../../../components/common/CommonFrame';
-import {RecentBookings} from "../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
 import Paper from "@mui/material/Paper";
 import {List, ListItemText} from "@mui/material";
 
@@ -41,7 +40,6 @@ export function DashboardPage() {
                 </div>
                 <div className={"upcoming-bookings"}>
                     <strong>Upcoming bookings</strong>
-                    <RecentBookings/>
                 </div>
             </div>
         </>
