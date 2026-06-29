@@ -1,5 +1,5 @@
 export class MaintenanceRequest {
-    public _id: string;
+    public id: string;
     public createdBy: string;
     public title: string;
     public description: string;
@@ -8,8 +8,8 @@ export class MaintenanceRequest {
     public priority: string;
     public location: string | null;
 
-    constructor({_id, createdBy, title, description, type, status, priority, location}: {
-        _id: string,
+    constructor({id, createdBy, title, description, type, status, priority, location}: {
+        id: string,
         createdBy: string,
         title: string,
         description: string,
@@ -18,7 +18,7 @@ export class MaintenanceRequest {
         priority: string,
         location: string | null
     }) {
-        this._id = _id;
+        this.id = id;
         this.createdBy = createdBy;
         this.title = title;
         this.description = description;
@@ -30,31 +30,31 @@ export class MaintenanceRequest {
 }
 
 export class MaintenanceRequestType {
-    public _id: string;
+    public id: string;
     public text: string;
 
-    constructor({_id, text}: {_id: string, text: string}) {
-        this._id = _id;
+    constructor({id, text}: {id: string, text: string}) {
+        this.id = id;
         this.text = text;
     }
 }
 
 export class MaintenanceRequestStatus {
-    public _id: string;
+    public id: string;
     public text: string;
 
-    constructor({_id, text}: {_id: string, text: string}) {
-        this._id = _id;
+    constructor({id, text}: {id: string, text: string}) {
+        this.id = id;
         this.text = text;
     }
 }
 
 export class MaintenanceRequestPriority {
-    public _id: string;
+    public id: string;
     public text: string;
 
-    constructor({_id, text}: {_id: string, text: string}) {
-        this._id = _id;
+    constructor({id, text}: {id: string, text: string}) {
+        this.id = id;
         this.text = text;
     }
 }

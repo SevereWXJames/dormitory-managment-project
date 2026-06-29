@@ -1,19 +1,19 @@
 {
   "transactions": [
     {
-      "_id": "transaction0",
+      "id": "transaction0",
       "userId": "user0",
       "description": "test",
       "transaction": 100
     },
     {
-      "_id": "transaction1",
+      "id": "transaction1",
       "userId": "user1",
       "description": "test",
       "transaction": 200
     },
     {
-      "_id": "transaction2",
+      "id": "transaction2",
       "userId": "user2",
       "description": "test",
       "transaction": 300

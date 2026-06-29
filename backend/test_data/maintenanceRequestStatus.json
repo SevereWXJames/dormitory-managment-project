@@ -1,15 +1,15 @@
 {
   "maintenanceRequestStatuses": [
     {
-      "_id": "new",
+      "id": "new",
       "text": "New"
     },
     {
-      "_id": "inProgress",
+      "id": "inProgress",
       "text": "In Progress"
     },
     {
-      "_id": "completed",
+      "id": "completed",
       "text": "Completed"
     }
   ]
