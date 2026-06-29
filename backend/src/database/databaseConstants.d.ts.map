@@ -1,0 +1,1 @@
+{"version":3,"file":"databaseConstants.d.ts","sourceRoot":"","sources":["databaseConstants.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,WAAW,0BAA0B,CAAC;AACnD,eAAO,MAAM,aAAa,aAAa,CAAC;AAExC,MAAM,MAAM,cAAc,GAAG,iBAAiB,GAAG,cAAc,GAAG,sBAAsB,GAAG,2BAA2B,GACtH,8BAA8B,GAAG,gCAAgC,GAAG,SAAS,GAAG,mBAAmB,GAAG,OAAO,GAC7G,WAAW,GAAG,UAAU,CAAC"}
