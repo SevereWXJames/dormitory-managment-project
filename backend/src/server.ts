@@ -12,7 +12,6 @@ import servicesRouter from "./routes/services.ts";
 import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
-import loadSampleData from "./database/loadDatabase.ts";
 
 dotenv.config();
 
@@ -32,8 +31,6 @@ app.use("/maintenance-request", maintenanceRequestRouter)
 app.use("/IoT", IoTRouter);
 app.use("/user", userRouter);
 app.use("/", loginRouter);
-
-loadSampleData();
 
 app.listen(port, () => {
    console.log(`Server running on port ${port}`);

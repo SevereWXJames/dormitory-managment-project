@@ -1,15 +1,15 @@
 {
   "maintenanceRequestPriorities": [
     {
-      "id": "prio0",
+      "_id": "prio0",
       "text": "Low"
     },
     {
-      "id": "prio1",
+      "_id": "prio1",
       "text": "Medium"
     },
     {
-      "id": "prio2",
+      "_id": "prio2",
       "text": "High"
     }
   ]

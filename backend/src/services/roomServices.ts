@@ -3,8 +3,8 @@ import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import type {Room} from "../dataTypes/room.ts";
 import type {Resident} from "../dataTypes/user.ts";
 
-export async function getAllRooms(): Promise<Room[]> {
-    return roomJSON.rooms as Room[];
+export async function getAllRooms(): Promise<[Room]> {
+    return roomJSON.rooms as [Room];
 }
 
 export async function getRoomById(id: string): Promise<Room> {
@@ -22,8 +22,8 @@ export async function getRoomByUserId(id: string): Promise<Room> {
     return testRoom as Room;
 }
 
-export async function getAllResidents(): Promise<Resident[]> {
-    return residentJSON.residents as Resident[];
+export async function getAllResidents(): Promise<[Resident]> {
+    return residentJSON.residents as [Resident];
 }
 
 export async function getResidentByUserId(id: string): Promise<Resident> {
