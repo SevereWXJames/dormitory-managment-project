@@ -17,7 +17,7 @@ describe("reservationServices", function () {
 		it("userID with two facilities booked", async function () {
 			const userId = "user1";
 			const expectedSlot = {
-				"id": "slot2",
+				"_id": "slot2",
 				"serviceId": "service0",
 				"booked": true,
 				"bookedBy": "user1",
@@ -33,7 +33,7 @@ describe("reservationServices", function () {
 		it("userID with one facility booked", async function () {
 			const userId = "user1";
 			const expectedSlot = {
-				"id": "slot5",
+				"_id": "slot5",
 				"serviceId": "service1",
 				"booked": true,
 				"bookedBy": "user2",
@@ -58,7 +58,7 @@ describe("reservationServices", function () {
 		it("Service with both booked and not booked slots", async function () {
 			const serviceId = "service1";
 			const expectedSlotBooked = {
-				"id": "slot5",
+				"_id": "slot5",
 				"serviceId": "service1",
 				"booked": true,
 				"bookedBy": "user2",
@@ -66,7 +66,7 @@ describe("reservationServices", function () {
 				"durationSeconds": 3600
 			};
 			const expectedSlotNotBooked = {
-				"id": "slot3",
+				"_id": "slot3",
 				"serviceId": "service1",
 				"booked": false,
 				"startTime": 0,

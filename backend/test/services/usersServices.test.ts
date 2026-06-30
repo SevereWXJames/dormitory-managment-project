@@ -17,7 +17,7 @@ describe("usersServices", function () {
 		it("Existing username", async function () {
 			const username = "admin1";
 			const expectedUser = {
-				"id": "user2",
+				"_id": "user2",
 				"username": "test3",
 				"email": "test3@test.com",
 				"phoneNumber": "6045550003",
@@ -38,7 +38,7 @@ describe("usersServices", function () {
 		it("Existing id", async function () {
 			const id = "admin0";
 			const expectedUser = {
-				"id": "admin0",
+				"_id": "admin0",
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",

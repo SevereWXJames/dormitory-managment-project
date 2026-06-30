@@ -27,7 +27,7 @@ describe("maintenanceRequestServices", function () {
 		it("userId with one maintenance request", async function () {
 			const userId = "user1";
 			const expectedLength = 1;
-			const expectedId = {id: "mR2"};
+			const expectedId = {_id: "mR2"};
 			const actual = await getAllMaintenanceRequestsByUserId(userId);
 			expect(actual).to.have.lengthOf(expectedLength);
 			expect(actual).to.be.an.instanceOf(Array);
@@ -96,7 +96,7 @@ describe("maintenanceRequestServices", function () {
 	describe("getAllMaintenanceRequestTypes()", function () {
 		it("Test", async function () {
 			const actual = await getAllMaintenanceRequestTypes();
-			const expectedEntry = {id: "misc", text: "Miscellaneous"};
+			const expectedEntry = {_id: "misc", text: "Miscellaneous"};
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.deep.include(expectedEntry);
 		});
@@ -105,7 +105,7 @@ describe("maintenanceRequestServices", function () {
 	describe("getAllMaintenanceRequestStatuses()", function () {
 		it("Test", async function () {
 			const actual = await getAllMaintenanceRequestStatuses();
-			const expectedEntry = {id: "completed", text: "Completed"};
+			const expectedEntry = {_id: "completed", text: "Completed"};
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.deep.include(expectedEntry);
 		});
@@ -114,7 +114,7 @@ describe("maintenanceRequestServices", function () {
 	describe("getAllMaintenanceRequestPriorities()", function () {
 		it("Test", async function () {
 			const actual = await getAllMaintenanceRequestPriorities();
-			const expectedEntry = {id: "prio1", text: "Medium"};
+			const expectedEntry = {_id: "prio1", text: "Medium"};
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.deep.include(expectedEntry);
 		});

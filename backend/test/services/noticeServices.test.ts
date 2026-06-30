@@ -23,7 +23,7 @@ describe("noticeServices", function () {
 			const userId = "user1";
 			const expectedLength = 1;
 			const expectedNotice = {
-				"id": "notice2",
+				"_id": "notice2",
 				"createdBy": "admin0",
 				"viewableBy": ["user1, user0"],
 				"title": "test3",
@@ -39,7 +39,7 @@ describe("noticeServices", function () {
 			const userId = "user0";
 			const expectedLength = 2;
 			const expectedNotice = {
-				"id": "notice1",
+				"_id": "notice1",
 				"createdBy": "admin0",
 				"viewableBy": ["user0"],
 				"title": "test2",

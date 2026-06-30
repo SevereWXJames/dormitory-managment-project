@@ -17,7 +17,7 @@ describe("serviceServices", function () {
 		it("Test", async function () {
 			const expectedLength = 3;
 			const expectedService = {
-				"id": "service1",
+				"_id": "service1",
 				"name": "Washing Machine 2",
 				"description": "test",
 				"hasIoT": true,
@@ -37,7 +37,7 @@ describe("serviceServices", function () {
 		it("Existing id with hasIoT: false", async function () {
 			const id = "service2";
 			const expectedService = {
-				"id": "service2",
+				"_id": "service2",
 				"name": "Dryer 1",
 				"description": "test",
 				"hasIoT": false,
@@ -52,7 +52,7 @@ describe("serviceServices", function () {
 		it("Existing id with hasIoT: true", async function () {
 			const id = "service1";
 			const expectedService = {
-				"id": "service1",
+				"_id": "service1",
 				"name": "Washing Machine 2",
 				"description": "test",
 				"hasIoT": true,

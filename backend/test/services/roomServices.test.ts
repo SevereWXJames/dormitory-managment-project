@@ -19,7 +19,7 @@ describe("roomServices", function () {
 		it("Test", async function () {
 			const expectedLength = 3;
 			const expectedRoom = {
-				"id": "room1",
+				"_id": "room1",
 				"roomName": "test-unit-2",
 				"verificationCode": "abcd"
 			};
@@ -34,7 +34,7 @@ describe("roomServices", function () {
 		it("Existing id", async function () {
 			const id = "room0";
 			const expectedRoom = {
-				"id": "room0",
+				"_id": "room0",
 				"roomName": "test-unit-1",
 				"verificationCode": "abcd"
 			};
@@ -54,7 +54,7 @@ describe("roomServices", function () {
 		it("Existing userId", async function () {
 			const userId = "user1";
 			const expectedRoom = {
-				"id": "room0",
+				"_id": "room0",
 				"roomName": "test-unit-1",
 				"verificationCode": "abcd"
 			};
@@ -73,7 +73,7 @@ describe("roomServices", function () {
 		it("Test", async function () {
 			const expectedLength = 3;
 			const expectedResident = {
-				"id": "resident0",
+				"_id": "resident0",
 				"userId": "user0",
 				"roomId": "room0"
 			};
@@ -88,7 +88,7 @@ describe("roomServices", function () {
 		it("Existing userId", async function () {
 			const userId = "user1";
 			const expectedResident = {
-				"id": "resident1",
+				"_id": "resident1",
 				"userId": "user1",
 				"roomId": "room0"
 			}

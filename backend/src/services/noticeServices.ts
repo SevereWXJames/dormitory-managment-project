@@ -5,8 +5,8 @@ export async function getAllNotices(): Promise<[Notice]> {
     return noticeJSON.notices as Notice[];
 }
 
-export async function getNoticesForUserId(id: string): Promise<Notice[]> {
+export async function getNoticesForUserId(_id: string): Promise<Notice[]> {
     return noticeJSON.notices.filter((notice) => {
-        return notice.viewableBy === null || notice.viewableBy.includes(id);
+        return notice.viewableBy === null || notice.viewableBy.includes(_id);
     }) as Notice[];
 }

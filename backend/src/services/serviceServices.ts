@@ -5,9 +5,9 @@ export async function getAllServices(): Promise<Service[]> {
     return serviceJSON.services as Service[];
 }
 
-export async function getServiceById(id: string): Promise<Service> {
+export async function getServiceById(_id: string): Promise<Service> {
     const testService = serviceJSON.services.find((service) => {
-        return service._id === id;
+        return service._id === _id;
     });
     return testService as Service;
 }

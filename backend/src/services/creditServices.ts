@@ -3,15 +3,15 @@ import transactionHistoryJSON from "../../test_data/transactionHistory.json" wit
 // import database from "../database/database.ts";
 import {CreditBalance, Transaction} from "../dataTypes/creditBalance.ts";
 
-export async function getCreditBalanceByUserId(id: string): Promise<CreditBalance | undefined> {
+export async function getCreditBalanceByUserId(_id: string): Promise<CreditBalance | undefined> {
     const testBalance = creditBalanceJSON.creditBalances.find((creditBalance) => {
-        return creditBalance.userId === id;
+        return creditBalance.userId === _id;
     });
 
     // This and other updated implementations of the service functions using
     // the database will be added as part of the next related pull request.
 
-    // return database.getCollection("credit_balances").findOne({userId: id})
+    // return database.getCollection("credit_balances").findOne({userId: _id})
     //     .then((document) => {
     //         return Promise.resolve(CreditBalance.fromDocument(document));
     //     })
@@ -20,15 +20,15 @@ export async function getCreditBalanceByUserId(id: string): Promise<CreditBalanc
     //     });
 }
 
-export async function getTransactionHistoryByUserId(id: string): Promise<Transaction[]> {
+export async function getTransactionHistoryByUserId(_id: string): Promise<Transaction[]> {
     return transactionHistoryJSON.transactions.filter((transaction) => {
-        return transaction.userId === id;
+        return transaction.userId === _id;
     }) as [Transaction];
 
     // This and other updated implementations of the service functions using
     // the database will be added as part of the next related pull request.
 
-    // const cursor = database.getCollection("transactions").find({userId: id});
+    // const cursor = database.getCollection("transactions").find({userId: _id});
     // const results: Transaction[] = [];
 
     // for await (const document of cursor) {

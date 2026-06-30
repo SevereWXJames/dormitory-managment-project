@@ -7,15 +7,15 @@ export async function getAllRooms(): Promise<Room[]> {
     return roomJSON.rooms as Room[];
 }
 
-export async function getRoomById(id: string): Promise<Room> {
+export async function getRoomById(_id: string): Promise<Room> {
     const testRoom = roomJSON.rooms.find((room) => {
-        return room._id === id;
+        return room._id === _id;
     });
     return testRoom as Room;
 }
 
-export async function getRoomByUserId(id: string): Promise<Room> {
-    const resident = await getResidentByUserId(id);
+export async function getRoomByUserId(_id: string): Promise<Room> {
+    const resident = await getResidentByUserId(_id);
     const testRoom = roomJSON.rooms.find((room) => {
         return room._id === resident.roomId;
     });
@@ -26,9 +26,9 @@ export async function getAllResidents(): Promise<Resident[]> {
     return residentJSON.residents as Resident[];
 }
 
-export async function getResidentByUserId(id: string): Promise<Resident> {
+export async function getResidentByUserId(_id: string): Promise<Resident> {
     const testResident = residentJSON.residents.find((resident) => {
-        return resident.userId === id;
+        return resident.userId === _id;
     });
     return testResident as Resident;
 }
