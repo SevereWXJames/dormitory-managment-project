@@ -9,14 +9,14 @@ import {
     MaintenanceRequestType
 } from "../dataTypes/maintenanceRequest.ts";
 
-export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]> {
-    return requestJSON.maintenanceRequests as MaintenanceRequest[];
+export async function getAllMaintenanceRequests(): Promise<[MaintenanceRequest]> {
+    return requestJSON.maintenanceRequests as [MaintenanceRequest];
 }
 
-export async function getAllMaintenanceRequestsByUserId(id: string): Promise<MaintenanceRequest[]> {
+export async function getAllMaintenanceRequestsByUserId(id: string): Promise<[MaintenanceRequest]> {
     return requestJSON.maintenanceRequests.filter((maintenanceRequest) => {
         return maintenanceRequest.createdBy === id;
-    }) as MaintenanceRequest[];
+    }) as [MaintenanceRequest];
 }
 
 export async function getMaintenanceRequestTypeById(id: string): Promise<MaintenanceRequestType | undefined> {
@@ -40,14 +40,14 @@ export async function getMaintenanceRequestPriorityById(id: string): Promise<Mai
     return testPriority as MaintenanceRequestPriority;
 }
 
-export async function getAllMaintenanceRequestTypes(): Promise<MaintenanceRequestType[]> {
-    return requestTypeJSON.maintenanceRequestTypes as MaintenanceRequestType[];
+export async function getAllMaintenanceRequestTypes(): Promise<[MaintenanceRequestType]> {
+    return requestTypeJSON.maintenanceRequestTypes as [MaintenanceRequestType];
 }
 
-export async function getAllMaintenanceRequestStatuses(): Promise<MaintenanceRequestStatus[]> {
-    return requestStatusJSON.maintenanceRequestStatuses as MaintenanceRequestStatus[];
+export async function getAllMaintenanceRequestStatuses(): Promise<[MaintenanceRequestStatus]> {
+    return requestStatusJSON.maintenanceRequestStatuses as [MaintenanceRequestStatus];
 }
 
-export async function getAllMaintenanceRequestPriorities(): Promise<MaintenanceRequestPriority[]> {
-    return requestPriorityJSON.maintenanceRequestPriorities as MaintenanceRequestPriority[];
+export async function getAllMaintenanceRequestPriorities(): Promise<[MaintenanceRequestPriority]> {
+    return requestPriorityJSON.maintenanceRequestPriorities as [MaintenanceRequestPriority];
 }
