@@ -61,7 +61,7 @@ export function SettingsPage() {
     const user: ProfileFieldProps = {name: "Lem Lemmings", username, email, phone: "12345678"};
     return (
         <div>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
+            <CommonFrame commonFrameType={"RESIDENT"}>
             <div className={"settingsPage"}>
                 <div className={"contents"}>
                     <div className={"profile-settings"}>
@@ -81,6 +81,7 @@ export function SettingsPage() {
                     </div>
                 </div>
             </div>
+            </CommonFrame>
         </div>
     )
 }

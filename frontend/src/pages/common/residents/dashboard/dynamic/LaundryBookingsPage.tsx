@@ -33,7 +33,7 @@ export function LaundryBookingsPage() {
         },
     ]
     return (<>
-        <CommonFrame commonFrameType={"RESIDENT"}/>
+        <CommonFrame commonFrameType={"RESIDENT"}>
         <div className="bento-grid grid grid-cols-1 md:grid-cols-[min-content_1fr] gap-4 p-4">
             <Card className="p-4 text-left" style={{gridArea: "book"}}>
                 <CardTitle>Book a machine:</CardTitle>
@@ -62,5 +62,6 @@ export function LaundryBookingsPage() {
                 </CardContent>
             </Card>
         </div>
-    </>)
+        </CommonFrame>
+        </>)
 }

@@ -10,7 +10,7 @@ export interface MaintenanceRequestsProps {
 export function MaintenanceRequestsPage() {
     return (
         <>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
+            <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="maintenance-requests-page">
                 <h1>Maintenance Requests</h1>
                 <Box className="card-container">
@@ -22,6 +22,7 @@ export function MaintenanceRequestsPage() {
                     <CreateMaintenanceRequestCard />
                 </Box>
             </div>
+            </CommonFrame>
         </>
     );
 }
