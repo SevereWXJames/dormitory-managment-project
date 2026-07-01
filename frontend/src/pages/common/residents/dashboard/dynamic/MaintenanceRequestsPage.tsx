@@ -13,7 +13,7 @@ export function MaintenanceRequestsPage() {
             <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="maintenance-requests-page">
                 <h1>Maintenance Requests</h1>
-                <div className="flex flex-col sm:flex-row">
+                <div className="flex flex-col md:flex-row">
                     <Box className="card-container">
                         <h2>Request History</h2>
                         <MaintenanceRequestHistoryCard />
