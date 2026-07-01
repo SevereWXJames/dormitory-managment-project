@@ -13,7 +13,7 @@ export function NoticesPage() {
 
     return (
         <>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
+            <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="notices-page">
                 <h1>Notices</h1>
                 <Box className="card-container">
@@ -24,6 +24,7 @@ export function NoticesPage() {
                     <h2>Read</h2>
                 </Box>
             </div>
+            </CommonFrame>
         </>
     )
 }

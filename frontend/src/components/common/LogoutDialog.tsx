@@ -13,6 +13,7 @@ export type LogoutDialogProps = {
 export function LogoutDialog({open, onClose} : LogoutDialogProps) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    //const state = useSelector(getAuthenticationState);
 
     const onSubmit = ()=>{
         dispatch(logOut());

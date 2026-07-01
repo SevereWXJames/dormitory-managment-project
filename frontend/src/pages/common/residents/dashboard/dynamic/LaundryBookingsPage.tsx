@@ -33,35 +33,35 @@ export function LaundryBookingsPage() {
         },
     ]
     return (<>
-        <CommonFrame commonFrameType={"RESIDENT"}/>
-
-        <div className={"flex flex-wrap gap-4 p-4"}>
-            <Card className="w-full max-w-sm p-4 text-left">
+        <CommonFrame commonFrameType={"RESIDENT"}>
+        <div className="bento-grid grid grid-cols-1 md:grid-cols-[min-content_1fr] gap-4 p-4">
+            <Card className="flex flex-col p-4 text-left" style={{gridArea: "book"}}>
                 <CardTitle>Book a machine:</CardTitle>
                 <div className={"machineList"}>
-                    <CardContent>
+                    <CardContent className="flex flex-col">
                         <MachineList/>
                     </CardContent>
                 </div>
             </Card>
 
-            <Card className="w-full max-w-sm p-3 flex flex-col gap-1">
+            <Card className="p-3 flex flex-col gap-1 text-left" style={{gridArea: "credits"}}>
                 <div className="flex items-center gap-2">
                     <strong>Credit Balance (credits):</strong>
                     <p className="m-0">100</p>
                 </div>
-                <Link to={"/credits"} className="font-semibold underline hover:opacity-70 transition-opacity flex-1 text-left">
+                <Link to={"/credits"}
+                      className="font-semibold underline hover:opacity-70 transition-opacity">
                     <strong>Buy More Credits</strong>
                 </Link>
             </Card>
 
-            <Card className="flex-1 min-w-[300px]">
+            <Card style={{gridArea: "bookings"}}>
                 <CardTitle>Upcoming bookings</CardTitle>
                 <CardContent>
                     <BookingsTable rows={rows} caption={"Upcoming bookings"}/>
                 </CardContent>
             </Card>
-
         </div>
-    </>)
+        </CommonFrame>
+        </>)
 }

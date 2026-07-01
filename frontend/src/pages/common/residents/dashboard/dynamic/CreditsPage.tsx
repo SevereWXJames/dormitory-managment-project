@@ -11,7 +11,7 @@ export interface CreditsPageProps {
 
 export function CreditsPage() {
     return (<>
-        <CommonFrame commonFrameType={"RESIDENT"}/>
+        <CommonFrame commonFrameType={"RESIDENT"}>
         <div className="credits-page">
             <h1>Credits</h1>
             <Box className="cards-row">
@@ -29,5 +29,6 @@ export function CreditsPage() {
                 <TransactionHistoryCard />
             </Box>
         </div>
+        </CommonFrame>
     </>)
 }
