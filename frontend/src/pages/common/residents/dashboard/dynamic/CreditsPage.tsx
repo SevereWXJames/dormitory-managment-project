@@ -48,7 +48,7 @@ export function CreditsPage() {
     }, [userId, dispatch]);
 
     return (<>
-        <CommonFrame commonFrameType={"RESIDENT"}/>
+        <CommonFrame commonFrameType={"RESIDENT"}>
         <div className="credits-page">
             <h1>Credits</h1>
             {loading && <p>Loading credits data...</p>}
@@ -72,5 +72,6 @@ export function CreditsPage() {
                 </>
             )}
         </div>
+        </CommonFrame>
     </>)
 }

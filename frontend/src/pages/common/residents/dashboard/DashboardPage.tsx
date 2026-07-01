@@ -17,7 +17,7 @@ export interface DashboardProps {
 export function DashboardPage() {
     return (
         <>
-            <CommonFrame commonFrameType="RESIDENT"/>
+            <CommonFrame commonFrameType="RESIDENT">
             <div className="dashboardPage m-4 p-4 gap-4 flex flex-col text-left">
                 <h2 className="!text-black" style={{ gridArea: "title" }}>Resident Dashboard</h2>
                 <Card className="p-4 m-4" style={{gridArea: "finance-summary"}}>
@@ -40,6 +40,7 @@ export function DashboardPage() {
                     <CardTitle>Reminders for upcoming bookings:</CardTitle>
                 </Card>
             </div>
+            </CommonFrame>
         </>
     )
 }

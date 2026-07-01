@@ -41,7 +41,7 @@ export function NoticesPage() {
 
     return (
         <>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
+            <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="notices-page">
                 <h1>Notices</h1>
                 {loading && <p>Loading notices...</p>}
@@ -55,6 +55,7 @@ export function NoticesPage() {
                     </Box>
                 )}
             </div>
+            </CommonFrame>
         </>
     )
 }

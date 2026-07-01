@@ -52,7 +52,7 @@ export function MaintenanceRequestsPage() {
 
     return (
         <>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
+            <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="maintenance-requests-page">
                 <h1>Maintenance Requests</h1>
                 {loading && <p>Loading maintenance requests...</p>}
@@ -70,6 +70,7 @@ export function MaintenanceRequestsPage() {
                     </>
                 )}
             </div>
+            </CommonFrame>
         </>
     );
 }
