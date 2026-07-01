@@ -34,18 +34,6 @@
 }
 
 /*SETTINGS_PAGE*/
-.settingsPage {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.settingsPage .contents {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    left: 100px;
-
-}
 
 .settingsPage .contents > * {
     padding: 30px;
@@ -54,26 +42,7 @@
     margin: 15px;
 }
 
-.settingsPage .profile-settings {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    text-align: left;
-}
 
-.settingsPage .notifications-settings {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    text-align: left;
-}
-
-.settingsPage .security-settings {
-    display: flex;
-    align-self: flex-start;
-    flex-direction: column;
-    text-align: left;
-}
 
 /* LOG IN PAGE */
 
