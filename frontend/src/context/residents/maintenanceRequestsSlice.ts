@@ -36,7 +36,7 @@ export const maintenanceRequestsSlice = createSlice({
 			const status = "NEW";
 			const issue = parameters.payload.issueType + " - " + parameters.payload.issue;
 			const location = parameters.payload.location;
-			const description = parameters.payload.location;
+			const description = parameters.payload.description;
 
 			state.maintenanceRequests.push({id, unit, priority, status, issue, location, description});
 		}

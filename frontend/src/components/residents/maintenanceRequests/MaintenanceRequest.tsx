@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useId } from "react";
 import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from "../../../app/types";
 
-type MaintenanceRequestsProps = {
+export type MaintenanceRequestsProps = {
 	unit: string,
 	status: MaintenanceRequestStatus;
 	priority: MaintenanceRequestPriority;
@@ -20,7 +20,7 @@ export function MaintenanceRequest(props: MaintenanceRequestsProps) {
 	const id = "maintenance-request-" + useId();
 
 	return (
-		<Box id={id}>
+		<Box id={id} className="flex flex-row p-4 gap-4">
 			<div className="maintenance-request-title">Unit {props.unit}</div>
 			<div className="maintenance-request-status">Status: {props.status}</div>
 			<div className="maintenance-request-priority">Priority: {props.priority}</div>

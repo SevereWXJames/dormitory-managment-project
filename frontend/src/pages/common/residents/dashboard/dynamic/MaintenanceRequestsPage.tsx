@@ -13,14 +13,16 @@ export function MaintenanceRequestsPage() {
             <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="maintenance-requests-page">
                 <h1>Maintenance Requests</h1>
-                <Box className="card-container">
-                    <h2>Request History</h2>
-                    <MaintenanceRequestHistoryCard />
-                </Box>
-                <Box className="card-container">
-                    <h2>Create a new request</h2>
-                    <CreateMaintenanceRequestCard />
-                </Box>
+                <div className="flex flex-col sm:flex-row">
+                    <Box className="card-container">
+                        <h2>Request History</h2>
+                        <MaintenanceRequestHistoryCard />
+                    </Box>
+                    <Box className="card-container">
+                        <h2>Create a new request</h2>
+                        <CreateMaintenanceRequestCard />
+                    </Box>
+                </div>
             </div>
             </CommonFrame>
         </>
