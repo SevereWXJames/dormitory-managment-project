@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {Link, Link as RouterLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import type {CommonFrameType} from "../../app/types";
-import {AppBar, Avatar, Box, Button, Divider, Drawer, List} from "@mui/material";
+import {AppBar, Avatar, Box, Divider, Drawer, List} from "@mui/material";
 import {NavBarButton} from "./NavBarButton";
 import logo from "../../assets/common/logo.svg";
 import {LogoutDialog} from "./LogoutDialog.tsx";
@@ -20,7 +20,7 @@ type CommonFrameProps = {
 export function CommonFrame(props: CommonFrameProps) {
     const headerUserTypeMessage = (props.commonFrameType == "BUILDING_MANAGER") ? "Building manager view" : "";
     const avatar = (props.commonFrameType == "UNAUTHENTICATED") ?
-        <Button id="log-in-button" variant="contained" component={RouterLink} to="/login">Log in</Button> :
+        <></> :
         <Avatar id="header-avatar"></Avatar>;
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
