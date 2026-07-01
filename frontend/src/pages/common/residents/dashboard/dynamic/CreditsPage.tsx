@@ -14,10 +14,10 @@ export function CreditsPage() {
         <CommonFrame commonFrameType={"RESIDENT"}>
         <div className="credits-page">
             <h1>Credits</h1>
-            <Box className="cards-row flex flex-col lg:flex-row items-center gap-4">
+            <Box className="cards-row flex flex-col lg:items-center lg:flex-row gap-4 p-4">
                 <Box className="card-container">
                     <h2>Credit Balance</h2>
-                    <CreditsBalanceCard />
+                    <CreditsBalanceCard/>
                 </Box>
                 <Box className="card-container">
                     <h2>Add funds</h2>
@@ -26,7 +26,7 @@ export function CreditsPage() {
             </Box>
             <Box className="card-container">
                 <h2>Transaction History</h2>
-                <TransactionHistoryCard />
+                <TransactionHistoryCard/>
             </Box>
         </div>
         </CommonFrame>
