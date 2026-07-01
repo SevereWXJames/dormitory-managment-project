@@ -63,7 +63,7 @@ export function AdminDashboardPage() {
 
     return (
         <>
-            <CommonFrame commonFrameType="BUILDING_MANAGER" />
+            <CommonFrame commonFrameType="BUILDING_MANAGER">
             <div className="adminDashboardPage">
                 <h1>Building Manager Dashboard</h1>
                 <p>Overview of building activity, maintenance workload, and facility occupancy.</p>
@@ -122,6 +122,7 @@ export function AdminDashboardPage() {
                     </>
                 )}
             </div>
+            </CommonFrame>
         </>
     );
 }
