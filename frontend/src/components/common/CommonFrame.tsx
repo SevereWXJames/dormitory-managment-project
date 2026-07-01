@@ -81,7 +81,7 @@ export function CommonFrame(props: CommonFrameProps) {
             <AppBar className="header-appbar" position="sticky"
                     sx={{display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center", padding: "4px"}}>
                 {isMobile && (
-                    <IconButton id="open-nav-bar-button" onClick={toggleDrawer} edge="start">
+                    <IconButton id="open-nav-bar-button" onClick={toggleDrawer}>
                         <MenuIcon />
                     </IconButton>
                 )}
