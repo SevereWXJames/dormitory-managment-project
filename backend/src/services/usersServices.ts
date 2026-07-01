@@ -2,7 +2,7 @@ import userJson from "../../test_data/users.json" with {type: "json"};
 import jwt,{type Secret} from "jsonwebtoken";
 import type {User} from "../dataTypes/user.ts";
 
-export async function checkLogIn(username: string, password: string, ): Promise<boolean> {
+export async function checkLogIn(username: string, password: string): Promise<boolean> {
     return true;
 }
 

@@ -1,6 +1,5 @@
-// The MongoDB_URl variable is set based on an environment variable of the same
-// name. Refer to database.md for details and troubleshooting information.
-export const MONGODB_URL = (process.env.MONGODB_URL == null) ? "mongodb://mongo:27017" : process.env.MONGODB_URL;
+export const MONGODB_URL_DOCKER = "mongodb://mongo:27017";
+export const MONGODB_URL_LOCAL = "mongodb://localhost:27017";
 export const DATABASE_NAME = "SmartAPT";
 
 export type CollectionName = "credit_balances" | "transactions" | "maintenance_requests" | "maintenance_request_types" |

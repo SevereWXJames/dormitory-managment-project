@@ -1,43 +1,44 @@
 import creditBalanceJSON from "../../test_data/creditBalance.json" with {type: "json"};
 import transactionHistoryJSON from "../../test_data/transactionHistory.json" with {type: "json"};
-// import database from "../database/database.ts";
+import database from "../database/database.ts";
 import {CreditBalance, Transaction} from "../dataTypes/creditBalance.ts";
 
-export async function getCreditBalanceByUserId(_id: string): Promise<CreditBalance | undefined> {
-    const testBalance = creditBalanceJSON.creditBalances.find((creditBalance) => {
-        return creditBalance.userId === _id;
-    });
+export async function getCreditBalanceByUserId(userId: string): Promise<CreditBalance | undefined> {
+    // Original, static implementation:
+    // const testBalance = creditBalanceJSON.creditBalances.find((creditBalance) => {
+    //     return creditBalance.userId === _id;
+    // });
 
-    // This and other updated implementations of the service functions using
-    // the database will be added as part of the next related pull request.
-
-    // return database.getCollection("credit_balances").findOne({userId: _id})
-    //     .then((document) => {
-    //         return Promise.resolve(CreditBalance.fromDocument(document));
-    //     })
-    //     .catch((e) => {
-    //         return Promise.reject(e);
-    //     });
+    return CreditBalance.model.findOne({userId: userId}).exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as CreditBalance);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
-export async function getTransactionHistoryByUserId(_id: string): Promise<Transaction[]> {
-    return transactionHistoryJSON.transactions.filter((transaction) => {
-        return transaction.userId === _id;
-    }) as [Transaction];
+export async function getTransactionHistoryByUserId(userId: string): Promise<Transaction[]> {
+    // Original static implementation:
+    // return transactionHistoryJSON.transactions.filter((transaction) => {
+    //     return transaction.userId === _id;
+    // }) as [Transaction];
 
-    // This and other updated implementations of the service functions using
-    // the database will be added as part of the next related pull request.
+    const cursor = Transaction.model.find({userId: userId});
+    const results: Transaction[] = [];
 
-    // const cursor = database.getCollection("transactions").find({userId: _id});
-    // const results: Transaction[] = [];
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as Transaction);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
 
-    // for await (const document of cursor) {
-    //     try {
-    //         results.push(Transaction.fromDocument(document));
-    //     } catch (e) {
-    //         return Promise.reject(e);
-    //     }
-    // }
-
-    // return Promise.resolve(results);
+    return Promise.resolve(results);
 }

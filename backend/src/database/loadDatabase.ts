@@ -22,7 +22,7 @@ import serviceJSON from "../../test_data/services.json" with {type: "json"};
 export default function loadSampleData(): Promise<void> {
 	// console.debug("loadSampleData(): Loading sample data");
 
-	return database.database.dropDatabase().then((value) =>
+	return database.getConnection().dropDatabase().then((value) =>
 		Promise.all([database.load("credit_balances", creditBalanceJSON.creditBalances),
 			database.load("transactions", transactionHistoryJSON.transactions),
 			database.load("maintenance_requests", requestJSON.maintenanceRequests),
