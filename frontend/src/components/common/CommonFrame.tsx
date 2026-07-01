@@ -86,8 +86,7 @@ export function CommonFrame(props: CommonFrameProps) {
                     </IconButton>
                 )}
                 <Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{height: 48}}/></Link>
-                <div id="header-user-type-message" className="header-user-type"
-                     style={{flex: 1, textAlign: "left"}}>{headerUserTypeMessage}</div>
+                <div id="header-user-type-message" className="header-user-type flex-1 text-left sm:text-right text-xs sm:text-lg">{headerUserTypeMessage}</div>
                 {avatar}
             </AppBar>
             <Box sx={{display: "flex", flex: 1, overflow: "hidden"}}>
