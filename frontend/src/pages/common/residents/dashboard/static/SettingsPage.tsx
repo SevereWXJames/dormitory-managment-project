@@ -16,36 +16,32 @@ export type ProfileFieldProps = {
 
 export function NotificationControls() {
     return (
-        <div>
-            <FormGroup>
-                <FormControlLabel control={<Switch defaultChecked/>} label="Email Notifications"/>
-                <FormControlLabel control={<Switch defaultChecked/>} label="Maintenance Notifications"/>
-                <FormControlLabel control={<Switch defaultChecked/>} label="Notice Alerts"/>
-            </FormGroup>
-        </div>
+        <FormGroup>
+            <FormControlLabel control={<Switch defaultChecked/>} label="Email Notifications"/>
+            <FormControlLabel control={<Switch defaultChecked/>} label="Maintenance Notifications"/>
+            <FormControlLabel control={<Switch defaultChecked/>} label="Notice Alerts"/>
+        </FormGroup>
     )
 }
 
 export function ProfileField({input}: FieldProps) {
     return (
-        <div>
-            <TextField
-                id="outlined-read-only-input"
-                label="Read Only"
-                defaultValue={input}
-                sx={{'& .MuiInputBase-input': {color: 'white'}}}
-                slotProps={{
-                    input: {
-                        readOnly: true,
-                    },
-                }}/>
-        </div>
+        <TextField
+            id="outlined-read-only-input"
+            label="Read Only"
+            defaultValue={input}
+            sx={{'& .MuiInputBase-input': {color: 'black'}}}
+            slotProps={{
+                input: {
+                    readOnly: true,
+                },
+            }}/>
     )
 }
 
 export function ProfileFields({name, username, email, phone}: ProfileFieldProps) {
     return (
-        <div>
+        <div className="flex flex-col p-4 m-4 gap-4 max-w-96">
             <ProfileField input={name}/>
             <ProfileField input={username}/>
             <ProfileField input={email}/>
@@ -62,25 +58,25 @@ export function SettingsPage() {
     return (
         <div>
             <CommonFrame commonFrameType={"RESIDENT"}>
-            <div className={"settingsPage"}>
-                <div className={"contents"}>
-                    <div className={"profile-settings"}>
-                        <h1>Profile</h1>
-                        <ProfileFields name={user.name}
-                                       username={user.username}
-                                       email={user.email} phone={user.phone}/>
-                    </div>
-                    <div className={"notifications-settings"}>
-                        <h1>Notifications</h1>
-                        <NotificationControls/>
-                    </div>
-                    <div className={"security-settings"}>
-                        <h1>Security</h1>
-                        <button>Change password</button>
-                        <FormControlLabel control={<Switch defaultChecked/>} label="Two factor auth"/>
+                <div className="settingsPage flex flex-col">
+                    <div className="contents w-fit">
+                        <div className="profile-settings text-left">
+                            <h1>Profile</h1>
+                            <ProfileFields name={user.name}
+                                           username={user.username}
+                                           email={user.email} phone={user.phone}/>
+                        </div>
+                        <div className="notifications-settings text-left">
+                            <h1>Notifications</h1>
+                            <NotificationControls/>
+                        </div>
+                        <div className="security-settings flex flex-col text-left">
+                            <h1>Security</h1>
+                            <button className="text-left font-bold">Change password</button>
+                            <FormControlLabel control={<Switch defaultChecked/>} label="Two factor auth"/>
+                        </div>
                     </div>
                 </div>
-            </div>
             </CommonFrame>
         </div>
     )
