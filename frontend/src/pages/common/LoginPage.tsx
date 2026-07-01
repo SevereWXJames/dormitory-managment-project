@@ -9,7 +9,7 @@ import {
 export function LoginPage() {
     return (
         <>
-            <CommonFrame commonFrameType="LOGIN">
+            <CommonFrame commonFrameType="UNAUTHENTICATED">
             <main className="login-page">
                 <Card className="flex flex-col gap-4 p-4 m-4 w-fit mx-auto">
                     <CardTitle className="text-2xl">Log in</CardTitle>
