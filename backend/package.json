@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.3",
     "mocha": "^11.3.0",
     "mongodb": "7.3.0",
+    "mongoose": "^9.7.3",
     "mqtt": "^5.15.1",
     "typescript": "^6.0.3"
   },
