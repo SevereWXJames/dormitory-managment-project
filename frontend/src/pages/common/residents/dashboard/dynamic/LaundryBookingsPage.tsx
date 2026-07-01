@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import {BookingsTable} from "@/components/residents/facilitiesBooking/BookingsTable.tsx";
 
 export function LaundryBookingsPage() {
+    //Mock data
     const rows = [
         {
             machineId: "machine 1",
