@@ -20,7 +20,7 @@ export function CommonFrame(props: CommonFrameProps) {
         <Button id="log-in-button" variant="contained" component={RouterLink} to="/login">Log in</Button> :
         <Avatar id="header-avatar"></Avatar>;
 
-    const [navBarOpen, setNavBarOpen] = useState(false);
+    const [navBarOpen, setNavBarOpen] = useState(true);
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
     const toggleNavBar = (openValue: boolean) => () => {
@@ -42,7 +42,8 @@ export function CommonFrame(props: CommonFrameProps) {
                 <NavBarButton id="logout-nav-bar-button" label="Logout" to="#"
                               onClick={() => {
                                   console.log("Dialog opens!");
-                                  setLogoutDialogOpen(true)}}/>
+                                  setLogoutDialogOpen(true)
+                              }}/>
             </>;
             break;
         case "BUILDING_MANAGER":
@@ -59,7 +60,8 @@ export function CommonFrame(props: CommonFrameProps) {
                 <NavBarButton id="logout-nav-bar-button" label="Logout" to="#"
                               onClick={() => {
                                   console.log("Dialog opens!");
-                                  setLogoutDialogOpen(true)}}/>
+                                  setLogoutDialogOpen(true)
+                              }}/>
             </>;
             break;
         default:
@@ -79,7 +81,7 @@ export function CommonFrame(props: CommonFrameProps) {
                      style={{flex: 1, textAlign: "left"}}>{headerUserTypeMessage}</div>
                 {avatar}
             </AppBar>
-            <Drawer id="nav-bar-drawer" open={navBarOpen} onClose={toggleNavBar(false)}>
+            <Drawer id="nav-bar-drawer" variant="permanent" open={navBarOpen} onClose={toggleNavBar(false)}>
                 <List id="nav-bar-list">
                     {buttons}
                 </List>
