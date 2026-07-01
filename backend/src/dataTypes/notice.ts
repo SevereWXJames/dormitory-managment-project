@@ -4,7 +4,7 @@ export class Notice {
     public viewableBy: [string] | null;
     public title: string;
     public text: string;
-    public createAt: number;
+    public createdAt: number;
 
     constructor({_id, createdBy, viewableBy, title, text, createdAt}: {_id: string, createdBy: string, viewableBy: [string] | null, title: string, text: string, createdAt: number}) {
         this._id = _id;
@@ -12,6 +12,6 @@ export class Notice {
         this.viewableBy = viewableBy;
         this.title = title;
         this.text = text;
-        this.createAt = createdAt;
+        this.createdAt = createdAt;
     }
 }
