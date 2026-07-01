@@ -25,7 +25,7 @@ export function AdminResidentsPage() {
 
     return (
         <>
-            <CommonFrame commonFrameType="BUILDING_MANAGER" />
+            <CommonFrame commonFrameType="BUILDING_MANAGER">
             <div className="adminResidentsPage">
                 <h1>Residents Management</h1>
                 <p>Admin tools for viewing and managing resident information.</p>
@@ -57,6 +57,7 @@ export function AdminResidentsPage() {
                     </section>
                 )}
             </div>
+            </CommonFrame>
         </>
     );
 }
