@@ -35,10 +35,10 @@ export function LaundryBookingsPage() {
     return (<>
         <CommonFrame commonFrameType={"RESIDENT"}>
         <div className="bento-grid grid grid-cols-1 md:grid-cols-[min-content_1fr] gap-4 p-4">
-            <Card className="p-4 text-left" style={{gridArea: "book"}}>
+            <Card className="flex flex-col p-4 text-left" style={{gridArea: "book"}}>
                 <CardTitle>Book a machine:</CardTitle>
                 <div className={"machineList"}>
-                    <CardContent>
+                    <CardContent className="flex flex-col">
                         <MachineList/>
                     </CardContent>
                 </div>

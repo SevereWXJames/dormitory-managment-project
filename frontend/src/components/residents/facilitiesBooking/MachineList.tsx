@@ -4,7 +4,7 @@ import {MachineOptions} from "@/components/residents/facilitiesBooking/MachineOp
 export function MachineList(){
     const options = <MachineOptions/>
     const props = {children: options, subheader: "Select a laundry machine:"}
-    return(<div className={"machineList"}>
+    return(<div className="machineList flex flex-col">
         <ScrollList {...props}/>
     </div> )
 }

@@ -1,10 +1,13 @@
 import React, {useState} from "react";
 import {Link} from 'react-router-dom';
 import type {CommonFrameType} from "../../app/types";
-import {AppBar, Avatar, Box, Divider, Drawer, List} from "@mui/material";
+import {AppBar, Avatar, Box, Divider, Drawer, IconButton, List} from "@mui/material";
 import {NavBarButton} from "./NavBarButton";
 import logo from "../../assets/common/logo.svg";
 import {LogoutDialog} from "./LogoutDialog.tsx";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import {useTheme} from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
 
 type CommonFrameProps = {
     commonFrameType: CommonFrameType,
@@ -23,6 +26,10 @@ export function CommonFrame(props: CommonFrameProps) {
         <></> :
         <Avatar id="header-avatar"></Avatar>;
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const toggleDrawer = () => setMobileOpen((prev) => !prev);
 
     let buttons;
     switch (props.commonFrameType) {
@@ -73,15 +80,24 @@ export function CommonFrame(props: CommonFrameProps) {
             <Box sx={{display: "flex", flexDirection: "column", height: "100vh"}}>
             <AppBar className="header-appbar" position="sticky"
                     sx={{display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center", padding: "4px"}}>
+                {isMobile && (
+                    <IconButton id="open-nav-bar-button" onClick={toggleDrawer} edge="start">
+                        <MenuIcon />
+                    </IconButton>
+                )}
                 <Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{height: 48}}/></Link>
                 <div id="header-user-type-message" className="header-user-type"
                      style={{flex: 1, textAlign: "left"}}>{headerUserTypeMessage}</div>
                 {avatar}
             </AppBar>
             <Box sx={{display: "flex", flex: 1, overflow: "hidden"}}>
-                <Drawer id="nav-bar-drawer" variant="permanent" sx={{
+                <Drawer id="nav-bar-drawer"
+                        variant={isMobile ? "temporary" : "permanent"}
+                        open={isMobile ? mobileOpen : true}
+                        onClose={toggleDrawer}
+                        sx={{
                     "& .MuiDrawer-paper": {
-                        position: "relative", // pulls paper back into normal flow
+                        position: isMobile ? "fixed" : "relative", // overlay on mobile, in-flow on desktop
                     },
                 }}  >
                     <List id="nav-bar-list">
