@@ -58,7 +58,7 @@ export function LoginForm() {
     }, [role, navigate]);
 
 	return (
-		<div className="login-form flex flex-col gap-4 m-4 items-center mx-auto" style={{ width: 'fit-content', margin: '0 auto' }}>
+		<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto" style={{ width: 'fit-content', margin: '0 auto' }}>
             <FormControl sx={{ m: 1, width: '30ch' }} variant="filled">
                 <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
                 <OutlinedInput
