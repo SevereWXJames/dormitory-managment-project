@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useId } from "react";
-import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from "../../../app/types";
+import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from "../../../types/residents/types.ts";
 
 export type MaintenanceRequestsProps = {
 	unit: string,

@@ -18,7 +18,7 @@ function toBooking(slot: ReservationSlot): Booking {
     };
 }
 
-export const creditsApi = api.injectEndpoints({
+export const reservationSlotsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getBookings: builder.query<Booking[], string>({
             query: (userId) => ({ url: `/reservations/get-booked-by-user/${encodeURIComponent(userId)}`}),
@@ -28,4 +28,4 @@ export const creditsApi = api.injectEndpoints({
     }),
 });
 
-export const {useGetBookingsQuery, useLazyGetBookingsQuery} = creditsApi;
+export const {useGetBookingsQuery, useLazyGetBookingsQuery} = reservationSlotsApi;

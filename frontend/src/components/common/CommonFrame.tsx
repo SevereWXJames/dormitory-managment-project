@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Link} from 'react-router-dom';
-import type {CommonFrameType} from "../../app/types";
+import type {CommonFrameType} from "../../types/residents/types.ts";
 import {AppBar, Avatar, Box, Divider, Drawer, IconButton, List} from "@mui/material";
 import {NavBarButton} from "./NavBarButton";
 import logo from "../../assets/common/logo.svg";
