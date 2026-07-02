@@ -6,18 +6,12 @@ import { MaintenanceRequestHistoryCard } from "../../../../../components/residen
 import { setMaintenanceRequests } from "../../../../../context/residents/maintenanceRequestsSlice.ts";
 import {useMaintenanceRequestData} from "@/pages/common/residents/pageHooks/useMaintenanceRequestData.tsx";
 
-export interface MaintenanceRequestsProps {
-    requests: object[]
-}
-
 export function MaintenanceRequestsPage() {
     const dispatch = useDispatch();
     const {requests, isLoading, isError, error} = useMaintenanceRequestData();
-    console.log(`returned requests: ${JSON.stringify(requests)}`);
     if(!isLoading && !isError && requests){
         dispatch(setMaintenanceRequests(requests));
     }
-    console.log("dispatched");
 
     return (
         <>
