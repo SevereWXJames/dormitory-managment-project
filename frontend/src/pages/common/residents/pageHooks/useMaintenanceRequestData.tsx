@@ -7,10 +7,10 @@ export function useMaintenanceRequestData() {
     const {data, isLoading, isError, error} = useGetMaintenanceRequestByUserQuery(userId!, { skip: !userId });
     return {
         isLoading: isLoading,
-        isError: isError,
+        isError: isError || !userId,
         error: !userId
             ? "User is not authenticated."
             : isError ? error?.message : null,
-        requests: data,
+        requests: data ?? [],
     };
 }
