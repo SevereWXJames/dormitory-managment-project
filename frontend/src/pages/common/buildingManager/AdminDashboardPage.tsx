@@ -1,9 +1,5 @@
-import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
-import { fetchJson } from "../../../utils/api";
-import type {Notice} from "../../../dataTypes/notice.ts";
-import type {User} from "../../../dataTypes/user.ts";
-import {MaintenanceRequest} from "../../../dataTypes/maintenanceRequest.ts";
+import {useAdminData} from "@/pages/common/buildingManager/pageHooks/useAdminData.tsx";
 
 interface NoticeItem {
     notice_id: string | number;
@@ -30,36 +26,51 @@ const initialDashboardData: DashboardData = {
 };
 
 export function AdminDashboardPage() {
-    const [dashboardData, setDashboardData] = useState<DashboardData>(initialDashboardData);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    // const [dashboardData, setDashboardData] = useState<DashboardData>(initialDashboardData);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState<string | null>(null);
+    //
+    // useEffect(() => {
+    //     const loadData = async () => {
+    //         try {
+    //             const manager = await fetchJson<User>("/user/get-by-id/admin0");
+    //             const maintenanceRequests = await fetchJson<[MaintenanceRequest]>("/maintenance-request/");
+    //             const notices = await fetchJson<[Notice]>("/notices/");
+    //
+    //             setDashboardData({
+    //                 ...initialDashboardData,
+    //                 name: manager.username,
+    //                 pending_maintenance_count: maintenanceRequests.length,
+    //                 recent_published_notices: notices.slice(0, 3).map((notice) => ({
+    //                     notice_id: notice._id,
+    //                     title: notice.title,
+    //                     created_at: notice.createAt ?? Date.now(),
+    //                 })),
+    //             });
+    //         } catch (fetchError) {
+    //             setError(fetchError instanceof Error ? fetchError.message : "Unable to load dashboard data.");
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //
+    //     loadData();
+    // }, []);
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const manager = await fetchJson<User>("/user/get-by-id/admin0");
-                const maintenanceRequests = await fetchJson<[MaintenanceRequest]>("/maintenance-request/");
-                const notices = await fetchJson<[Notice]>("/notices/");
+    const { loading, error, managerData, maintenanceRequests, notices } = useAdminData();
 
-                setDashboardData({
-                    ...initialDashboardData,
-                    name: manager.username,
-                    pending_maintenance_count: maintenanceRequests.length,
-                    recent_published_notices: notices.slice(0, 3).map((notice) => ({
-                        notice_id: notice._id,
-                        title: notice.title,
-                        created_at: notice.createAt ?? Date.now(),
-                    })),
-                });
-            } catch (fetchError) {
-                setError(fetchError instanceof Error ? fetchError.message : "Unable to load dashboard data.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
-    }, []);
+    const dashboardData: DashboardData = (!loading && !error && managerData && maintenanceRequests && notices)
+        ? {
+            ...initialDashboardData,
+            name: managerData.username,
+            pending_maintenance_count: maintenanceRequests.length,
+            recent_published_notices: notices.slice(0, 3).map((notice) => ({
+                notice_id: notice._id,
+                title: notice.title,
+                created_at: notice.createAt ?? null,
+            })),
+        }
+        : initialDashboardData;
 
     return (
         <>

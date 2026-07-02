@@ -1,5 +1,5 @@
 import { CommonFrame } from "@/components/common/CommonFrame.tsx";
-import {useGetRoomsQuery} from "@/context/api/services/roomsApi.ts";
+import {useGetRoomsQuery} from "@/context/api/apiServices/roomsApi.ts";
 
 export function AdminAccessCodesPage() {
     const { data: rooms = [], isLoading: loading, error } = useGetRoomsQuery();

@@ -26,7 +26,13 @@ export const maintenanceRequestApi = api.injectEndpoints({
             transformResponse: (requests : MaintenanceRequest[]) => requests.map(parseRequest),
             providesTags: ["MaintenanceRequests"],
         }),
+
+        getMaintenanceRequests: builder.query<MaintenanceRequestState[], void>({
+            query: () => ({ url: `/maintenance-request/`}),
+            transformResponse: (requests : MaintenanceRequest[]) => requests.map(parseRequest),
+            providesTags: ["MaintenanceRequests"],
+        }),
     }),
 });
 
-export const {useGetMaintenanceRequestByUserQuery} = maintenanceRequestApi;
+export const {useGetMaintenanceRequestByUserQuery, useGetMaintenanceRequestsQuery} = maintenanceRequestApi;
