@@ -3,15 +3,8 @@ import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import { AddCreditsCard } from "../../../../../components/residents/credits/AddCreditsCard.tsx";
 import { CreditsBalanceCard } from "../../../../../components/residents/credits/CreditsBalanceCard.tsx";
 import { TransactionHistoryCard } from "../../../../../components/residents/credits/TransactionHistoryCard.tsx";
-// import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getUserId } from "../../../../../context/authenticationSlice.ts";
-// import { fetchJson } from "../../../../../utils/api.ts";
-// import { setCredits, setTransactionHistory } from "../../../../../context/residents/creditsSlice.ts";
-// import type { CreditBalance, Transaction } from "../../../../../dataTypes/creditBalance.ts";
 import {useCreditsData} from "@/pages/common/residents/pageHooks/useCreditsData.tsx";
 import {useDispatch} from "react-redux";
-// import {getUserId} from "@/context/authenticationSlice.ts";
 import {setCredits, setTransactionHistory} from "@/context/residents/creditsSlice.ts";
 
 export interface CreditsPageProps {
@@ -20,37 +13,6 @@ export interface CreditsPageProps {
 }
 
 export function CreditsPage() {
-    // const userId = useSelector(getUserId);
-    // const dispatch = useDispatch();
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState<string | null>(null);
-
-    // useEffect(() => {
-    //     const loadCreditsData = async () => {
-    //         if (!userId) {
-    //             setError("User is not authenticated.");
-    //             setLoading(false);
-    //             return;
-    //         }
-    //
-    //         try {
-    //             const [balance, transactions] = await Promise.all([
-    //                 fetchJson<CreditBalance>(`/credits/get-for-user/${encodeURIComponent(userId)}`),
-    //                 fetchJson<Transaction[]>(`/credits/get-transaction-history/${encodeURIComponent(userId)}`),
-    //             ]);
-    //
-    //             dispatch(setCredits(balance.balanceCents));
-    //             dispatch(setTransactionHistory(transactions));
-    //         } catch (fetchError) {
-    //             setError(fetchError instanceof Error ? fetchError.message : "Unable to load credits data.");
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //
-    //     loadCreditsData();
-    // }, [userId, dispatch]);
-
     const { loading, error, balanceCents, transactions} = useCreditsData();//apiHook
     const dispatch = useDispatch();//reduxHook
 

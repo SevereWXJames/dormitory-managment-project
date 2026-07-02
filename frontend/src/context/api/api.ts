@@ -5,6 +5,6 @@ import { apiBaseQuery } from "./apiBaseQuery";
 export const api = createApi({
     reducerPath: "api",
     baseQuery: apiBaseQuery,
-    tagTypes: ["Booking", "MachineStatus", "Room", "Credits", "Transactions"],
+    tagTypes: ["Booking", "MachineStatus", "Room", "Credits", "Transactions", "ReservationSlots"],
     endpoints: () => ({}),
 });
