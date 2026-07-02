@@ -17,14 +17,13 @@ describe("usersServices", function () {
 		it("Existing username", async function () {
 			const username = "admin1";
 			const expectedUser = {
-				"_id": "user2",
-				"username": "test3",
-				"email": "test3@test.com",
-				"phoneNumber": "6045550003",
-				"roles": ["Resident"]
+				"_id": "admin0",
+				"username": "admin1",
+				"email": "admin1@test.com",
+				"phoneNumber": "6045550004",
+				"roles": ["Admin"]
 			};
 			const actual = await getExistingUserFromUsername(username);
-			expect(actual).to.be.instanceOf(User);
 			expect(actual).to.deep.equal(expectedUser);
 		});
 		it("Absent username", async function () {
@@ -45,7 +44,6 @@ describe("usersServices", function () {
 				"roles": ["Admin"]
 			};
 			const actual = await getExistingUserFromId(id);
-			expect(actual).to.be.instanceOf(User);
 			expect(actual).to.deep.equal(expectedUser);
 		});
 		it("Absent id", async function () {

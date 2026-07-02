@@ -10,6 +10,7 @@ import reservationJSON from "../../test_data/reservationSlots.json" with {type: 
 import roomJSON from "../../test_data/rooms.json" with {type: "json"};
 import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import serviceJSON from "../../test_data/services.json" with {type: "json"};
+import userJSON from "../../test_data/users.json" with {type: "json"};
 
 /**
  * Loads the sample data from the backend/test_data folder into the SmartAPT
@@ -33,7 +34,8 @@ export default function loadSampleData(): Promise<void> {
 			database.load("reservation_slots", reservationJSON.reservationSlots),
 			database.load("rooms", roomJSON.rooms),
 			database.load("residents", residentJSON.residents),
-			database.load("services", serviceJSON.services)])
+			database.load("services", serviceJSON.services),
+			database.load("users", userJSON.users)]),
 		).then((value) => {
 			Promise.resolve();
 		})

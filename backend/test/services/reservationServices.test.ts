@@ -31,7 +31,7 @@ describe("reservationServices", function () {
 			expect(actual).to.have.lengthOf(expectedLength);
 		});
 		it("userID with one facility booked", async function () {
-			const userId = "user1";
+			const userId = "user2";
 			const expectedSlot = {
 				"_id": "slot5",
 				"serviceId": "service1",

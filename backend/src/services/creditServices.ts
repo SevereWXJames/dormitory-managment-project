@@ -4,12 +4,7 @@ import database from "../database/database.ts";
 import {CreditBalance, Transaction} from "../dataTypes/creditBalance.ts";
 
 export async function getCreditBalanceByUserId(userId: string): Promise<CreditBalance | undefined> {
-    // Original, static implementation:
-    // const testBalance = creditBalanceJSON.creditBalances.find((creditBalance) => {
-    //     return creditBalance.userId === _id;
-    // });
-
-    return CreditBalance.model.findOne({userId: userId}).exec()
+    return CreditBalance.model.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as CreditBalance);
@@ -22,12 +17,7 @@ export async function getCreditBalanceByUserId(userId: string): Promise<CreditBa
 }
 
 export async function getTransactionHistoryByUserId(userId: string): Promise<Transaction[]> {
-    // Original static implementation:
-    // return transactionHistoryJSON.transactions.filter((transaction) => {
-    //     return transaction.userId === _id;
-    // }) as [Transaction];
-
-    const cursor = Transaction.model.find({userId: userId});
+    const cursor = Transaction.model.find({userId: userId}).lean();
     const results: Transaction[] = [];
 
     for await (const result of cursor) {

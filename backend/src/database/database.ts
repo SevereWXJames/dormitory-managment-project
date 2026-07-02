@@ -1,5 +1,5 @@
-import mongoose, { Mongoose } from 'mongoose';
-import { MONGODB_URL_DOCKER, MONGODB_URL_LOCAL, DATABASE_NAME, type CollectionName } from './databaseConstants.ts';
+import mongoose, { Model, Mongoose } from 'mongoose';
+import { MONGODB_URL_DOCKER, MONGODB_URL_LOCAL, DATABASE_NAME, type CollectionName, MONGODB_URL_DEFAULT } from './databaseConstants.ts';
 
 /**
  * Class that creates ? objects for the MongoDB database.
@@ -23,20 +23,30 @@ export class Database {
 	 * @returns A promise, to either be resolved with a Database or be rejected.
 	 */
 	public static async create() : Promise<Database> {
-		// console.debug(`Database.create()`);
-		try {
-			const options = {dbName: DATABASE_NAME};
-			const dockerConnectionPromise = mongoose.connect(MONGODB_URL_DOCKER, options);
-			const localConnectionPromise = mongoose.connect(MONGODB_URL_LOCAL, options);
+		const timeout = 5000;
+		const options = {dbName: DATABASE_NAME, serverSelectionTimeoutMS: timeout};
 
-			return Promise.any([dockerConnectionPromise, localConnectionPromise]).then(async (mongoose) => {
-				console.info(`Database.create(): Connected to ${mongoose.connection.host}`);
+		console.info("Database.create(): Creating a database connection.");
+		console.info(`Database.create(): Note: Each connection attempt may take up to ${timeout/1000} seconds.`);
+
+		for (const host of [MONGODB_URL_DEFAULT, MONGODB_URL_DOCKER, MONGODB_URL_LOCAL]) {
+			if (host == null || host == "") {
+				console.warn("Database.create(): Skipping a host name as it is null or empty.");
+				continue;
+			}
+
+			try {
+				console.info(`Database.create(): Attempting to connect to ${host}.`);
+				await mongoose.connect(host, options);
+				console.info(`Database.create(): Successfully connected to ${host}.`);
 				return Promise.resolve(new Database(mongoose));
-			});
-		} catch (e) {
-			console.log(`Database.create(): Connection failed to all hosts.`);
-			return Promise.reject(e);
+			} catch (e) {
+				console.warn(`Database.create(): Failed to connect to host ${host}.`);
+				continue;
+			}
 		}
+
+		return Promise.reject(new Error("Database.create(): Failed to connect to all specified hosts."));
 	}
 
 	/**

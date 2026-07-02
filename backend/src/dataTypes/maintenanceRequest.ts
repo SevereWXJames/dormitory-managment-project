@@ -1,5 +1,9 @@
+import { Schema } from "mongoose";
+import database from "../database/database.ts";
+import type { CollectionName } from "../database/databaseConstants.ts";
+
 export class MaintenanceRequest {
-    public id: string;
+    public _id: string;
     public createdBy: string;
     public title: string;
     public description: string;
@@ -7,9 +11,12 @@ export class MaintenanceRequest {
     public status: string;
     public priority: string;
     public location: string | null;
+    public static model = database.mongoose.model("maintenance_request" as CollectionName,
+        new Schema({_id: String, createdBy: String, title: String, description: String, type: String, status: String,
+            priority: String, location: String}));
 
-    constructor({id, createdBy, title, description, type, status, priority, location}: {
-        id: string,
+    constructor({_id, createdBy, title, description, type, status, priority, location}: {
+        _id: string,
         createdBy: string,
         title: string,
         description: string,
@@ -18,7 +25,7 @@ export class MaintenanceRequest {
         priority: string,
         location: string | null
     }) {
-        this.id = id;
+        this._id = _id;
         this.createdBy = createdBy;
         this.title = title;
         this.description = description;
@@ -30,31 +37,37 @@ export class MaintenanceRequest {
 }
 
 export class MaintenanceRequestType {
-    public id: string;
+    public _id: string;
     public text: string;
+    public static model = database.mongoose.model("maintenance_request_type" as CollectionName,
+        new Schema({_id: String, text: String}));
 
-    constructor({id, text}: {id: string, text: string}) {
-        this.id = id;
+    constructor({_id, text}: {_id: string, text: string}) {
+        this._id = _id;
         this.text = text;
     }
 }
 
 export class MaintenanceRequestStatus {
-    public id: string;
+    public _id: string;
     public text: string;
+    public static model = database.mongoose.model("maintenance_request_status" as CollectionName,
+        new Schema({_id: String, text: String}));
 
-    constructor({id, text}: {id: string, text: string}) {
-        this.id = id;
+    constructor({_id, text}: {_id: string, text: string}) {
+        this._id = _id;
         this.text = text;
     }
 }
 
 export class MaintenanceRequestPriority {
-    public id: string;
+    public _id: string;
     public text: string;
+    public static model = database.mongoose.model("maintenance_request_priority" as CollectionName,
+        new Schema({_id: String, text: String}));
 
-    constructor({id, text}: {id: string, text: string}) {
-        this.id = id;
+    constructor({_id, text}: {_id: string, text: string}) {
+        this._id = _id;
         this.text = text;
     }
 }

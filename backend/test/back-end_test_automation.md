@@ -24,6 +24,14 @@ This runs the MongoDB container as well as a second back-end container called �
 
 Tests can be written using Mocha, Chai and Chai as Promised. Refer to their documentations for more information.
 
+## Usage Notes
+
+**The tests were written under the assumption that the sample data in the test_data folder is loaded into MongoDB.**
+
+**Not all tests were written in exactly the same manner, thus some checks may be missing for some tables and functions.** If any tests fail due to a mistake on the program code, review all similar functions to ensure the mistake is not repeated.
+
+The inclusion of this test suite should not interfere with regular code execution.
+
 ## Implementation Notes
 
 This method of running tests is based on Docker Compose profiles, defined such that the regular “deployment to production” pipeline (i.e. running `docker compose up --build` to create the three production containers "backend", "frontend" and "mongo") uses the same command as before test automation was added. For more information on profiles, see https://docs.docker.com/compose/how-tos/profiles/. Importantly, the profile used by Docker Compose can either be passed with the `--profile` attribute or by setting the COMPOSE_PROFILES envrionment variable.
@@ -32,7 +40,7 @@ Two Docker Compose profiles were created: "production" and "test", where the for
 
 Note that the "mongo" container is run on either configuration, as it uses no profiles. This means that tests can query and update the MongoDB database as if the database was deployed in production.
 
-To avoid potential conflicts with the exposed ports, the "backend-test" container exposes port 3001. Nevertheless, it is best to delete the container stack created for testing before deploying to production.
+To avoid potential conflicts with the exposed ports, the "backend-test" container exposes port 3001.
 
 ---
 

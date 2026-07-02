@@ -18,7 +18,7 @@ describe("maintenanceRequestServices", function () {
 	describe("getAllMaintenanceRequests()", function () {
 		it("Test", async function () {
 			const expectedLength = 3;
-			const actual = getAllMaintenanceRequests();
+			const actual = await getAllMaintenanceRequests();
 			expect(actual).to.have.lengthOf(expectedLength);
 		});
 	});
@@ -27,11 +27,18 @@ describe("maintenanceRequestServices", function () {
 		it("userId with one maintenance request", async function () {
 			const userId = "user1";
 			const expectedLength = 1;
-			const expectedId = {_id: "mR2"};
+			const expectedMaintenanceRequest = {
+				"_id": "mR2",
+				"createdBy": "user1",
+				"title": "title3",
+				"description": "description description description",
+				"type": "misc",
+				"status": "completed"
+			};
 			const actual = await getAllMaintenanceRequestsByUserId(userId);
 			expect(actual).to.have.lengthOf(expectedLength);
 			expect(actual).to.be.an.instanceOf(Array);
-			expect(actual).to.deep.include(expectedId);
+			expect(actual[0]).to.deep.equal(expectedMaintenanceRequest);
 		});
 		it("userId with two maintenance requests", async function () {
 			const userId = "user0";

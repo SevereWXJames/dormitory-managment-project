@@ -39,7 +39,6 @@ describe("roomServices", function () {
 				"verificationCode": "abcd"
 			};
 			const actual = await getRoomById(id);
-			expect(actual).to.be.instanceOf(Room);
 			expect(actual).to.deep.equal(expectedRoom);
 			expect(actual).to.not.be.undefined;
 		});
@@ -59,7 +58,6 @@ describe("roomServices", function () {
 				"verificationCode": "abcd"
 			};
 			const actual = await getRoomByUserId(userId);
-			expect(actual).to.be.instanceOf(Room);
 			expect(actual).to.deep.equal(expectedRoom);
 		});
 		it("Absent userId", async function () {
@@ -93,7 +91,6 @@ describe("roomServices", function () {
 				"roomId": "room0"
 			}
 			const actual = await getResidentByUserId(userId);
-			expect(actual).to.be.instanceOf(Resident);
 			expect(actual).to.deep.equal(expectedResident);
 		});
 		it("Absent userId", async function () {

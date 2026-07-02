@@ -10,44 +10,125 @@ import {
 } from "../dataTypes/maintenanceRequest.ts";
 
 export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]> {
-    return requestJSON.maintenanceRequests as MaintenanceRequest[];
+    const cursor = MaintenanceRequest.model.find({ }).lean();
+    const results: MaintenanceRequest[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as MaintenanceRequest);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
-export async function getAllMaintenanceRequestsByUserId(_id: string): Promise<MaintenanceRequest[]> {
-    return requestJSON.maintenanceRequests.filter((maintenanceRequest) => {
-        return maintenanceRequest.createdBy === _id;
-    }) as MaintenanceRequest[];
+export async function getAllMaintenanceRequestsByUserId(userId: string): Promise<MaintenanceRequest[]> {
+    const cursor = MaintenanceRequest.model.find({createdBy: userId}).lean();
+    const results: MaintenanceRequest[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as MaintenanceRequest);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
 export async function getMaintenanceRequestTypeById(_id: string): Promise<MaintenanceRequestType | undefined> {
-    const testType = requestTypeJSON.maintenanceRequestTypes.find((request) => {
-        return request._id === _id;
-    });
-    return testType as MaintenanceRequestType;
+    return MaintenanceRequestType.model.findOne({_id: _id}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as MaintenanceRequestType);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
 export async function getMaintenanceRequestStatusById(_id: string): Promise<MaintenanceRequestStatus | undefined> {
-    const testStatus = requestStatusJSON.maintenanceRequestStatuses.find((request) => {
-        return request._id === _id;
-    });
-    return testStatus as MaintenanceRequestStatus;
+    return MaintenanceRequestStatus.model.findOne({_id: _id}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as MaintenanceRequestStatus);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
 export async function getMaintenanceRequestPriorityById(_id: string): Promise<MaintenanceRequestPriority | undefined> {
-    const testPriority = requestPriorityJSON.maintenanceRequestPriorities.find((priority) => {
-        return priority._id === _id;
-    });
-    return testPriority as MaintenanceRequestPriority;
+    return MaintenanceRequestPriority.model.findOne({_id: _id}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as MaintenanceRequestPriority);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
 export async function getAllMaintenanceRequestTypes(): Promise<MaintenanceRequestType[]> {
-    return requestTypeJSON.maintenanceRequestTypes as MaintenanceRequestType[];
+    const cursor = MaintenanceRequestType.model.find({ }).lean();
+    const results: MaintenanceRequestType[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as MaintenanceRequestType);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
 export async function getAllMaintenanceRequestStatuses(): Promise<MaintenanceRequestStatus[]> {
-    return requestStatusJSON.maintenanceRequestStatuses as MaintenanceRequestStatus[];
+    const cursor = MaintenanceRequestStatus.model.find({ }).lean();
+    const results: MaintenanceRequestStatus[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as MaintenanceRequestStatus);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
 export async function getAllMaintenanceRequestPriorities(): Promise<MaintenanceRequestPriority[]> {
-    return requestPriorityJSON.maintenanceRequestPriorities as MaintenanceRequestPriority[];
+    const cursor = MaintenanceRequestPriority.model.find({ }).lean();
+    const results: MaintenanceRequestPriority[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as MaintenanceRequestPriority);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }

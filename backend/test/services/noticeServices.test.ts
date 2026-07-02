@@ -25,7 +25,7 @@ describe("noticeServices", function () {
 			const expectedNotice = {
 				"_id": "notice2",
 				"createdBy": "admin0",
-				"viewableBy": ["user1, user0"],
+				"viewableBy": ["user1", "user0"],
 				"title": "test3",
 				"text": "test",
 				"createdAt": 2

@@ -1,14 +1,36 @@
 import reservationJSON from "../../test_data/reservationSlots.json" with {type: "json"};
-import type {ReservationSlot} from "../dataTypes/reservationSlot.ts";
+import {ReservationSlot} from "../dataTypes/reservationSlot.ts";
 
-export async function getReservationsBookedByUserId(_id: string): Promise<ReservationSlot[]> {
-    return reservationJSON.reservationSlots.filter((reservationSlot) => {
-        return reservationSlot.booked && reservationSlot.bookedBy === _id;
-    }) as ReservationSlot[];
+export async function getReservationsBookedByUserId(userId: string): Promise<ReservationSlot[]> {
+    const cursor = ReservationSlot.model.find({bookedBy: userId}).lean();
+    const results: ReservationSlot[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as ReservationSlot);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
-export async function getReservationsSlotsByServiceId(_id: string): Promise<ReservationSlot[]> {
-    return reservationJSON.reservationSlots.filter((reservationSlot) => {
-        return reservationSlot.serviceId === _id;
-    }) as ReservationSlot[];
+export async function getReservationsSlotsByServiceId(serviceId: string): Promise<ReservationSlot[]> {
+    const cursor = ReservationSlot.model.find({serviceId: serviceId}).lean();
+    const results: ReservationSlot[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as ReservationSlot);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }

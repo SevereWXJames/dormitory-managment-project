@@ -46,7 +46,6 @@ describe("serviceServices", function () {
 				"reservationEndHour": 18
 			};
 			const actual = await getServiceById(id);
-			expect(actual).to.be.instanceOf(Service);
 			expect(actual).to.deep.equal(expectedService);
 		});
 		it("Existing id with hasIoT: true", async function () {
@@ -62,7 +61,6 @@ describe("serviceServices", function () {
 				"reservationEndHour": 18
 			};
 			const actual = await getServiceById(id);
-			expect(actual).to.be.instanceOf(Service);
 			expect(actual).to.deep.equal(expectedService);
 		});
 		it("Absent id", async function () {
