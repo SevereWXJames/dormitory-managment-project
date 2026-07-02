@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@mui/material";
-import { useSelector } from "react-redux";
-import { getTransactionHistory } from "../../../context/residents/creditsSlice";
 import { Transaction } from "./Transaction";
+import {useSelector} from "react-redux";
+import {getTransactionHistory} from "@/context/residents/creditsSlice.ts";
 
 /**
  * React components for the Transaction History display.
