@@ -34,38 +34,3 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
         </div>
     );
 }
-
-
-// export function ResponsiveDialog(props : ResponsiveDialogProps) {
-//     const theme = useTheme();
-//     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-//
-//     return (<div>
-//             <Dialog
-//                 fullScreen={fullScreen}
-//                 open={props.open}
-//                 onClose={props.handleClose}
-//                 aria-labelledby="responsive-dialog-title"
-//             >
-//                 <DialogTitle
-//                     id="responsive-dialog-title"
-//                     sx={{color: 'black'}}>
-//                     {"Calendar"}
-//                 </DialogTitle>
-//                 <DialogContent>
-//                     <DialogContentText>
-//                         Default text here.
-//                     </DialogContentText>
-//                 </DialogContent>
-//                 <DialogActions>
-//                     <Button autoFocus onClick={props.handleClose}>
-//                         Disagree
-//                     </Button>
-//                     <Button onClick={props.handleClose} autoFocus>
-//                         Agree
-//                     </Button>
-//                 </DialogActions>
-//             </Dialog>
-//         </div>
-//     );
-// }
