@@ -27,14 +27,14 @@ export function CreditsPage() {
     }
 
     return (<>
-        <CommonFrame commonFrameType={"RESIDENT"}/>
+        <CommonFrame commonFrameType={"RESIDENT"}>
         <div className="credits-page">
             <h1>Credits</h1>
             {loading && <p>Loading credits data...</p>}
             {error && <p style={{ color: "red" }}>{error}</p>}
             {!loading && !error && (
                 <>
-                    <Box className="cards-row">
+                    <Box className="cards-row flex flex-col lg:items-center lg:flex-row gap-4 p-4">
                         <Box className="card-container">
                             <h2>Credit Balance</h2>
                             <CreditsBalanceCard />
@@ -51,6 +51,7 @@ export function CreditsPage() {
                 </>
             )}
         </div>
+        </CommonFrame>
     </>)
 }
 //
