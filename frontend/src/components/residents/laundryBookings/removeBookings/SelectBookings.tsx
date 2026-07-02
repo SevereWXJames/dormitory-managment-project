@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import type {SelectChangeEvent} from '@mui/material/Select';
 import {useSelector} from "react-redux";
 import {getBookingsByUser} from "../../../../context/residents/bookingsSlice.ts";
-import {getUsername} from "../../../../context/authenticationSlice.ts";
+import {getUserId} from "../../../../context/authenticationSlice.ts";
 import type {Booking} from "../../../../types/residents/types.tsx";
 
 export type SelectBookingsProps = {
@@ -16,7 +16,7 @@ export type SelectBookingsProps = {
 
 export default function SelectBookings({value, setValue} : SelectBookingsProps) {
     // const [booking, setBooking] = useState('');
-    const userId: string = useSelector(getUsername);
+    const userId: string = useSelector(getUserId);
     const bookings: Booking[] = useSelector(getBookingsByUser(userId));
     const options: { val: string, name: string }[] = bookings.map((elm) =>
         ({val: elm._id, name: elm.eventName}));

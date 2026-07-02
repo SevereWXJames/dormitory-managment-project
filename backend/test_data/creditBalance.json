@@ -3,7 +3,7 @@
     {
       "_id": "credit0",
       "userId": "user0",
-      "balanceCents": 10000
+      "balanceCents": 100
     },
     {
       "_id": "credit1",
