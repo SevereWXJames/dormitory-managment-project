@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import type {CommonFrameType} from '../../../../app/types';
+import type {CommonFrameType} from '../../../../types/residents/types.ts';
 import {CommonFrame} from '../../../../components/common/CommonFrame';
 //import {RecentBookings} from "../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
 import Paper from "@mui/material/Paper";
