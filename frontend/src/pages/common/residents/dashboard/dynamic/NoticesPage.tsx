@@ -3,11 +3,6 @@ import { NoticeCard } from "../../../../../components/residents/notices/NoticeCa
 import { Box } from "@mui/material";
 import {useNoticesData} from "@/pages/common/residents/pageHooks/useNoticesData.tsx";
 
-export interface NoticesPageProps {
-    read_notices: object[],
-    unread_notices: object[]
-}
-
 export function NoticesPage() {
     const {notices, isLoading, isError, error} = useNoticesData();
 
