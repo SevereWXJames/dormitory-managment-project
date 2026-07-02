@@ -78,47 +78,47 @@ export function CommonFrame(props: CommonFrameProps) {
     return (
         <>
             <Box sx={{display: "flex", flexDirection: "column", height: "100vh"}}>
-            <AppBar className="header-appbar" position="sticky"
-                    sx={{display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center", padding: "4px"}}>
-                {isMobile && (
-                    <IconButton id="open-nav-bar-button" onClick={toggleDrawer}>
-                        <MenuIcon />
-                    </IconButton>
-                )}
-                <Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{height: 48}}/></Link>
-                <div id="header-user-type-message" className="header-user-type flex-1 text-left sm:text-right text-xs sm:text-lg">{headerUserTypeMessage}</div>
-                {avatar}
-            </AppBar>
-            <Box sx={{display: "flex", flex: 1, overflow: "hidden"}}>
-                <Drawer id="nav-bar-drawer"
-                        variant={isMobile ? "temporary" : "permanent"}
-                        open={isMobile ? mobileOpen : true}
-                        onClose={toggleDrawer}
+                <AppBar className="header-appbar" position="sticky"
+                        sx={{display: "flex", flexDirection: "row", gap: "1rem", alignItems: "center", padding: "4px"}}>
+                    {isMobile && (
+                        <IconButton id="open-nav-bar-button" onClick={toggleDrawer}>
+                            <MenuIcon/>
+                        </IconButton>
+                    )}
+                    <Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{height: 48}}/></Link>
+                    <div id="header-user-type-message"
+                         className="header-user-type flex-1 text-left sm:text-right text-xs sm:text-lg">{headerUserTypeMessage}</div>
+                    {avatar}
+                </AppBar>
+                <Box sx={{display: "flex", flex: 1, overflow: "hidden"}}>
+                    <Drawer id="nav-bar-drawer"
+                            variant={isMobile ? "temporary" : "permanent"}
+                            open={isMobile ? mobileOpen : true}
+                            onClose={toggleDrawer}
+                            sx={{
+                                "& .MuiDrawer-paper": {
+                                    position: isMobile ? "fixed" : "relative", // overlay on mobile, in-flow on desktop
+                                },
+                            }}>
+                        <List id="nav-bar-list">
+                            {buttons}
+                        </List>
+                    </Drawer>
+                    <Box
+                        component="main"
                         sx={{
-                    "& .MuiDrawer-paper": {
-                        position: isMobile ? "fixed" : "relative", // overlay on mobile, in-flow on desktop
-                    },
-                }}  >
-                    <List id="nav-bar-list">
-                        {buttons}
-                    </List>
-                </Drawer>
-                <Box
-                    component="main"
-                    sx={{
-                        flexGrow: 1,
-                        overflow: "auto",
-                        p: 2,
-                        transition: theme => theme.transitions.create("margin"),
-                    }}
-                >
-                    {props.children}
+                            flexGrow: 1,
+                            overflow: "auto",
+                            p: 2,
+                            transition: theme => theme.transitions.create("margin")
+                        }}>
+                        {props.children}
+                    </Box>
                 </Box>
-            </Box>
-            <LogoutDialog
-                open={logoutDialogOpen}
-                onClose={() => setLogoutDialogOpen(false)}
-            />
+                <LogoutDialog
+                    open={logoutDialogOpen}
+                    onClose={() => setLogoutDialogOpen(false)}
+                />
             </Box>
         </>
     );

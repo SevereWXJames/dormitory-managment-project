@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
-import {MachineOptions} from "../../../../../components/residents/laundryBookings/MachineButtons.tsx";
-import {ReservationForm} from "../../../../../components/residents/laundryBookings/reservationForm/ReservationForm.tsx";
-import {
-    CancelBookingButton
-} from "../../../../../components/residents/laundryBookings/removeBookings/CancelBookingButton.tsx";
-import {
-    RecentBookings
-} from "../../../../../components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
-import {
-    CheckMachineStatus
-} from "../../../../../components/residents/laundryBookings/reservationForm/CheckMachineStatus.tsx";
-import { getUserId } from "../../../../../context/authenticationSlice.ts";
-import { setBookings } from "../../../../../context/residents/bookingsSlice.ts";
-import { fetchJson } from "../../../../../utils/api.ts";
-import type { ReservationSlot } from "../../../../../dataTypes/reservationSlot.ts";
-import type { Booking } from "../../../../../types/residents/types.tsx";
+import {CommonFrame} from "@/components/common/CommonFrame.tsx";
+// import {MachineOptions} from "../../../../../components/residents/laundryBookings/MachineButtons";
+// import {ReservationForm} from "../../../../../components/residents/laundryBookings/reservationForm/ReservationForm.tsx";
+// import {
+//     CancelBookingButton
+// } from "../../../../../components/residents/laundryBookings/removeBookings/CancelBookingButton.tsx";
+// import {
+//     RecentBookings
+// } from "@/components/residents/laundryBookings/bookingHistory/UserBookings.tsx";
+// import {
+//     CheckMachineStatus
+// } from "../../../../../components/residents/laundryBookings/reservationForm/CheckMachineStatus.tsx";
+import { getUserId } from "@/context/authenticationSlice.ts";
+import { setBookings } from "@/context/residents/bookingsSlice.ts";
+import { fetchJson } from "@/utils/api.ts";
+import type { ReservationSlot } from "@/dataTypes/reservationSlot.ts";
+import type { Booking } from "@/types/residents/types.tsx";
 
 export type Bookings = {
     date: Date,
@@ -26,20 +26,20 @@ export type Bookings = {
     event_title: string,
 }
 
-export function LaundryMachinesList() {
-    const machines: string[] = ["machine_1", "machine_2", "machine_3"]
-    return (
-        <div>
-            <div className={"machine-options"}>
-                <MachineOptions machine_ids={machines}/>
-            </div>
-            <div className={"check-machine-status"}>
-                <strong>Check Machine status</strong>
-                <CheckMachineStatus/>
-            </div>
-        </div>
-    )
-}
+// export function LaundryMachinesList() {
+//     const machines: string[] = ["machine_1", "machine_2", "machine_3"]
+//     return (
+//         <div>
+//             <div className={"machine-options"}>
+//                 <MachineOptions machine_ids={machines}/>
+//             </div>
+//             <div className={"check-machine-status"}>
+//                 <strong>Check Machine status</strong>
+//                 <CheckMachineStatus/>
+//             </div>
+//         </div>
+//     )
+// }
 
 export function LaundryBookingsPage() {
     const userId = useSelector(getUserId);
@@ -92,22 +92,22 @@ export function LaundryBookingsPage() {
                     <div className={"contents"}>
                         <div className={"machineList"}>
                             <strong>Laundry Machines</strong>
-                            <LaundryMachinesList/>
+                            {/*<LaundryMachinesList/>*/}
                         </div>
                         <div className={"bookingsColumn"}>
                             <div className={"bookingForm"}>
                                 <strong>Make a booking</strong>
-                                <ReservationForm/>
+                                {/*<ReservationForm/>*/}
                             </div>
                             <div className={"cancel-booking"}>
                                 <strong>Cancel a booking</strong>
-                                <CancelBookingButton/>
+                                {/*<CancelBookingButton/>*/}
                             </div>
 
                             <div className={"tables"}>
                                 <div className={"recentBookings"}>
                                     <strong>Recent bookings</strong>
-                                    <RecentBookings/>
+                                    {/*<RecentBookings/>*/}
                                 </div>
                             </div>
                         </div>
