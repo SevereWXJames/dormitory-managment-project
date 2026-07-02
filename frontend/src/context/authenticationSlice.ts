@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { AuthenticationState } from '../app/types';
-import type {RootState} from "./store.ts";
+import type {RootState} from "./store/store.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
