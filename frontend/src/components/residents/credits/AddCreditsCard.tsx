@@ -44,10 +44,18 @@ export function AddCreditsCard() {
 		}
 	}
 
+    const handleAmountInput = (e: React.InputEvent<HTMLInputElement>) => {
+        const value = (e.target as HTMLInputElement).value;
+        if (value === "" || Number(value) >= 0) {
+            setAmount(value);
+        }
+        // if negative, simply don't update state — input visually reverts on next render
+    };
+
 	return (
-		<Card id="add-credits-card" className="card">
+		<Card id="add-credits-card" className="card flex flex-col">
 			<CardContent id="add-credits-card-content">
-				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
+				<FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
 					<InputLabel htmlFor={`${cardNumberID}-input`}>Card number</InputLabel>
 					<OutlinedInput
 						id={`${cardNumberID}-input`}
@@ -56,8 +64,7 @@ export function AddCreditsCard() {
 						onInput={(e) => setCardNumber((e.target as HTMLInputElement).value)}
 					/>
 				</FormControl>
-				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
-					{/* <InputLabel htmlFor={`${expirationDateID}-input`}>Expiration date</InputLabel> */}
+				<FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}} variant="filled">
 					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-ca">
 						<DateField
 							id={`${expirationDateID}-input`}
@@ -70,7 +77,7 @@ export function AddCreditsCard() {
 						/>
 					</LocalizationProvider>
 				</FormControl>
-				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
+				<FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
 					<InputLabel htmlFor={`${securityCodeID}-input`}>Security code</InputLabel>
 					<OutlinedInput
 						id={`${securityCodeID}-input`}
@@ -79,7 +86,7 @@ export function AddCreditsCard() {
 						onInput={(e) => setsecurityCode((e.target as HTMLInputElement).value)}
 					/>
 				</FormControl>
-				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
+				<FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
 					<InputLabel htmlFor={`${nameID}-input`}>Cardholder name</InputLabel>
 					<OutlinedInput
 						id={`${nameID}-input`}
@@ -88,13 +95,14 @@ export function AddCreditsCard() {
 						onInput={(e) => setName((e.target as HTMLInputElement).value)}
 					/>
 				</FormControl>
-				<FormControl sx={{m: 1, width: '25ch'}} variant="filled">
+				<FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
 					<InputLabel htmlFor={`${amountID}-input`}>Amount</InputLabel>
 					<OutlinedInput
 						id={`${amountID}-input`}
 						type='number'
 						label="Amount"
-						onInput={(e) => setAmount((e.target as HTMLInputElement).value)}
+                        inputProps={{ min: 0 }}
+                        onInput={handleAmountInput}
 					/>
 				</FormControl>
 				<FormControl>

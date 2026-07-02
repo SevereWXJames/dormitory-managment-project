@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@mui/material";
-import { useSelector } from "react-redux";
-import { getCreditsString } from "../../../context/residents/creditsSlice";
+import {useSelector} from "react-redux";
+import {getCreditsString} from "@/context/residents/creditsSlice.ts";
 
 /**
  * React components for the Credits display.
@@ -9,11 +9,10 @@ import { getCreditsString } from "../../../context/residents/creditsSlice";
  */
 export function CreditsBalanceCard() {
 	const credits = useSelector(getCreditsString);
-
 	return (
-		<Card id="credits-balance-card" className="card">
+		<Card id="credits-balance-card" className="card top">
 			<CardContent id="credits-balance-card-content" sx={{fontSize: 'x-large'}}>
-				{credits}
+                {credits}
 			</CardContent>
 		</Card>
 	);

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
-import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from '../../app/types';
+import type { RootState } from '../store/store.ts';
+// import type { RootState } from '../store';
+import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from '../../types/residents/types.ts';
 
 type MaintenanceRequestSliceState = {
 	maintenanceRequests: {
