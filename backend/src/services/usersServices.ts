@@ -2,12 +2,36 @@ import userJson from "../../test_data/users.json" with {type: "json"};
 import jwt,{type Secret} from "jsonwebtoken";
 import {User} from "../dataTypes/user.ts";
 
-export async function checkLogIn(username: string, password: string): Promise<boolean> {
-    return true;
+export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
+    if (!password || password.trim() === "") {
+        return false;
+    }
+
+    const usernameUser = username ? userJson.users.find((user) => user.username === username) : undefined;
+    const emailUser = email ? userJson.users.find((user) => user.email === email) : undefined;
+
+    if (username && email) {
+        return Boolean(usernameUser && emailUser && usernameUser._id === emailUser._id);
+    }
+
+    return Boolean(usernameUser ?? emailUser);
 }
 
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
     return User.model.findOne({username: username}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as User);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
+}
+
+export async function getExistingUserFromEmail(email: string): Promise<User | undefined> {
+    return User.model.findOne({email: email}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as User);

@@ -18,7 +18,7 @@ export function MaintenanceRequestHistoryCard() {
 	return (
 		<Card id="maintenance-request-history-card" className="card">
 			<CardContent id="maintenance-request-history-card-content">
-				{requestsElems}
+				{requestsElems.length > 0 ? requestsElems : <p>No maintenance requests found.</p>}
 			</CardContent>
 		</Card>
 	);

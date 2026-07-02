@@ -11,7 +11,7 @@ import { Transaction } from "./Transaction";
 export function TransactionHistoryCard() {
 	const transactionHistory = useSelector(getTransactionHistory);
 	const transactionCards = transactionHistory.map((t) =>
-		<Transaction key={t.id} cardNumber={t.cardNumber} date={t.date} amount={t.amount} />);
+		<Transaction key={t._id} description={t.description} transaction={t.transaction} />);
 
 	return (
 		<Card id="transaction-history-card" className="card">

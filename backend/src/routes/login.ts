@@ -1,22 +1,36 @@
 import express, {type Request, type Response, type NextFunction} from "express";
-import {checkLogIn, createToken, getExistingUserFromUsername} from "../services/usersServices.ts";
+import {checkLogIn, createToken, getExistingUserFromEmail, getExistingUserFromUsername} from "../services/usersServices.ts";
 import type {User} from "../dataTypes/user.ts";
 
 const loginRouter = express.Router();
 
 loginRouter.post("/login", async (req: Request, res: Response)=> {
-    let {username, password} = req.body as { username: string, password: string };
+    let {username, email, password} = req.body as { username?: string, email?: string, password?: string };
 
-    if (username === null || password === null) {
-        return res.status(400).json({success: false, message: "Invalid arguments."});
+    if ((!username || username.trim() === "") && (!email || email.trim() === "") || !password) {
+        return res.status(400).json({success: false, message: "Username or email and password are required."});
     }
 
-    let existingUser: User;
+    let existingUser: User | undefined;
     try {
-        if (!await checkLogIn(username, password)) {
-            return res.status(200).json({success: false, message: "Wrong username or password."});
+        if (!await checkLogIn(username, email, password)) {
+            return res.status(200).json({success: false, message: "Wrong username/email or password."});
         }
-        existingUser = await getExistingUserFromUsername(username);
+        if (username && email) {
+            const usernameUser = await getExistingUserFromUsername(username);
+            const emailUser = await getExistingUserFromEmail(email);
+            if (!usernameUser || !emailUser || usernameUser._id !== emailUser._id) {
+                return res.status(200).json({success: false, message: "Wrong username/email or password."});
+            }
+            existingUser = usernameUser;
+        } else if (username) {
+            existingUser = await getExistingUserFromUsername(username);
+        } else if (email) {
+            existingUser = await getExistingUserFromEmail(email);
+        }
+        if (!existingUser) {
+            return res.status(200).json({success: false, message: "Wrong username/email or password."});
+        }
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
@@ -35,6 +49,8 @@ loginRouter.post("/login", async (req: Request, res: Response)=> {
        data: {
            _id: existingUser._id,
            username: username,
+           email: existingUser.email,
+           roles: existingUser.roles,
            token: token
        }
     });
