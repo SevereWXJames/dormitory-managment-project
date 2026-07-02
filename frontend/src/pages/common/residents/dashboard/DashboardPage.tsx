@@ -7,7 +7,7 @@ import {
 import {CommonFrame} from "@/components/common/CommonFrame.tsx";
 
 export function DashboardPage() {
-    const {loading, isError, error, creditBalance, notices, bookings} = useUserDashboardData();
+    const {loading, isError, error, creditBalance} = useUserDashboardData();
     const formattedBalance = creditBalance ? `$${(creditBalance.balanceCents / 100).toFixed(2)}` : "N/A";
 
     return (
