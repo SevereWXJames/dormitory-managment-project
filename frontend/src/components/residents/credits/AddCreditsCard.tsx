@@ -35,11 +35,12 @@ export function AddCreditsCard() {
 	 * and amount adding.
 	 */
 	const processPayment = () => {
-		if (!Number.isNaN(parseFloat(amount))) {
-			const amountNumber = parseFloat(amount) * 100;
+		const parsedAmount = parseFloat(amount);
+		if (!Number.isNaN(parsedAmount)) {
+			const amountCents = Math.round(parsedAmount * 100);
 
-			dispatch(addCredits({amount: amountNumber}));
-			dispatch(addTransactionHistoryEntry({cardNumber, amount}));
+			dispatch(addCredits({amount: amountCents}));
+			dispatch(addTransactionHistoryEntry({cardNumber, amount: amountCents}));
 		}
 	}
 

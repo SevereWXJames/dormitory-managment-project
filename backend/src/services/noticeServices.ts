@@ -7,6 +7,13 @@ export async function getAllNotices(): Promise<[Notice]> {
 
 export async function getNoticesForUserId(id: string): Promise<[Notice]> {
     return noticeJSON.notices.filter((notice) => {
-        return notice.viewableBy === null || notice.viewableBy.includes(id);
+        if (notice.viewableBy === null) {
+            return true;
+        }
+
+        const visibleUserIds = (Array.isArray(notice.viewableBy) ? notice.viewableBy : [notice.viewableBy])
+            .flatMap((entry) => entry.split(",").map((item) => item.trim()).filter(Boolean));
+
+        return visibleUserIds.includes(id);
     }) as [Notice];
 }
