@@ -44,6 +44,14 @@ export function AddCreditsCard() {
 		}
 	}
 
+    const handleAmountInput = (e: React.InputEvent<HTMLInputElement>) => {
+        const value = (e.target as HTMLInputElement).value;
+        if (value === "" || Number(value) >= 0) {
+            setAmount(value);
+        }
+        // if negative, simply don't update state — input visually reverts on next render
+    };
+
 	return (
 		<Card id="add-credits-card" className="card flex flex-col">
 			<CardContent id="add-credits-card-content">
@@ -93,7 +101,8 @@ export function AddCreditsCard() {
 						id={`${amountID}-input`}
 						type='number'
 						label="Amount"
-						onInput={(e) => setAmount((e.target as HTMLInputElement).value)}
+                        inputProps={{ min: 0 }}
+                        onInput={handleAmountInput}
 					/>
 				</FormControl>
 				<FormControl>
