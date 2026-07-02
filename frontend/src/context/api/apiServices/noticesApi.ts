@@ -7,7 +7,12 @@ export const noticesApi = api.injectEndpoints({
             query: (userId) => ({ url: `/notices/get-for-user/${encodeURIComponent(userId)}`}),
             providesTags: ["Notices"],
         }),
+
+        getNotices: builder.query<Notice[], void>({
+            query: () => ({ url: `/notices/`}),
+            providesTags: ["Notices"],
+        }),
     }),
 });
 
-export const {useGetNoticesByUserQuery} = noticesApi;
+export const {useGetNoticesByUserQuery, useGetNoticesQuery} = noticesApi;

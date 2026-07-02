@@ -1,4 +1,3 @@
-// Scaffolding created by Claude
 import { api } from "../api";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import type {Booking} from "@/types/residents/types.tsx";

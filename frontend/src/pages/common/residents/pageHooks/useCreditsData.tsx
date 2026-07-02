@@ -1,6 +1,6 @@
 // hooks/useCreditsData.ts
 import {useSelector} from "react-redux";
-import {useGetCreditBalanceQuery, useGetTransactionHistoryQuery} from "@/context/api/services/creditsApi.ts";
+import {useGetCreditBalanceQuery, useGetTransactionHistoryQuery} from "@/context/api/apiServices/creditsApi.ts";
 import {getUserId} from "@/context/authenticationSlice.ts";
 
 export function useCreditsData() {

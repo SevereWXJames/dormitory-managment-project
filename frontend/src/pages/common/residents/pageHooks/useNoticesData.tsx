@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {getUserId} from "@/context/authenticationSlice.ts";
-import {useGetNoticesByUserQuery} from "@/context/api/services/noticesApi.ts";
+import {useGetNoticesByUserQuery} from "@/context/api/apiServices/noticesApi.ts";
 
 export function useNoticesData() {
     const userId = useSelector(getUserId);

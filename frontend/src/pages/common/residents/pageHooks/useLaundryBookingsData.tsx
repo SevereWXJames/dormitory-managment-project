@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {getUserId} from "@/context/authenticationSlice.ts";
-import {useGetBookingsQuery} from "@/context/api/services/reservationSlotsApi.ts";
+import {useGetBookingsQuery} from "@/context/api/apiServices/reservationSlotsApi.ts";
 
 export function useLaundryBookingsData() {
     const userId = useSelector(getUserId);

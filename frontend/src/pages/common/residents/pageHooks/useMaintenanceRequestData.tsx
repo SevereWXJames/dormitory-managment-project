@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {getUserId} from "@/context/authenticationSlice.ts";
-import {useGetMaintenanceRequestByUserQuery} from "@/context/api/services/maintenanceRequestApi.ts";
+import {useGetMaintenanceRequestByUserQuery} from "@/context/api/apiServices/maintenanceRequestApi.ts";
 
 export function useMaintenanceRequestData() {
     const userId = useSelector(getUserId);
