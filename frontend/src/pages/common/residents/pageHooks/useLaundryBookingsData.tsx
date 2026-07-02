@@ -7,10 +7,10 @@ export function useLaundryBookingsData() {
     const {data, isLoading, isError, error} = useGetBookingsQuery(userId!, { skip: !userId });
     return {
         isLoading: isLoading,
-        isError: isError,
+        isError: isError || !userId,
         error: !userId
             ? "User is not authenticated."
             : isError ? error?.message : null,
-        bookings: data,
+        bookings: data ?? [],
     };
 }
