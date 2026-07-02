@@ -9,17 +9,18 @@ import {
     TableRow,
 } from "@/components/ui/table.tsx"
 import {RowDropDown} from "@/components/residents/facilitiesBooking/RowDropDown.tsx";
+import type {Booking} from "@/types/residents/types.ts";
 
-type Row = {
-    machineId: string,
-    date: string,
-    startTime: string,
-    endTime: string,
-    amountPaid: number,
-}
+// type Row = {
+//     machineId: string,
+//     date: string,
+//     startTime: string,
+//     endTime: string,
+//     amountPaid: number,
+// }
 
 type TableProps = {
-    rows: Row[],
+    rows: Booking[],
     caption: string,
 }
 export function BookingsTable(props: TableProps) {
@@ -32,6 +33,7 @@ export function BookingsTable(props: TableProps) {
                     <TableHead>Machine Id</TableHead>
                     <TableHead className="text-right">Start Time</TableHead>
                     <TableHead className="text-right">End Time</TableHead>
+                    <TableHead className="text-right">Duration (sec)</TableHead>
                     <TableHead className="text-right">Amount Paid</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -40,10 +42,10 @@ export function BookingsTable(props: TableProps) {
                 {props.rows.map((row) => (
                     <TableRow key={row.date}>
                         <TableCell className="font-medium">{row.date}</TableCell>
-                        <TableCell className="font-medium">{row.machineId}</TableCell>
+                        <TableCell className="font-medium">{row.serviceId}</TableCell>
                         <TableCell className="text-right">{row.startTime}</TableCell>
-                        <TableCell className="text-right">{row.endTime}</TableCell>
-                        <TableCell className="text-right">{row.amountPaid}</TableCell>
+                        <TableCell className="text-right">{row.durationSeconds}</TableCell>
+                        <TableCell className="text-right">N/A</TableCell>
                         <TableCell className="text-right">{<RowDropDown/>}</TableCell>
                     </TableRow>
                 ))}
@@ -51,7 +53,7 @@ export function BookingsTable(props: TableProps) {
             <TableFooter>
                 <TableRow>
                     <TableCell colSpan={5}>Total</TableCell>
-                    <TableCell className="text-right">$2,500.00</TableCell>
+                    <TableCell className="text-right">N/A</TableCell>
                 </TableRow>
             </TableFooter>
         </Table>
