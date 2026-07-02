@@ -23,3 +23,10 @@ export type MaintenanceRequestState = {
     location: string,
     description: string
 }
+
+export type Transaction = {
+    _id: string
+    userId: string
+    description: string
+    transaction: number
+}
