@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useId } from "react";
 
-type TransactionCardProps = {description: string, transaction: number};
+export type TransactionCardProps = {cardNumber: number, date: string, amount: number};
 
 /**
  * React components for a Transaction (i.e. one entry in the Transaction
@@ -14,8 +14,9 @@ export function Transaction(props: TransactionCardProps) {
 
 	return (
 		<Box id={id} sx={{textAlign: "left"}}>
-			<div className="transaction-card-description">Description: {props.description}</div>
-			<div className="transaction-card-amount">Amount: ${Number(props.transaction / 100).toFixed(2)}</div>
+			<div className="transaction-card-card-number">Card: {props.cardNumber}</div>
+			<div className="transaction-card-date">Date: {props.date}</div>
+			<div className="transaction-card-amount">Amount: ${Number(props.amount).toFixed(2)}</div>
 		</Box>
 	);
 }
