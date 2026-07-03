@@ -1,34 +1,83 @@
 import roomJSON from "../../test_data/rooms.json" with {type: "json"};
 import residentJSON from "../../test_data/residents.json" with {type: "json"};
-import type {Room} from "../dataTypes/room.ts";
-import type {Resident} from "../dataTypes/user.ts";
+import {Room} from "../dataTypes/room.ts";
+import {Resident} from "../dataTypes/user.ts";
 
-export async function getAllRooms(): Promise<[Room]> {
-    return roomJSON.rooms as [Room];
+export async function getAllRooms(): Promise<Room[]> {
+    const cursor = Room.model.find({ }).lean();
+    const results: Room[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as Room);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
-export async function getRoomById(id: string): Promise<Room> {
-    const testRoom = roomJSON.rooms.find((room) => {
-        return room._id === id;
-    });
-    return testRoom as Room;
+export async function getRoomById(_id: string): Promise<Room | undefined> {
+    return Room.model.findOne({_id: _id}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as Room);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
-export async function getRoomByUserId(id: string): Promise<Room> {
-    const resident = await getResidentByUserId(id);
-    const testRoom = roomJSON.rooms.find((room) => {
-        return room._id === resident.roomId;
-    });
-    return testRoom as Room;
+export async function getRoomByUserId(_id: string): Promise<Room | undefined> {
+    const resident = await getResidentByUserId(_id);
+    
+    if (resident === undefined) {
+        return Promise.resolve(undefined);
+    }
+
+    return Room.model.findOne({_id: resident.roomId}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as Room);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
-export async function getAllResidents(): Promise<[Resident]> {
-    return residentJSON.residents as [Resident];
+export async function getAllResidents(): Promise<Resident[]> {
+    const cursor = Resident.model.find({ }).lean();
+    const results: Resident[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as Resident);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
-export async function getResidentByUserId(id: string): Promise<Resident> {
-    const testResident = residentJSON.residents.find((resident) => {
-        return resident.userId === id;
-    });
-    return testResident as Resident;
+export async function getResidentByUserId(userId: string): Promise<Resident | undefined> {
+    return Resident.model.findOne({userId: userId}).lean().exec()
+        .then((result) => {
+            if (result != null) {
+                return Promise.resolve(result as Resident);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }

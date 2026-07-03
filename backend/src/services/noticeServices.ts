@@ -1,19 +1,36 @@
 import noticeJSON from "../../test_data/notices.json" with {type: "json"};
-import type {Notice} from "../dataTypes/notice.ts";
+import {Notice} from "../dataTypes/notice.ts";
 
-export async function getAllNotices(): Promise<[Notice]> {
-    return noticeJSON.notices as [Notice];
+export async function getAllNotices(): Promise<Notice[]> {
+    const cursor = Notice.model.find({ }).lean();
+    const results: Notice[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as Notice);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
 }
 
-export async function getNoticesForUserId(id: string): Promise<[Notice]> {
-    return noticeJSON.notices.filter((notice) => {
-        if (notice.viewableBy === null) {
-            return true;
+export async function getNoticesForUserId(userId: string): Promise<Notice[]> {
+    const cursor = Notice.model.find({viewableBy: userId}).lean();
+    const results: Notice[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as Notice);
+            }
+        } catch (e) {
+            // "Pass"
         }
+    }
 
-        const visibleUserIds = (Array.isArray(notice.viewableBy) ? notice.viewableBy : [notice.viewableBy])
-            .flatMap((entry) => entry.split(",").map((item) => item.trim()).filter(Boolean));
-
-        return visibleUserIds.includes(id);
-    }) as [Notice];
+    return Promise.resolve(results);
 }
