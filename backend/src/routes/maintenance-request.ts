@@ -17,13 +17,13 @@ maintenanceRequestRouter.get("/", async (req: Request, res: Response)=> {
     }
 });
 
-maintenanceRequestRouter.get("/get-for-user/", async (req: Request, res: Response)=> {
-    if (req.body.userId === undefined) {
+maintenanceRequestRouter.get("/get-for-user/:userId", async (req: Request, res: Response)=> {
+    if (req.params.userId === undefined) {
         return res.status(400).json({success: false, message: "No ID provided."});
     }
 
     try {
-        const maintenanceRequests = await getAllMaintenanceRequestsByUserId(req.body.userId as string);
+        const maintenanceRequests = await getAllMaintenanceRequestsByUserId(req.params.userId as string);
         return res.status(200).json({success: true, data: maintenanceRequests});
     } catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});

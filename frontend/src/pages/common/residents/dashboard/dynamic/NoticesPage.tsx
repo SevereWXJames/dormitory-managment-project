@@ -1,29 +1,28 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import { NoticeCard } from "../../../../../components/residents/notices/NoticeCard.tsx";
-import data from "../../../../../assets/residents/placeholderData/notices.json";
 import { Box } from "@mui/material";
-
-export interface NoticesPageProps {
-    read_notices: object[],
-    unread_notices: object[]
-}
+import {useNoticesData} from "@/pages/common/residents/pageHooks/useNoticesData.tsx";
 
 export function NoticesPage() {
-    const noticeCards = <>{data.map((e) => <NoticeCard title={e.title}>{e.body}</NoticeCard>)}</>;
+    const {notices, isLoading, isError, error} = useNoticesData();
 
     return (
         <>
-            <CommonFrame commonFrameType={"RESIDENT"}/>
+            <CommonFrame commonFrameType={"RESIDENT"}>
             <div className="notices-page">
                 <h1>Notices</h1>
-                <Box className="card-container">
-                    <h2>Unread</h2>
-                    {noticeCards}
-                </Box>
-                <Box className="card-container">
-                    <h2>Read</h2>
-                </Box>
+                {isLoading && <p>Loading notices...</p>}
+                {(isError || !notices) && <p style={{ color: "red" }}>{error}</p>}
+                {(!isLoading && !isError && notices) && (
+                    <Box className="card-container">
+                        {notices.length === 0 && <p>No notices available.</p>}
+                        {notices.map((n) => (
+                            <NoticeCard key={n._id} title={n.title}>{n.text}</NoticeCard>
+                        ))}
+                    </Box>
+                )}
             </div>
+            </CommonFrame>
         </>
     )
 }

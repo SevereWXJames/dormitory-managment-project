@@ -1,17 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { AuthenticationState } from '../app/types';
-import type {RootState} from "./store.ts";
+import type { AuthenticationState } from '../types/residents/types.ts';
+import type {RootState} from "./store/store.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
 	email: string,
     username: string,
+    userId: string,
 };
 
 const initialState: AuthenticationSliceState = {
 	authenticationState: "UNAUTHENTICATED",
 	email: "",
     username: "",
+    userId: "",
 };
 
 /**
@@ -22,21 +24,19 @@ export const authenticationSlice = createSlice({
 	name: 'authentication',
 	initialState,
 	reducers: {
-		logIn: (state, parameters) => {
-            const username = parameters.payload[0];
-			const email = parameters.payload[1];
-            console.log(username);
-            console.log(email);
-			// const password = parameters.payload[2];
-
-			if (email.includes("admin")) {
-				state.authenticationState = "BUILDING_MANAGER";
-			}
-			else {
-				state.authenticationState = "RESIDENT";
-			}
+		logIn: (state, action) => {
+            const { username, email, userId, roles } = action.payload;
             state.username = username;
             state.email = email;
+            state.userId = userId ?? "";
+
+            const roleList: string[] = Array.isArray(roles) ? roles : [];
+            if (roleList.includes("Admin") || roleList.includes("Staff")) {
+                state.authenticationState = "BUILDING_MANAGER";
+            }
+            else {
+                state.authenticationState = "RESIDENT";
+            }
 		},
 		logOut: (state) => {
 			state.authenticationState = "UNAUTHENTICATED";
@@ -52,6 +52,10 @@ export const getEmail = (state: RootState) => {
 
 export const getUsername = (state: RootState) => {
     return state.authentication.username;
+}
+
+export const getUserId = (state: RootState) => {
+    return state.authentication.userId;
 }
 
 export const getAuthenticationState = (state: RootState) => {

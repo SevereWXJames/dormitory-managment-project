@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx mocha test/**/*.test.ts",
     "start": "node src/server.ts"
   },
   "keywords": [],
@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/express": "^5.0.6",
+    "chai": "^6.2.2",
+    "chai-as-promised": "^8.0.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -28,6 +30,10 @@
     "@types/chai-as-promised": "^8.0.2",
     "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/mocha": "^10.0.10"
+    "@types/mocha": "^10.0.10",
+    "mocha": "^11.3.0"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.7"
   }
 }

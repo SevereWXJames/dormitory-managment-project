@@ -17,7 +17,7 @@ import {AdminResidentsPage} from "./pages/common/buildingManager/AdminResidentsP
 import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPage.tsx";
 import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
 import {AdminAccessCodesPage} from "./pages/common/buildingManager/AdminAccessCodesPage.tsx";
-
+import CssBaseline from "@mui/material/CssBaseline";
 /**
  * App React component, containing routes to other pages.
  *
@@ -25,31 +25,35 @@ import {AdminAccessCodesPage} from "./pages/common/buildingManager/AdminAccessCo
  */
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<HomePage/>}/>
-                {/* Resident-only: */}
-                <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/dashboard" element={<DashboardPage/>}/>
-                <Route path="/facilities" element={<LaundryBookingsPage/>}/>
-                <Route path="/maintenance" element={<MaintenanceRequestsPage/>}/>
-                <Route path="/help" element={<HelpPage/>}/>
-                <Route path="/notices" element={<NoticesPage/>}/>
-                <Route path="/credits" element={<CreditsPage/>}/>
-                <Route path="/settings" element={<SettingsPage/>}/>
+        <>
+            <CssBaseline />
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<HomePage/>}/>
+                    {/* Resident-only: */}
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/dashboard" element={<DashboardPage/>}/>
+                    <Route path="/facilities" element={<LaundryBookingsPage/>}/>
+                    <Route path="/maintenance" element={<MaintenanceRequestsPage/>}/>
+                    <Route path="/help" element={<HelpPage/>}/>
+                    <Route path="/notices" element={<NoticesPage/>}/>
+                    <Route path="/credits" element={<CreditsPage/>}/>
+                    <Route path="/settings" element={<SettingsPage/>}/>
 
-                {/* Building manager routes */}
-                <Route path="/admin" element={<AdminDashboardPage/>}/>
-                <Route path="/admin/dashboard" element={<AdminDashboardPage/>}/>
-                <Route path="/admin/facilities" element={<AdminFacilitiesPage/>}/>
-                <Route path="/admin/maintenance" element={<AdminMaintenancePage/>}/>
-                <Route path="/admin/notices" element={<AdminNoticesPage/>}/>
-                <Route path="/admin/residents" element={<AdminResidentsPage/>}/>
-                <Route path="/admin/access-codes" element={<AdminAccessCodesPage/>}/>
-                <Route path="/admin/settings" element={<AdminSettingsPage/>}/>
-                <Route path="/admin/help" element={<AdminHelpPage/>}/>
-            </Routes>
-        </BrowserRouter>
+                    {/* Building manager routes */}
+                    <Route path="/admin" element={<AdminDashboardPage/>}/>
+                    <Route path="/admin/dashboard" element={<AdminDashboardPage/>}/>
+                    <Route path="/admin/facilities" element={<AdminFacilitiesPage/>}/>
+                    <Route path="/admin/maintenance" element={<AdminMaintenancePage/>}/>
+                    <Route path="/admin/notices" element={<AdminNoticesPage/>}/>
+                    <Route path="/admin/residents" element={<AdminResidentsPage/>}/>
+                    <Route path="/admin/access-codes" element={<AdminAccessCodesPage/>}/>
+                    <Route path="/admin/settings" element={<AdminSettingsPage/>}/>
+                    <Route path="/admin/help" element={<AdminHelpPage/>}/>
+                </Routes>
+            </BrowserRouter>
+        </>
+
     );
 }
 

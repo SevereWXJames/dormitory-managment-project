@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
-import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from '../../app/types';
+import type { RootState } from '../store/store.ts';
+// import type { RootState } from '../store';
+import type { MaintenanceRequestPriority, MaintenanceRequestStatus } from '../../types/residents/types.ts';
 
 type MaintenanceRequestSliceState = {
 	maintenanceRequests: {
-		id: number,
+		id: string | number,
 		unit: string,
 		priority: MaintenanceRequestPriority,
 		status: MaintenanceRequestStatus,
@@ -29,21 +30,24 @@ export const maintenanceRequestsSlice = createSlice({
 		 * @param parameters An object with format {unit, priority,
 		 * issueType, issue, location, description}
 		 */
-		addMaintenanceRequest: (state, parameters) => {
+			addMaintenanceRequest: (state, parameters) => {
 			const id = state.maintenanceRequests.length + 1;
 			const unit = parameters.payload.unit;
 			const priority = parameters.payload.priority;
 			const status = "NEW";
 			const issue = parameters.payload.issueType + " - " + parameters.payload.issue;
 			const location = parameters.payload.location;
-			const description = parameters.payload.location;
+			const description = parameters.payload.description;
 
 			state.maintenanceRequests.push({id, unit, priority, status, issue, location, description});
+		},
+		setMaintenanceRequests: (state, action) => {
+			state.maintenanceRequests = action.payload;
 		}
 	}
 });
 
-export const { addMaintenanceRequest } = maintenanceRequestsSlice.actions;
+export const { addMaintenanceRequest, setMaintenanceRequests } = maintenanceRequestsSlice.actions;
 
 export const getMaintenanceRequests = (state: RootState) => {
 	return state.maintenanceRequests.maintenanceRequests;

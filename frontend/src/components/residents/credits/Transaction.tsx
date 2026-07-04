@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useId } from "react";
 
-type TransactionCardProps = {cardNumber: number, date: string, amount: number};
+export type TransactionCardProps = {cardNumber: number, date: string, amount: number};
 
 /**
  * React components for a Transaction (i.e. one entry in the Transaction

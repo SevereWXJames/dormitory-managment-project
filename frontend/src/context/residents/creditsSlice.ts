@@ -8,10 +8,10 @@ import type { RootState } from '../store/store.ts';
 type CreditsSliceState = {
 	credits: number
 	transactionHistory: {
-		id: number,
-		cardNumber: number,
-		date: string,
-		amount: number
+		_id: string,
+		userId: string,
+		description: string,
+		transaction: number
 	}[];
 };
 
@@ -27,6 +27,14 @@ export const creditsSlice = createSlice({
 	name: 'credits',
 	initialState,
 	reducers: {
+		setCredits: (state, parameters) => {
+			state.credits = parameters.payload;
+		},
+
+		setTransactionHistory: (state, parameters) => {
+			state.transactionHistory = parameters.payload;
+		},
+
 		addCredits: (state, parameters) => {
 			state.credits += parameters.payload.amount;
 		},
@@ -37,16 +45,14 @@ export const creditsSlice = createSlice({
 
         addTransactionHistoryEntry: (state, parameters) => {
 			const id = state.transactionHistory.length + 1;
-			const cardNumber = parameters.payload.cardNumber;
-			const date = new Date(Date.now()).toISOString();
 			const amount = parameters.payload.amount;
 
-			state.transactionHistory.push({id, cardNumber, date, amount});
+			state.transactionHistory.push({_id: `trans${id}`, userId: '', description: '', transaction: amount});
 		}
 	}
 });
 
-export const { addCredits, addTransactionHistoryEntry, removeCredits } = creditsSlice.actions;
+export const { addCredits, addTransactionHistoryEntry, removeCredits, setCredits, setTransactionHistory } = creditsSlice.actions;
 
 /**
  * Returns the amount of credits as a number of cents.

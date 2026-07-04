@@ -33,7 +33,7 @@ export class MaintenanceRequestType {
     public _id: string;
     public text: string;
 
-    constructor({_id, text}: {_id: string, text: string}) {
+    constructor({_id, text}: { _id: string, text: string }) {
         this._id = _id;
         this.text = text;
     }
@@ -43,7 +43,7 @@ export class MaintenanceRequestStatus {
     public _id: string;
     public text: string;
 
-    constructor({_id, text}: {_id: string, text: string}) {
+    constructor({_id, text}: { _id: string, text: string }) {
         this._id = _id;
         this.text = text;
     }
@@ -53,7 +53,7 @@ export class MaintenanceRequestPriority {
     public _id: string;
     public text: string;
 
-    constructor({_id, text}: {_id: string, text: string}) {
+    constructor({_id, text}: { _id: string, text: string }) {
         this._id = _id;
         this.text = text;
     }

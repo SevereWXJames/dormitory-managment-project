@@ -1,0 +1,11 @@
+FROM node:24-alpine AS dev
+WORKDIR /app
+COPY package.json ./
+RUN npm install
+COPY . .
+EXPOSE 3001
+# CMD ["npm", "start"]
+
+FROM dev AS test
+ENV CI=true
+CMD ["npm", "test"]

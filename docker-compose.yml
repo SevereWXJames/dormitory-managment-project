@@ -9,6 +9,8 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+    profiles:
+      - production
 
   backend:
     build:
@@ -21,6 +23,19 @@ services:
       - .env
     environment:
       - BACKEND_PORT=3000
+    profiles:
+      - production
+
+  backend_test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile_test
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    profiles:
+      - test
 
   mongo:
     image: mongo:7

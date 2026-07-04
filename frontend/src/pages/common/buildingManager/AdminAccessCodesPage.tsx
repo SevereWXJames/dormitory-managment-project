@@ -1,36 +1,18 @@
-import {useEffect, useState} from "react";
-import { CommonFrame } from "../../../components/common/CommonFrame";
-import {fetchJson} from "../../../utils/api.ts";
-import type {Room} from "../../../dataTypes/room.ts";
+import { CommonFrame } from "@/components/common/CommonFrame.tsx";
+import {useGetRoomsQuery} from "@/context/api/apiServices/roomsApi.ts";
 
 export function AdminAccessCodesPage() {
-    const [rooms, setRooms] = useState<Room[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const loadRequests = async () => {
-            try {
-                setRooms(await fetchJson<[Room]>("/rooms/"));
-            } catch (fetchError) {
-                setError(fetchError instanceof Error ? fetchError.message : "Unable to load maintenance requests.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadRequests();
-    }, []);
+    const { data: rooms = [], isLoading: loading, error } = useGetRoomsQuery();
 
     return (
         <>
-            <CommonFrame commonFrameType="BUILDING_MANAGER" />
+            <CommonFrame commonFrameType="BUILDING_MANAGER">
             <div className="adminAccessCodesPage">
                 <h1>Access Codes Management</h1>
                 <p>Manage building access codes and resident permissions here.</p>
 
                 {loading && <p>Loading dashboard data...</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {error && <p style={{ color: "red" }}>{error.message}</p>}
 
                 {!loading && !error && (
 
@@ -54,6 +36,7 @@ export function AdminAccessCodesPage() {
                     </table>
                 </section> )}
             </div>
+            </CommonFrame>
         </>
     );
 }

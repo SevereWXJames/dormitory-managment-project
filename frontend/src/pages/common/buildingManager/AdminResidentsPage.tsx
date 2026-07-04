@@ -1,39 +1,20 @@
-import {useEffect, useState} from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
-import { fetchJson } from "../../../utils/api";
-import {Resident} from "../../../dataTypes/user.ts";
+import {useAdminResidentsData} from "@/pages/common/buildingManager/pageHooks/useAdminResidentsData.tsx";
 
 export function AdminResidentsPage() {
-    const [residents, setResidents] = useState<Resident[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const loadResidents = async () => {
-            try {
-                const residentList = await fetchJson<Resident[]>("/residents/");
-                setResidents(residentList);
-            } catch (fetchError) {
-                setError(fetchError instanceof Error ? fetchError.message : "Unable to load residents.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadResidents();
-    }, []);
+    const {loading, isError, error, residents} = useAdminResidentsData();
 
     return (
         <>
-            <CommonFrame commonFrameType="BUILDING_MANAGER" />
+            <CommonFrame commonFrameType="BUILDING_MANAGER">
             <div className="adminResidentsPage">
                 <h1>Residents Management</h1>
                 <p>Admin tools for viewing and managing resident information.</p>
 
                 {loading && <p>Loading residents...</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {isError && <p style={{ color: "red" }}>{error}</p>}
 
-                {!loading && !error && (
+                {!loading && !isError && (
                     <section>
                         <h2>Residents</h2>
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -57,6 +38,7 @@ export function AdminResidentsPage() {
                     </section>
                 )}
             </div>
+            </CommonFrame>
         </>
     );
 }
