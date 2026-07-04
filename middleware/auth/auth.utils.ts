@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import jwt, {SignOptions} from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import type {SignOptions} from "jsonwebtoken";
 
 // Move these to your .env — never hardcode in real code.
 const JWT_SECRET = process.env.JWT_SECRET ?? "dev-only-fallback-secret";

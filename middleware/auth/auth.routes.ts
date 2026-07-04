@@ -1,8 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+import type {Request, Response} from "express";
 import { Db } from "mongodb";
-import { UserRepository } from "./repository/auth.repository";
-import { AuthService, ValidationError, ConflictError, InvalidCredentialsError } from "./services/auth.services";
-import { requireAuth } from "./auth.middleware";
+import { UserRepository } from "./repository/auth.repository.ts";
+import { AuthService, ValidationError, ConflictError, InvalidCredentialsError } from "./services/auth.services.ts";
+import { requireAuth } from "./auth.middleware.ts";
 
 // Thin HTTP layer: parse request, call the service, map the result/error
 // to a status code. No hashing, no Mongo queries, no business rules here.
