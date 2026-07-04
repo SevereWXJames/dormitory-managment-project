@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { verifyToken, JwtPayload } from "./auth.utils";
+import type { Request, Response, NextFunction } from "express";
+import { verifyToken} from "./auth.utils.ts";
+import type {JwtPayload} from "jsonwebtoken";
 
 // Extend Express's Request type so req.user is typed downstream.
 declare global {
