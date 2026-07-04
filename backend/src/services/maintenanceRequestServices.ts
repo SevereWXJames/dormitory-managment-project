@@ -132,3 +132,51 @@ export async function getAllMaintenanceRequestPriorities(): Promise<MaintenanceR
 
     return Promise.resolve(results);
 }
+
+/**
+ * Adds the provided maintenance request to the database.
+ * 
+ * @param maintenanceRequest Maintenance request to be added to the database.
+ * @returns Promise indicating whether the maintenance request was added
+ * successfully.
+ */
+export async function addMaintenanceRequest(maintenanceRequest: MaintenanceRequest) : Promise<void> {
+    return Promise.reject(new Error("Not implemented."));
+} 
+
+/**
+ * Sets all fields of the maintenance request with the provided _id to have
+ * the provided values, except for the _id itself.
+ * 
+ * @param _id _id value of the maintenance request to be edited.
+ * @param maintenanceRequest A maintenance request with the desired new values.
+ * @returns Promise indicating whether the maintenance request was set
+ * successfully.
+ */
+export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequest) : Promise<void> {
+    return Promise.reject(new Error("Not implemented."));
+} 
+
+/**
+ * Sets the priority of the maintenance request with the provided _id.
+ * 
+ * @param _id _id value of the maintenance request to be edited.
+ * @param maintenanceRequestPriority New priority value to be set.
+ * @returns Promise indicating whether the maintenance request was set
+ * successfully.
+ */
+export async function setMaintenanceRequestPriority(_id: string, maintenanceRequestPriority: MaintenanceRequestPriority) : Promise<void> {
+    return Promise.reject(new Error("Not implemented."));
+} 
+
+/**
+ * Sets the status of the maintenance request with the provided _id.
+ * 
+ * @param _id _id value of the maintenance request to be edited.
+ * @param maintenanceRequestStatus New status value to be set.
+ * @returns Promise indicating whether the maintenance request was set
+ * successfully.
+ */
+export async function setMaintenanceRequestStatus(_id: string, maintenanceRequestStatus: MaintenanceRequestStatus) : Promise<void> {
+    return Promise.reject(new Error("Not implemented."));
+} 

@@ -2,7 +2,7 @@ import mongoose, { Model, Mongoose } from 'mongoose';
 import { MONGODB_URL_DOCKER, MONGODB_URL_LOCAL, DATABASE_NAME, type CollectionName, MONGODB_URL_DEFAULT } from './databaseConstants.ts';
 
 /**
- * Class that creates ? objects for the MongoDB database.
+ * Class that interacts with the MongoDB database.
  */
 export class Database {
 	mongoose: Mongoose;
