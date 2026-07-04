@@ -13,15 +13,18 @@ import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import {setUpMQTT} from "./utility/mqttSetup.ts";
-import {connectMongoose} from "./database/configureMongoose.ts";
+import loadSampleData from "./database/loadDatabase.ts";
 
 dotenv.config();
 
 setUpMQTT();
-connectMongoose();
 
 const app = express();
 const port: number = 3000;
+
+if (process.env.LOAD_SAMPLE_DATA !== undefined) {
+   loadSampleData();
+}
 
 app.use(json());
 app.use(cors());
