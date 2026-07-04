@@ -1,3 +1,7 @@
+import { Schema } from "mongoose";
+import database from "../database/database.ts";
+import type { CollectionName } from "../database/databaseConstants.ts";
+
 export class Notice {
     public _id: string;
     public createdBy: string;
