@@ -7,10 +7,14 @@ import type {IUser} from "../models/users.model.js";
 type TransformFn<T> = (docs: T[]) => Promise<T[]>;
 
 export class BaseTable<T extends Document>{
-    private model: Model<T>;
+    private readonly model: Model<T>;
 
     constructor(model: Model<T>) {
         this.model = model;
+    }
+
+    getModel(){
+        return this.model;
     }
 
     readFile(filepath: string) {

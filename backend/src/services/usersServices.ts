@@ -1,7 +1,15 @@
 import userJson from "../../test_data/users.json" with {type: "json"};
-import jwt,{type Secret} from "jsonwebtoken";
+import type { Request } from "express";
+import jwt, {type Secret, type JwtPayload} from "jsonwebtoken";
+import pkg from "jsonwebtoken";
+import {compare, hash} from "bcryptjs";
+import {createAccessToken, createRefreshToken} from "./utils/tokens.ts";
+import {UserTable} from "../database/tableOperations/User.table.js";
 import {type User, UserModel} from "../dataTypes/user.ts";
 
+const {verify} = pkg;
+const userTable : UserTable = new UserTable();
+const userModel = userTable.getModel();
 export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
     if (!password || password.trim() === "") {
         return false;
@@ -69,24 +77,19 @@ export function createToken(_id: string, username: string): string {
         secret as Secret, {expiresIn: "1h"});
 }
 
-export async function signUp(email: string, password: string){
+export async function signUp(email: string, password: string, username?: string,){
     // 1. check if user already exists
-    const user = await Users.findOne({ email: email });
+    const user = await userModel.findOne({ email: email });
     // if user exists already, return error
     if (user) throw Error("User already exists! Try logging in.");
     // 2. if user doesn't exist, create a new user
     // hashing the password
     const passwordHash = await hash(password, 10);
-    const newUser = new Users({
-        email: email,
-        password: passwordHash,
-    });
-    // 3. save the user to the database
-    await newUser.save();
+    await userTable.createUser(email, passwordHash, username);
 }
 
 export async function signIn(email: string, password: string){
-    const user = await Users.findOne({ email: email });
+    const user = await userModel.findOne({ email: email });
 
     // if user doesn't exist, return error
     if (!user) throw Error("User doesn't exist!");
@@ -109,8 +112,10 @@ export async function signIn(email: string, password: string){
 export async function verifyRefreshToken(refreshToken: string){
     const key = process.env.REFRESH_TOKEN_SECRET;
     if(!key) throw Error("Error verifying token!");
+
     const payload = verify(refreshToken, key);
     if(typeof payload === "string") throw Error("Invalid payload!");
+
     if(!payload.id) throw Error("Invalid refresh token!");
     return payload.id;
 }
@@ -125,11 +130,12 @@ export async function refreshTokens(refreshToken: string){
         throw Error("Invalid refresh token!");
     }
 
-    const user = await Users.findById(id);
+    const user = await userModel.findById(id);
     if(!user) throw Error("User does not exist!");
 
     const accessToken = createAccessToken(user._id);
     const newRefreshToken = createRefreshToken(user._id);
+
     user.refreshToken = newRefreshToken;
     return {accessToken, newRefreshToken};
 }
@@ -150,7 +156,7 @@ export async function verifyRequest(req: Request){
     if(typeof payload == "string" || !payload.id) throw Error("Invalid payload!");
     let id = payload.id
     //Check if user exists:
-    const user = await Users.findById(id);
+    const user = await userModel.findById(id);
     if(!user) throw Error("User does not exist!");
     req.user = user;
     return user;

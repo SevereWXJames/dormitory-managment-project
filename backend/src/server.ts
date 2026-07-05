@@ -13,7 +13,7 @@ import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import {connectMongo} from "./database/database.ts";
-import authRouter from "./routes/signup.js";
+import authRouter from "./routes/auth.ts";
 
 dotenv.config();
 
