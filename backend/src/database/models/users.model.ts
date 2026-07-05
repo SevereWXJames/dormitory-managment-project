@@ -1,10 +1,11 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, {Schema, Types} from 'mongoose';
 import type {Role} from "../types/roles.types.js";
 
 export interface IUser extends Document{
+    _id: string | Types.ObjectId;
     username: string,
     email: string,
-    phoneNumber: number,
+    phoneNumber: string,
     password: string,
     roles: string[],
     refreshToken: string
@@ -22,7 +23,7 @@ const UsersSchema = new Schema({
         unique: true
     },
     phoneNumber: {
-        type: Number,
+        type: String,
         required: false,
         unique: true
     },
