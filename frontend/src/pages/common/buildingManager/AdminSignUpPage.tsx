@@ -5,6 +5,8 @@ import {
     CardTitle,
 } from "@/components/ui/card.tsx"
 import {Link} from "react-router-dom";
+import {SignUpForm} from "@/components/common/Auth/SignUpForm.tsx";
+import {Role} from "@/dataTypes/user.ts";
 
 export function AdminSignUpPage() {
     return (
@@ -16,7 +18,7 @@ export function AdminSignUpPage() {
                     <Card className="flex flex-col gap-4 p-4 m-4 w-fit mx-auto">
                         <CardTitle className="text-2xl">Sign Up</CardTitle>
                         <CardContent className="flex flex-col gap-4">
-                            <p>(Admin sign up form)</p>
+                            <SignUpForm role={Role.ADMIN}/>
                         </CardContent>
                     </Card>
                 </main>

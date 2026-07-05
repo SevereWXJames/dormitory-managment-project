@@ -25,3 +25,10 @@ export class Resident {
         this.roomId = roomId;
     }
 }
+
+export const Role = {
+    RESIDENT: "RESIDENT",
+    ADMIN: "ADMIN",
+} as const;
+
+export type Role = typeof Role[keyof typeof Role];

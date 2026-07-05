@@ -1,0 +1,51 @@
+import {Button, FormControl, InputLabel, OutlinedInput} from "@mui/material";
+import {useSignUpForm} from "@/components/common/Auth/hooks/useSignUpForm.tsx";
+import type {UserInputForm} from "@/components/common/Auth/utils/signup.utils.tsx";
+import {PasswordField} from "@/components/common/Auth/PasswordField.tsx";
+import type {Role} from "@/dataTypes/user.ts";
+
+
+/**
+ * React component for the login form, including e-mail and password fields,
+ * and a “Log in” button.
+ *
+ * The password field and its associated variables and functions were adapted
+ * from the Material UI documentation.
+ * (https://mui.com/material-ui/react-text-field/#input-adornments)
+ *
+ * @returns JSX for the login form
+ */
+type SignUpFormProps = {
+    role: Role,
+}
+export function SignUpForm({role} : SignUpFormProps) {
+    const signUpFields: { key: keyof UserInputForm; label: string; type?: string }[] = [
+        {key: "name", label: "Name"},
+        {key: "username", label: "Username"},
+        {key: "email", label: "Email"},
+        {key: "phoneNumber", label: "Phone Number"},
+    ];
+    const {form, errors, isLoading, isError, handleChange, handleSubmit} = useSignUpForm(role);
+    return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
+                 style={{width: 'fit-content', margin: '0 auto'}}>
+        {signUpFields.map(({key, label, type}) => (
+            <FormControl key={key} sx={{m: 1, width: '100%', maxWidth: '30ch'}} error={!!errors[key]}>
+                <InputLabel htmlFor={`${key}-input`}>{label}</InputLabel>
+                <OutlinedInput
+                    id={`${key}-input`}
+                    type={type ?? "text"}
+                    label={label}
+                    value={form[key]}
+                    onChange={handleChange(key)}
+                />
+                {errors[key] && <span className="red">{`Error: ${errors[key]}`}</span>}
+            </FormControl>
+        ))}
+        <PasswordField onChange={handleChange("password")}/>
+        {isLoading && <p>Loading ... </p>}
+        {isError && <p className="red">Error signing up</p>}
+        <FormControl>
+            <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Sign Up</Button>
+        </FormControl>
+    </div>);
+}
