@@ -2,7 +2,7 @@ import mongoose, {Schema, Types} from 'mongoose';
 import type {Role} from "../types/roles.types.js";
 
 export interface IUser extends Document{
-    _id: string | Types.ObjectId;
+    _id: Types.ObjectId;
     username: string,
     email: string,
     phoneNumber: string,

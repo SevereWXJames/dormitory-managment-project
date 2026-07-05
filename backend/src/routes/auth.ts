@@ -82,7 +82,7 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
 
     let token: string;
     try {
-        token = createToken(existingUser._id, existingUser.username);
+        token = createToken(existingUser._id.toString(), existingUser.username);
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error in JWT."});
