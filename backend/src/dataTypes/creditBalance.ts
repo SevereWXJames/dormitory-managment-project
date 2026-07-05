@@ -1,6 +1,3 @@
-import { Schema } from "mongoose";
-import type { CollectionName } from "../database/databaseConstants.ts";
-
 export class CreditBalance {
     public _id: string;
     public userId: string;

@@ -1,4 +1,3 @@
-import noticeJSON from "../../test_data/notices.json" with {type: "json"};
 import {Notice} from "../dataTypes/notice.ts";
 import NoticeModel from "../database/models/noticeModel.ts";
 

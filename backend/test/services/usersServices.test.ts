@@ -1,7 +1,6 @@
 import * as chai from "chai";
 // import chaiAsPromised from 'chai-as-promised';
 import { getExistingUserFromUsername, getExistingUserFromId, getExistingUserFromEmail } from "../../src/services/usersServices.ts";
-import { User } from "../../src/dataTypes/user.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
 

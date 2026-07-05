@@ -2,8 +2,6 @@ import * as chai from "chai";
 import chaiAsPromised from 'chai-as-promised';
 import { getAllRooms, getRoomById, getRoomByUserId, getAllResidents, getResidentByUserId }
 	from "../../src/services/roomServices.ts";
-import { Room } from "../../src/dataTypes/room.ts";
-import { Resident } from "../../src/dataTypes/user.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
 

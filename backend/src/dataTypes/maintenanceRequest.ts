@@ -1,5 +1,3 @@
-import type { CollectionName } from "../database/databaseConstants.ts";
-
 export class MaintenanceRequest {
     public _id: string;
     public createdBy: string;

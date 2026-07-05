@@ -1,7 +1,6 @@
 import * as chai from "chai";
 // import chaiAsPromised from 'chai-as-promised';
 import { getAllServices, getServiceById } from "../../src/services/serviceServices.ts";
-import { Service } from "../../src/dataTypes/service.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
 
