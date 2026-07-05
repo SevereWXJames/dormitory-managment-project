@@ -12,8 +12,11 @@ import servicesRouter from "./routes/services.ts";
 import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
+import {connectMongo} from "./database/database.ts";
 
 dotenv.config();
+
+await connectMongo();
 
 const app = express();
 const port: number = 3000;
