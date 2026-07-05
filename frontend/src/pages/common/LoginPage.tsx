@@ -1,5 +1,5 @@
 import {CommonFrame} from "../../components/common/CommonFrame";
-import {LoginForm} from "../../components/common/LoginForm";
+import {LoginForm} from "../../components/common/Auth/LoginForm.tsx";
 import {
     Card,
     CardContent,

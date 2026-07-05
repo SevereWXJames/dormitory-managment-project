@@ -4,8 +4,9 @@ import {
     CardContent,
     CardTitle,
 } from "@/components/ui/card.tsx"
-import {ResidentSignUpForm} from "@/components/residents/ResidentSignUpForm.tsx";
 import {Link} from "react-router-dom";
+import {Role} from "@/dataTypes/user.ts";
+import {SignUpForm} from "@/components/common/Auth/SignUpForm.tsx";
 
 export function ResidentSignUpPage() {
     return (
@@ -17,7 +18,7 @@ export function ResidentSignUpPage() {
                     <Card className="flex flex-col gap-4 p-4 m-4 w-fit mx-auto">
                         <CardTitle className="text-2xl">Sign Up</CardTitle>
                         <CardContent className="flex flex-col gap-4">
-                            <ResidentSignUpForm/>
+                            <SignUpForm role={Role.RESIDENT}/>
                         </CardContent>
                     </Card>
                 </main>
