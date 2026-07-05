@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {useLoginMutation} from "@/context/api/apiServices/authApi.ts";
 
-export function useLoginForm() {
+export function useUserForm() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
