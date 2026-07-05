@@ -1,7 +1,3 @@
-import { Schema } from "mongoose";
-import database from "../database/database.ts";
-import type { CollectionName } from "../database/databaseConstants.ts";
-
   export class Service {
     public _id: string;
     public name: string;
@@ -11,11 +7,6 @@ import type { CollectionName } from "../database/databaseConstants.ts";
     public reservationDurationSeconds: number;
     public reservationStartHour: number;
     public reservationEndHour: number;
-
-     public static model = database.mongoose.model("services" as CollectionName,
-        new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
-          IoTName: String, reservationDurationSeconds: Number,
-          reservationStartHour: Number, reservationEndHour: Number}));
 
     constructor({
                     _id,

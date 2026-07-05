@@ -1,7 +1,3 @@
-import { Schema } from "mongoose";
-import database from "../database/database.ts";
-import type { CollectionName } from "../database/databaseConstants.ts";
-
 export class MaintenanceRequest {
     public _id: string;
     public createdBy: string;
@@ -11,9 +7,6 @@ export class MaintenanceRequest {
     public status: string;
     public priority: string;
     public location: string | null;
-    public static model = database.mongoose.model("maintenance_request" as CollectionName,
-        new Schema({_id: String, createdBy: String, title: String, description: String, type: String, status: String,
-            priority: String, location: String}));
 
     constructor({_id, createdBy, title, description, type, status, priority, location}: {
         _id: string,
@@ -39,8 +32,6 @@ export class MaintenanceRequest {
 export class MaintenanceRequestType {
     public _id: string;
     public text: string;
-    public static model = database.mongoose.model("maintenance_request_type" as CollectionName,
-        new Schema({_id: String, text: String}));
 
     constructor({_id, text}: {_id: string, text: string}) {
         this._id = _id;
@@ -51,8 +42,6 @@ export class MaintenanceRequestType {
 export class MaintenanceRequestStatus {
     public _id: string;
     public text: string;
-    public static model = database.mongoose.model("maintenance_request_status" as CollectionName,
-        new Schema({_id: String, text: String}));
 
     constructor({_id, text}: {_id: string, text: string}) {
         this._id = _id;
@@ -63,8 +52,6 @@ export class MaintenanceRequestStatus {
 export class MaintenanceRequestPriority {
     public _id: string;
     public text: string;
-    public static model = database.mongoose.model("maintenance_request_priority" as CollectionName,
-        new Schema({_id: String, text: String}));
 
     constructor({_id, text}: {_id: string, text: string}) {
         this._id = _id;

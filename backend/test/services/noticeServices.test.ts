@@ -1,11 +1,14 @@
 import * as chai from "chai";
 import { getAllNotices, getNoticesForUserId } from "../../src/services/noticeServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
+import {connectMongo} from "../../src/database/database.ts";
 
 const expect = chai.expect;
 
 describe("noticeServices", function () {
 	before(async function() {
+		this.timeout(15000);
+		await connectMongo();
 		await loadSampleData();
 	});
 

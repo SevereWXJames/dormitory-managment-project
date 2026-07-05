@@ -1,6 +1,7 @@
 import userJson from "../../test_data/users.json" with {type: "json"};
 import jwt,{type Secret} from "jsonwebtoken";
 import {User} from "../dataTypes/user.ts";
+import UserModel from "../database/models/user.model.ts";
 
 export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
     if (!password || password.trim() === "") {
@@ -18,7 +19,7 @@ export async function checkLogIn(username: string | undefined, email: string | u
 }
 
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
-    return User.model.findOne({username: username}).lean().exec()
+    return UserModel.findOne({username: username}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as User);
@@ -31,7 +32,7 @@ export async function getExistingUserFromUsername(username: string): Promise<Use
 }
 
 export async function getExistingUserFromEmail(email: string): Promise<User | undefined> {
-    return User.model.findOne({email: email}).lean().exec()
+    return UserModel.findOne({email: email}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as User);
@@ -44,7 +45,7 @@ export async function getExistingUserFromEmail(email: string): Promise<User | un
 }
 
 export async function getExistingUserFromId(_id: string): Promise<User | undefined> {
-    return User.model.findOne({_id: _id}).lean().exec()
+    return UserModel.findOne({_id: _id}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as User);
