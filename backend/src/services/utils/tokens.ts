@@ -1,5 +1,6 @@
-import {sign} from "jsonwebtoken";
+import pkg from "jsonwebtoken";
 import {Types} from "mongoose";
+const {sign} = pkg;
 
 // signing the access token
 export const createAccessToken = (id: string | Types.ObjectId) => {
