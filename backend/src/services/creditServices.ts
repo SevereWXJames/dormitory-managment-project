@@ -1,5 +1,5 @@
 import {CreditBalance, Transaction} from "../dataTypes/creditBalance.ts";
-import CreditBalanceModel from "../database/models/creditBalanceModel.ts";
+import CreditBalanceModel from "../database/models/creditBalance.model.ts";
 import TransactionModel from "../database/models/transaction.model.ts";
 
 export async function getCreditBalanceByUserId(userId: string): Promise<CreditBalance | undefined> {

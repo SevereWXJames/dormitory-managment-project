@@ -1,7 +1,7 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../databaseConstants.ts";
 
-const ResidentSchema = new Schema({_id: String, userId: String, roomId: String});
+const residentSchema = new Schema({_id: String, userId: String, roomId: String});
 
-const ResidentModel = mongoose.model("residents"  as CollectionName, ResidentSchema);
+const ResidentModel = mongoose.model("residents"  as CollectionName, residentSchema);
 export default ResidentModel;
