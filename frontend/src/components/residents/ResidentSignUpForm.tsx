@@ -11,9 +11,9 @@ import {useUserForm} from "@/components/common/hooks/useUserForm.tsx";
  *
  * @returns JSX for the login form
  */
-export function LoginForm() {
+export function ResidentSignUpForm() {
     const emailFieldID = "email-field";
-	const passwordFieldID = "password-field";
+    const passwordFieldID = "password-field";
     const usernameFieldID="username-field";
 
     const {
@@ -28,31 +28,31 @@ export function LoginForm() {
         handleLogIn,
     } = useUserForm();
 
-	return (
+    return (
         <div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
              style={{width: 'fit-content', margin: '0 auto'}}>
             <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
-                <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
+                <InputLabel htmlFor={`${usernameFieldID}-input`}>Create a username</InputLabel>
                 <OutlinedInput
                     id={`${usernameFieldID}-input`}
                     type='text'
-                    label="Username"
+                    label="Create-Username"
                     value={username}
                     onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
             <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
-                <InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
+                <InputLabel htmlFor={`${emailFieldID}-input`}>Add e-mail</InputLabel>
                 <OutlinedInput
                     id={`${emailFieldID}-input`}
                     type='text'
-                    label="E-mail"
+                    label="Input E-mail"
                     value={email}
                     onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
             <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
-                <InputLabel htmlFor={`${passwordFieldID}-input`}>Password</InputLabel>
+                <InputLabel htmlFor={`${passwordFieldID}-input`}>Create a password</InputLabel>
                 <OutlinedInput
                     id={`${passwordFieldID}-input`}
                     type={showPassword ? 'text' : 'password'}
@@ -82,5 +82,5 @@ export function LoginForm() {
             </FormControl>
             {loginError && <p style={{ color: "red" }}>{loginError}</p>}
         </div>
-	)
+    )
 }

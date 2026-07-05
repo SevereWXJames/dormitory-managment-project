@@ -18,6 +18,8 @@ import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPag
 import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
 import {AdminAccessCodesPage} from "./pages/common/buildingManager/AdminAccessCodesPage.tsx";
 import CssBaseline from "@mui/material/CssBaseline";
+import {ResidentSignUpPage} from "@/pages/common/residents/ResidentSignUpPage.tsx";
+import {AdminSignUpPage} from "@/pages/common/buildingManager/AdminSignUpPage.tsx";
 /**
  * App React component, containing routes to other pages.
  *
@@ -30,8 +32,10 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
-                    {/* Resident-only: */}
                     <Route path="/login" element={<LoginPage/>}/>
+
+                    {/* Resident-only: */}
+                    <Route path="/resident-signup" element={<ResidentSignUpPage/>}/>
                     <Route path="/dashboard" element={<DashboardPage/>}/>
                     <Route path="/facilities" element={<LaundryBookingsPage/>}/>
                     <Route path="/maintenance" element={<MaintenanceRequestsPage/>}/>
@@ -41,6 +45,7 @@ function App() {
                     <Route path="/settings" element={<SettingsPage/>}/>
 
                     {/* Building manager routes */}
+                    <Route path="/admin-signup" element={<AdminSignUpPage/>}/>
                     <Route path="/admin" element={<AdminDashboardPage/>}/>
                     <Route path="/admin/dashboard" element={<AdminDashboardPage/>}/>
                     <Route path="/admin/facilities" element={<AdminFacilitiesPage/>}/>

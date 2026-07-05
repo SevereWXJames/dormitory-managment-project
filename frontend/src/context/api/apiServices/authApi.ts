@@ -33,6 +33,23 @@ export const authApi = api.injectEndpoints({
                 }
             },
         }),
+
+        signUp: builder.mutation<AuthUser, LoginRequest>({
+            query: (credentials) => ({
+                url: "/signUp",
+                method: "POST",
+                body: credentials,
+            }),
+            invalidatesTags: ["CurrentUser", "User"],
+            async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
+                try {
+                    const { data } = await queryFulfilled;
+                    dispatch(logIn({ username: data.username, email: data.email, userId: data._id, roles: data.roles }));
+                } catch {
+                    // login failed — no dispatch needed, error surfaces via the mutation's own error state
+                }
+            },
+        }),
     }),
 });
 
