@@ -5,6 +5,7 @@ import { getAllRooms, getRoomById, getRoomByUserId, getAllResidents, getResident
 import { Room } from "../../src/dataTypes/room.ts";
 import { Resident } from "../../src/dataTypes/user.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
+import {connectMongo} from "../../src/database/database.ts";
 
 chai.use(chaiAsPromised);
 
@@ -12,6 +13,8 @@ const expect = chai.expect;
 
 describe("roomServices", function () {
 	before(async function() {
+		this.timeout(15000);
+		await connectMongo();
 		await loadSampleData();
 	});
 
