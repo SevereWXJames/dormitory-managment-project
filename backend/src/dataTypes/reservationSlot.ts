@@ -12,4 +12,4 @@ export interface ReservationSlot {
 
 const reservationSlotSchema = new Schema({_id: String, serviceId: String, booked: Boolean,
     bookedBy: String, startTime: Number, durationSeconds: Number});
-export const ReservationSlotModel = mongoose.model("reservation_slots"  as CollectionName, reservationSlotSchema);
+export const ReservationSlotModel = mongoose.model("ReservationSlots"  as CollectionName, reservationSlotSchema, "ReservationSlots"  as CollectionName);

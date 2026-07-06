@@ -8,4 +8,4 @@ export interface Room {
 }
 
 const roomSchema = new Schema({_id: String, roomName: String, verificationCode: String});
-export const RoomModel = mongoose.model("rooms"  as CollectionName, roomSchema);
+export const RoomModel = mongoose.model("Rooms"  as CollectionName, roomSchema, "Rooms"  as CollectionName);

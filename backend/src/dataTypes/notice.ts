@@ -12,4 +12,4 @@ export interface Notice {
 
 const noticeSchema = new Schema({_id: String, createdBy: String, viewableBy: Array,
     title: String, text: String, createAt: Number});
-export const NoticeModel = mongoose.model("notice"  as CollectionName, noticeSchema);
+export const NoticeModel = mongoose.model("Notices"  as CollectionName, noticeSchema, "Notices"  as CollectionName);

@@ -15,4 +15,4 @@ export interface Service {
 const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
     IoTName: String, reservationDurationSeconds: Number,
     reservationStartHour: Number, reservationEndHour: Number});
-export const ServiceModel = mongoose.model("services"  as CollectionName, serviceSchema);
+export const ServiceModel = mongoose.model("Services"  as CollectionName, serviceSchema, "Services"  as CollectionName);

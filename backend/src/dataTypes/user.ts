@@ -10,7 +10,7 @@ export interface User {
 }
 
 const userSchema = new Schema({_id: String, username: String, email: String, phoneNumber: String, roles: Array});
-export const UserModel = mongoose.model("users"  as CollectionName, userSchema);
+export const UserModel = mongoose.model("Users"  as CollectionName, userSchema, "Users"  as CollectionName);
 
 export interface Resident {
     _id: string;
@@ -19,4 +19,4 @@ export interface Resident {
 }
 
 const residentSchema = new Schema({_id: String, userId: String, roomId: String});
-export const ResidentModel = mongoose.model("residents"  as CollectionName, residentSchema);
+export const ResidentModel = mongoose.model("Residents"  as CollectionName, residentSchema, "Residents"  as CollectionName);

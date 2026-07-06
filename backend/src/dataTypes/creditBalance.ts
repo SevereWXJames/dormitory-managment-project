@@ -8,7 +8,7 @@ export interface CreditBalance {
 }
 
 const creditBalanceSchema = new mongoose.Schema({_id: String, userId: String, balanceCents: Number});
-export const CreditBalanceModel = mongoose.model("credit_balance"  as CollectionName, creditBalanceSchema);
+export const CreditBalanceModel = mongoose.model("CreditBalances"  as CollectionName, creditBalanceSchema, "CreditBalances"  as CollectionName);
 
 export interface Transaction {
     _id: string;
@@ -18,4 +18,4 @@ export interface Transaction {
 }
 
 const transactionSchema = new Schema({_id: String, userId: String, description: String, transaction: Number});
-export const TransactionModel = mongoose.model("transactions"  as CollectionName, transactionSchema);
+export const TransactionModel = mongoose.model("Transactions"  as CollectionName, transactionSchema, "Transactions"  as CollectionName);
