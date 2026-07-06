@@ -20,10 +20,10 @@ type SignUpFormProps = {
 }
 export function SignUpForm({role} : SignUpFormProps) {
     const signUpFields: { key: keyof UserInputForm; label: string; type?: string }[] = [
-        {key: "name", label: "Name"},
-        {key: "username", label: "Username"},
-        {key: "email", label: "Email"},
-        {key: "phoneNumber", label: "Phone Number"},
+        {key: "name", label: "Name", type: "text"},
+        {key: "username", label: "Username", type: "text"},
+        {key: "email", label: "Email", type: "text"},
+        {key: "phoneNumber", label: "Phone Number", type: "number"},
     ];
     const {form, errors, isLoading, isError, handleChange, handleSubmit} = useSignUpForm(role);
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
