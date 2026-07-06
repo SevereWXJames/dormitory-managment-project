@@ -14,7 +14,6 @@ export function useSignUpForm(role: Role) {
         email: "",
         role: role? Role.RESIDENT : role,
     });
-    console.log(`form: ${JSON.stringify(form)}`);
     const [errors, setErrors] = useState<FormErrors>({});
     const [signUp, {isLoading, isError, error}] = useSignUpMutation();
     const navigate = useNavigate();
@@ -30,7 +29,8 @@ export function useSignUpForm(role: Role) {
         setErrors(newErrors);
         if (Object.keys(newErrors).length === 0) {
             const request: SignUpRequest = {...form, roles:[form.role]};
-            await signUp(request).unwrap();
+            const data = await signUp(request).unwrap();
+            console.log(`Data: ${JSON.stringify(data)}`);
 
             const targetPath = (form.role === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
             navigate(targetPath);

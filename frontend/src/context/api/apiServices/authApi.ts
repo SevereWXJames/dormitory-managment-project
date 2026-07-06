@@ -2,6 +2,13 @@
 import { api } from "../api";
 import type {Role} from "@/dataTypes/user.ts";
 import {logIn} from "@/context/authenticationSlice.ts";
+
+export interface SignUpResponse {
+    message: string;
+    data: AuthUser;
+    type: string;
+}
+
 export interface SignUpRequest {
     name: string | null,
     username: string | null;
@@ -43,7 +50,7 @@ export const authApi = api.injectEndpoints({
             },
         }),
 
-        signUp: builder.mutation<AuthUser, SignUpRequest>({
+        signUp: builder.mutation<SignUpResponse, SignUpRequest>({
             query: (credentials) => ({
                 url: "/signup",
                 method: "POST",
@@ -52,9 +59,11 @@ export const authApi = api.injectEndpoints({
             invalidatesTags: ["CurrentUser", "User"],
             async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(logIn({ username: data.username, email: data.email, userId: data._id, roles: data.roles }));
-                } catch {
+                    const { data: responseBody } = await queryFulfilled;
+                    const user = responseBody.data;
+                    dispatch(logIn({ username: user.username, email: user.email, userId: user._id, roles: user.roles }));
+                } catch(err) {
+                    console.error('Signup mutation failed:', err);
                     // signup failed — no dispatch needed, error surfaces via the mutation's own error state
                 }
             },

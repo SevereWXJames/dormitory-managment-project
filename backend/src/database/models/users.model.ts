@@ -28,6 +28,7 @@ const UsersSchema = new Schema({
     phoneNumber: {
         type: String,
         required: false,
+        unique: false,
     },
     roles: {
         type: Array<Role>,

@@ -99,8 +99,6 @@ export async function signUp(profileData : SignUpRequest){
     }catch (error){
         throw Error("Error creating account", {cause: error});
     }
-
-
     // Check that the account has been created
     const userDoc = await userTable.findNewlyCreatedUser(profileData);
     if(!userDoc[0] || userDoc.length <= 0) throw Error("Error, failed to create account");
