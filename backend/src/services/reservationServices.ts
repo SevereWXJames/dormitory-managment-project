@@ -1,8 +1,7 @@
-import reservationJSON from "../../test_data/reservationSlots.json" with {type: "json"};
-import {ReservationSlot} from "../dataTypes/reservationSlot.ts";
+import {type ReservationSlot, ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
 
 export async function getReservationsBookedByUserId(userId: string): Promise<ReservationSlot[]> {
-    const cursor = ReservationSlot.model.find({bookedBy: userId}).lean();
+    const cursor = ReservationSlotModel.find({bookedBy: userId}).lean();
     const results: ReservationSlot[] = [];
 
     for await (const result of cursor) {
@@ -19,7 +18,7 @@ export async function getReservationsBookedByUserId(userId: string): Promise<Res
 }
 
 export async function getReservationsSlotsByServiceId(serviceId: string): Promise<ReservationSlot[]> {
-    const cursor = ReservationSlot.model.find({serviceId: serviceId}).lean();
+    const cursor = ReservationSlotModel.find({serviceId: serviceId}).lean();
     const results: ReservationSlot[] = [];
 
     for await (const result of cursor) {

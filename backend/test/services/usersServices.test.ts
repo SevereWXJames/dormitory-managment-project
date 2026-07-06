@@ -1,8 +1,8 @@
 import * as chai from "chai";
 // import chaiAsPromised from 'chai-as-promised';
 import { getExistingUserFromUsername, getExistingUserFromId, getExistingUserFromEmail } from "../../src/services/usersServices.ts";
-import { User } from "../../src/dataTypes/user.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
+import {connectMongo} from "../../src/database/database.ts";
 
 // chai.use(chaiAsPromised);
 
@@ -10,6 +10,8 @@ const expect = chai.expect;
 
 describe("usersServices", function () {
 	before(async function() {
+		this.timeout(15000);
+		await connectMongo();
 		await loadSampleData();
 	});
 

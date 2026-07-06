@@ -9,6 +9,7 @@ import { getAllMaintenanceRequests, getAllMaintenanceRequestsByUserId, getMainte
 	setMaintenanceRequestStatus} 
 	from "../../src/services/maintenanceRequestServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
+import {connectMongo} from "../../src/database/database.ts";
 
 // chai.use(chaiAsPromised);
 
@@ -16,6 +17,8 @@ const expect = chai.expect;
 
 describe("maintenanceRequestServices", function () {
 	beforeEach(async function() {
+		this.timeout(15000);
+		await connectMongo();
 		await loadSampleData();
 	});
 
