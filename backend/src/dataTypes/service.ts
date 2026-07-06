@@ -6,13 +6,14 @@ export interface Service {
     name: string;
     description: string;
     hasIoT: boolean;
-    IoTName: string | null;
+    IoTUUID: string | null;
+    IoTType: string | null;
     reservationDurationSeconds: number;
     reservationStartHour: number;
     reservationEndHour: number;
 }
 
 const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
-    IoTName: String, reservationDurationSeconds: Number,
+    IoTUUID: String, IoTType: String, reservationDurationSeconds: Number,
     reservationStartHour: Number, reservationEndHour: Number});
 export const ServiceModel = mongoose.model("Services"  as CollectionName, serviceSchema, "Services"  as CollectionName);

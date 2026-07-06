@@ -1,4 +1,4 @@
-import {IoTDeviceServices} from "./IoT/IoTDeviceServices.ts";
+import {handleIncomingIoTData} from "./IoT/IoTDeviceServices.ts";
 
 export async function handleMQTTMessage(topic: string, message: string) {
     const topicParts = topic.split("/");
@@ -7,13 +7,12 @@ export async function handleMQTTMessage(topic: string, message: string) {
     }
 
     const messageObject: object = JSON.parse(message);
-    if (!Object.hasOwn(messageObject, "uuid")) {
+    if (!Object.hasOwn(messageObject, "UUID")) {
         console.log("Error! Data object has no UUID!");
         return; // it has no uuid, can't identify it
     }
 
-    const IoTServices = new IoTDeviceServices();
-    await IoTServices.handleIncomingIoTData(messageObject);
+    await handleIncomingIoTData(messageObject);
 }
 
 export function handleMQTTError(error: Error) {

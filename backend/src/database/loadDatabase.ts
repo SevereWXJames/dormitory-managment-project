@@ -11,6 +11,7 @@ import roomJSON from "../../test_data/rooms.json" with {type: "json"};
 import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import serviceJSON from "../../test_data/services.json" with {type: "json"};
 import userJSON from "../../test_data/users.json" with {type: "json"};
+import IoTStatusJSON from "../../test_data/IoTStatus.json" with {type: "json"};
 
 /**
  * Loads the sample data from the backend/test_data folder into the SmartAPT
@@ -35,7 +36,8 @@ export default function loadSampleData(): Promise<void> {
 			load("Rooms", roomJSON.rooms),
 			load("Residents", residentJSON.residents),
 			load("Services", serviceJSON.services),
-			load("Users", userJSON.users)]),
+			load("Users", userJSON.users),
+			load("IoTStatuses", IoTStatusJSON.IoTStatuses)]),
 		).then((value) => {
 			Promise.resolve();
 		})
