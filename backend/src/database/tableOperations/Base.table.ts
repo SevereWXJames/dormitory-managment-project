@@ -2,7 +2,7 @@ import {Model} from "mongoose";
 import {fileURLToPath} from "url";
 import path from "path";
 import fs from "fs";
-import type {IUser} from "../models/users.model.js";
+import type {IUser} from "../models/users.model.ts";
 
 type TransformFn<T> = (docs: T[]) => Promise<T[]>;
 

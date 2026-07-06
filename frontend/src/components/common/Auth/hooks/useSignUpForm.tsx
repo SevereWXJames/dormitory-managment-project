@@ -12,9 +12,9 @@ export function useSignUpForm(role: Role) {
         password: "",
         phoneNumber: "",
         email: "",
-        roles: role? [Role.RESIDENT] : [role],
+        role: role? Role.RESIDENT : role,
     });
-
+    console.log(`form: ${JSON.stringify(form)}`);
     const [errors, setErrors] = useState<FormErrors>({});
     const [signUp, {isLoading, isError, error}] = useSignUpMutation();
     const navigate = useNavigate();
@@ -29,10 +29,10 @@ export function useSignUpForm(role: Role) {
         const newErrors = validateForm(form);
         setErrors(newErrors);
         if (Object.keys(newErrors).length === 0) {
-            const request: SignUpRequest = {...form};
+            const request: SignUpRequest = {...form, roles:[form.role]};
             await signUp(request).unwrap();
 
-            const targetPath = (form.roles[0] === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
+            const targetPath = (form.role === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
             navigate(targetPath);
         }
     };

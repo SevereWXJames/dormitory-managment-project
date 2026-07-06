@@ -1,6 +1,9 @@
 import type {SignUpRequest} from "@/context/api/apiServices/authApi.ts";
+import type {Role} from "@/dataTypes/user.ts";
 
-export type UserInputForm = SignUpRequest;
+export interface UserInputForm extends Omit<SignUpRequest,"roles"> {
+    role: Role
+};
 
 type UserInputFormKey = keyof UserInputForm | string;
 
