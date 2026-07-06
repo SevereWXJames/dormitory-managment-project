@@ -1,14 +1,17 @@
 //import userJson from "../../test_data/users.json" with {type: "json"};
 import type {Request} from "express";
 import {UserTable} from "../database/tableOperations/User.table.ts";
+import {Role} from "../database/types/user.service.types.ts";
 import type {SignUpRequest} from "../database/types/user.service.types.ts";
 import {compare, hash} from "bcryptjs";
-import {type User, UserModel} from "../dataTypes/user.ts";
+import {type User, UserModel, ResidentModel} from "../dataTypes/user.ts";
 import jwt from "jsonwebtoken";
 import pkg, {type Secret} from "jsonwebtoken";
+import {Types} from "mongoose";
+import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
 
 const {verify} = pkg;
-const userTable : UserTable = new UserTable();
+const userTable: UserTable = new UserTable();
 const userModel = userTable.getModel();
 
 // export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
@@ -79,50 +82,87 @@ export function createToken(_id: string, username: string): string {
 }
 
 //Looks for account, verifies information, returns user.
-export async function logIn(username: string, email: string, password: string){
+export async function logIn(username: string, email: string, password: string) {
     const passwordHash = await hash(password, 10);
     const userDocs = await userModel.findOne({username, email, password: passwordHash});
-    if(!userDocs) throw Error("Invalid username, email, or password");
+    if (!userDocs) throw Error("Invalid username, email, or password");
     return userDocs;
 }
 
+//Helpers for signup
+async function createNewBalance(userId: Types.ObjectId) {
+    try {
+        const balance = {
+            userId: userId.toString(),
+            balanceCents: 0
+        }
+        await CreditBalanceModel.create(balance);
+    } catch (error) {
+        throw Error("Error creating balance", {cause: error});
+    }
+}
+
+async function createNewResident(userId: Types.ObjectId) {
+    try {
+        const resident = {
+            userId: userId.toString(),
+            roomId: "N/A"
+        }
+        await ResidentModel.create(resident);
+    } catch (error) {
+        console.log(`error: ${error}`);
+        throw Error("Error creating resident", {cause: error});
+    }
+}
+
 //Creates a new user account and returns the newly created user.
-export async function signUp(profileData : SignUpRequest){
-    const {username, password, email} = profileData;
+export async function signUp(profileData: SignUpRequest) {
+    const {username, password, email, roles} = profileData;
 
     const user = await userModel.findOne({username, email});
     if (user) throw Error("User already exists! Try logging in.");
 
-    try{
+    try {
         profileData.password = await hash(password, 10);
         await userTable.createUser(profileData);
-    }catch (error){
+    } catch (error) {
         throw Error("Error creating account", {cause: error});
     }
     // Check that the account has been created
     const userDoc = await userTable.findNewlyCreatedUser(profileData);
-    if(!userDoc[0] || userDoc.length <= 0) throw Error("Error, failed to create account");
-    return userDoc[0];
+    if (!userDoc || !userDoc._id) throw Error("Error, failed to create account");
+
+    // Create new rows if role is resident
+    try {
+        if (roles.includes(Role.RESIDENT)) {
+            await createNewResident(userDoc._id);
+            await createNewBalance(userDoc._id);
+        }
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        throw Error("Unable to update references in other tables", {cause: error});
+    }
+    return userDoc;
 }
 
 //Auth:
-export async function verifyRequest(req: Request){
-    if(!req.headers) throw Error("Invalid request!");
+export async function verifyRequest(req: Request) {
+    if (!req.headers) throw Error("Invalid request!");
     // if we don't have a token, return error
     const authorization = req.headers["authorization"];
-    if(authorization === undefined) throw Error("No token!");
+    if (authorization === undefined) throw Error("No token!");
     const token = authorization.split(" ")[1];
 
     const key = process.env.ACCESS_TOKEN_SECRET;
-    if(!token) throw Error("Invalid token!");
-    if(!key) throw Error("Invalid key!");
+    if (!token) throw Error("Invalid token!");
+    if (!key) throw Error("Invalid key!");
 
     let payload = verify(token, key);
-    if(typeof payload == "string" || !payload.id) throw Error("Invalid payload!");
+    if (typeof payload == "string" || !payload.id) throw Error("Invalid payload!");
     let id = payload.id
     //Check if user exists:
     const user = await userModel.findById(id);
-    if(!user) throw Error("User does not exist!");
+    if (!user) throw Error("User does not exist!");
     req.user = user;
     return user;
 }

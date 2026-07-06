@@ -14,5 +14,5 @@ export type SignUpRequest = {
     email: string,
     phoneNumber: string,
     password: string,
-    roles: Role,
+    roles: Role[],
 }
