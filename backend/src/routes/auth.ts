@@ -3,8 +3,7 @@ import {
     logIn,
     signUp
 } from "../services/usersServices.ts";
-import {createJWTToken} from "../services/utils/tokens.js";
-import user from "./user.js";
+import {createJWTToken} from "../services/utils/tokens.ts";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
@@ -35,7 +34,7 @@ authRouter.post("/signup", async (req, res) => {
         res.status(500).json({
             type: "error",
             message: "Error signing up.",
-            error,
+            error: error instanceof Error ? error.message : String(error),
         });
     }
 });
@@ -67,7 +66,7 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
         res.status(500).json({
             type: "error",
             message: "Error logging in.",
-            error,
+            error: error instanceof Error ? error.message : String(error),
         });
     }
 });

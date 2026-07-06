@@ -2,10 +2,10 @@
 import type {Request} from "express";
 import {UserTable} from "../database/tableOperations/User.table.ts";
 import type {SignUpRequest} from "../database/types/user.service.types.ts";
-import jwt from "jsonwebtoken";
-import pkg, {type Secret} from "jsonwebtoken";
 import {compare, hash} from "bcryptjs";
 import {type User, UserModel} from "../dataTypes/user.ts";
+import jwt from "jsonwebtoken";
+import pkg, {type Secret} from "jsonwebtoken";
 
 const {verify} = pkg;
 const userTable : UserTable = new UserTable();
@@ -93,8 +93,13 @@ export async function signUp(profileData : SignUpRequest){
     const user = await userModel.findOne({username, email});
     if (user) throw Error("User already exists! Try logging in.");
 
-    profileData.password = await hash(password, 10);
-    await userTable.createUser(profileData);
+    try{
+        profileData.password = await hash(password, 10);
+        await userTable.createUser(profileData);
+    }catch (error){
+        throw Error("Error creating account", {cause: error});
+    }
+
 
     // Check that the account has been created
     const userDoc = await userTable.findNewlyCreatedUser(profileData);

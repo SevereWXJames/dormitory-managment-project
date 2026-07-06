@@ -1,6 +1,6 @@
-import {type IUser, Users} from "../models/users.model.js";
-import {BaseTable} from "./Base.table.js";
-import type {SignUpRequest} from "../types/user.service.types.js";
+import {type IUser, Users} from "../models/users.model.ts";
+import {BaseTable} from "./Base.table.ts";
+import type {SignUpRequest} from "../types/user.service.types.ts";
 
 export class UserTable extends BaseTable<IUser>{
     constructor() {
