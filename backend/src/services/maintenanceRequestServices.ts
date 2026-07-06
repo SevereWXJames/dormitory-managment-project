@@ -1,13 +1,9 @@
 import {
-    MaintenanceRequest,
-    MaintenanceRequestPriority,
-    MaintenanceRequestStatus,
-    MaintenanceRequestType
+    type MaintenanceRequest, MaintenanceRequestModel,
+    type MaintenanceRequestPriority, MaintenanceRequestPriorityModel,
+    type MaintenanceRequestStatus, MaintenanceRequestStatusModel,
+    type MaintenanceRequestType, MaintenanceRequestTypeModel
 } from "../dataTypes/maintenanceRequest.ts";
-import MaintenanceRequestTypeModel from "../database/models/maintenanceRequestType.model.ts";
-import MaintenanceRequestPriorityModel from "../database/models/maintenanceRequestPriority.model.ts";
-import MaintenanceRequestStatusModel from "../database/models/maintenanceRequestStatus.model.ts";
-import MaintenanceRequestModel from "../database/models/maintenanceRequest.model.ts";
 
 export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]> {
     const cursor = MaintenanceRequestModel.find({ }).lean();

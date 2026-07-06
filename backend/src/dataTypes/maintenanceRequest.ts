@@ -1,60 +1,44 @@
-export class MaintenanceRequest {
-    public _id: string;
-    public createdBy: string;
-    public title: string;
-    public description: string;
-    public type: string;
-    public status: string;
-    public priority: string;
-    public location: string | null;
+import mongoose, {Schema} from "mongoose";
+import type {CollectionName} from "../database/databaseConstants.ts";
 
-    constructor({_id, createdBy, title, description, type, status, priority, location}: {
-        _id: string,
-        createdBy: string,
-        title: string,
-        description: string,
-        type: string,
-        status: string,
-        priority: string,
-        location: string | null
-    }) {
-        this._id = _id;
-        this.createdBy = createdBy;
-        this.title = title;
-        this.description = description;
-        this.type = type;
-        this.status = status;
-        this.priority = priority;
-        this.location = location;
-    }
+export interface MaintenanceRequest {
+    _id: string;
+    createdBy: string;
+    title: string;
+    description: string;
+    type: string;
+    status: string;
+    priority: string;
+    location: string | null;
 }
 
-export class MaintenanceRequestType {
-    public _id: string;
-    public text: string;
+const maintenanceRequestSchema = new Schema({
+    _id: String, createdBy: String, title: String, description: String, type: String, status: String,
+    priority: String, location: String
+});
+export const MaintenanceRequestModel = mongoose.model("maintenance_request" as CollectionName, maintenanceRequestSchema);
 
-    constructor({_id, text}: {_id: string, text: string}) {
-        this._id = _id;
-        this.text = text;
-    }
+export interface MaintenanceRequestType {
+    _id: string;
+    text: string;
 }
 
-export class MaintenanceRequestStatus {
-    public _id: string;
-    public text: string;
+const maintenanceRequestTypeSchema = new Schema({_id: String, text: String});
+export const MaintenanceRequestTypeModel = mongoose.model("maintenance_request_type"  as CollectionName, maintenanceRequestTypeSchema);
 
-    constructor({_id, text}: {_id: string, text: string}) {
-        this._id = _id;
-        this.text = text;
-    }
+export interface MaintenanceRequestStatus {
+    _id: string;
+    text: string;
 }
 
-export class MaintenanceRequestPriority {
-    public _id: string;
-    public text: string;
+const maintenanceRequestStatusSchema = new Schema({_id: String, text: String});
+export const MaintenanceRequestStatusModel = mongoose.model("maintenance_request_status"  as CollectionName, maintenanceRequestStatusSchema);
 
-    constructor({_id, text}: {_id: string, text: string}) {
-        this._id = _id;
-        this.text = text;
-    }
+
+export interface MaintenanceRequestPriority {
+    _id: string;
+    text: string;
 }
+
+const maintenanceRequestPrioritySchema = new Schema({_id: String, text: String});
+export const MaintenanceRequestPriorityModel = mongoose.model("maintenance_request_priority"  as CollectionName, maintenanceRequestPrioritySchema);

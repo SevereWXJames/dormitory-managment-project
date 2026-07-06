@@ -1,7 +1,6 @@
 import userJson from "../../test_data/users.json" with {type: "json"};
 import jwt,{type Secret} from "jsonwebtoken";
-import {User} from "../dataTypes/user.ts";
-import UserModel from "../database/models/user.model.ts";
+import {type User, UserModel} from "../dataTypes/user.ts";
 
 export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
     if (!password || password.trim() === "") {

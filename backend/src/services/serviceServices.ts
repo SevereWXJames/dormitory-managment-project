@@ -1,5 +1,4 @@
-import {Service} from "../dataTypes/service.ts";
-import ServiceModel from "../database/models/service.model.ts";
+import {type Service, ServiceModel} from "../dataTypes/service.ts";
 
 export async function getAllServices(): Promise<Service[]> {
     const cursor = ServiceModel.find({ }).lean();

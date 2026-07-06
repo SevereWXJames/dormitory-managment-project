@@ -1,11 +1,11 @@
-export class Room {
-    public _id: string;
-    public roomName: string;
-    public verificationCode: string;
+import mongoose, {Schema} from "mongoose";
+import type {CollectionName} from "../database/databaseConstants.js";
 
-    constructor({_id, roomName, verificationCode}: {_id: string, roomName: string, verificationCode: string}) {
-        this._id = _id;
-        this.roomName = roomName;
-        this.verificationCode = verificationCode;
-    }
+export interface Room {
+    _id: string;
+    roomName: string;
+    verificationCode: string;
 }
+
+const roomSchema = new Schema({_id: String, roomName: String, verificationCode: String});
+export const RoomModel = mongoose.model("rooms"  as CollectionName, roomSchema);
