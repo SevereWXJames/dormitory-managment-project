@@ -5,9 +5,15 @@ import mongoose from 'mongoose';
 let mongod: MongoMemoryServer;
 
 export async function connectTestDB() {
-    mongod = await MongoMemoryServer.create();
-    const uri = mongod.getUri();
-    await mongoose.connect(uri);
+    try{
+        mongod = await MongoMemoryServer.create();
+        const uri = mongod.getUri();
+        await mongoose.connect(uri);
+        console.log("Successfully connected to test db!")
+    }catch (error){
+        console.log("Error connecting to the test db!")
+    }
+
 }
 
 export async function closeTestDB() {
