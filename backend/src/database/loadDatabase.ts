@@ -1,4 +1,4 @@
-import database from "./database.ts";
+import {getConnection, load} from "./database.ts";
 import creditBalanceJSON from "../../test_data/creditBalance.json" with {type: "json"};
 import transactionHistoryJSON from "../../test_data/transactionHistory.json" with {type: "json"};
 import requestJSON from "../../test_data/maintenanceRequest.json" with {type: "json"};
@@ -23,19 +23,19 @@ import userJSON from "../../test_data/users.json" with {type: "json"};
 export default function loadSampleData(): Promise<void> {
 	// console.debug("loadSampleData(): Loading sample data");
 
-	return database.getConnection().dropDatabase().then((value) =>
-		Promise.all([database.load("credit_balances", creditBalanceJSON.creditBalances),
-			database.load("transactions", transactionHistoryJSON.transactions),
-			database.load("maintenance_requests", requestJSON.maintenanceRequests),
-			database.load("maintenance_request_types", requestTypeJSON.maintenanceRequestTypes),
-			database.load("maintenance_request_statuses", requestStatusJSON.maintenanceRequestStatuses),
-			database.load("maintenance_request_priorities", requestPriorityJSON.maintenanceRequestPriorities),
-			database.load("notices", noticeJSON.notices),
-			database.load("reservation_slots", reservationJSON.reservationSlots),
-			database.load("rooms", roomJSON.rooms),
-			database.load("residents", residentJSON.residents),
-			database.load("services", serviceJSON.services),
-			database.load("users", userJSON.users)]),
+	return getConnection().dropDatabase().then((value) =>
+		Promise.all([load("CreditBalances", creditBalanceJSON.creditBalances),
+			load("Transactions", transactionHistoryJSON.transactions),
+			load("MaintenanceRequests", requestJSON.maintenanceRequests),
+			load("MaintenanceRequestTypes", requestTypeJSON.maintenanceRequestTypes),
+			load("MaintenanceRequestStatuses", requestStatusJSON.maintenanceRequestStatuses),
+			load("MaintenanceRequestPriorities", requestPriorityJSON.maintenanceRequestPriorities),
+			load("Notices", noticeJSON.notices),
+			load("ReservationSlots", reservationJSON.reservationSlots),
+			load("Rooms", roomJSON.rooms),
+			load("Residents", residentJSON.residents),
+			load("Services", serviceJSON.services),
+			load("Users", userJSON.users)]),
 		).then((value) => {
 			Promise.resolve();
 		})

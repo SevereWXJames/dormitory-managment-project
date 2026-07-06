@@ -1,8 +1,7 @@
-import serviceJSON from "../../test_data/services.json" with {type: "json"};
-import {Service} from "../dataTypes/service.ts";
+import {type Service, ServiceModel} from "../dataTypes/service.ts";
 
 export async function getAllServices(): Promise<Service[]> {
-    const cursor = Service.model.find({ }).lean();
+    const cursor = ServiceModel.find({ }).lean();
     const results: Service[] = [];
 
     for await (const result of cursor) {
@@ -19,7 +18,7 @@ export async function getAllServices(): Promise<Service[]> {
 }
 
 export async function getServiceById(_id: string): Promise<Service | undefined> {
-    return Service.model.findOne({_id: _id}).lean().exec()
+    return ServiceModel.findOne({_id: _id}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as Service);
