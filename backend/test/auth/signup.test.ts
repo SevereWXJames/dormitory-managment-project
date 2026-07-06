@@ -1,15 +1,15 @@
 import * as chai from "chai";
 import chaiHttp from "chai-http";
 import {after, afterEach, before, describe, it } from "node:test";
-import {expressApp} from "../../src/server.ts";
 import {clearTestDB, closeTestDB, connectTestDB} from "./setup/setup.ts";
+import app from "../../src/app.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const { expect } = chai;
-const app = expressApp;
 
 describe('POST /auth/signup', () => {
     before(async () => {
+        console.log('file loaded');
         await connectTestDB();
     });
 
