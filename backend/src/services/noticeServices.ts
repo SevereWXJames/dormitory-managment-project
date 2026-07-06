@@ -1,5 +1,4 @@
-import {Notice} from "../dataTypes/notice.ts";
-import NoticeModel from "../database/models/noticeModel.ts";
+import {type Notice, NoticeModel} from "../dataTypes/notice.ts";
 
 export async function getAllNotices(): Promise<Notice[]> {
     const cursor = NoticeModel.find({ }).lean();

@@ -1,7 +1,5 @@
-import {Room} from "../dataTypes/room.ts";
-import {Resident} from "../dataTypes/user.ts";
-import RoomModel from "../database/models/room.model.ts";
-import ResidentModel from "../database/models/resident.model.ts";
+import {type Room, RoomModel} from "../dataTypes/room.ts";
+import {type Resident, ResidentModel} from "../dataTypes/user.ts";
 
 export async function getAllRooms(): Promise<Room[]> {
     const cursor = RoomModel.find({ }).lean();

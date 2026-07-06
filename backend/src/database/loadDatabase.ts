@@ -24,18 +24,18 @@ export default function loadSampleData(): Promise<void> {
 	// console.debug("loadSampleData(): Loading sample data");
 
 	return getConnection().dropDatabase().then((value) =>
-		Promise.all([load("credit_balances", creditBalanceJSON.creditBalances),
-			load("transactions", transactionHistoryJSON.transactions),
-			load("maintenance_requests", requestJSON.maintenanceRequests),
-			load("maintenance_request_types", requestTypeJSON.maintenanceRequestTypes),
-			load("maintenance_request_statuses", requestStatusJSON.maintenanceRequestStatuses),
-			load("maintenance_request_priorities", requestPriorityJSON.maintenanceRequestPriorities),
-			load("notices", noticeJSON.notices),
-			load("reservation_slots", reservationJSON.reservationSlots),
-			load("rooms", roomJSON.rooms),
-			load("residents", residentJSON.residents),
-			load("services", serviceJSON.services),
-			load("users", userJSON.users)]),
+		Promise.all([load("CreditBalances", creditBalanceJSON.creditBalances),
+			load("Transactions", transactionHistoryJSON.transactions),
+			load("MaintenanceRequests", requestJSON.maintenanceRequests),
+			load("MaintenanceRequestTypes", requestTypeJSON.maintenanceRequestTypes),
+			load("MaintenanceRequestStatuses", requestStatusJSON.maintenanceRequestStatuses),
+			load("MaintenanceRequestPriorities", requestPriorityJSON.maintenanceRequestPriorities),
+			load("Notices", noticeJSON.notices),
+			load("ReservationSlots", reservationJSON.reservationSlots),
+			load("Rooms", roomJSON.rooms),
+			load("Residents", residentJSON.residents),
+			load("Services", serviceJSON.services),
+			load("Users", userJSON.users)]),
 		).then((value) => {
 			Promise.resolve();
 		})

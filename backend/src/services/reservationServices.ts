@@ -1,5 +1,4 @@
-import {ReservationSlot} from "../dataTypes/reservationSlot.ts";
-import ReservationSlotModel from "../database/models/reservationsSlot.models.ts";
+import {type ReservationSlot, ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
 
 export async function getReservationsBookedByUserId(userId: string): Promise<ReservationSlot[]> {
     const cursor = ReservationSlotModel.find({bookedBy: userId}).lean();

@@ -1,25 +1,21 @@
-export class CreditBalance {
-    public _id: string;
-    public userId: string;
-    public balanceCents: number;
+import mongoose, {Schema} from "mongoose";
+import type {CollectionName} from "../database/databaseConstants.ts";
 
-    constructor({_id, userId, balanceCents}: {_id: string, userId: string, balanceCents: number}) {
-        this._id = _id;
-        this.userId = userId;
-        this.balanceCents = balanceCents;
-    }
+export interface CreditBalance {
+    _id: string;
+    userId: string;
+    balanceCents: number;
 }
 
-export class Transaction {
-    public _id: string;
-    public userId: string;
-    public description: string;
-    public transaction: number;
+const creditBalanceSchema = new mongoose.Schema({_id: String, userId: String, balanceCents: Number});
+export const CreditBalanceModel = mongoose.model("CreditBalances"  as CollectionName, creditBalanceSchema, "CreditBalances"  as CollectionName);
 
-    constructor({_id, userId, description, transaction}: {_id: string, userId: string, description: string, transaction: number}) {
-        this._id = _id;
-        this.userId = userId;
-        this.description = description;
-        this.transaction = transaction;
-    }
+export interface Transaction {
+    _id: string;
+    userId: string;
+    description: string;
+    transaction: number;
 }
+
+const transactionSchema = new Schema({_id: String, userId: String, description: String, transaction: Number});
+export const TransactionModel = mongoose.model("Transactions"  as CollectionName, transactionSchema, "Transactions"  as CollectionName);
