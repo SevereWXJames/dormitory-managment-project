@@ -4,7 +4,8 @@
       "name": "Washing Machine 1",
       "description": "test",
       "hasIoT": true,
-      "IoTName": "WashingMachineType1",
+      "IoTUUID": "1586d8a9-3559-42ee-a7ed-36ee249506bb",
+      "IoTType": "washingMachine",
       "reservationDurationSeconds": 3600,
       "reservationStartHour": 8,
       "reservationEndHour": 18
@@ -12,8 +13,7 @@
     {
       "name": "Washing Machine 2",
       "description": "test",
-      "hasIoT": true,
-      "IoTName": "WashingMachineType1",
+      "hasIoT": false,
       "reservationDurationSeconds": 3600,
       "reservationStartHour": 8,
       "reservationEndHour": 18

@@ -12,18 +12,20 @@ import servicesRouter from "./routes/services.ts";
 import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
-import {setUpMQTT} from "./utility/mqttSetup.ts";
 import loadSampleData from "./database/loadDatabase.ts";
+import {connectMongo} from "./database/database.ts";
+import {setUpMQTT} from "./utility/mqttSetup.ts";
 
 dotenv.config();
 
+await connectMongo();
 setUpMQTT();
 
 const app = express();
 const port: number = 3000;
 
 if (process.env.LOAD_SAMPLE_DATA !== undefined) {
-   loadSampleData();
+   await loadSampleData();
 }
 
 app.use(json());
