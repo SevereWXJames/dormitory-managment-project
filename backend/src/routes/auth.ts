@@ -9,7 +9,7 @@ const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
-        const profileData = {_id: null, name, username, email, password, phoneNumber, roles };
+        const profileData = {name, username, email, password, phoneNumber, roles };
         const user = await signUp(profileData);
         const token = createJWTToken(user._id);
         res.cookie("jwt", token, {

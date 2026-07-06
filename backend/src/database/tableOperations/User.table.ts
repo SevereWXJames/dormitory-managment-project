@@ -8,8 +8,15 @@ export class UserTable extends BaseTable<IUser>{
     }
 
     async createUser(profileData : SignUpRequest){
-        const doc = new Users(profileData);
-        await doc.save();
+        try{
+            console.log(`Creating user: ${JSON.stringify(profileData)}`);
+            const doc = new Users(profileData);
+            await doc.save();
+        }catch(error){
+            console.log(`Error:${error}`);
+            throw Error("Error creating user", {cause: error});
+        }
+
     }
 
     async findNewlyCreatedUser(profileData : SignUpRequest){

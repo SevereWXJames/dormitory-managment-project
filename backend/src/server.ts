@@ -14,7 +14,7 @@ import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import {connectMongo} from "./database/database.ts";
 import authRouter from "./routes/auth.ts";
-import {Database} from "./database/database.js";
+import database from "./database/database.ts";
 
 dotenv.config();
 
@@ -41,6 +41,10 @@ app.use("/IoT", IoTRouter);
 app.use("/user", userRouter);
 app.use("/", authRouter);
 // app.use("/", loginRouter);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+})
 
 // await Database.create().then(() => {
 //         app.listen(port, () => {
