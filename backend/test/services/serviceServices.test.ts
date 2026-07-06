@@ -22,8 +22,7 @@ describe("serviceServices", function () {
 				"_id": "service1",
 				"name": "Washing Machine 2",
 				"description": "test",
-				"hasIoT": true,
-				"IoTName": "WashingMachineType1",
+				"hasIoT": false,
 				"reservationDurationSeconds": 3600,
 				"reservationStartHour": 8,
 				"reservationEndHour": 18
@@ -51,13 +50,14 @@ describe("serviceServices", function () {
 			expect(actual).to.deep.equal(expectedService);
 		});
 		it("Existing id with hasIoT: true", async function () {
-			const id = "service1";
+			const id = "service0";
 			const expectedService = {
-				"_id": "service1",
-				"name": "Washing Machine 2",
+				"_id": "service0",
+				"name": "Washing Machine 1",
 				"description": "test",
 				"hasIoT": true,
-				"IoTName": "WashingMachineType1",
+				"IoTUUID": "1586d8a9-3559-42ee-a7ed-36ee249506bb",
+				"IoTType": "washingMachine",
 				"reservationDurationSeconds": 3600,
 				"reservationStartHour": 8,
 				"reservationEndHour": 18
