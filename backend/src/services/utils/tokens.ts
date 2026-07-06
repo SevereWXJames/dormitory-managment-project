@@ -8,7 +8,7 @@ export const createJWTToken = (id: null | Types.ObjectId) => {
     if(!id) throw Error("Error, invalid id!");
     const key = process.env.ACCESS_TOKEN_SECRET;
 
-    if(!key) throw Error("Error creating access token");
+    if(!key) throw Error("Error creating jwt token");
     return jwt.sign({userId: id}, key, {expiresIn: "7d"}); //jwt token
 }
 
