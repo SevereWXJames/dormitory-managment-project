@@ -19,6 +19,7 @@ export async function closeTestDB() {
 export async function clearTestDB() {
     const collections = mongoose.connection.collections;
     for (const key in collections) {
+        if(!collections[key]) continue;
         await collections[key].deleteMany({});
     }
 }
