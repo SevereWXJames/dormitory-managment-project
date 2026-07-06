@@ -1,103 +1,68 @@
 import express, {type Request, type Response} from "express";
 import {
-    checkLogIn, createToken,
-    getExistingUserFromEmail,
-    getExistingUserFromUsername,
-    refreshTokens,
-    signIn,
+    logIn,
     signUp
 } from "../services/usersServices.ts";
-import type {User} from "../dataTypes/user.js";
+import {createJWTToken} from "../services/utils/tokens.js";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
     try{
-        const { email, password } = req.body;
-        const result = await signUp(email, password);
+        const { name, username, email, password, phoneNumber, roles } = req.body;
+        const profileData = {_id: null, name, username, email, password, phoneNumber, roles };
+        const userid = await signUp(profileData);
+        const token = createJWTToken(userid);
+        res.cookie("jwt", token, {
+            httpOnly: true,       // JS cannot read this cookie — protects against XSS
+            secure: true,          // only sent over HTTPS (set false only for local http dev)
+            sameSite: "strict",    // or "lax" — see note below on cross-site setups
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
+            path: "/",
+        });
+
         res.status(200).json({
-            result: result,
+            result: userid,
             message: "User created successfully!",
             type: "success",
         });
     }catch(error){
         res.status(500).json({
             type: "error",
-            message: "Error creating user!",
-            error,
-        });
-    }
-});
-
-authRouter.post("/signin", async (req, res) => {
-    try{
-        const { email, password } = req.body;
-        const{refreshToken, accessToken} = await signIn(email, password);
-        const cookieOptions = {httpOnly: true, secure: true, signed: true};
-        res.cookie("jwt", refreshToken, cookieOptions);
-        res.status(200).json({
-            message: "Signed in successfully!",
-            result: accessToken,
-            type: "success",
-        });
-    }catch(error){
-        res.status(500).json({
-            type: "error",
-            message: "Error creating signing in!",
+            message: "Error signing up.",
             error,
         });
     }
 });
 
 authRouter.post("/login", async (req: Request, res: Response)=> {
-    let {username, email, password} = req.body as { username?: string, email?: string, password?: string };
+    let {username, email, password} = req.body;
 
-    if ((!username || username.trim() === "") && (!email || email.trim() === "") || !password) {
-        return res.status(400).json({success: false, message: "Username or email and password are required."});
-    }
-
-    let existingUser: User | undefined;
     try {
-        if (!await checkLogIn(username, email, password)) {
-            return res.status(200).json({success: false, message: "Wrong username/email or password."});
-        }
-        if (username && email) {
-            const usernameUser = await getExistingUserFromUsername(username);
-            const emailUser = await getExistingUserFromEmail(email);
-            if (!usernameUser || !emailUser || usernameUser._id !== emailUser._id) {
-                return res.status(200).json({success: false, message: "Wrong username/email or password."});
+        const user = await logIn(username, email, password);
+        const token = createJWTToken(user._id);
+        res.cookie("jwt", token, {
+            httpOnly: true,       // JS cannot read this cookie — protects against XSS
+            secure: true,          // only sent over HTTPS (set false only for local http dev)
+            sameSite: "strict",    // or "lax" — see note below on cross-site setups
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
+            path: "/",
+        });
+        res.status(200).json({
+            success: true,
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: user.roles,
             }
-            existingUser = usernameUser;
-        } else if (username) {
-            existingUser = await getExistingUserFromUsername(username);
-        } else if (email) {
-            existingUser = await getExistingUserFromEmail(email);
-        }
-        if (!existingUser) {
-            return res.status(200).json({success: false, message: "Wrong username/email or password."});
-        }
+        });
+    }catch(error){
+        res.status(500).json({
+            type: "error",
+            message: "Error logging in.",
+            error,
+        });
     }
-    catch (error) {
-        return res.status(500).json({success: false, message: "Internal server error."});
-    }
-
-    let token: string;
-    try {
-        token = createToken(existingUser._id.toString(), existingUser.username);
-    }
-    catch (error) {
-        return res.status(500).json({success: false, message: "Internal server error in JWT."});
-    }
-
-    res.status(200).json({
-        success: true,
-        data: {
-            _id: existingUser._id,
-            username: username,
-            email: existingUser.email,
-            roles: existingUser.roles,
-            token: token
-        }
-    });
 });
 
 // Sign Out request
@@ -110,27 +75,58 @@ authRouter.post("/logout", (_req, res) => {
     });
 });
 
-// Refresh Token request:
-authRouter.post("/refresh_token", async (req, res) => {
-    try{
-        const { refreshToken } = req.cookies;
-        const result = await refreshTokens(refreshToken);
+//
+// authRouter.post("/login", async (req: Request, res: Response)=> {
+//     let {username, email, password} = req.body as { username?: string, email?: string, password?: string };
+//
+//     if ((!username || username.trim() === "") && (!email || email.trim() === "") || !password) {
+//         return res.status(400).json({success: false, message: "Username or email and password are required."});
+//     }
+//
+//     let existingUser: User | undefined;
+//     try {
+//         if (!await checkLogIn(username, email, password)) {
+//             return res.status(200).json({success: false, message: "Wrong username/email or password."});
+//         }
+//         if (username && email) {
+//             const usernameUser = await getExistingUserFromUsername(username);
+//             const emailUser = await getExistingUserFromEmail(email);
+//             if (!usernameUser || !emailUser || usernameUser._id !== emailUser._id) {
+//                 return res.status(200).json({success: false, message: "Wrong username/email or password."});
+//             }
+//             existingUser = usernameUser;
+//         } else if (username) {
+//             existingUser = await getExistingUserFromUsername(username);
+//         } else if (email) {
+//             existingUser = await getExistingUserFromEmail(email);
+//         }
+//         if (!existingUser) {
+//             return res.status(200).json({success: false, message: "Wrong username/email or password."});
+//         }
+//     }
+//     catch (error) {
+//         return res.status(500).json({success: false, message: "Internal server error."});
+//     }
+//
+//     let token: string;
+//     try {
+//         token = createToken(existingUser._id.toString(), existingUser.username);
+//     }
+//     catch (error) {
+//         return res.status(500).json({success: false, message: "Internal server error in JWT."});
+//     }
+//
+//     res.status(200).json({
+//         success: true,
+//         data: {
+//             _id: existingUser._id,
+//             username: username,
+//             email: existingUser.email,
+//             roles: existingUser.roles,
+//             token: token
+//         }
+//     });
+// });
 
-        const cookieOptions = {httpOnly: true, secure: true, signed: true};
-        res.cookie("jwt", result.newRefreshToken, cookieOptions);
-        res.status(200).json({
-            message: "Refreshed successfully!",
-            result: result.accessToken,
-            type: "success",
-        });
-
-    }catch(error){
-        res.status(500).json({
-            type: "error",
-            message: "Error refreshing token!",
-            error,
-        });
-    }
-});
 
 export default authRouter;

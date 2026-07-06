@@ -1,21 +1,24 @@
 import mongoose, {Schema, Types} from 'mongoose';
-import type {Role} from "../types/roles.types.js";
+import type {Role} from "../types/user.service.types.ts";
 
 export interface IUser extends Document{
-    _id: Types.ObjectId;
+    _id: Types.ObjectId | null;
+    name: string,
     username: string,
     email: string,
     phoneNumber: string,
     password: string,
-    roles: string[],
-    refreshToken: string
+    roles: Role[],
 }
 
 const UsersSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, "Please enter a name"],
+    },
     username: {
         type: String,
         required: [true, "Please enter a username"],
-        unique: false
     },
     email: {
         type: String,
@@ -25,20 +28,16 @@ const UsersSchema = new Schema({
     phoneNumber: {
         type: String,
         required: false,
-        unique: true
     },
     roles: {
         type: Array<Role>,
-        required: true,
-        default: []
+        required: [true, "Please enter a role"],
+        default: null
     },
     password: {
         type: String,
         required: [true, "Please enter a password"]
     },
-    refreshToken: {
-        type: String,
-    }
 });
 
 export const Users = mongoose.model<IUser>('users', UsersSchema);
