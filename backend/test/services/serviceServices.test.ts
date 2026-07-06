@@ -11,55 +11,63 @@ const expect = chai.expect;
 describe("serviceServices", function () {
 	before(async function() {
 		this.timeout(15000);
-		await connectMongo(true);
+		await connectMongo();
 		await loadSampleData();
 	});
 
 	describe("getAllServices()", function () {
 		it("Test", async function () {
 			const expectedLength = 3;
+			const expectedService = {
+				"_id": "service1",
+				"name": "Washing Machine 2",
+				"description": "test",
+				"hasIoT": false,
+				"reservationDurationSeconds": 3600,
+				"reservationStartHour": 8,
+				"reservationEndHour": 18
+			};
 			const actual = await getAllServices();
-			expect(actual).to.be.an.instanceOf(Array);
+			expect(actual).to.be.instanceOf(Array);
 			expect(actual).to.have.lengthOf(expectedLength);
-			expect(actual.some((service) => service.name === "Washing Machine 2" && service.description === "test" && service.hasIoT === true && service.IoTName === "WashingMachineType1" && service.reservationDurationSeconds === 3600 && service.reservationStartHour === 8 && service.reservationEndHour === 18)).to.be.true;
+			expect(actual).to.deep.include(expectedService);
 		});
 	});
 
 	describe("getServiceById()", function () {
 		it("Existing id with hasIoT: false", async function () {
-			const allServices = await getAllServices();
-			const target = allServices.find((service) => service.name === "Dryer 1");
-			const targetId = target ? String((target as { _id?: string })._id) : undefined;
-			const actual = targetId ? await getServiceById(targetId) : undefined;
-			expect(actual).to.not.be.undefined;
-			expect(actual).to.deep.include({
-				name: "Dryer 1",
-				description: "test",
-				hasIoT: false,
-				reservationDurationSeconds: 3600,
-				reservationStartHour: 8,
-				reservationEndHour: 18
-			});
+			const id = "service2";
+			const expectedService = {
+				"_id": "service2",
+				"name": "Dryer 1",
+				"description": "test",
+				"hasIoT": false,
+				"reservationDurationSeconds": 3600,
+				"reservationStartHour": 8,
+				"reservationEndHour": 18
+			};
+			const actual = await getServiceById(id);
+			expect(actual).to.deep.equal(expectedService);
 		});
 		it("Existing id with hasIoT: true", async function () {
-			const allServices = await getAllServices();
-			const target = allServices.find((service) => service.name === "Washing Machine 2");
-			const targetId = target ? String((target as { _id?: string })._id) : undefined;
-			const actual = targetId ? await getServiceById(targetId) : undefined;
-			expect(actual).to.not.be.undefined;
-			expect(actual).to.deep.include({
-				name: "Washing Machine 2",
-				description: "test",
-				hasIoT: true,
-				IoTName: "WashingMachineType1",
-				reservationDurationSeconds: 3600,
-				reservationStartHour: 8,
-				reservationEndHour: 18
-			});
+			const id = "service0";
+			const expectedService = {
+				"_id": "service0",
+				"name": "Washing Machine 1",
+				"description": "test",
+				"hasIoT": true,
+				"IoTUUID": "1586d8a9-3559-42ee-a7ed-36ee249506bb",
+				"IoTType": "washingMachine",
+				"reservationDurationSeconds": 3600,
+				"reservationStartHour": 8,
+				"reservationEndHour": 18
+			};
+			const actual = await getServiceById(id);
+			expect(actual).to.deep.equal(expectedService);
 		});
 		it("Absent id", async function () {
-			const id = "507f1f77bcf86cd799439011";
-			const actual = await getServiceById(id);
+			const id = "not_a_service";
+			const actual = await  getServiceById(id);
 			expect(actual).to.be.undefined;
 		});
 	});
