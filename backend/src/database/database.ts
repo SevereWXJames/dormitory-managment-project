@@ -24,6 +24,9 @@ import {
  * @returns A promise, to either be resolved with a Database or be rejected.
  */
 export async function connectMongo(): Promise<void> {
+    // stop mongoose from pluralizing tables
+    mongoose.pluralize(null);
+
     const timeout = 5000;
     const options = {dbName: DATABASE_NAME, serverSelectionTimeoutMS: timeout};
 
