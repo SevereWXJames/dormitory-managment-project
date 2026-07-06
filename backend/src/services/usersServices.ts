@@ -86,7 +86,7 @@ export async function logIn(username: string, email: string, password: string){
     return userDocs;
 }
 
-//Creates a new user account and returns the user id.
+//Creates a new user account and returns the newly created user.
 export async function signUp(profileData : SignUpRequest){
     const {username, password, email} = profileData;
 
@@ -99,8 +99,7 @@ export async function signUp(profileData : SignUpRequest){
     // Check that the account has been created
     const userDoc = await userTable.findNewlyCreatedUser(profileData);
     if(!userDoc[0] || userDoc.length <= 0) throw Error("Error, failed to create account");
-
-    return userDoc[0]._id;
+    return userDoc[0];
 }
 
 //Auth:

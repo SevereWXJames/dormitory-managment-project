@@ -12,7 +12,7 @@ export function useSignUpForm(role: Role) {
         password: "",
         phoneNumber: "",
         email: "",
-        role: role? Role.RESIDENT : role,
+        roles: role? [Role.RESIDENT] : [role],
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
@@ -32,7 +32,7 @@ export function useSignUpForm(role: Role) {
             const request: SignUpRequest = {...form};
             await signUp(request).unwrap();
 
-            const targetPath = (form.role === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
+            const targetPath = (form.roles[0] === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
             navigate(targetPath);
         }
     };

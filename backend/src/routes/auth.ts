@@ -4,14 +4,15 @@ import {
     signUp
 } from "../services/usersServices.ts";
 import {createJWTToken} from "../services/utils/tokens.js";
+import user from "./user.js";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {_id: null, name, username, email, password, phoneNumber, roles };
-        const userid = await signUp(profileData);
-        const token = createJWTToken(userid);
+        const user = await signUp(profileData);
+        const token = createJWTToken(user._id);
         res.cookie("jwt", token, {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: true,          // only sent over HTTPS (set false only for local http dev)
@@ -21,8 +22,13 @@ authRouter.post("/signup", async (req, res) => {
         });
 
         res.status(200).json({
-            result: userid,
-            message: "User created successfully!",
+            message: "Signed up successfully!",
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: user.roles,
+            },
             type: "success",
         });
     }catch(error){
@@ -49,6 +55,7 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
         });
         res.status(200).json({
             success: true,
+            message: "Logged in successfully!",
             data: {
                 _id: user._id,
                 username: user.username,
