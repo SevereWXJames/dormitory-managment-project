@@ -68,3 +68,90 @@ export function createToken(_id: string, username: string): string {
         },
         secret as Secret, {expiresIn: "1h"});
 }
+
+export async function signUp(email: string, password: string){
+    // 1. check if user already exists
+    const user = await Users.findOne({ email: email });
+    // if user exists already, return error
+    if (user) throw Error("User already exists! Try logging in.");
+    // 2. if user doesn't exist, create a new user
+    // hashing the password
+    const passwordHash = await hash(password, 10);
+    const newUser = new Users({
+        email: email,
+        password: passwordHash,
+    });
+    // 3. save the user to the database
+    await newUser.save();
+}
+
+export async function signIn(email: string, password: string){
+    const user = await Users.findOne({ email: email });
+
+    // if user doesn't exist, return error
+    if (!user) throw Error("User doesn't exist!");
+
+    // 2. if user exists, check if password is correct
+    const isMatch = await compare(password, user.password);
+    if(!isMatch) throw Error("Password or username is incorrect");
+
+    const accessToken = createAccessToken(user._id);
+    const refreshToken = createRefreshToken(user._id);
+
+    // 4. put refresh token in database
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // 5. send the response
+    return {refreshToken, accessToken}
+}
+
+export async function verifyRefreshToken(refreshToken: string){
+    const key = process.env.REFRESH_TOKEN_SECRET;
+    if(!key) throw Error("Error verifying token!");
+    const payload = verify(refreshToken, key);
+    if(typeof payload === "string") throw Error("Invalid payload!");
+    if(!payload.id) throw Error("Invalid refresh token!");
+    return payload.id;
+}
+
+export async function refreshTokens(refreshToken: string){
+    if (!refreshToken) throw Error("No refresh token!");
+    // if we have a refresh token, you have to verify it
+    let id;
+    try {
+        id = verifyRefreshToken(refreshToken);
+    } catch (error) {
+        throw Error("Invalid refresh token!");
+    }
+
+    const user = await Users.findById(id);
+    if(!user) throw Error("User does not exist!");
+
+    const accessToken = createAccessToken(user._id);
+    const newRefreshToken = createRefreshToken(user._id);
+    user.refreshToken = newRefreshToken;
+    return {accessToken, newRefreshToken};
+}
+
+//Auth:
+export async function verifyRequest(req: Request){
+    if(!req.headers) throw Error("Invalid request!");
+    // if we don't have a token, return error
+    const authorization = req.headers["authorization"];
+    if(authorization === undefined) throw Error("No token!");
+    const token = authorization.split(" ")[1];
+
+    const key = process.env.ACCESS_TOKEN_SECRET;
+    if(!token) throw Error("Invalid token!");
+    if(!key) throw Error("Invalid key!");
+
+    let payload = verify(token, key);
+    if(typeof payload == "string" || !payload.id) throw Error("Invalid payload!");
+    let id = payload.id
+    //Check if user exists:
+    const user = await Users.findById(id);
+    if(!user) throw Error("User does not exist!");
+    req.user = user;
+    return user;
+}
