@@ -23,7 +23,11 @@ const app = express();
 const port: number = 3000;
 
 app.use(json());
-app.use(cors());
+
+app.use(cors({
+    origin: process.env.FRONT_END_URL,
+    credentials: true, // required for cookies to be sent/received cross-origin
+}));
 
 app.use("/residents", residentsRouter);
 app.use("/reservations", reservationRouter);

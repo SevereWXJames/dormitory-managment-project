@@ -1,29 +1,30 @@
-import userJson from "../../test_data/users.json" with {type: "json"};
-import type { Request } from "express";
-import jwt, {type Secret, type JwtPayload} from "jsonwebtoken";
-import pkg from "jsonwebtoken";
+//import userJson from "../../test_data/users.json" with {type: "json"};
+import type {Request} from "express";
+import {UserTable} from "../database/tableOperations/User.table.ts";
+import type {SignUpRequest} from "../database/types/user.service.types.ts";
+import jwt from "jsonwebtoken";
+import pkg, {type Secret} from "jsonwebtoken";
 import {compare, hash} from "bcryptjs";
-import {createAccessToken, createRefreshToken} from "./utils/tokens.ts";
-import {UserTable} from "../database/tableOperations/User.table.js";
 import {type User, UserModel} from "../dataTypes/user.ts";
 
 const {verify} = pkg;
 const userTable : UserTable = new UserTable();
 const userModel = userTable.getModel();
-export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
-    if (!password || password.trim() === "") {
-        return false;
-    }
 
-    const usernameUser = username ? userJson.users.find((user) => user.username === username) : undefined;
-    const emailUser = email ? userJson.users.find((user) => user.email === email) : undefined;
-
-    if (username && email) {
-        return Boolean(usernameUser && emailUser && usernameUser._id === emailUser._id);
-    }
-
-    return Boolean(usernameUser ?? emailUser);
-}
+// export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
+//     if (!password || password.trim() === "") {
+//         return false;
+//     }
+//
+//     const usernameUser = username ? userJson.users.find((user) => user.username === username) : undefined;
+//     const emailUser = email ? userJson.users.find((user) => user.email === email) : undefined;
+//
+//     if (username && email) {
+//         return Boolean(usernameUser && emailUser && usernameUser._id === emailUser._id);
+//     }
+//
+//     return Boolean(usernameUser ?? emailUser);
+// }
 
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
     return UserModel.findOne({username: username}).lean().exec()
@@ -77,67 +78,29 @@ export function createToken(_id: string, username: string): string {
         secret as Secret, {expiresIn: "1h"});
 }
 
-export async function signUp(email: string, password: string, username?: string,){
-    // 1. check if user already exists
-    const user = await userModel.findOne({ email: email });
-    // if user exists already, return error
-    if (user) throw Error("User already exists! Try logging in.");
-    // 2. if user doesn't exist, create a new user
-    // hashing the password
+//Looks for account, verifies information, returns user.
+export async function logIn(username: string, email: string, password: string){
     const passwordHash = await hash(password, 10);
-    await userTable.createUser(email, passwordHash, username);
+    const userDocs = await userModel.findOne({username, email, password: passwordHash});
+    if(!userDocs) throw Error("Invalid username, email, or password");
+    return userDocs;
 }
 
-export async function signIn(email: string, password: string){
-    const user = await userModel.findOne({ email: email });
+//Creates a new user account and returns the user id.
+export async function signUp(profileData : SignUpRequest){
+    const {username, password, email} = profileData;
 
-    // if user doesn't exist, return error
-    if (!user) throw Error("User doesn't exist!");
+    const user = await userModel.findOne({username, email});
+    if (user) throw Error("User already exists! Try logging in.");
 
-    // 2. if user exists, check if password is correct
-    const isMatch = await compare(password, user.password);
-    if(!isMatch) throw Error("Password or username is incorrect");
+    profileData.password = await hash(password, 10);
+    await userTable.createUser(profileData);
 
-    const accessToken = createAccessToken(user._id);
-    const refreshToken = createRefreshToken(user._id);
+    // Check that the account has been created
+    const userDoc = await userTable.findNewlyCreatedUser(profileData);
+    if(!userDoc[0] || userDoc.length <= 0) throw Error("Error, failed to create account");
 
-    // 4. put refresh token in database
-    user.refreshToken = refreshToken;
-    await user.save();
-
-    // 5. send the response
-    return {refreshToken, accessToken}
-}
-
-export async function verifyRefreshToken(refreshToken: string){
-    const key = process.env.REFRESH_TOKEN_SECRET;
-    if(!key) throw Error("Error verifying token!");
-
-    const payload = verify(refreshToken, key);
-    if(typeof payload === "string") throw Error("Invalid payload!");
-
-    if(!payload.id) throw Error("Invalid refresh token!");
-    return payload.id;
-}
-
-export async function refreshTokens(refreshToken: string){
-    if (!refreshToken) throw Error("No refresh token!");
-    // if we have a refresh token, you have to verify it
-    let id;
-    try {
-        id = verifyRefreshToken(refreshToken);
-    } catch (error) {
-        throw Error("Invalid refresh token!");
-    }
-
-    const user = await userModel.findById(id);
-    if(!user) throw Error("User does not exist!");
-
-    const accessToken = createAccessToken(user._id);
-    const newRefreshToken = createRefreshToken(user._id);
-
-    user.refreshToken = newRefreshToken;
-    return {accessToken, newRefreshToken};
+    return userDoc[0]._id;
 }
 
 //Auth:
