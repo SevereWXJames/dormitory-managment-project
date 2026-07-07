@@ -65,7 +65,6 @@ describe('POST /logout', () => {
                 const cookies = res.headers['set-cookie'] as unknown as string[];
                 const rawCookie = cookies.find((c) => c.startsWith('jwt='));
                 const jwt = rawCookie?.split(';')[0]?.replace("jwt=", "");
-
                 expect(jwt?.length).lessThanOrEqual(0);
             } catch (error) {
                 throw Error(`Error with logging out! ${error}`);
