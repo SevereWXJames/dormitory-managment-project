@@ -10,6 +10,7 @@ const ResidentSchema = new Schema({
     userId: {
         type: Types.ObjectId,
         ref: 'Users',
+        unique: true,
         required: [true, "Please enter a userId"],
     },
 
