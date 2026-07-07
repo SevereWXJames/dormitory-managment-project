@@ -35,7 +35,7 @@ export async function getExistingUserFromUsername(username: string): Promise<Use
     return UserModel.findOne({username: username}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as User);
+                return Promise.resolve(result as unknown as User);
             }
             return Promise.resolve(undefined);
         })
@@ -48,7 +48,7 @@ export async function getExistingUserFromEmail(email: string): Promise<User | un
     return UserModel.findOne({email: email}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as User);
+                return Promise.resolve(result as unknown as User);
             }
             return Promise.resolve(undefined);
         })
@@ -61,7 +61,7 @@ export async function getExistingUserFromId(_id: string): Promise<User | undefin
     return UserModel.findOne({_id: _id}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as User);
+                return Promise.resolve(result as unknown as User);
             }
             return Promise.resolve(undefined);
         })
