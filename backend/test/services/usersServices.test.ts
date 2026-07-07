@@ -28,7 +28,7 @@ describe("usersServices", function () {
             const ids = all.map(doc => doc._id);
             console.log(`ids: ${ids}`);
             console.log('first:', all[0]);
-            console.log('all docs:', all); // may run before seeding completes
+            console.log('all docs:', all);
         });
 
 		it("Existing username", async function () {
@@ -46,8 +46,7 @@ describe("usersServices", function () {
 		it("Absent username", async function () {
 			const username = "not_a_username";
 			const actual = await getExistingUserFromUsername(username);
-			// expect(actual).to.be.undefined;
-            expect(actual).to.be.null;
+			expect(actual).to.be.undefined;
 		});
 	});
 
