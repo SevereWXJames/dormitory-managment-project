@@ -68,7 +68,7 @@ export function getConnection() {
  * @returns Collection, the collection with name collectionName.
  */
 export function getCollection(collectionName: CollectionName) {
-    // console.debug(`database.getCollection(${collectionName})`);
+    //console.debug(`database.getCollection(${collectionName})`);
     return getConnection().collection(collectionName);
 }
 
@@ -82,11 +82,24 @@ export function getCollection(collectionName: CollectionName) {
  */
 export async function load(collectionName: CollectionName, data: any[]): Promise<void> {
     // console.debug(`database.load(${collectionName})`);
+    // try {
+    //     return getCollection(collectionName).insertMany(data).then(() => {
+    //         Promise.resolve();
+    //     });
+    // } catch (e) {
+    //     return Promise.reject(e);
+    // }
     try {
-        return getCollection(collectionName).insertMany(data).then(() => {
-            Promise.resolve();
-        });
-    } catch (e) {
-        return Promise.reject(e);
+        console.log('Loading into DB:', getConnection().name);
+        const collection = await getCollection(collectionName);
+        console.log(`collection name: ${collection.collectionName}`);
+        console.log(`dbName: ${collection.dbName}`);
+        await collection.insertMany(data);
+        const count = await collection.countDocuments();
+        console.log(`number of docs inserted: ${count}`);
+
+    } catch (error) {
+        console.log(`error: ${error}`);
+        throw Error("Error inserting into DB!");
     }
 }

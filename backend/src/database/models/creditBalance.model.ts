@@ -21,4 +21,4 @@ const CreditBalanceSchema = new Schema({
     }
 });
 
-export const CreditBalances = mongoose.model<ICreditBalance>('CreditBalances', CreditBalanceSchema);
+export const CreditBalances = mongoose.model<ICreditBalance>("CreditBalances", CreditBalanceSchema, "CreditBalances");

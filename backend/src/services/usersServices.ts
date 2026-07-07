@@ -33,16 +33,15 @@ const userModel = userTable.getModel();
 // }
 
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
-    return UserModel.findOne({username: username}).lean().exec()
-        .then((result) => {
-            if (result != null) {
-                return Promise.resolve(result as unknown as User);
-            }
-            return Promise.resolve(undefined);
-        })
-        .catch((e) => {
-            return Promise.reject(e);
-        });
+    let res;
+    try{
+        const all = await UserModel.find({});
+        console.log(`all docs: ${JSON.stringify(all)}`);
+        res = await UserModel.findOne({username: username}).lean().exec();
+    }catch(error){
+        throw Error("Error querying DB!", {cause: error});
+    }
+    return res;
 }
 
 export async function getExistingUserFromEmail(email: string): Promise<User | undefined> {
@@ -59,10 +58,11 @@ export async function getExistingUserFromEmail(email: string): Promise<User | un
 }
 
 export async function getExistingUserFromId(_id: string): Promise<User | undefined> {
-    return UserModel.findOne({_id: _id}).lean().exec()
+    const id = new Types.ObjectId(_id);
+    return UserModel.findOne({_id: id}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as unknown as User);
+                return Promise.resolve(result as IUser as User);
             }
             return Promise.resolve(undefined);
         })
@@ -105,7 +105,6 @@ async function createNewResident(userId: Types.ObjectId) {
     try {
         await residentTable.createResident(userId);
     } catch (error) {
-        console.log(`error: ${error}`);
         throw Error("Error creating resident", {cause: error});
     }
 }
@@ -134,7 +133,6 @@ export async function signUp(profileData: SignUpRequest) {
             await createNewBalance(userDoc._id);
         }
     } catch (error) {
-        console.log(`Error: ${error}`);
         throw Error("Unable to update references in other tables", {cause: error});
     }
     return userDoc;
