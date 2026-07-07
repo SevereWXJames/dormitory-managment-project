@@ -73,6 +73,15 @@ describe('AUTHENTICATION', () => {
                 .send();
             expect(res).to.have.status(200);
         });
+
+        it('rejects request with an invalid token', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/credits/get-for-user/${testUserId}`)
+                .set('Cookie', `jwt=invalid.token.bad`)
+                .send();
+            expect(res).to.have.status(500);
+            expect(res.body.message).to.equal("Authentication failed");
+        });
     })
 
 });
