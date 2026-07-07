@@ -41,7 +41,6 @@ authRouter.post("/signup", async (req, res) => {
 
 authRouter.post("/login", async (req: Request, res: Response)=> {
     let {username, email, password} = req.body;
-    console.log(`input: ${JSON.stringify(req.body, null, 2)}`);
 
     try {
         const user = await logIn(username, email, password);

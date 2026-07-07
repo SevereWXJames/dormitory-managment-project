@@ -33,6 +33,8 @@ describe('POST /login', () => {
         password: 'password123',
     };
 
+    const validRequest =
+
     describe('HTTP Response - Log In', () => {
         beforeEach('Create an account', async () => {
             try{

@@ -1,15 +1,14 @@
 import type {Request} from "express"
-import jwt, {verify} from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export async function verifyRequestHeader(req: Request) {
     //Verify jwt token
     if(!req.headers) throw Error("Invalid request!");
-    const cookies = req.headers['set-cookie'] as unknown as string[];
+    const token = req.headers['cookie']?.split("jwt=")[1];
 
-    const token = cookies.find((c) => c.startsWith('jwt='));
     if(!token) throw Error("Invalid Token!");
 
-    const key = process.env.JWT_SECRET;
+    const key = process.env.ACCESS_TOKEN_SECRET;
     if(!key) throw Error("Error authenticating request");
 
     try {
@@ -20,6 +19,6 @@ export async function verifyRequestHeader(req: Request) {
         // 3. Attach to request for downstream use
         req.user = payload;
     } catch (error) {
-        throw Error("Error verifying request!", {cause: error});
+        throw Error(`Error verifying request! ${error}`, {cause: error});
     }
 }

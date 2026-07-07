@@ -11,6 +11,7 @@ import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import authRouter from "./routes/auth.ts";
+import {authenticateRequest} from "./middleware/auth.middleware.ts";
 
 const app = express();
 app.use(json());
@@ -25,7 +26,7 @@ app.use("/reservations", reservationRouter);
 app.use("/services", servicesRouter);
 app.use("/notices", noticeRouter)
 app.use("/rooms", roomsRouter);
-app.use("/credits", creditRouter);
+app.use("/credits", authenticateRequest, creditRouter);
 app.use("/maintenance-request", maintenanceRequestRouter)
 app.use("/IoT", IoTRouter);
 app.use("/user", userRouter);
