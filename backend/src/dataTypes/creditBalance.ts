@@ -1,5 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
+import {CreditBalances} from "../database/models/creditBalance.model.ts";
 
 export interface CreditBalance {
     _id: string;
@@ -7,8 +8,9 @@ export interface CreditBalance {
     balanceCents: number;
 }
 
-const creditBalanceSchema = new mongoose.Schema({_id: String, userId: String, balanceCents: Number});
-export const CreditBalanceModel = mongoose.model("CreditBalances"  as CollectionName, creditBalanceSchema, "CreditBalances"  as CollectionName);
+// const creditBalanceSchema = new mongoose.Schema({_id: String, userId: String, balanceCents: Number});
+// export const CreditBalanceModel = mongoose.model("CreditBalances"  as CollectionName, creditBalanceSchema, "CreditBalances"  as CollectionName);
+export const CreditBalanceModel = CreditBalances;
 
 export interface Transaction {
     _id: string;
