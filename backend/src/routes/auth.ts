@@ -3,7 +3,7 @@ import {
     logIn,
     signUp
 } from "../services/usersServices.ts";
-import {createJWTToken} from "../services/utils/tokens.ts";
+import {createJWTToken} from "../utils/tokens.ts";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
@@ -11,7 +11,7 @@ authRouter.post("/signup", async (req, res) => {
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles };
         const user = await signUp(profileData);
-        const token = createJWTToken(user._id);
+        const token = createJWTToken(user._id, user.roles);
         res.cookie("jwt", token, {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: true,          // only sent over HTTPS (set false only for local http dev)
@@ -44,7 +44,7 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
 
     try {
         const user = await logIn(username, email, password);
-        const token = createJWTToken(user._id);
+        const token = createJWTToken(user._id, user.roles);
         res.cookie("jwt", token, {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: true,          // only sent over HTTPS (set false only for local http dev)
