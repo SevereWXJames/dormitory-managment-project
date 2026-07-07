@@ -5,7 +5,6 @@ import {Role} from "../database/types/user.service.types.ts";
 import type {SignUpRequest} from "../database/types/user.service.types.ts";
 import {compare, hash} from "bcryptjs";
 import {type User, UserModel, ResidentModel} from "../dataTypes/user.ts";
-import jwt from "jsonwebtoken";
 import pkg, {type Secret} from "jsonwebtoken";
 import {Types} from "mongoose";
 import {ResidentTable} from "../database/tableOperations/Resident.table.ts";
@@ -44,19 +43,6 @@ export async function getExistingUserFromEmail(email: string): Promise<User | un
 }
 
 export async function getExistingUserFromId(_id: string): Promise<User | undefined> {
-    // const id = new Types.ObjectId(_id);
-    // const doc = await UserModel.findOne({_id: id}).exec();
-    // console.log(`doc: ${JSON.stringify(doc)}`);
-    // return UserModel.findOne({_id: id}).lean().exec()
-    //     .then((result) => {
-    //         if (result) {
-    //             return Promise.resolve(result as unknown as User);
-    //         }
-    //         return Promise.resolve(undefined);
-    //     })
-    //     .catch((e) => {
-    //         return Promise.reject(e);
-    //     });
     try {
         const id = new Types.ObjectId(_id);
         const doc = await UserModel.findOne({_id: id }).lean().exec();
@@ -65,19 +51,6 @@ export async function getExistingUserFromId(_id: string): Promise<User | undefin
     } catch (error) {
         throw Error(`Error finding user!`, {cause: error});
     }
-}
-
-export function createToken(_id: string, username: string): string {
-    let secret: string | undefined = process.env.SECRET_KEY;
-    if (secret === undefined) {
-        console.log("NO SECRET PROVIDED!!!");
-        secret = "testvalue"; //for debug
-    }
-    return jwt.sign({
-            _id: _id,
-            username: username
-        },
-        secret as Secret, {expiresIn: "1h"});
 }
 
 //Looks for account, verifies information, returns user.
