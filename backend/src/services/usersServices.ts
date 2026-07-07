@@ -8,12 +8,13 @@ import {type User, UserModel, ResidentModel} from "../dataTypes/user.ts";
 import jwt from "jsonwebtoken";
 import pkg, {type Secret} from "jsonwebtoken";
 import {Types} from "mongoose";
-import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
 import {ResidentTable} from "../database/tableOperations/Resident.table.ts";
+import {CreditBalanceTable} from "../database/tableOperations/CreditBalance.table.ts";
 
 const {verify} = pkg;
 const userTable: UserTable = new UserTable();
 const residentTable: ResidentTable = new ResidentTable();
+const creditBalanceTable: CreditBalanceTable = new CreditBalanceTable();
 const userModel = userTable.getModel();
 
 // export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
@@ -94,11 +95,7 @@ export async function logIn(username: string, email: string, password: string) {
 //Helpers for signup
 async function createNewBalance(userId: Types.ObjectId) {
     try {
-        const balance = {
-            userId: userId.toString(),
-            balanceCents: 0
-        }
-        await CreditBalanceModel.create(balance);
+        await creditBalanceTable.createBalance(userId);
     } catch (error) {
         throw Error("Error creating balance", {cause: error});
     }
@@ -134,7 +131,7 @@ export async function signUp(profileData: SignUpRequest) {
     try {
         if (roles.includes(Role.RESIDENT)) {
             await createNewResident(userDoc._id);
-            //await createNewBalance(userDoc._id);
+            await createNewBalance(userDoc._id);
         }
     } catch (error) {
         console.log(`Error: ${error}`);
