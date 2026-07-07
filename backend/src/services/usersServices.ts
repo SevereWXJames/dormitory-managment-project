@@ -136,25 +136,3 @@ export async function signUp(profileData: SignUpRequest) {
     }
     return userDoc;
 }
-
-//Auth:
-export async function verifyRequest(req: Request) {
-    if (!req.headers) throw Error("Invalid request!");
-    // if we don't have a token, return error
-    const authorization = req.headers["authorization"];
-    if (authorization === undefined) throw Error("No token!");
-    const token = authorization.split(" ")[1];
-
-    const key = process.env.ACCESS_TOKEN_SECRET;
-    if (!token) throw Error("Invalid token!");
-    if (!key) throw Error("Invalid key!");
-
-    let payload = verify(token, key);
-    if (typeof payload == "string" || !payload.id) throw Error("Invalid payload!");
-    let id = payload.id
-    //Check if user exists:
-    const user = await userModel.findById(id);
-    if (!user) throw Error("User does not exist!");
-    req.user = user;
-    return user;
-}

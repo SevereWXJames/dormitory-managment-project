@@ -1,5 +1,4 @@
-import express, {type Request, type Response, type NextFunction} from "express";
-import dotenv from "dotenv";
+import express from "express";
 import {json} from "body-parser";
 import cors from "cors";
 import IoTRouter from "./routes/IoT.ts";
@@ -31,6 +30,5 @@ app.use("/maintenance-request", maintenanceRequestRouter)
 app.use("/IoT", IoTRouter);
 app.use("/user", userRouter);
 app.use("/", authRouter);
-// app.use("/", loginRouter);
 
 export default app;
