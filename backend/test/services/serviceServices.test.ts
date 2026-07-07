@@ -29,7 +29,8 @@ describe("serviceServices", function () {
 		it("Existing id with hasIoT: false", async function () {
 			const allServices = await getAllServices();
 			const target = allServices.find((service) => service.name === "Dryer 1");
-			const actual = target ? await getServiceById(String(target._id)) : undefined;
+			const targetId = target ? String((target as { _id?: string })._id) : undefined;
+			const actual = targetId ? await getServiceById(targetId) : undefined;
 			expect(actual).to.not.be.undefined;
 			expect(actual).to.deep.include({
 				name: "Dryer 1",
@@ -43,7 +44,8 @@ describe("serviceServices", function () {
 		it("Existing id with hasIoT: true", async function () {
 			const allServices = await getAllServices();
 			const target = allServices.find((service) => service.name === "Washing Machine 2");
-			const actual = target ? await getServiceById(String(target._id)) : undefined;
+			const targetId = target ? String((target as { _id?: string })._id) : undefined;
+			const actual = targetId ? await getServiceById(targetId) : undefined;
 			expect(actual).to.not.be.undefined;
 			expect(actual).to.deep.include({
 				name: "Washing Machine 2",

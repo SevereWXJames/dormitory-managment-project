@@ -2,6 +2,7 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface MaintenanceRequest {
+    _id?: string | mongoose.Types.ObjectId;
     createdBy: string;
     title: string;
     description: string;

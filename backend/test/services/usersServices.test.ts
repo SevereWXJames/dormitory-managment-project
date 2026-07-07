@@ -56,7 +56,7 @@ describe("usersServices", function () {
 	describe("getExistingUserFromId()", function () {
 		it("Existing id", async function () {
 			const existingUser = await getExistingUserFromUsername("admin1");
-			const id = existingUser ? String(existingUser._id) : "507f1f77bcf86cd799439011";
+			const id = existingUser ? String((existingUser as { _id?: string })._id) : "507f1f77bcf86cd799439011";
 			const actual = await getExistingUserFromId(id);
 			expect(actual).to.not.be.undefined;
 			expect(actual).to.deep.include({

@@ -2,6 +2,7 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface User {
+    _id?: string | mongoose.Types.ObjectId;
     username: string;
     email: string;
     phoneNumber: string;
