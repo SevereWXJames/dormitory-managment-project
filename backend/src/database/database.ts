@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Model, Document } from 'mongoose';
 import {
     MONGODB_URL_DOCKER,
     MONGODB_URL_LOCAL,
@@ -21,28 +21,31 @@ import {
 /**
  * Initialization function, returning a promise with a Database object.
  *
+ * @param [quiet=false] Set to true to prevent console prints. Defaults to false.
  * @returns A promise, to either be resolved with a Database or be rejected.
  */
-export async function connectMongo(): Promise<void> {
+export async function connectMongo(quiet: boolean = false): Promise<void> {
     const timeout = 5000;
     const options = {dbName: DATABASE_NAME, serverSelectionTimeoutMS: timeout};
 
-    console.info("Database.create(): Creating a database connection.");
-    console.info(`Database.create(): Note: Each connection attempt may take up to ${timeout / 1000} seconds.`);
+    if (!quiet) {
+        console.info("Database.create(): Creating a database connection.");
+        console.info(`Database.create(): Note: Each connection attempt may take up to ${timeout / 1000} seconds.`);
+    }
 
     for (const host of [MONGODB_URL_DEFAULT, MONGODB_URL_DOCKER, MONGODB_URL_LOCAL]) {
         if (host == null || host == "") {
-            console.warn("Database.create(): Skipping a host name as it is null or empty.");
+            if (!quiet) console.warn("Database.create(): Skipping a host name as it is null or empty.");
             continue;
         }
 
         try {
-            console.info(`Database.create(): Attempting to connect to ${host}.`);
+            if (!quiet) console.info(`Database.create(): Attempting to connect to ${host}.`);
             await mongoose.connect(host, options);
-            console.info(`Database.create(): Successfully connected to ${host}.`);
+            if (!quiet) console.info(`Database.create(): Successfully connected to ${host}.`);
             return;
         } catch (e) {
-            console.warn(`Database.create(): Failed to connect to host ${host}.`);
+            if (!quiet) console.warn(`Database.create(): Failed to connect to host ${host}.`);
             continue;
         }
     }
@@ -90,3 +93,4 @@ export async function load(collectionName: CollectionName, data: any[]): Promise
         return Promise.reject(e);
     }
 }
+

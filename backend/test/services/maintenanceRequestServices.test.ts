@@ -18,7 +18,7 @@ const expect = chai.expect;
 describe("maintenanceRequestServices", function () {
 	beforeEach(async function() {
 		this.timeout(15000);
-		await connectMongo();
+		await connectMongo(true);
 		await loadSampleData();
 	});
 
@@ -151,7 +151,8 @@ describe("maintenanceRequestServices", function () {
 				type: "New type",
 				status: "new",
 				priority: "prio0",
-				location: null
+				location: null,
+				__v: 0
 			};
 
 			try {
@@ -174,14 +175,25 @@ describe("maintenanceRequestServices", function () {
 				type: "New type",
 				status: "new",
 				priority: "prio0",
-				location: "New location"
+				location: "New location",
+			};
+			const expected = {
+				_id: "new_valid_request1",
+				createdBy: userId,
+				title: "New title",
+				description: "New description",
+				type: "New type",
+				status: "new",
+				priority: "prio0",
+				location: "New location",
+				__v: 0
 			};
 
 			try {
 				await addMaintenanceRequest(maintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
 				expect(result).to.have.lengthOf(1);
-				expect(result).to.deep.include(maintenanceRequest);
+				expect(result).to.deep.include(expected);
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
@@ -214,10 +226,10 @@ describe("maintenanceRequestServices", function () {
 	describe ("setMaintenanceRequest", function () {
 		it("Valid maintenanceRequest, with a present _id", async function () {
 			const id = "mR0";
-			const userId = "user0";
-			const original = {
+			const newUserId = "new_user";
+			const oldMaintenanceRequest = {
 				"_id": id,
-				"createdBy": userId,
+				"createdBy": "user0",
 				"title": "title1",
 				"description": "description description description",
 				"type": "plumbing",
@@ -225,22 +237,22 @@ describe("maintenanceRequestServices", function () {
 				"priority": "prio2",
 				"location": null
 			};
-			const expected = {
-				_id: id,
-				createdBy: userId,
-				title: "New title",
-				description: "New description",
-				type: "New type",
-				status: "inProgress",
-				priority: "prio1",
-				location: "Bathroom"
-			}
+			const newMaintenanceRequest = {
+				"_id": id,
+				"createdBy": newUserId,
+				"title": "new_title",
+				"description": "new description",
+				"type": "new_category",
+				"status": "new_status",
+				"priority": "new_priority",
+				"location": "new_location"
+			};
 
 			try {
-				await setMaintenanceRequest(id, original);
-				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result).to.deep.include(expected);
-				expect(result).to.not.deep.include(original);
+				await setMaintenanceRequest(id, newMaintenanceRequest);
+				const result = await getAllMaintenanceRequestsByUserId(newUserId);
+				expect(result).to.deep.include(newMaintenanceRequest);
+				expect(result).to.not.deep.include(oldMaintenanceRequest);
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
@@ -319,7 +331,7 @@ describe("maintenanceRequestServices", function () {
 				"type": "electrical",
 				"status": "inProgress",
 				"priority": newPriority,
-				"location": "Bedroom"
+				"location": "Bedroom",
 			};
 
 			try {
@@ -381,7 +393,7 @@ describe("maintenanceRequestServices", function () {
 				"type": "electrical",
 				"status": newStatus,
 				"priority": "prio1",
-				"location": "Bedroom"
+				"location": "Bedroom",
 			};
 
 			try {
@@ -406,7 +418,8 @@ describe("maintenanceRequestServices", function () {
 				"type": "electrical",
 				"status": newStatus,
 				"priority": "prio1",
-				"location": "Bedroom"
+				"location": "Bedroom",
+				"__v": 0
 			};
 
 			try {

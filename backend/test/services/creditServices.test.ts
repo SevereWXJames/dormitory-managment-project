@@ -11,7 +11,7 @@ const expect = chai.expect;
 describe("creditServices", function () {
 	before(async function() {
 		this.timeout(15000);
-		await connectMongo();
+		await connectMongo(true);
 		await loadSampleData();
 	});
 

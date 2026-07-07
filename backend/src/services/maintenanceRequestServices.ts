@@ -1,3 +1,4 @@
+import type { Model, Document } from "mongoose";
 import {
     type MaintenanceRequest, MaintenanceRequestModel,
     type MaintenanceRequestPriority, MaintenanceRequestPriorityModel,
@@ -137,8 +138,29 @@ export async function getAllMaintenanceRequestPriorities(): Promise<MaintenanceR
  * successfully.
  */
 export async function addMaintenanceRequest(maintenanceRequest: MaintenanceRequest) : Promise<void> {
-    return Promise.reject(new Error("Not implemented."));
+    return MaintenanceRequestModel.insertOne(maintenanceRequest).then((result) => {
+        return Promise.resolve();
+    }).catch((e) => {
+        return Promise.reject(e);
+    });
 } 
+
+/**
+ * Sets all fields of the maintenance request according to the provided values.
+ * 
+ * @param _id _id value of the maintenance request to be edited.
+ * @param updateFields The provided new values to be set. This must be a subset
+ * of the MaintenanceRequest fields.
+ * @returns Promise indicating whether the maintenance request was set
+ * successfully.
+ */
+async function setMaintenanceRequestFields(_id: string, updateFields: any): Promise<void> {
+    return MaintenanceRequestModel.updateOne({_id: _id}, {$set: updateFields}).then((result) => {
+        return Promise.resolve();
+    }).catch((e) => {
+        return Promise.reject();
+    });
+}
 
 /**
  * Sets all fields of the maintenance request with the provided _id to have
@@ -150,7 +172,11 @@ export async function addMaintenanceRequest(maintenanceRequest: MaintenanceReque
  * successfully.
  */
 export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequest) : Promise<void> {
-    return Promise.reject(new Error("Not implemented."));
+    if (_id != maintenanceRequest._id) {
+        return Promise.reject(new Error("The passed _id and the _id in the maintenanceRequest are different."));
+    }
+
+    return setMaintenanceRequestFields(_id, maintenanceRequest);
 } 
 
 /**
@@ -162,7 +188,13 @@ export async function setMaintenanceRequest(_id: string, maintenanceRequest: Mai
  * successfully.
  */
 export async function setMaintenanceRequestStatus(_id: string, statusId: string) : Promise<void> {
-    return Promise.reject(new Error("Not implemented."));
+    await getAllMaintenanceRequestStatuses().then((result) => {
+        if (result.find((status) => status._id === statusId) === undefined) {
+            return Promise.reject(new Error("Status not available in the database."));
+        }
+    });
+
+    return setMaintenanceRequestFields(_id, {status: statusId});
 } 
 
 /**
@@ -174,5 +206,10 @@ export async function setMaintenanceRequestStatus(_id: string, statusId: string)
  * successfully.
  */
 export async function setMaintenanceRequestPriority(_id: string, priorityId: string) : Promise<void> {
-    return Promise.reject(new Error("Not implemented."));
+    await getAllMaintenanceRequestPriorities().then((result) => {
+        if (result.find((priority) => priority._id === priorityId) === undefined) {
+            return Promise.reject(new Error("Priority not available in the database."));
+        }
+    });
+    return setMaintenanceRequestFields(_id, {priority: priorityId});
 } 

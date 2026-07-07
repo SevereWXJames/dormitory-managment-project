@@ -12,7 +12,7 @@ const expect = chai.expect;
 describe("reservationServices", function () {
 	before(async function() {
 		this.timeout(15000);
-		await connectMongo();
+		await connectMongo(true);
 		await loadSampleData();
 	});
 
