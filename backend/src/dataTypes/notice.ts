@@ -2,7 +2,6 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface Notice {
-    _id: string;
     createdBy: string;
     viewableBy: string[] | null;
     title: string;

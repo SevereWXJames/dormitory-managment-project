@@ -2,7 +2,6 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface Service {
-    _id: string;
     name: string;
     description: string;
     hasIoT: boolean;

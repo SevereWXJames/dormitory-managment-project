@@ -1,10 +1,12 @@
-import type { Model, Document } from "mongoose";
+import type { Model, Document, Types } from "mongoose";
 import {
     type MaintenanceRequest, MaintenanceRequestModel,
     type MaintenanceRequestPriority, MaintenanceRequestPriorityModel,
     type MaintenanceRequestStatus, MaintenanceRequestStatusModel,
     type MaintenanceRequestType, MaintenanceRequestTypeModel
 } from "../dataTypes/maintenanceRequest.ts";
+
+type MaintenanceRequestWithId = MaintenanceRequest & { _id?: string | Types.ObjectId };
 
 export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]> {
     const cursor = MaintenanceRequestModel.find({ }).lean();
@@ -158,7 +160,7 @@ async function setMaintenanceRequestFields(_id: string, updateFields: any): Prom
     return MaintenanceRequestModel.updateOne({_id: _id}, {$set: updateFields}).then((result) => {
         return Promise.resolve();
     }).catch((e) => {
-        return Promise.reject();
+        return Promise.reject(e);
     });
 }
 
@@ -171,9 +173,9 @@ async function setMaintenanceRequestFields(_id: string, updateFields: any): Prom
  * @returns Promise indicating whether the maintenance request was set
  * successfully.
  */
-export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequest) : Promise<void> {
-    if (_id != maintenanceRequest._id) {
-        return Promise.reject(new Error("The passed _id and the _id in the maintenanceRequest are different."));
+export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequestWithId) : Promise<void> {
+    if (String(_id) !== String(maintenanceRequest._id)) {
+        throw new Error("The passed _id and the _id in the maintenanceRequest are different.");
     }
 
     return setMaintenanceRequestFields(_id, maintenanceRequest);

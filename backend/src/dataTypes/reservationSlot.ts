@@ -2,7 +2,6 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface ReservationSlot {
-    _id: string;
     serviceId: string;
     booked: boolean;
     bookedBy: string | null;

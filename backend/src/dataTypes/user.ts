@@ -2,7 +2,6 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface User {
-    _id: string;
     username: string;
     email: string;
     phoneNumber: string;

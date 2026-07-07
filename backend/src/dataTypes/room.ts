@@ -2,7 +2,6 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface Room {
-    _id: string;
     roomName: string;
     verificationCode: string;
 }
