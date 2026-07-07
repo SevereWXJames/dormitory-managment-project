@@ -33,13 +33,16 @@ const userModel = userTable.getModel();
 // }
 
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
-    let res;
-    try{
-        res = await UserModel.findOne({username: username}).lean().exec();
-    }catch(error){
-        throw Error("Error querying DB!", {cause: error});
-    }
-    return res;
+    return UserModel.findOne({username: username}).lean().exec()
+        .then((result) => {
+            if (result) {
+                return Promise.resolve(result as unknown as User);
+            }
+            return Promise.resolve(undefined);
+        })
+        .catch((e) => {
+            return Promise.reject(e);
+        });
 }
 
 export async function getExistingUserFromEmail(email: string): Promise<User | undefined> {
