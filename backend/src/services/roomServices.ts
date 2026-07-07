@@ -57,7 +57,7 @@ export async function getAllResidents(): Promise<Resident[]> {
     for await (const result of cursor) {
         try {
             if (result != null) {
-                results.push(result as Resident);
+                results.push(result as unknown as Resident);
             }
         } catch (e) {
             // "Pass"
@@ -71,7 +71,7 @@ export async function getResidentByUserId(userId: string): Promise<Resident | un
     return ResidentModel.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as Resident);
+                return Promise.resolve(result as unknown as Resident);
             }
             return Promise.resolve(undefined);
         })
