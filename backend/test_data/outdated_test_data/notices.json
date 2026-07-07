@@ -2,7 +2,7 @@
   "notices": [
     {
       "_id": "notice0",
-      "createdBy": "000000000000000000000003",
+      "createdBy": "admin0",
       "viewableBy": null,
       "title": "test1",
       "text": "test",
@@ -10,8 +10,8 @@
     },
     {
       "_id": "notice1",
-      "createdBy": "000000000000000000000003",
-      "viewableBy": ["000000000000000000000000"],
+      "createdBy": "admin0",
+      "viewableBy": ["user0"],
       "title": "test2",
       "text": "test",
       "createdAt": 1

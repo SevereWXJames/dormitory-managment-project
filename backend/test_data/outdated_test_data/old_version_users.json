@@ -1,35 +1,35 @@
 {
   "users": [
     {
-      "_id": "000000000000000000000000",
+      "_id": "user0",
       "username": "test1",
       "email": "test1@test.com",
       "phoneNumber": "6045550001",
       "roles": ["Resident"]
     },
     {
-      "_id": "000000000000000000000001",
+      "_id": "user1",
       "username": "test2",
       "email": "test2@test.com",
       "phoneNumber": "6045550002",
       "roles": ["Resident"]
     },
     {
-      "_id": "000000000000000000000002",
+      "_id": "user2",
       "username": "test3",
       "email": "test3@test.com",
       "phoneNumber": "6045550003",
       "roles": ["Resident"]
     },
     {
-      "_id": "000000000000000000000003",
+      "_id": "admin0",
       "username": "admin1",
       "email": "admin1@test.com",
       "phoneNumber": "6045550004",
       "roles": ["Admin"]
     },
     {
-      "_id": "000000000000000000000004",
+      "_id": "staff0",
       "username": "staff1",
       "email": "staff1@test.com",
       "phoneNumber": "6045550005",

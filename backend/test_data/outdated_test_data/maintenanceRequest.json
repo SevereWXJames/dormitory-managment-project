@@ -2,7 +2,7 @@
   "maintenanceRequests": [
     {
       "_id": "mR0",
-      "createdBy": "000000000000000000000000",
+      "createdBy": "user0",
       "title": "title1",
       "description": "description description description",
       "type": "plumbing",
@@ -10,7 +10,7 @@
     },
     {
       "_id": "mR1",
-      "createdBy": "000000000000000000000000",
+      "createdBy": "user0",
       "title": "title2",
       "description": "description description description",
       "type": "electrical",
@@ -18,7 +18,7 @@
     },
     {
       "_id": "mR2",
-      "createdBy": "000000000000000000000001",
+      "createdBy": "user1",
       "title": "title3",
       "description": "description description description",
       "type": "misc",

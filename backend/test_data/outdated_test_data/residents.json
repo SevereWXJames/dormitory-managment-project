@@ -2,17 +2,17 @@
   "residents": [
     {
       "_id": "resident0",
-      "userId": "000000000000000000000000",
+      "userId": "user0",
       "roomId": "room0"
     },
     {
       "_id": "resident1",
-      "userId": "000000000000000000000001",
+      "userId": "user1",
       "roomId": "room0"
     },
     {
       "_id": "resident2",
-      "userId": "000000000000000000000002",
+      "userId": "user2",
       "roomId": "room1"
     }
   ]

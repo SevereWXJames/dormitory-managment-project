@@ -32,9 +32,9 @@ describe("usersServices", function () {
         });
 
 		it("Existing username", async function () {
-			const username = "admin1";
+            const username = "admin1";
 			const expectedUser = {
-				"_id": "admin0",
+				"_id": "000000000000000000000004", //originally "admin0"
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",
@@ -55,7 +55,7 @@ describe("usersServices", function () {
 		it("Existing e-mail", async function () {
 			const email = "admin1@test.com";
 			const expectedUser = {
-				"_id": "admin0",
+				"_id": "000000000000000000000004",
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",
@@ -75,7 +75,7 @@ describe("usersServices", function () {
 		it("Existing id", async function () {
 			const id = "admin0";
 			const expectedUser = {
-				"_id": "admin0",
+				"_id": "000000000000000000000004",
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",
