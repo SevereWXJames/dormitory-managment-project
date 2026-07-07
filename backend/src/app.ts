@@ -27,7 +27,7 @@ app.use("/services",authenticateRequest, servicesRouter);
 app.use("/notices", authenticateRequest, noticeRouter)
 app.use("/rooms", authenticateRequest, roomsRouter);
 app.use("/credits", authenticateRequest, creditRouter);
-app.use("/maintenance-request", maintenanceRequestRouter)
+app.use("/maintenance-request", authenticateRequest, maintenanceRequestRouter)
 app.use("/IoT", authenticateRequest, IoTRouter);
 app.use("/user",authenticateRequest, userRouter);
 app.use("/", authRouter);
