@@ -1,5 +1,3 @@
-import {Types} from "mongoose";
-
 export const Role = {
     RESIDENT: "RESIDENT",
     ADMIN: "ADMIN",
