@@ -17,7 +17,8 @@ const ResidentSchema = new Schema({
     roomId: {
         type: String,
         required: false,
-        default: null
+        default: null,
+        unique: false,
     }
 });
 

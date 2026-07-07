@@ -1,11 +1,10 @@
 import {BaseTable} from "./Base.table.ts";
-import {type IResident, Residents} from "../models/residents.model.ts";
 import type {Model} from "mongoose";
 import {Types} from "mongoose"
-import {CreditBalances} from "../models/creditBalance.model.ts";
+import {CreditBalances, type ICreditBalance} from "../models/creditBalance.model.ts";
 
-export class CreditBalanceTable extends BaseTable<IResident> {
-    private CreditBalancesModel : Model<IResident>;
+export class CreditBalanceTable extends BaseTable<ICreditBalance> {
+    private readonly CreditBalancesModel : Model<ICreditBalance>;
     constructor() {
         super(CreditBalances);
         this.CreditBalancesModel = super.getModel();
@@ -15,12 +14,12 @@ export class CreditBalanceTable extends BaseTable<IResident> {
     // If the user is a resident, creates a resident in the Resident table and a balance in the CreditBalance table
     async createBalance(userId: Types.ObjectId, balanceCents?: string) {
         try {
-            const resident = {userId: userId, roomId: roomId ?? null};
+            const resident = {userId: userId, balanceCents: balanceCents ?? 0};
             const doc = new this.CreditBalancesModel(resident);
             await doc.save();
         } catch (error) {
             console.log(`Error:${error}`);
-            throw Error("Error creating Resident", {cause: error});
+            throw Error("Error creating balance", {cause: error});
         }
 
     }
