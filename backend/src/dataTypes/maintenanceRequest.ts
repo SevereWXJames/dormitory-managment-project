@@ -13,7 +13,7 @@ export interface MaintenanceRequest {
 }
 
 const maintenanceRequestSchema = new Schema({
-    _id: String, createdBy: String, title: String, description: String, type: String, status: String,
+    createdBy: String, title: String, description: String, type: String, status: String,
     priority: String, location: String
 });
 export const MaintenanceRequestModel = mongoose.model("MaintenanceRequests" as CollectionName, maintenanceRequestSchema, "MaintenanceRequests" as CollectionName);

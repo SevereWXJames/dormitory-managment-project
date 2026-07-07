@@ -7,5 +7,5 @@ export interface Room {
     verificationCode: string;
 }
 
-const roomSchema = new Schema({_id: String, roomName: String, verificationCode: String});
+const roomSchema = new Schema({roomName: String, verificationCode: String});
 export const RoomModel = mongoose.model("Rooms"  as CollectionName, roomSchema, "Rooms"  as CollectionName);

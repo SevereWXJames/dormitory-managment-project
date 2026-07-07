@@ -1,17 +1,14 @@
 {
   "creditBalances": [
     {
-      "_id": "credit0",
       "userId": "user0",
       "balanceCents": 100
     },
     {
-      "_id": "credit1",
       "userId": "user1",
       "balanceCents": 10000
     },
     {
-      "_id": "credit2",
       "userId": "user2",
       "balanceCents": 10000
     }

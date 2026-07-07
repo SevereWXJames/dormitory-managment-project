@@ -9,7 +9,7 @@ export interface User {
     roles: string[];
 }
 
-const userSchema = new Schema({_id: String, username: String, email: String, phoneNumber: String, roles: Array});
+const userSchema = new Schema({username: String, email: String, phoneNumber: String, roles: Array});
 export const UserModel = mongoose.model("Users"  as CollectionName, userSchema, "Users"  as CollectionName);
 
 export interface Resident {
