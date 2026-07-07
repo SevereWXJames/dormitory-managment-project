@@ -9,9 +9,11 @@ import jwt from "jsonwebtoken";
 import pkg, {type Secret} from "jsonwebtoken";
 import {Types} from "mongoose";
 import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
+import type {ResidentTable} from "../database/tableOperations/Resident.table.ts";
 
 const {verify} = pkg;
 const userTable: UserTable = new UserTable();
+const residentTable: ResidentTable = new ResidentTable();
 const userModel = userTable.getModel();
 
 // export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
@@ -104,11 +106,7 @@ async function createNewBalance(userId: Types.ObjectId) {
 
 async function createNewResident(userId: Types.ObjectId) {
     try {
-        const resident = {
-            userId: userId.toString(),
-            roomId: "N/A"
-        }
-        await ResidentModel.create(resident);
+        await residentTable.createResident(userId);
     } catch (error) {
         console.log(`error: ${error}`);
         throw Error("Error creating resident", {cause: error});

@@ -1,8 +1,8 @@
-import mongoose, {Schema, Types} from 'mongoose';
+import mongoose, {Schema, Types, Document} from 'mongoose';
 import type {Role} from "../types/user.service.types.ts";
 
 export interface IUser extends Document{
-    _id: Types.ObjectId | null;
+    _id: Types.ObjectId;
     name: string,
     username: string,
     email: string,
@@ -41,4 +41,4 @@ const UsersSchema = new Schema({
     },
 });
 
-export const Users = mongoose.model<IUser>('users', UsersSchema);
+export const Users = mongoose.model<IUser>('Users', UsersSchema);
