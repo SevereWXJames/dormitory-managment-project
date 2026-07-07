@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import {mongoose, Types} from 'mongoose';
 import {
     MONGODB_URL_DOCKER,
     MONGODB_URL_LOCAL,
@@ -90,16 +90,13 @@ export async function load(collectionName: CollectionName, data: any[]): Promise
     //     return Promise.reject(e);
     // }
     try {
-        console.log('Loading into DB:', getConnection().name);
+        const castedData = data.map((doc) => ({
+            ...doc,
+            _id: new Types.ObjectId(doc._id)
+        }));
         const collection = await getCollection(collectionName);
-        console.log(`collection name: ${collection.collectionName}`);
-        console.log(`dbName: ${collection.dbName}`);
-        await collection.insertMany(data);
-        const count = await collection.countDocuments();
-        console.log(`number of docs inserted: ${count}`);
-
+        await collection.insertMany(castedData);
     } catch (error) {
-        console.log(`error: ${error}`);
-        throw Error("Error inserting into DB!");
+        throw Error(`Error inserting into DB! ${error}`, {cause: error});
     }
 }

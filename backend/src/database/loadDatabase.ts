@@ -39,7 +39,4 @@ export default function loadSampleData(): Promise<void> {
 		).then((value) => {
 			Promise.resolve();
 		});
-		// .catch((e) => {
-    // 	Promise.reject(e);
-    // });
 };
