@@ -17,21 +17,6 @@ const residentTable: ResidentTable = new ResidentTable();
 const creditBalanceTable: CreditBalanceTable = new CreditBalanceTable();
 const userModel = userTable.getModel();
 
-// export async function checkLogIn(username: string | undefined, email: string | undefined, password: string | undefined): Promise<boolean> {
-//     if (!password || password.trim() === "") {
-//         return false;
-//     }
-//
-//     const usernameUser = username ? userJson.users.find((user) => user.username === username) : undefined;
-//     const emailUser = email ? userJson.users.find((user) => user.email === email) : undefined;
-//
-//     if (username && email) {
-//         return Boolean(usernameUser && emailUser && usernameUser._id === emailUser._id);
-//     }
-//
-//     return Boolean(usernameUser ?? emailUser);
-// }
-
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
     return UserModel.findOne({username: username}).lean().exec()
         .then((result) => {
@@ -74,12 +59,7 @@ export async function getExistingUserFromId(_id: string): Promise<User | undefin
     //     });
     try {
         const id = new Types.ObjectId(_id);
-        console.log(`id: ${id}`);
-        console.log(`type of id: ${typeof id}`);
-        const docs = await UserModel.find({}).lean().exec();
-        console.log(`all: ${JSON.stringify(docs, null, 2)}`);
         const doc = await UserModel.findOne({_id: id }).lean().exec();
-        console.log(`doc: ${JSON.stringify(doc)}`);
         if (!doc) return undefined;
         return { ...doc, _id: doc._id.toString() } as unknown as User;
     } catch (error) {
@@ -102,10 +82,13 @@ export function createToken(_id: string, username: string): string {
 
 //Looks for account, verifies information, returns user.
 export async function logIn(username: string, email: string, password: string) {
-    const passwordHash = await hash(password, 10);
-    const userDocs = await userModel.findOne({username, email, password: passwordHash});
-    if (!userDocs) throw Error("Invalid username, email, or password");
-    return userDocs;
+    const user = await userModel.findOne({ username, email });
+    if (!user) throw Error("Invalid username, email, or password");
+
+    const isMatch = await compare(password, user.password); // correct verification
+    if (!isMatch) throw Error("Invalid username, email, or password");
+
+    return user;
 }
 
 //Helpers for signup
@@ -142,7 +125,7 @@ export async function signUp(profileData: SignUpRequest) {
     const userDoc = await userTable.findNewlyCreatedUser(profileData);
     if (!userDoc || !userDoc._id) throw Error("Error, failed to create account");
 
-    // Create new rows if role is resident
+    // Create new rows if role is Resident
     try {
         if (roles.includes(Role.RESIDENT)) {
             await createNewResident(userDoc._id);
