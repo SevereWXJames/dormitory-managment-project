@@ -2,6 +2,7 @@ import * as chai from "chai";
 // import chaiAsPromised from 'chai-as-promised';
 import { getCreditBalanceByUserId, getTransactionHistoryByUserId } from "../../src/services/creditServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
+import {connectMongo} from "../../src/database/database.ts";
 
 // chai.use(chaiAsPromised);
 
@@ -9,6 +10,8 @@ const expect = chai.expect;
 
 describe("creditServices", function () {
 	before(async function() {
+		this.timeout(15000);
+		await connectMongo(true);
 		await loadSampleData();
 	});
 

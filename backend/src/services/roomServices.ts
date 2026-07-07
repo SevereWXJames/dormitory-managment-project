@@ -1,10 +1,8 @@
-import roomJSON from "../../test_data/rooms.json" with {type: "json"};
-import residentJSON from "../../test_data/residents.json" with {type: "json"};
-import {Room} from "../dataTypes/room.ts";
-import {Resident} from "../dataTypes/user.ts";
+import {type Room, RoomModel} from "../dataTypes/room.ts";
+import {type Resident, ResidentModel} from "../dataTypes/user.ts";
 
 export async function getAllRooms(): Promise<Room[]> {
-    const cursor = Room.model.find({ }).lean();
+    const cursor = RoomModel.find({ }).lean();
     const results: Room[] = [];
 
     for await (const result of cursor) {
@@ -21,7 +19,7 @@ export async function getAllRooms(): Promise<Room[]> {
 }
 
 export async function getRoomById(_id: string): Promise<Room | undefined> {
-    return Room.model.findOne({_id: _id}).lean().exec()
+    return RoomModel.findOne({_id: _id}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as Room);
@@ -40,7 +38,7 @@ export async function getRoomByUserId(_id: string): Promise<Room | undefined> {
         return Promise.resolve(undefined);
     }
 
-    return Room.model.findOne({_id: resident.roomId}).lean().exec()
+    return RoomModel.findOne({_id: resident.roomId}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as Room);
@@ -53,7 +51,7 @@ export async function getRoomByUserId(_id: string): Promise<Room | undefined> {
 }
 
 export async function getAllResidents(): Promise<Resident[]> {
-    const cursor = Resident.model.find({ }).lean();
+    const cursor = ResidentModel.find({ }).lean();
     const results: Resident[] = [];
 
     for await (const result of cursor) {
@@ -70,7 +68,7 @@ export async function getAllResidents(): Promise<Resident[]> {
 }
 
 export async function getResidentByUserId(userId: string): Promise<Resident | undefined> {
-    return Resident.model.findOne({userId: userId}).lean().exec()
+    return ResidentModel.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as Resident);
