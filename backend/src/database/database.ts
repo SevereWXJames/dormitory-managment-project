@@ -1,4 +1,4 @@
-import {mongoose, Types} from 'mongoose';
+import mongoose, {Types} from 'mongoose';
 import {
     MONGODB_URL_DOCKER,
     MONGODB_URL_LOCAL,

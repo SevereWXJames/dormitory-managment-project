@@ -1,11 +1,11 @@
 import type {NextFunction,Response, Request} from "express";
-import {verifyRequest} from "../usersServices.js";
+import {verifyRequestHeader} from "./middlerware.service.ts";
 
 //Auth Middleware
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticateRequest = async (req: Request, res: Response, next: NextFunction) => {
     // get the token from the header
     try{
-        await verifyRequest(req);
+        await verifyRequestHeader(req);
         next();
     }catch(error){
         return res.status(500).json({
@@ -15,3 +15,4 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         });
     }
 }
+
