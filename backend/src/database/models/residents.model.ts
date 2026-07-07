@@ -22,4 +22,4 @@ const ResidentSchema = new Schema({
     }
 });
 
-export const Residents = mongoose.model<IResident>('Residents', ResidentSchema);
+export const Residents = mongoose.model<IResident>("Residents", ResidentSchema, "Residents");
