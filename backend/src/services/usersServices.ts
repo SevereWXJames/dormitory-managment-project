@@ -35,8 +35,6 @@ const userModel = userTable.getModel();
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
     let res;
     try{
-        const all = await UserModel.find({});
-        console.log(`all docs: ${JSON.stringify(all)}`);
         res = await UserModel.findOne({username: username}).lean().exec();
     }catch(error){
         throw Error("Error querying DB!", {cause: error});
@@ -47,7 +45,7 @@ export async function getExistingUserFromUsername(username: string): Promise<Use
 export async function getExistingUserFromEmail(email: string): Promise<User | undefined> {
     return UserModel.findOne({email: email}).lean().exec()
         .then((result) => {
-            if (result != null) {
+            if (result) {
                 return Promise.resolve(result as unknown as User);
             }
             return Promise.resolve(undefined);
@@ -58,17 +56,32 @@ export async function getExistingUserFromEmail(email: string): Promise<User | un
 }
 
 export async function getExistingUserFromId(_id: string): Promise<User | undefined> {
-    const id = new Types.ObjectId(_id);
-    return UserModel.findOne({_id: id}).lean().exec()
-        .then((result) => {
-            if (result != null) {
-                return Promise.resolve(result as IUser as User);
-            }
-            return Promise.resolve(undefined);
-        })
-        .catch((e) => {
-            return Promise.reject(e);
-        });
+    // const id = new Types.ObjectId(_id);
+    // const doc = await UserModel.findOne({_id: id}).exec();
+    // console.log(`doc: ${JSON.stringify(doc)}`);
+    // return UserModel.findOne({_id: id}).lean().exec()
+    //     .then((result) => {
+    //         if (result) {
+    //             return Promise.resolve(result as unknown as User);
+    //         }
+    //         return Promise.resolve(undefined);
+    //     })
+    //     .catch((e) => {
+    //         return Promise.reject(e);
+    //     });
+    try {
+        const id = new Types.ObjectId(_id);
+        console.log(`id: ${id}`);
+        console.log(`type of id: ${typeof id}`);
+        const docs = await UserModel.find({}).lean().exec();
+        console.log(`all: ${JSON.stringify(docs, null, 2)}`);
+        const doc = await UserModel.findOne({_id: id }).lean().exec();
+        console.log(`doc: ${JSON.stringify(doc)}`);
+        if (!doc) return undefined;
+        return { ...doc, _id: doc._id.toString() } as unknown as User;
+    } catch (error) {
+        throw Error(`Error finding user!`, {cause: error});
+    }
 }
 
 export function createToken(_id: string, username: string): string {

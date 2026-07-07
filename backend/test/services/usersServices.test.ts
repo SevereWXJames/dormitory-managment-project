@@ -16,7 +16,7 @@ describe("usersServices", function () {
             await connectMongo();
             await loadSampleData();
         }catch(error){
-            throw Error("Error with setup!");
+            throw Error(`Error with setup! ${error}`);
         }
 	});
 
@@ -34,7 +34,7 @@ describe("usersServices", function () {
 		it("Existing username", async function () {
             const username = "admin1";
 			const expectedUser = {
-				"_id": "000000000000000000000004", //originally "admin0"
+				"_id": "000000000000000000000003", //originally "admin0"
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",
@@ -55,7 +55,7 @@ describe("usersServices", function () {
 		it("Existing e-mail", async function () {
 			const email = "admin1@test.com";
 			const expectedUser = {
-				"_id": "000000000000000000000004",
+				"_id": "000000000000000000000003",
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",
@@ -73,9 +73,9 @@ describe("usersServices", function () {
 
 	describe("getExistingUserFromId()", function () {
 		it("Existing id", async function () {
-			const id = "admin0";
+			const id = "000000000000000000000003";
 			const expectedUser = {
-				"_id": "000000000000000000000004",
+				"_id": "000000000000000000000003",
 				"username": "admin1",
 				"email": "admin1@test.com",
 				"phoneNumber": "6045550004",
@@ -85,7 +85,7 @@ describe("usersServices", function () {
 			expect(actual).to.deep.equal(expectedUser);
 		});
 		it("Absent id", async function () {
-			const id = "not_an_id";
+			const id = "00000000000000000000000F";
 			const actual = await getExistingUserFromId(id);
 			expect(actual).to.be.undefined;
 		});
