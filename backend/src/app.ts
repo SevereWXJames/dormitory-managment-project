@@ -21,15 +21,15 @@ app.use(cors({
     credentials: true, // required for cookies to be sent/received cross-origin
 }));
 
-app.use("/residents", residentsRouter);
-app.use("/reservations", reservationRouter);
-app.use("/services", servicesRouter);
-app.use("/notices", noticeRouter)
-app.use("/rooms", roomsRouter);
+app.use("/residents", authenticateRequest, residentsRouter);
+app.use("/reservations", authenticateRequest, reservationRouter);
+app.use("/services",authenticateRequest, servicesRouter);
+app.use("/notices", authenticateRequest, noticeRouter)
+app.use("/rooms", authenticateRequest, roomsRouter);
 app.use("/credits", authenticateRequest, creditRouter);
 app.use("/maintenance-request", maintenanceRequestRouter)
-app.use("/IoT", IoTRouter);
-app.use("/user", userRouter);
+app.use("/IoT", authenticateRequest, IoTRouter);
+app.use("/user",authenticateRequest, userRouter);
 app.use("/", authRouter);
 
 export default app;
