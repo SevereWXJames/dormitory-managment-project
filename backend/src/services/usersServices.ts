@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 import pkg, {type Secret} from "jsonwebtoken";
 import {Types} from "mongoose";
 import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
-import type {ResidentTable} from "../database/tableOperations/Resident.table.ts";
+import {ResidentTable} from "../database/tableOperations/Resident.table.ts";
 
 const {verify} = pkg;
 const userTable: UserTable = new UserTable();
@@ -134,7 +134,7 @@ export async function signUp(profileData: SignUpRequest) {
     try {
         if (roles.includes(Role.RESIDENT)) {
             await createNewResident(userDoc._id);
-            await createNewBalance(userDoc._id);
+            //await createNewBalance(userDoc._id);
         }
     } catch (error) {
         console.log(`Error: ${error}`);
