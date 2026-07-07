@@ -89,13 +89,16 @@ export async function load(collectionName: CollectionName, data: any[]): Promise
     // } catch (e) {
     //     return Promise.reject(e);
     // }
+
     try {
-        const castedData = data.map((doc) => ({
-            ...doc,
-            _id: new Types.ObjectId(doc._id)
-        }));
+        // !!! We need to cast the id fields as ObjectId's when seeding!
+        // !!! Else Gale's tests fail since strings are not ObjectIds and mongoDB will not cast automatically
+        // const castedData = data.map((doc) => ({
+        //     ...doc,
+        //     _id: new Types.ObjectId(doc._id)
+        // }));
         const collection = await getCollection(collectionName);
-        await collection.insertMany(castedData);
+        await collection.insertMany(data);
     } catch (error) {
         throw Error(`Error inserting into DB! ${error}`, {cause: error});
     }
