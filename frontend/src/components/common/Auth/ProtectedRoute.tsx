@@ -1,7 +1,6 @@
 import type {Role} from "@/dataTypes/user.ts";
 import {useSelector} from "react-redux";
 import {getUserId, getUserRole} from "@/context/authenticationSlice.ts";
-import {LoginPage} from "@/pages/common/LoginPage.tsx";
 import {UnauthorizedPage} from "@/pages/UnauthorizedPage.tsx";
 
 interface ProtectedRouteProps {
@@ -12,12 +11,12 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({allowedRoles, children} : ProtectedRouteProps){
     const userId = useSelector(getUserId);
     const userRoles = useSelector(getUserRole);
-    if (!userId) {
-        return <LoginPage/>;
-    }
+    console.log(`userId: ${userId}`);
+    console.log(`userRoles: ${userRoles}`);
+    console.log(`allowedRoles: ${allowedRoles}`);
 
-    const hasPermission = userRoles.find((role) => {allowedRoles.includes(role)});
-    if(!hasPermission){
+    const hasPermission = userRoles.some(role => allowedRoles.includes(role));
+    if(!hasPermission || !userId){
         return <UnauthorizedPage/>
     }
 
