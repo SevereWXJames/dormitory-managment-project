@@ -1,14 +1,13 @@
 import * as chai from "chai";
+import chaiHttp from "chai-http";
 import {after, afterEach, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "./setup/setup.ts";
 import app from "../../src/app.ts";
-import chaiHttp from "chai-http";
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
 
 describe('POST /logout', () => {
     before(async () => {
-
         console.log('file loaded');
         await connectTestDB();
     });

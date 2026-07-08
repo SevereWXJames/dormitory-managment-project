@@ -1,16 +1,15 @@
 import * as chai from "chai";
+import chaiHttp from "chai-http";
 import {after, afterEach, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "./setup/setup.ts";
 import app from "../../src/app.ts";
 import {Users} from "../../src/database/models/users.model.ts";
-import chaiHttp from "chai-http";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
 
 describe('POST /login', () => {
     before(async () => {
-
         console.log('file loaded');
         await connectTestDB();
     });
@@ -51,6 +50,8 @@ describe('POST /login', () => {
         email: 'alice@tmp.com',
         password: 'password123',
     };
+
+    const validRequest =
 
     describe('HTTP Response - Log In', () => {
         beforeEach('Create an account', async () => {

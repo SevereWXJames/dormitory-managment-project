@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "npx mocha test/**/*.test.ts",
-    "auth-test": "mocha -r ts-node/esm --exit --timeout 10000 test/auth/*.test.ts",
+    "auth-test": "mocha -r ts-node/register --exit --timeout 10000 test/auth/*.test.ts",
     "start": "node src/server.ts",
     "build": "npx tsc --noEmit",
     "database": "docker start team07-mongo-1"

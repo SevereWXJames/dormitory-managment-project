@@ -1,19 +1,19 @@
 import * as chai from "chai";
+import chaiHttp from "chai-http";
 import { after, afterEach, before, describe, it } from "mocha";
+import {assert} from "chai";
 import {clearTestDB, closeTestDB, connectTestDB} from "./setup/setup.ts";
 import app from "../../src/app.ts";
 import {ResidentModel} from "../../src/dataTypes/user.ts";
 import {Users} from "../../src/database/models/users.model.ts";
 import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
-import chaiHttp from "chai-http";
 
-const { expect } = chai;
+
 const chaiWithHttp = chai.use(chaiHttp);
+const { expect } = chai;
 
 describe('POST /signup', () => {
     before(async () => {
-
-        console.log(`chaiHttp: ${typeof chaiWithHttp.request}`);
         console.log('file loaded');
         await connectTestDB();
     });
