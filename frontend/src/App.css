@@ -27,7 +27,7 @@
     grid-template-areas: "title" "finance-summary" "recent-activity" "bookings";  /* mobile default */
 }
 @media (min-width: 768px) {
-    display: flex;
+    display:flex;
     .dashboardPage {
         grid-template-areas: "title finance-summary recent-activity" "recent-activity bookings";
     }

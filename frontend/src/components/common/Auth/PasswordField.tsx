@@ -3,9 +3,10 @@ import {usePasswordField} from "@/components/common/Auth/hooks/usePasswordField.
 
 type PasswordFieldProps = {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    isError: string | undefined;
 }
 
-export function PasswordField({onChange}: PasswordFieldProps) {
+export function PasswordField({onChange, isError}: PasswordFieldProps) {
     const passwordFieldID = "password-field";
     const {
         setPassword,
@@ -16,7 +17,7 @@ export function PasswordField({onChange}: PasswordFieldProps) {
     } = usePasswordField();
 
     return (
-        <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
+        <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}} error={!!isError}>
             <InputLabel htmlFor={`${passwordFieldID}-input`}>Password</InputLabel>
             <OutlinedInput
                 id={`${passwordFieldID}-input`}
@@ -41,6 +42,7 @@ export function PasswordField({onChange}: PasswordFieldProps) {
                 }
                 label="Password"
             />
+            {isError && <span className="red text-red-500">{`Error: ${isError}`}</span>}
         </FormControl>
     );
 
