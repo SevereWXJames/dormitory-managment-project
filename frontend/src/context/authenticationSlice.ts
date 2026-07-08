@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { AuthenticationState } from '../types/residents/types.ts';
 import type {RootState} from "./store/store.ts";
+import type {Role} from "@/dataTypes/user.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
 	email: string,
     username: string,
     userId: string,
+    userRole: Role[],
 };
 
 const initialState: AuthenticationSliceState = {
@@ -14,6 +16,7 @@ const initialState: AuthenticationSliceState = {
 	email: "",
     username: "",
     userId: "",
+    userRole: []
 };
 
 /**
@@ -30,6 +33,7 @@ export const authenticationSlice = createSlice({
             state.username = username;
             state.email = email;
             state.userId = userId ?? "";
+            state.userRole = roles ?? [];
 
             const roleList: string[] = Array.isArray(roles) ? roles : [];
             if (roleList.includes("Admin") || roleList.includes("Staff")) {
