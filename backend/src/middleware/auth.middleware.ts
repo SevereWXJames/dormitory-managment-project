@@ -30,7 +30,7 @@ export const checkRole = async (requiredRoles: Role[], req: Request, res: Respon
     }
 }
 
-export const requireRole = async (... requiredRoles: Role[]) => {
+export const requireRole = (... requiredRoles: Role[]) => {
     // get the token from the header
     return async (req: Request, res: Response, next: NextFunction) => {
         return await checkRole(requiredRoles, req, res, next);
