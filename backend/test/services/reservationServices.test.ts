@@ -1,11 +1,8 @@
 import * as chai from "chai";
-// import chaiAsPromised from 'chai-as-promised';
 import { getReservationsBookedByUserId, getReservationsSlotsByServiceId }
 	from "../../src/services/reservationServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
-
-// chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
