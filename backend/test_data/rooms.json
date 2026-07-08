@@ -1,17 +1,17 @@
 {
   "rooms": [
     {
-      "_id": "room0",
+      "_id": "507f1f77bcf86cd799439011",
       "roomName": "test-unit-1",
       "verificationCode": "abcd"
     },
     {
-      "_id": "room1",
+      "_id": "507f1f77bcf86cd799439012",
       "roomName": "test-unit-2",
       "verificationCode": "abcd"
     },
     {
-      "_id": "room2",
+      "_id": "507f1f77bcf86cd799439013",
       "roomName": "test-unit-3",
       "verificationCode": "abcd"
     }

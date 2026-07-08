@@ -2,7 +2,7 @@ import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
 export interface Service {
-    _id: string;
+    _id?: string | mongoose.Types.ObjectId;
     name: string;
     description: string;
     hasIoT: boolean;
@@ -12,7 +12,7 @@ export interface Service {
     reservationEndHour: number;
 }
 
-const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
+const serviceSchema = new Schema({name: String, description: String, hasIoT: Boolean,
     IoTName: String, reservationDurationSeconds: Number,
     reservationStartHour: Number, reservationEndHour: Number});
 export const ServiceModel = mongoose.model("Services"  as CollectionName, serviceSchema, "Services"  as CollectionName);

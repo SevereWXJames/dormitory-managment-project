@@ -1,14 +1,12 @@
 {
   "reservationSlots": [
     {
-      "_id": "slot0",
       "serviceId": "service0",
       "booked": false,
       "startTime": 0,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot1",
       "serviceId": "service0",
       "booked": true,
       "bookedBy": "000000000000000000000000",
@@ -16,7 +14,6 @@
       "durationSeconds": 3600
     },
     {
-      "_id": "slot2",
       "serviceId": "service0",
       "booked": true,
       "bookedBy": "000000000000000000000001",
@@ -24,14 +21,12 @@
       "durationSeconds": 3600
     },
     {
-      "_id": "slot3",
       "serviceId": "service1",
       "booked": false,
       "startTime": 0,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot4",
       "serviceId": "service1",
       "booked": true,
       "bookedBy": "000000000000000000000001",
@@ -39,7 +34,6 @@
       "durationSeconds": 3600
     },
     {
-      "_id": "slot5",
       "serviceId": "service1",
       "booked": true,
       "bookedBy": "000000000000000000000002",

@@ -1,4 +1,4 @@
-import mongoose, {Types} from 'mongoose';
+import mongoose, { Model, Document } from 'mongoose';
 import {
     MONGODB_URL_DOCKER,
     MONGODB_URL_LOCAL,
@@ -8,7 +8,7 @@ import {
 } from './databaseConstants.ts';
 
 /**
- * Class that creates ? objects for the MongoDB database.
+ * Class that interacts with the MongoDB database.
  */
 
 /**
@@ -21,28 +21,31 @@ import {
 /**
  * Initialization function, returning a promise with a Database object.
  *
+ * @param [quiet=false] Set to true to prevent console prints. Defaults to false.
  * @returns A promise, to either be resolved with a Database or be rejected.
  */
-export async function connectMongo(): Promise<void> {
+export async function connectMongo(quiet: boolean = false): Promise<void> {
     const timeout = 5000;
     const options = {dbName: DATABASE_NAME, serverSelectionTimeoutMS: timeout};
 
-    console.info("Database.create(): Creating a database connection.");
-    console.info(`Database.create(): Note: Each connection attempt may take up to ${timeout / 1000} seconds.`);
+    if (!quiet) {
+        console.info("Database.create(): Creating a database connection.");
+        console.info(`Database.create(): Note: Each connection attempt may take up to ${timeout / 1000} seconds.`);
+    }
 
     for (const host of [MONGODB_URL_DEFAULT, MONGODB_URL_DOCKER, MONGODB_URL_LOCAL]) {
         if (host == null || host == "") {
-            console.warn("Database.create(): Skipping a host name as it is null or empty.");
+            if (!quiet) console.warn("Database.create(): Skipping a host name as it is null or empty.");
             continue;
         }
 
         try {
-            console.info(`Database.create(): Attempting to connect to ${host}.`);
+            if (!quiet) console.info(`Database.create(): Attempting to connect to ${host}.`);
             await mongoose.connect(host, options);
-            console.info(`Database.create(): Successfully connected to ${host}.`);
+            if (!quiet) console.info(`Database.create(): Successfully connected to ${host}.`);
             return;
         } catch (e) {
-            console.warn(`Database.create(): Failed to connect to host ${host}.`);
+            if (!quiet) console.warn(`Database.create(): Failed to connect to host ${host}.`);
             continue;
         }
     }
@@ -68,7 +71,7 @@ export function getConnection() {
  * @returns Collection, the collection with name collectionName.
  */
 export function getCollection(collectionName: CollectionName) {
-    //console.debug(`database.getCollection(${collectionName})`);
+    // console.debug(`database.getCollection(${collectionName})`);
     return getConnection().collection(collectionName);
 }
 
@@ -82,24 +85,19 @@ export function getCollection(collectionName: CollectionName) {
  */
 export async function load(collectionName: CollectionName, data: any[]): Promise<void> {
     // console.debug(`database.load(${collectionName})`);
-    // try {
-    //     return getCollection(collectionName).insertMany(data).then(() => {
-    //         Promise.resolve();
-    //     });
-    // } catch (e) {
-    //     return Promise.reject(e);
-    // }
+    const preparedData = data.map((entry) => {
+        if (entry != null && typeof entry === "object" && typeof entry._id === "string" && mongoose.Types.ObjectId.isValid(entry._id)) {
+            return { ...entry, _id: new mongoose.Types.ObjectId(entry._id) };
+        }
+        return entry;
+    });
 
     try {
-        // !!! We need to cast the id fields as ObjectId's when seeding!
-        // !!! Else Gale's tests fail since strings are not ObjectIds and mongoDB will not cast automatically
-        // const castedData = data.map((doc) => ({
-        //     ...doc,
-        //     _id: new Types.ObjectId(doc._id)
-        // }));
-        const collection = await getCollection(collectionName);
-        await collection.insertMany(data);
-    } catch (error) {
-        throw Error(`Error inserting into DB! ${error}`, {cause: error});
+        return getCollection(collectionName).insertMany(preparedData).then(() => {
+            Promise.resolve();
+        });
+    } catch (e) {
+        return Promise.reject(e);
     }
 }
+

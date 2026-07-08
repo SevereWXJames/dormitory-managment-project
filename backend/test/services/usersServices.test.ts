@@ -3,7 +3,6 @@ import * as chai from "chai";
 import { getExistingUserFromUsername, getExistingUserFromId, getExistingUserFromEmail } from "../../src/services/usersServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
-import {UserModel} from "../../src/dataTypes/user.ts";
 
 // chai.use(chaiAsPromised);
 
@@ -11,57 +10,41 @@ const expect = chai.expect;
 
 describe("usersServices", function () {
 	before(async function() {
-        try{
-            this.timeout(15000);
-            await connectMongo();
-            await loadSampleData();
-        }catch(error){
-            throw Error(`Error with setup! ${error}`);
-        }
+		this.timeout(15000);
+		await connectMongo(true);
+		await loadSampleData();
 	});
 
 	describe("getExistingUserFromUsername()", function () {
-        it('should find all docs', async () => {
-            console.log('Querying DB:', UserModel.db.name);
-            console.log('UserModel is querying collection:', UserModel.collection.collectionName);
-            const all = await UserModel.find({});
-            const ids = all.map(doc => doc._id);
-            console.log(`ids: ${ids}`);
-            console.log('first:', all[0]);
-            console.log('all docs:', all);
-        });
-
 		it("Existing username", async function () {
-            const username = "admin1";
-			const expectedUser = {
-				"_id": "000000000000000000000003", //originally "admin0"
-				"username": "admin1",
-				"email": "admin1@test.com",
-				"phoneNumber": "6045550004",
-				"roles": ["Admin"]
-			};
+			const username = "admin1";
 			const actual = await getExistingUserFromUsername(username);
-			expect(actual).to.deep.equal(expectedUser);
+			expect(actual).to.not.be.undefined;
+			expect(actual).to.deep.include({
+				username: "admin1",
+				email: "admin1@test.com",
+				phoneNumber: "6045550004",
+				roles: ["Admin"]
+			});
 		});
 		it("Absent username", async function () {
 			const username = "not_a_username";
 			const actual = await getExistingUserFromUsername(username);
-			expect(actual).to.be.undefined;
+			expect(actual).to.be.undefined; 
 		});
 	});
 
 	describe("getExistingUserFromEmail()", function () {
 		it("Existing e-mail", async function () {
 			const email = "admin1@test.com";
-			const expectedUser = {
-				"_id": "000000000000000000000003",
-				"username": "admin1",
-				"email": "admin1@test.com",
-				"phoneNumber": "6045550004",
-				"roles": ["Admin"]
-			};
 			const actual = await getExistingUserFromEmail(email);
-			expect(actual).to.deep.equal(expectedUser);
+			expect(actual).to.not.be.undefined;
+			expect(actual).to.deep.include({
+				username: "admin1",
+				email: "admin1@test.com",
+				phoneNumber: "6045550004",
+				roles: ["Admin"]
+			});
 		});
 		it("Absent e-mail", async function () {
 			const email = "not_an_email";
@@ -72,19 +55,19 @@ describe("usersServices", function () {
 
 	describe("getExistingUserFromId()", function () {
 		it("Existing id", async function () {
-			const id = "000000000000000000000003";
-			const expectedUser = {
-				"_id": "000000000000000000000003",
-				"username": "admin1",
-				"email": "admin1@test.com",
-				"phoneNumber": "6045550004",
-				"roles": ["Admin"]
-			};
+			const existingUser = await getExistingUserFromUsername("admin1");
+			const id = existingUser ? String((existingUser as { _id?: string })._id) : "507f1f77bcf86cd799439011";
 			const actual = await getExistingUserFromId(id);
-			expect(actual).to.deep.equal(expectedUser);
+			expect(actual).to.not.be.undefined;
+			expect(actual).to.deep.include({
+				username: "admin1",
+				email: "admin1@test.com",
+				phoneNumber: "6045550004",
+				roles: ["Admin"]
+			});
 		});
 		it("Absent id", async function () {
-			const id = "00000000000000000000000F";
+			const id = "507f1f77bcf86cd799439011";
 			const actual = await getExistingUserFromId(id);
 			expect(actual).to.be.undefined;
 		});

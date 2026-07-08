@@ -12,42 +12,26 @@ const expect = chai.expect;
 describe("reservationServices", function () {
 	before(async function() {
 		this.timeout(15000);
-		await connectMongo();
+		await connectMongo(true);
 		await loadSampleData();
 	});
 
 	describe("getReservationsBookedByUserId()", function () {
 		it("userID with two facilities booked", async function () {
 			const userId = "user1";
-			const expectedSlot = {
-				"_id": "slot2",
-				"serviceId": "service0",
-				"booked": true,
-				"bookedBy": "user1",
-				"startTime": 7200,
-				"durationSeconds": 3600
-			};
 			const expectedLength = 2;
 			const actual = await getReservationsBookedByUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
-			expect(actual).to.deep.include(expectedSlot);
 			expect(actual).to.have.lengthOf(expectedLength);
+			expect(actual.some((slot) => slot.serviceId === "service0" && slot.booked === true && slot.bookedBy === "user1" && slot.startTime === 7200 && slot.durationSeconds === 3600)).to.be.true;
 		});
 		it("userID with one facility booked", async function () {
 			const userId = "user2";
-			const expectedSlot = {
-				"_id": "slot5",
-				"serviceId": "service1",
-				"booked": true,
-				"bookedBy": "user2",
-				"startTime": 7200,
-				"durationSeconds": 3600
-			};
 			const expectedLength = 1;
 			const actual = await getReservationsBookedByUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
-			expect(actual).to.deep.include(expectedSlot);
 			expect(actual).to.have.lengthOf(expectedLength);
+			expect(actual.some((slot) => slot.serviceId === "service1" && slot.booked === true && slot.bookedBy === "user2" && slot.startTime === 7200 && slot.durationSeconds === 3600)).to.be.true;
 		});
 		it("Absent userId", async function () {
 			const userId = "not_a_user";
@@ -78,9 +62,9 @@ describe("reservationServices", function () {
 			const expectedLength = 3;
 			const actual = await getReservationsSlotsByServiceId(serviceId);
 			expect(actual).to.be.instanceOf(Array);
-			expect(actual).to.deep.include(expectedSlotBooked);
-			expect(actual).to.deep.include(expectedSlotNotBooked);
 			expect(actual).to.have.lengthOf(expectedLength);
+			expect(actual.some((slot) => slot.serviceId === "service1" && slot.booked === true && slot.bookedBy === "user2" && slot.startTime === 7200 && slot.durationSeconds === 3600)).to.be.true;
+			expect(actual.some((slot) => slot.serviceId === "service1" && slot.booked === false && slot.startTime === 0 && slot.durationSeconds === 3600)).to.be.true;
 		})
 	});
 });
