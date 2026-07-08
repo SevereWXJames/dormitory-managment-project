@@ -63,6 +63,10 @@ export const getUserId = (state: RootState) => {
     return state.authentication.userId;
 }
 
+export const getUserRole = (state: RootState) => {
+    return state.authentication.userRole;
+}
+
 export const getAuthenticationState = (state: RootState) => {
 	return state.authentication.authenticationState;
 }
