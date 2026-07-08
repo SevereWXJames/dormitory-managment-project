@@ -27,6 +27,24 @@ describe('POST /login', () => {
         roles: ["RESIDENT"],
     };
 
+    const invalidPasswordPayload = {
+        username: 'alice123',
+        email: 'alice@tmp.com',
+        password: 'password1234',
+    };
+
+    const invalidUsernamePayload = {
+        username: 'alice1234',
+        email: 'alice@tmp.com',
+        password: 'password123',
+    };
+
+    const invalidEmailPayload = {
+        username: 'alice1234',
+        email: 'aliceye@tmp.com',
+        password: 'password123',
+    };
+
     const validLoginPayload = {
         username: 'alice123',
         email: 'alice@tmp.com',
@@ -57,6 +75,31 @@ describe('POST /login', () => {
             console.log(`res: ${JSON.stringify(res.body)}`);
             expect(res).to.have.status(200);
         });
+
+        it('should return 500 on invalid password', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/login')
+                .send(invalidPasswordPayload);
+            console.log(`res: ${JSON.stringify(res.body)}`);
+            expect(res).to.have.status(500);
+        });
+
+        it('should return 500 on invalid username', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/login')
+                .send(invalidUsernamePayload);
+            console.log(`res: ${JSON.stringify(res.body)}`);
+            expect(res).to.have.status(500);
+        });
+
+        it('should return 500 on invalid email', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/login')
+                .send(invalidEmailPayload);
+            console.log(`res: ${JSON.stringify(res.body)}`);
+            expect(res).to.have.status(500);
+        });
+
 
         it('should set a jwt cookie on a successful login', async () => {
             const res = await chaiWithHttp.request.execute(app)

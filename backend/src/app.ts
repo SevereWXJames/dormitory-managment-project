@@ -15,12 +15,12 @@ import {authenticateRequest, requireRole} from "./middleware/auth.middleware.ts"
 import {Role} from "./database/types/user.service.types.ts";
 
 const app = express();
-app.use(json());
-
 app.use(cors({
     origin: process.env.FRONT_END_URL,
     credentials: true, // required for cookies to be sent/received cross-origin
 }));
+
+app.use(json());
 
 app.use("/residents", authenticateRequest, requireRole(Role.ADMIN), residentsRouter);
 app.use("/maintenance-request", authenticateRequest, requireRole(Role.ADMIN), maintenanceRequestRouter);
