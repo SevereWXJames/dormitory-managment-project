@@ -22,15 +22,17 @@ app.use(cors({
     credentials: true, // required for cookies to be sent/received cross-origin
 }));
 
-app.use("/residents", authenticateRequest, await requireRole(Role.ADMIN), residentsRouter);
-app.use("/reservations", authenticateRequest, reservationRouter);
-app.use("/services",authenticateRequest, servicesRouter);
-app.use("/notices", authenticateRequest, noticeRouter)
-app.use("/rooms", authenticateRequest, roomsRouter);
-app.use("/credits", authenticateRequest, creditRouter);
-app.use("/maintenance-request", authenticateRequest, maintenanceRequestRouter)
-app.use("/IoT", authenticateRequest, IoTRouter);
-app.use("/user",authenticateRequest, userRouter);
+app.use("/residents", authenticateRequest, requireRole(Role.ADMIN), residentsRouter);
+app.use("/maintenance-request", authenticateRequest, requireRole(Role.ADMIN), maintenanceRequestRouter);
+app.use("/notices", authenticateRequest, requireRole(Role.ADMIN), noticeRouter)
+app.use("/rooms", authenticateRequest, requireRole(Role.ADMIN), roomsRouter);
+
+app.use("/reservations", authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), reservationRouter);
+app.use("/services",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), servicesRouter);
+
+app.use("/credits", authenticateRequest, requireRole(Role.RESIDENT), creditRouter);
+app.use("/IoT", authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), IoTRouter);
+app.use("/user",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), userRouter);
 app.use("/", authRouter);
 
 export default app;
