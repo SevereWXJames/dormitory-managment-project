@@ -12,7 +12,7 @@ export function useSignUpForm(role: Role) {
         password: "",
         phoneNumber: "",
         email: "",
-        role: role? Role.RESIDENT : role,
+        role: role? role : Role.RESIDENT,
     });
     const [errors, setErrors] = useState<FormErrors>({});
     const [signUp, {isLoading, isError, error}] = useSignUpMutation();

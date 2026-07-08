@@ -13,19 +13,23 @@ const SignUpFormErrors: Record<UserInputFormKey, string> = {
     name: "Name is required",
     username: "Username is required",
     password: "Password is required",
-    phoneNumber: "Phone number is required",
+    email: "Email is required",
 };
 
+const requiredInputs : UserInputFormKey[] = ["name", "username", "password", "email"];
+
 const validateInput = (key: UserInputFormKey, input: string | null) => {
-    if (!input || input.trim().length <= 0) return SignUpFormErrors[key];
+    if (!input || input.trim().length <= 0 || input == "") return SignUpFormErrors[key];
     return null;
 }
 
 export function validateForm(form: UserInputForm): FormErrors {
     const errors: FormErrors = {};
     for (const [field, input] of Object.entries(form)) {
-        const message = validateInput(field, input);
-        if (message) errors[field] = message;
+        if(requiredInputs.includes(field)){
+            const message = validateInput(field, input);
+            if (message) errors[field] = message;
+        }
     }
     return errors;
 }

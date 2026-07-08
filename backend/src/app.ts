@@ -25,10 +25,10 @@ app.use(cors({
 app.use(json());
 
 app.use("/residents", authenticateRequest, requireRole(Role.ADMIN), residentsRouter);
-app.use("/maintenance-request", authenticateRequest, requireRole(Role.ADMIN), maintenanceRequestRouter);
-app.use("/notices", authenticateRequest, requireRole(Role.ADMIN), noticeRouter)
+app.use("/notices", authenticateRequest, requireRole(Role.ADMIN, Role.RESIDENT), noticeRouter)
 app.use("/rooms", authenticateRequest, requireRole(Role.ADMIN), roomsRouter);
 
+app.use("/maintenance-request", authenticateRequest, requireRole(Role.ADMIN, Role.RESIDENT), maintenanceRequestRouter);
 app.use("/reservations", authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), reservationRouter);
 app.use("/services",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), servicesRouter);
 
