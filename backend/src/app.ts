@@ -13,7 +13,9 @@ import residentsRouter from "./routes/residents.ts";
 import authRouter from "./routes/auth.ts";
 import {authenticateRequest, requireRole} from "./middleware/auth.middleware.ts";
 import {Role} from "./database/types/user.service.types.ts";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 app.use(cors({
     origin: process.env.FRONT_END_URL,
