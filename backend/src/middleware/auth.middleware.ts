@@ -6,7 +6,6 @@ import type {Role} from "../database/types/user.service.types.ts";
 export const authenticateRequest = async (req: Request, res: Response, next: NextFunction) => {
     // get the token from the header
     try{
-        console.log(`req headers: ${JSON.stringify(req.headers)}`);
         await verifyRequestHeader(req);
         next();
     }catch(error){
@@ -18,11 +17,9 @@ export const authenticateRequest = async (req: Request, res: Response, next: Nex
     }
 }
 
-export const authorizeRole = async (req: Request, res: Response, next: NextFunction, allowedRoles: Role[]) => {
-    // get the token from the header
+export const checkRole = async (requiredRoles: Role[], req: Request, res: Response, next: NextFunction ) => {
     try{
-        console.log(`req headers: ${JSON.stringify(req.headers)}`);
-        await verifyRoles(req, allowedRoles);
+        await verifyRoles(req, requiredRoles);
         next();
     }catch(error){
         return res.status(500).json({
@@ -30,6 +27,13 @@ export const authorizeRole = async (req: Request, res: Response, next: NextFunct
             type: "error",
             error: (error as Error).message,
         });
+    }
+}
+
+export const requireRole = async (... requiredRoles: Role[]) => {
+    // get the token from the header
+    return async (req: Request, res: Response, next: NextFunction) => {
+        return await checkRole(requiredRoles, req, res, next);
     }
 }
 

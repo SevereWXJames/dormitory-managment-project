@@ -28,5 +28,6 @@ export async function verifyRequestHeader(req: Request) {
 export async function verifyRoles(req: Request, allowedRoles: Role[]){
     const {roles} = req.user;
     if(!roles) throw Error("Unauthorized request!");
-    if(!allowedRoles.includes(roles)) throw Error("Insufficient permissions!");
+    const hasPermission = roles.some((role : Role) => allowedRoles.includes(role));
+    if(!hasPermission) throw Error("Insufficient permissions!");
 }

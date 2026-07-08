@@ -83,10 +83,23 @@ describe('AUTHORIZATION', () => {
 
         it('accepts request with a valid token and role', async () => {
             const res = await chaiWithHttp.request.execute(app)
-                .get(`/residents/${testUserId}`)
+                .get(`/residents`)
                 .set('Cookie', `${testJwt}`)
                 .send();
+            console.log(`res: ${JSON.stringify(res, null, 2)}`);
             expect(res).to.have.status(200);
+
+        });
+
+        it('rejects request with an invalid token and valid role', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/residents`)
+                .set('Cookie', `112938123.fake.jwt`)
+                .send();
+            console.log(`res: ${JSON.stringify(res, null, 2)}`);
+            expect(res).to.have.status(500);
+            expect(res.body.message).to.equal("Authentication failed");
+            expect(res.body.type).to.equal("error")
         });
 
     })
@@ -127,10 +140,11 @@ describe('AUTHORIZATION', () => {
 
         it('rejects request with a valid token but invalid role', async () => {
             const res = await chaiWithHttp.request.execute(app)
-                .get(`/residents/${testUserId}`)
+                .get(`/residents`)
                 .set('Cookie', `${testJwt}`)
                 .send();
-            expect(res).to.have.status(200);
+            expect(res).to.have.status(500);
+            expect(res?.body.message).to.equal("Authorization failed.");
         });
     });
 

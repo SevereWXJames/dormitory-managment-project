@@ -11,7 +11,8 @@ import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import authRouter from "./routes/auth.ts";
-import {authenticateRequest} from "./middleware/auth.middleware.ts";
+import {authenticateRequest, requireRole} from "./middleware/auth.middleware.ts";
+import {Role} from "./database/types/user.service.types.ts";
 
 const app = express();
 app.use(json());
@@ -21,7 +22,7 @@ app.use(cors({
     credentials: true, // required for cookies to be sent/received cross-origin
 }));
 
-app.use("/residents", authenticateRequest, residentsRouter);
+app.use("/residents", authenticateRequest, await requireRole(Role.ADMIN), residentsRouter);
 app.use("/reservations", authenticateRequest, reservationRouter);
 app.use("/services",authenticateRequest, servicesRouter);
 app.use("/notices", authenticateRequest, noticeRouter)
