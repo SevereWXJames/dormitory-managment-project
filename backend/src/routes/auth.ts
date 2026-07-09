@@ -41,7 +41,6 @@ authRouter.post("/signup", async (req, res) => {
 
 authRouter.post("/login", async (req: Request, res: Response)=> {
     let {username, email, password} = req.body;
-
     try {
         const user = await logIn(username, email, password);
         const token = createJWTToken(user._id, user.roles);

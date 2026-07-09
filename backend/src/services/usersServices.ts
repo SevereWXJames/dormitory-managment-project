@@ -57,7 +57,6 @@ export async function getExistingUserFromId(_id: string): Promise<User | undefin
 export async function logIn(username: string, email: string, password: string) {
     const user = await userModel.findOne({ username, email });
     if (!user) throw Error("Invalid username, email, or password");
-
     const isMatch = await compare(password, user.password); // correct verification
     if (!isMatch) throw Error("Invalid username, email, or password");
 
