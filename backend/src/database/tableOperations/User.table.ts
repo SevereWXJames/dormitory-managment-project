@@ -14,7 +14,6 @@ export class UserTable extends BaseTable<IUser> {
             const doc = new Users(profileData);
             await doc.save();
         } catch (error) {
-            console.log(`Error:${error}`);
             throw Error("Error creating user", {cause: error});
         }
 
