@@ -1,10 +1,11 @@
+import { useMemo, useState } from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
-import {useAdminData} from "@/pages/common/buildingManager/pageHooks/useAdminData.tsx";
+import { useAdminData } from "@/pages/common/buildingManager/pageHooks/useAdminData.tsx";
 
 interface NoticeItem {
     notice_id: string | number;
     title: string;
-    created_at: number;
+    created_at: number | null;
 }
 
 interface DashboardData {
@@ -27,82 +28,133 @@ const initialDashboardData: DashboardData = {
 
 export function AdminDashboardPage() {
     const { loading, error, managerData, maintenanceRequests, notices } = useAdminData();
+    const [activeModal, setActiveModal] = useState<"queue" | "notice" | null>(null);
+    const [selectedNotice, setSelectedNotice] = useState<NoticeItem | null>(null);
 
-    const dashboardData: DashboardData = (!loading && !error && managerData && maintenanceRequests && notices)
-        ? {
-            ...initialDashboardData,
-            name: managerData.username,
-            pending_maintenance_count: maintenanceRequests.length,
-            recent_published_notices: notices.slice(0, 3).map((notice) => ({
-                notice_id: notice._id,
-                title: notice.title,
-                created_at: notice.createAt ?? null,
-            })),
+    const dashboardData: DashboardData = useMemo(() => {
+        if (!loading && !error && managerData && maintenanceRequests && notices) {
+            return {
+                ...initialDashboardData,
+                name: managerData.username,
+                pending_maintenance_count: maintenanceRequests.length,
+                recent_published_notices: notices.slice(0, 3).map((notice) => ({
+                    notice_id: notice._id,
+                    title: notice.title,
+                    created_at: notice.createAt ?? null,
+                })),
+            };
         }
-        : initialDashboardData;
+        return initialDashboardData;
+    }, [loading, error, managerData, maintenanceRequests, notices]);
+
+    const openNotice = (notice: NoticeItem) => {
+        setSelectedNotice(notice);
+        setActiveModal("notice");
+    };
 
     return (
-        <>
-            <CommonFrame commonFrameType="BUILDING_MANAGER">
-            <div className="adminDashboardPage">
-                <h1>Building Manager Dashboard</h1>
-                <p>Overview of building activity, maintenance workload, and facility occupancy.</p>
+        <CommonFrame commonFrameType="BUILDING_MANAGER">
+            <div className="admin-dashboard-page">
+                <div className="admin-page-header">
+                    <div>
+                        <h1>Building Manager Dashboard</h1>
+                        <p>Overview of building activity, maintenance workload, and facility occupancy.</p>
+                    </div>
+                    <div className="page-actions">
+                        <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
+                        <button type="button" className="primary-button" onClick={() => setActiveModal("notice")}>Publish notice</button>
+                    </div>
+                </div>
 
                 {loading && <p>Loading dashboard data...</p>}
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                {error && <p className="form-error">{error}</p>}
 
                 {!loading && !error && (
                     <>
-                        <section>
-                            <h2>Manager</h2>
-                            <div style={{ padding: "1rem", border: "1px solid #ccc", borderRadius: 8, marginBottom: "1rem" }}>
-                                <strong>Name: </strong>{dashboardData.name}
-                            </div>
-                        </section>
+                        <div className="dashboard-grid">
+                            <section className="content-card metric-card">
+                                <p className="card-label">Manager</p>
+                                <h3>{dashboardData.name}</h3>
+                                <p>On-site oversight and daily operations</p>
+                            </section>
 
-                        <section>
-                            <h2>Pending maintenance</h2>
-                            <div style={{ display: "inline-flex", alignItems: "center", padding: "1rem", border: "1px solid #ccc", borderRadius: 8, marginBottom: "1rem" }}>
-                                <span style={{ fontSize: "2rem", fontWeight: 600, marginRight: "0.75rem" }}>{dashboardData.pending_maintenance_count}</span>
-                                <span>open maintenance requests</span>
-                            </div>
-                        </section>
+                            <section className="content-card metric-card">
+                                <p className="card-label">Pending maintenance</p>
+                                <h3>{dashboardData.pending_maintenance_count}</h3>
+                                <p>Open work orders waiting for triage</p>
+                            </section>
 
-                        <section>
-                            <h2>Active facilities occupancy</h2>
-                            <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
+                            <section className="content-card metric-card">
+                                <p className="card-label">Facility occupancy</p>
+                                <h3>{Math.round(dashboardData.active_facilities_occupancy.reduce((sum, facility) => sum + facility.occupancy_rate, 0) / dashboardData.active_facilities_occupancy.length * 100)}%</h3>
+                                <p>Average active facility usage</p>
+                            </section>
+                        </div>
+
+                        <section className="content-card">
+                            <div className="section-title-row">
+                                <h2>Active facilities occupancy</h2>
+                                <span className="section-pill">Live overview</span>
+                            </div>
+                            <div className="facility-grid">
                                 {dashboardData.active_facilities_occupancy.map((facility) => (
-                                    <div key={facility.facility_id} style={{ border: "1px solid #ccc", borderRadius: 8, padding: "1rem" }}>
-                                        <div style={{ fontWeight: 600 }}>{facility.name}</div>
-                                        <div>Occupancy rate: {(facility.occupancy_rate * 100).toFixed(0)}%</div>
+                                    <div key={facility.facility_id} className="facility-card">
+                                        <div className="facility-card-title">{facility.name}</div>
+                                        <div className="facility-card-value">{(facility.occupancy_rate * 100).toFixed(0)}%</div>
+                                        <div className="facility-card-caption">Current occupancy trend</div>
                                     </div>
                                 ))}
                             </div>
                         </section>
 
-                        <section>
-                            <h2>Recent published notices</h2>
-                            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                                <thead>
-                                    <tr>
-                                        <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Notice</th>
-                                        <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "0.5rem" }}>Published</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <section className="content-card">
+                            <div className="section-title-row">
+                                <h2>Recent published notices</h2>
+                                <span className="section-pill">Latest updates</span>
+                            </div>
+                            {dashboardData.recent_published_notices.length > 0 ? (
+                                <div className="notice-list">
                                     {dashboardData.recent_published_notices.map((notice) => (
-                                        <tr key={notice.notice_id}>
-                                            <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{notice.title}</td>
-                                            <td style={{ padding: "0.5rem", borderBottom: "1px solid #eee" }}>{new Date(notice.created_at).toLocaleDateString()}</td>
-                                        </tr>
+                                        <button key={notice.notice_id} type="button" className="notice-item" onClick={() => openNotice(notice)}>
+                                            <div>
+                                                <strong>{notice.title}</strong>
+                                                <p>{notice.created_at ? new Date(notice.created_at).toLocaleDateString() : "Recently published"}</p>
+                                            </div>
+                                            <span className="text-link">View</span>
+                                        </button>
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+                            ) : (
+                                <p className="empty-state">No notices have been published yet.</p>
+                            )}
                         </section>
                     </>
                 )}
+
+                {activeModal && (
+                    <div className="modal-backdrop" onClick={() => setActiveModal(null)}>
+                        <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+                            <div className="modal-header">
+                                <h3>{activeModal === "queue" ? "Maintenance queue" : "Notice preview"}</h3>
+                                <button type="button" className="icon-button" onClick={() => setActiveModal(null)}>×</button>
+                            </div>
+                            <p>
+                                {activeModal === "queue"
+                                    ? `There are ${dashboardData.pending_maintenance_count} maintenance items waiting for review.`
+                                    : selectedNotice?.title ?? "This notice is ready for publication."}
+                            </p>
+                            <div className="modal-actions">
+                                <button type="button" className="secondary-button" onClick={() => setActiveModal(null)}>Close</button>
+                                {activeModal === "queue" ? (
+                                    <button type="button" className="primary-button" onClick={() => setActiveModal(null)}>Open maintenance</button>
+                                ) : (
+                                    <button type="button" className="primary-button" onClick={() => setActiveModal(null)}>Share notice</button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
-            </CommonFrame>
-        </>
+        </CommonFrame>
     );
 }
