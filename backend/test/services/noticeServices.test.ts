@@ -23,21 +23,21 @@ describe("noticeServices", function () {
 
 	describe("getNoticesForUserId", function () {
 		it("userId with one viewable notice", async function () {
-			const userId = "user1";
+			const userId = "507f191e810c19729de860eb";
 			const actual = await getNoticesForUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
 			expect(actual).to.have.lengthOf(1);
-			expect(actual.some((notice) => notice.title === "test3" && notice.text === "test" && Array.isArray(notice.viewableBy) && notice.viewableBy.includes("user1"))).to.be.true;
+			expect(actual.some((notice) => notice.title === "test3" && notice.text === "test" && Array.isArray(notice.viewableBy) && notice.viewableBy.includes("507f191e810c19729de860eb"))).to.be.true;
 		});
 		it("userId with two viewable notices", async function () {
-			const userId = "user0";
+			const userId = "507f191e810c19729de860ea";
 			const actual = await getNoticesForUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
 			expect(actual).to.have.lengthOf(2);
-			expect(actual.some((notice) => notice.title === "test2" && notice.text === "test" && Array.isArray(notice.viewableBy) && notice.viewableBy.includes("user0"))).to.be.true;
+			expect(actual.some((notice) => notice.title === "test2" && notice.text === "test" && Array.isArray(notice.viewableBy) && notice.viewableBy.includes("507f191e810c19729de860ea"))).to.be.true;
 		});
 		it("userId with no viewable notices or absent userId", async function () {
-			const userId = "user2";
+			const userId = "507f191e810c19729de860ec";
 			const actual = await getNoticesForUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
 			expect(actual).to.be.empty;

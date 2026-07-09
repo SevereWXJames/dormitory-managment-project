@@ -1,12 +1,13 @@
-import type { Model, Document, Types } from "mongoose";
 import {
     type MaintenanceRequest, MaintenanceRequestModel,
+    type MaintenanceRequestInput,
     type MaintenanceRequestPriority, MaintenanceRequestPriorityModel,
     type MaintenanceRequestStatus, MaintenanceRequestStatusModel,
-    type MaintenanceRequestType, MaintenanceRequestTypeModel
+    type MaintenanceRequestType, MaintenanceRequestTypeModel,
+    type MongoId
 } from "../dataTypes/maintenanceRequest.ts";
 
-type MaintenanceRequestWithId = MaintenanceRequest & { _id?: string | Types.ObjectId };
+type MaintenanceRequestWithId = MaintenanceRequest;
 
 export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]> {
     const cursor = MaintenanceRequestModel.find({ }).lean();
@@ -139,7 +140,7 @@ export async function getAllMaintenanceRequestPriorities(): Promise<MaintenanceR
  * @returns Promise indicating whether the maintenance request was added
  * successfully.
  */
-export async function addMaintenanceRequest(maintenanceRequest: MaintenanceRequest) : Promise<void> {
+export async function addMaintenanceRequest(maintenanceRequest: MaintenanceRequestInput) : Promise<void> {
     return MaintenanceRequestModel.insertOne(maintenanceRequest).then((result) => {
         return Promise.resolve();
     }).catch((e) => {

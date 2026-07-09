@@ -1,22 +1,22 @@
 {
   "notices": [
     {
-      "createdBy": "admin0",
+      "createdBy": "507f191e810c19729de860ed",
       "viewableBy": null,
       "title": "test1",
       "text": "test",
       "createdAt": 0
     },
     {
-      "createdBy": "admin0",
-      "viewableBy": ["user0"],
+      "createdBy": "507f191e810c19729de860ed",
+      "viewableBy": ["507f191e810c19729de860ea"],
       "title": "test2",
       "text": "test",
       "createdAt": 1
     },
     {
-      "createdBy": "admin0",
-      "viewableBy": ["user1", "user0"],
+      "createdBy": "507f191e810c19729de860ed",
+      "viewableBy": ["507f191e810c19729de860eb", "507f191e810c19729de860ea"],
       "title": "test3",
       "text": "test",
       "createdAt": 2
