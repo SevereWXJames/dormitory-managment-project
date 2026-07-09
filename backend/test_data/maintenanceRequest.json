@@ -6,7 +6,9 @@
       "title": "title1",
       "description": "description description description",
       "type": "plumbing",
-      "status": "new"
+      "status": "new",
+      "priority": "prio2",
+      "location": null
     },
     {
       "_id": "mR1",
@@ -14,7 +16,9 @@
       "title": "title2",
       "description": "description description description",
       "type": "electrical",
-      "status": "inProgress"
+      "status": "inProgress",
+      "priority": "prio1",
+      "location": "Bedroom"
     },
     {
       "_id": "mR2",
@@ -22,7 +26,9 @@
       "title": "title3",
       "description": "description description description",
       "type": "misc",
-      "status": "completed"
+      "status": "completed",
+      "priority": "prio0",
+      "location": "Kitchen"
     }
   ]
 }
