@@ -30,24 +30,17 @@ export function SignUpForm({role}: SignUpFormProps) {
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
                  style={{width: 'fit-content', margin: '0 auto'}}>
         {signUpFields.map(({key, label, type}) => (
-            <>
-                <FormControl key={key} sx={{m: 1, width: '100%', maxWidth: '30ch'}} error={!!errors[key]}>
-                    {key != "password" && <>
-                        <InputLabel htmlFor={`${key}-input`}>{label}</InputLabel>
-                        <OutlinedInput
-                            id={`${key}-input`}
-                            type={type ?? "text"}
-                            label={label}
-                            value={form[key]}
-                            onChange={handleChange(key)}
-                        />
-                    </>}
-                    {/*{key === "password" && <>*/}
-                    {/*    <PasswordField key={key} onChange={handleChange(key)}/>*/}
-                    {/*</>}*/}
-                    {errors[key] && <span className="red text-red-500">{`Error: ${errors[key]}`}</span>}
-                </FormControl>
-            </>
+            <FormControl key={key} sx={{m: 1, width: '100%', maxWidth: '30ch'}} error={!!errors[key]}>
+                <InputLabel htmlFor={`${key}-input`}>{label}</InputLabel>
+                <OutlinedInput
+                    id={`${key}-input`}
+                    type={type ?? "text"}
+                    label={label}
+                    value={form[key]}
+                    onChange={handleChange(key)}
+                />
+                {errors[key] && <span className="red text-red-500">{`Error: ${errors[key]}`}</span>}
+            </FormControl>
         ))}
         <PasswordField onChange={handleChange("password")} isError={errors["password"]}/>
         {isLoading && <p>Loading ... </p>}
