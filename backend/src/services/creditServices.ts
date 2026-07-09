@@ -9,7 +9,7 @@ export async function getCreditBalanceByUserId(userId: string): Promise<CreditBa
     return CreditBalanceModel.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as CreditBalance);
+                return Promise.resolve(result as unknown as CreditBalance);
             }
             return Promise.resolve(undefined);
         })

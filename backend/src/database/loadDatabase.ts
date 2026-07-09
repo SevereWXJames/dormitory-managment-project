@@ -38,8 +38,5 @@ export default function loadSampleData(): Promise<void> {
 			load("Users", userJSON.users)]),
 		).then((value) => {
 			Promise.resolve();
-		})
-		.catch((e) => {
-			Promise.reject(e);
 		});
 };

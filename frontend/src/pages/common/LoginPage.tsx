@@ -1,11 +1,11 @@
 import {CommonFrame} from "../../components/common/CommonFrame";
-import {LoginForm} from "../../components/common/LoginForm";
+import {LoginForm} from "../../components/common/Auth/LoginForm.tsx";
 import {
     Card,
     CardContent,
     CardTitle,
 } from "@/components/ui/card"
-
+import {Link} from "react-router-dom";
 export function LoginPage() {
     return (
         <>
@@ -18,6 +18,12 @@ export function LoginPage() {
                         <CardContent className="flex flex-col gap-4">
                             <LoginForm/>
                         </CardContent>
+                        <Link to="/resident-signup">
+                            Create a new resident account
+                        </Link>
+                        <Link to="/admin-signup">
+                            Create a new admin account
+                        </Link>
                     </Card>
                 </main>
             </CommonFrame>

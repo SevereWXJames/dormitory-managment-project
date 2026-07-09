@@ -1,5 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
+import {CreditBalances} from "../database/models/creditBalance.model.ts";
 
 export type MongoId = string | mongoose.Types.ObjectId;
 
@@ -11,8 +12,9 @@ export interface CreditBalance {
 
 export type CreditBalanceInput = Omit<CreditBalance, "_id"> & { _id?: MongoId };
 
-const creditBalanceSchema = new mongoose.Schema({userId: String, balanceCents: Number});
-export const CreditBalanceModel = mongoose.model("CreditBalances"  as CollectionName, creditBalanceSchema, "CreditBalances"  as CollectionName);
+// const creditBalanceSchema = new mongoose.Schema({userId: String, balanceCents: Number});
+// export const CreditBalanceModel = mongoose.model("CreditBalances"  as CollectionName, creditBalanceSchema, "CreditBalances"  as CollectionName);
+export const CreditBalanceModel = CreditBalances;
 
 export interface Transaction {
     _id: MongoId;
