@@ -21,7 +21,13 @@ describe("serviceServices", function () {
 			const actual = await getAllServices();
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.have.lengthOf(expectedLength);
-			expect(actual.some((service) => service.name === "Washing Machine 2" && service.description === "test" && service.hasIoT === true && service.IoTName === "WashingMachineType1" && service.reservationDurationSeconds === 3600 && service.reservationStartHour === 8 && service.reservationEndHour === 18)).to.be.true;
+			expect(actual.some((service) =>
+                service.name === "Washing Machine 2" &&
+                service.description === "test" &&
+                service.hasIoT === true && service.IoTName === "WashingMachineType1" &&
+                service.reservationDurationSeconds === 3600 &&
+                service.reservationStartHour === 8 &&
+                service.reservationEndHour === 18)).to.be.true;
 		});
 	});
 

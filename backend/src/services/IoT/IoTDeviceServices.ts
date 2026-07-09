@@ -29,7 +29,7 @@ async function getFacilityID(uuid: string): Promise<string> {
     if (result === null) {
         throw new Error("No service has this IoT UUID");
     }
-    return (result as Service)._id;
+    return (result as Service)._id.toString();
 }
 
 async function saveIoTEvent(iotEvent: IoTEvent) {
