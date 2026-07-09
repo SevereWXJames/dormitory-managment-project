@@ -45,5 +45,14 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/logs:/mosquitto/log
+    ports:
+      - "1883:1883"
 volumes:
   mongo-data: {}
