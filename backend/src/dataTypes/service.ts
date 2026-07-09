@@ -11,6 +11,7 @@ export interface Service {
     reservationDurationSeconds: number;
     reservationStartHour: number;
     reservationEndHour: number;
+    IoTName: string;
 }
 
 const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
