@@ -3,7 +3,7 @@
 ## Purpose
 
 The MQTT test app is a test app meant to mock the functionality of an IoT device talking to our server.
-The app sends MQTT messages to the broker url contained in the app. To run the app use `node mqtt-test-app` and the arguments documented below.
+The app sends MQTT messages to the broker url contained in the app. To run the app use `node mqtt-test-app.js` and the arguments documented below.
 
 ## Arguments
 
