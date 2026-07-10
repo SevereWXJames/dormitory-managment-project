@@ -4,8 +4,10 @@ import {after, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
-import mongoose from "mongoose";
+import mongoose, {Types} from "mongoose";
 import {ServiceModel} from "../../src/dataTypes/service.ts";
+import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalance.table.js";
+import {BOOKING_COST} from "../../src/utility/pricesForBookings.js";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -151,8 +153,29 @@ describe('FACILITY BOOKING SERVICES', () => {
             expect(res).to.have.status(200);
         });
 
-        it('Book a slot by service Id', async () => {
+        it('Book a slot by service Id - not enough credits', async () => {
             const serviceId = "service0";
+            const slotsRes = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const slots = slotsRes.body.data;
+            const slotId = slots[0]._id;
+
+            const res = await chaiWithHttp.request.execute(app)
+                .put(`/reservations/book-slot-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+            const booking = res.body.data;
+            expect(res).to.have.status(500);
+        });
+
+        it('Book a slot by service Id - enough credits', async () => {
+            const serviceId = "service0";
+            const balanceTable = new CreditBalanceTable();
+            const userId = new Types.ObjectId(testUserId)
+            await balanceTable.incrementBalance(userId, BOOKING_COST);
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)

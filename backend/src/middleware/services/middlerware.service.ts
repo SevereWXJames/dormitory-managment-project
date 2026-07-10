@@ -1,7 +1,7 @@
 import type {Request} from "express"
 import jwt from "jsonwebtoken";
 import type {Role} from "../../database/types/user.service.types.ts";
-import type {JWTPayload} from "../../auth-utils/tokens.js";
+import type {JWTPayload} from "../../utility/auth-utils/tokens.js";
 
 export async function verifyRequestHeader(req: Request) {
     //Verify jwt token

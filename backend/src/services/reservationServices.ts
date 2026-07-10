@@ -1,5 +1,7 @@
 import {type ReservationSlot, ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
 import {Types} from "mongoose";
+import {CreditBalances} from "../database/models/creditBalance.model.ts";
+import {BOOKING_COST} from "../utility/pricesForBookings.ts";
 
 export async function getReservationsBookedByUserId(userId: string): Promise<ReservationSlot[]> {
     const cursor = ReservationSlotModel.find({bookedBy: userId}).lean();
@@ -35,16 +37,28 @@ export async function getReservationsSlotsByServiceId(serviceId: string): Promis
     return Promise.resolve(results);
 }
 
+export async function hasEnoughCredits(userId: string){
+    const id = new Types.ObjectId(userId)
+    const balanceDoc = await CreditBalances.findOne({userId: id}).lean().exec();
+    if(!balanceDoc) throw Error("Error, no credit balance!");
+    const balanceCents = balanceDoc.balanceCents;
+    return balanceCents >= BOOKING_COST;
+}
+
 export async function bookReservationSlot(serviceId: string | string[], slotId: string, userId: string){
     //TODO:
     // Given a service id and a slot id, set the slot with given slotId and serviceId to be booked by userData
     // 1. Check that the slot is available
-    // 2. Check that the slot has not been booked.
+    // 2. Check that the slot has not been booked, and that the user has enough balance.
     // 3. Set slot bookedBy to be userId
     // 4. Set slot booked to be true
-    // 5. Return status of action
+    // 5. Decrement the balance.
+    // 6. Return status of action
 
     const id = new Types.ObjectId(slotId);
+    const hasEnough = hasEnoughCredits(userId);
+    if(!hasEnough) throw Error("Error, not enough credits.");
+
     const filter = {serviceId: serviceId, _id: id, booked: false};
     const update = {$set: {booked: true, bookedBy: userId}};
     const options = { new: true } as const;
@@ -67,7 +81,6 @@ export async function getAllSlots(serviceId: string){
     }catch(error){
         throw Error(`Error getting slots for service ${serviceId}`, {cause: error});
     }
-
 }
 
 export async function getAllFreeSlots(serviceId: string){
