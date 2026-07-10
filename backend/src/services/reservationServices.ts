@@ -38,11 +38,19 @@ export async function getReservationsSlotsByServiceId(serviceId: string): Promis
 }
 
 export async function hasEnoughCredits(userId: string){
-    const id = new Types.ObjectId(userId)
+    const id = new Types.ObjectId(userId);
     const balanceDoc = await CreditBalances.findOne({userId: id}).lean().exec();
     if(!balanceDoc) throw Error("Error, no credit balance!");
     const balanceCents = balanceDoc.balanceCents;
     return balanceCents >= BOOKING_COST;
+}
+
+export async function payBooking(userId: string){
+    const id = new Types.ObjectId(userId);
+    const filter = {userId: id};
+    const update = {$inc: {balanceCents: -1 * BOOKING_COST}};
+    const options = {new: true}
+    return await CreditBalances.findOneAndUpdate(filter, update, options);
 }
 
 export async function bookReservationSlot(serviceId: string | string[], slotId: string, userId: string){
@@ -56,7 +64,7 @@ export async function bookReservationSlot(serviceId: string | string[], slotId: 
     // 6. Return status of action
 
     const id = new Types.ObjectId(slotId);
-    const hasEnough = hasEnoughCredits(userId);
+    const hasEnough = await hasEnoughCredits(userId);
     if(!hasEnough) throw Error("Error, not enough credits.");
 
     const filter = {serviceId: serviceId, _id: id, booked: false};
@@ -68,6 +76,7 @@ export async function bookReservationSlot(serviceId: string | string[], slotId: 
     if(!res){
         throw Error("Error, slot already booked!");
     }
+    await payBooking(userId);
     return res;
 }
 export async function getAllSlots(serviceId: string){
