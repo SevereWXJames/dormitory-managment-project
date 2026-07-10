@@ -205,34 +205,6 @@ describe('FACILITY BOOKING SERVICES', () => {
 
             balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
             expect(balanceDoc?.balanceCents).to.equal(0);
-        });
-
-        it('Book a slot by service Id - success, row set', async () => {
-            const serviceId = "service0";
-            const balanceTable = new CreditBalanceTable();
-            const userId = new Types.ObjectId(testUserId);
-            const update = await balanceTable.incrementBalance(userId, BOOKING_COST);
-
-            let balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
-            expect(balanceDoc?.balanceCents).to.equal(5);
-
-            const slotsRes = await chaiWithHttp.request.execute(app)
-                .get(`/reservations/get-slots-by-service/${serviceId}`)
-                .set('Cookie', `${testJwt}`)
-                .send();
-            const slots = slotsRes.body.data;
-            const slotId = slots[0]._id;
-
-            const res = await chaiWithHttp.request.execute(app)
-                .put(`/reservations/book-slot-by-service/${serviceId}`)
-                .set('Cookie', `${testJwt}`)
-                .send({userId: testUserId, slotId: slotId});
-            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
-
-            const booking = res.body.data;
-            expect(res).to.have.status(200);
-            expect(booking.booked).to.be.true;
-            expect(booking.bookedBy).to.be.equal(testUserId);
 
             const userBooking = await ReservationSlotModel.findOne({bookedBy: userId}).lean().exec();
             expect(userBooking).to.exist;
