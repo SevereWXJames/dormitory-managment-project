@@ -40,5 +40,5 @@ export default function loadSampleData(): Promise<void> {
 			load("IoTStatuses", IoTStatusJSON.IoTStatuses)]),
 		).then((value) => {
 			Promise.resolve();
-		});
+		}).catch((error) => {throw Error(`Error loading the database! ${error}`)});
 };

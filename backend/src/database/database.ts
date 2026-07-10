@@ -42,7 +42,7 @@ export async function connectMongo(quiet: boolean = false): Promise<void> {
         try {
             if (!quiet) console.info(`Database.create(): Attempting to connect to ${host}.`);
             await mongoose.connect(host, options);
-            clearDB(); //for testing purposes
+            // clearDB(); //for testing purposes
             if (!quiet) console.info(`Database.create(): Successfully connected to ${host}.`);
             return;
         } catch (e) {
