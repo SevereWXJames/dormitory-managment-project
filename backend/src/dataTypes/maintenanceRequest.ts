@@ -1,8 +1,10 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
+export type MongoId = string | mongoose.Types.ObjectId;
+
 export interface MaintenanceRequest {
-    _id: string;
+    _id: MongoId;
     createdBy: string;
     title: string;
     description: string;
@@ -12,8 +14,10 @@ export interface MaintenanceRequest {
     location: string | null;
 }
 
+export type MaintenanceRequestInput = Omit<MaintenanceRequest, "_id"> & { _id?: MongoId };
+
 const maintenanceRequestSchema = new Schema({
-    _id: String, createdBy: String, title: String, description: String, type: String, status: String,
+    createdBy: String, title: String, description: String, type: String, status: String,
     priority: String, location: String
 });
 export const MaintenanceRequestModel = mongoose.model("MaintenanceRequests" as CollectionName, maintenanceRequestSchema, "MaintenanceRequests" as CollectionName);
@@ -27,7 +31,7 @@ const maintenanceRequestTypeSchema = new Schema({_id: String, text: String});
 export const MaintenanceRequestTypeModel = mongoose.model("MaintenanceRequestTypes"  as CollectionName, maintenanceRequestTypeSchema, "MaintenanceRequestTypes"  as CollectionName);
 
 export interface MaintenanceRequestStatus {
-    _id: string;
+    _id: MongoId;
     text: string;
 }
 
@@ -36,7 +40,7 @@ export const MaintenanceRequestStatusModel = mongoose.model("MaintenanceRequestS
 
 
 export interface MaintenanceRequestPriority {
-    _id: string;
+    _id: MongoId;
     text: string;
 }
 

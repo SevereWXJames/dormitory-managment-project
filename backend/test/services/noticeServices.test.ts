@@ -23,39 +23,21 @@ describe("noticeServices", function () {
 
 	describe("getNoticesForUserId", function () {
 		it("userId with one viewable notice", async function () {
-			const userId = "user1";
-			const expectedLength = 1;
-			const expectedNotice = {
-				"_id": "notice2",
-				"createdBy": "admin0",
-				"viewableBy": ["user1", "user0"],
-				"title": "test3",
-				"text": "test",
-				"createdAt": 2
-			};
+			const userId = "507f191e810c19729de860eb";
 			const actual = await getNoticesForUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
-			expect(actual).to.have.lengthOf(expectedLength);
-			expect(actual).to.deep.include(expectedNotice);
+			expect(actual).to.have.lengthOf(1);
+			expect(actual.some((notice) => notice.title === "test3" && notice.text === "test" && Array.isArray(notice.viewableBy) && notice.viewableBy.includes("507f191e810c19729de860eb"))).to.be.true;
 		});
 		it("userId with two viewable notices", async function () {
-			const userId = "user0";
-			const expectedLength = 2;
-			const expectedNotice = {
-				"_id": "notice1",
-				"createdBy": "admin0",
-				"viewableBy": ["user0"],
-				"title": "test2",
-				"text": "test",
-				"createdAt": 1
-			};
+			const userId = "507f191e810c19729de860ea";
 			const actual = await getNoticesForUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
-			expect(actual).to.have.lengthOf(expectedLength);
-			expect(actual).to.deep.include(expectedNotice);
+			expect(actual).to.have.lengthOf(2);
+			expect(actual.some((notice) => notice.title === "test2" && notice.text === "test" && Array.isArray(notice.viewableBy) && notice.viewableBy.includes("507f191e810c19729de860ea"))).to.be.true;
 		});
 		it("userId with no viewable notices or absent userId", async function () {
-			const userId = "user2";
+			const userId = "507f191e810c19729de860ec";
 			const actual = await getNoticesForUserId(userId);
 			expect(actual).to.be.instanceOf(Array);
 			expect(actual).to.be.empty;

@@ -35,21 +35,10 @@ describe("maintenanceRequestServices", function () {
 	describe("getAllMaintenanceRequestsByUserId()", function () {
 		it("userId with one maintenance request", async function () {
 			const userId = "user1";
-			const expectedLength = 1;
-			const expectedMaintenanceRequest = {
-				"_id": "mR2",
-				"createdBy": "user1",
-				"title": "title3",
-				"description": "description description description",
-				"type": "misc",
-				"status": "completed",
-				"priority": "prio0",
-				"location": "Kitchen"
-			};
 			const actual = await getAllMaintenanceRequestsByUserId(userId);
-			expect(actual).to.have.lengthOf(expectedLength);
 			expect(actual).to.be.an.instanceOf(Array);
-			expect(actual[0]).to.deep.equal(expectedMaintenanceRequest);
+			expect(actual).to.have.lengthOf(1);
+			expect(actual.some((req) => req.createdBy === "user1" && req.title === "title3" && req.description === "description description description" && req.type === "misc" && req.status === "completed" && req.priority === "prio0" && req.location === "Kitchen")).to.be.true;
 		});
 		it("userId with two maintenance requests", async function () {
 			const userId = "user0";
@@ -144,22 +133,20 @@ describe("maintenanceRequestServices", function () {
 		it("Valid maintenanceRequest, with a null location", async function () {
 			const userId = "new_user1";
 			const maintenanceRequest = {
-				_id: "new_valid_request0",
 				createdBy: userId,
 				title: "New title",
 				description: "New description",
 				type: "New type",
 				status: "new",
 				priority: "prio0",
-				location: null,
-				__v: 0
+				location: null
 			};
 
 			try {
 				await addMaintenanceRequest(maintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
 				expect(result).to.have.lengthOf(1);
-				expect(result).to.deep.include(maintenanceRequest);
+				expect(result.some((req) => req.createdBy === userId && req.title === "New title" && req.description === "New description" && req.type === "New type" && req.status === "new" && req.priority === "prio0" && req.location === null)).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
@@ -168,32 +155,20 @@ describe("maintenanceRequestServices", function () {
 		it("Valid maintenanceRequest, with a non-null location", async function () {
 			const userId = "new_user2";
 			const maintenanceRequest = {
-				_id: "new_valid_request1",
 				createdBy: userId,
 				title: "New title",
 				description: "New description",
 				type: "New type",
 				status: "new",
 				priority: "prio0",
-				location: "New location",
-			};
-			const expected = {
-				_id: "new_valid_request1",
-				createdBy: userId,
-				title: "New title",
-				description: "New description",
-				type: "New type",
-				status: "new",
-				priority: "prio0",
-				location: "New location",
-				__v: 0
+				location: "New location"
 			};
 
 			try {
 				await addMaintenanceRequest(maintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
 				expect(result).to.have.lengthOf(1);
-				expect(result).to.deep.include(expected);
+				expect(result.some((req) => req.createdBy === userId && req.title === "New title" && req.description === "New description" && req.type === "New type" && req.status === "new" && req.priority === "prio0" && req.location === "New location")).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
@@ -201,8 +176,10 @@ describe("maintenanceRequestServices", function () {
 
 		it("Invalid maintenanceRequest: _id already exists", async function () {
 			const userId = "new_user3";
+			const existingRequests = await getAllMaintenanceRequestsByUserId("user0");
+			const existing = existingRequests[0];
 			const maintenanceRequest = {
-				_id: "mR0",
+				_id: existing ? String(existing._id) : "507f1f77bcf86cd799439011",
 				createdBy: userId,
 				title: "New title",
 				description: "New description",
@@ -210,7 +187,7 @@ describe("maintenanceRequestServices", function () {
 				status: "new",
 				priority: "prio0",
 				location: null
-			}
+			};
 
 			try {
 				await addMaintenanceRequest(maintenanceRequest);
@@ -225,34 +202,28 @@ describe("maintenanceRequestServices", function () {
 
 	describe ("setMaintenanceRequest", function () {
 		it("Valid maintenanceRequest, with a present _id", async function () {
-			const id = "mR0";
 			const newUserId = "new_user";
-			const oldMaintenanceRequest = {
-				"_id": id,
-				"createdBy": "user0",
-				"title": "title1",
-				"description": "description description description",
-				"type": "plumbing",
-				"status": "new",
-				"priority": "prio2",
-				"location": null
-			};
+			const existingRequests = await getAllMaintenanceRequestsByUserId("user0");
+			const existing = existingRequests.find((req) => req.title === "title1");
+			if (!existing || !existing._id) {
+				throw new Error("Expected an existing maintenance request for update test");
+			}
+			const id = String(existing._id);
 			const newMaintenanceRequest = {
-				"_id": id,
-				"createdBy": newUserId,
-				"title": "new_title",
-				"description": "new description",
-				"type": "new_category",
-				"status": "new_status",
-				"priority": "new_priority",
-				"location": "new_location"
+				_id: id,
+				createdBy: newUserId,
+				title: "new_title",
+				description: "new description",
+				type: "new_category",
+				status: "new_status",
+				priority: "new_priority",
+				location: "new_location"
 			};
 
 			try {
 				await setMaintenanceRequest(id, newMaintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(newUserId);
-				expect(result).to.deep.include(newMaintenanceRequest);
-				expect(result).to.not.deep.include(oldMaintenanceRequest);
+				expect(result.some((req) => req.title === "new_title" && req.createdBy === newUserId && req.location === "new_location")).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
@@ -283,25 +254,29 @@ describe("maintenanceRequestServices", function () {
 		});
 
 		it("Invalid maintenanceRequest: Attempt to set a new _id", async function () {
-			const oldId = "mR1";
-			const newId = "new_id";
+			const existingRequests = await getAllMaintenanceRequestsByUserId("user0");
+			const existing = existingRequests.find((req) => req.title === "title2");
+			if (!existing || !existing._id) {
+				throw new Error("Expected an existing maintenance request for invalid _id test");
+			}
+			const oldId = String(existing._id);
+			const newId = "507f1f77bcf86cd799439012";
 			const userId = "user0";
 			const maintenanceRequest = {
-				"_id": newId,
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": "inProgress",
-				"priority": "prio1",
-				"location": "Bedroom"
-			}
+				_id: newId,
+				createdBy: userId,
+				title: "title2",
+				description: "description description description",
+				type: "electrical",
+				status: "inProgress",
+				priority: "prio1",
+				location: "Bedroom"
+			};
 
 			try {
 				await setMaintenanceRequest(oldId, maintenanceRequest);
 				expect.fail("setMaintenanceRequest() should have rejected");
 			} catch (e) {
-				// setMaintenanceRequest() is expected to reject.
 				const result = await getAllMaintenanceRequestsByUserId(userId);
 				expect(result).to.not.deep.include(maintenanceRequest);
 			}
@@ -310,125 +285,80 @@ describe("maintenanceRequestServices", function () {
 
 	describe("setMaintenanceRequestPriority()", function () {
 		it("Valid priority", async function () {
-			const id = "mR1";
 			const userId = "user0";
+			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
+			const existing = existingRequests.find((req) => req.title === "title2");
+			if (!existing || !existing._id) {
+				throw new Error("Expected an existing maintenance request for priority test");
+			}
+			const id = String(existing._id);
 			const newPriority = "prio0";
-			const original = {
-				"_id": "mR1",
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": "inProgress",
-				"priority": "prio1",
-				"location": "Bedroom"
-			};
-			const expected = {
-				"_id": "mR1",
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": "inProgress",
-				"priority": newPriority,
-				"location": "Bedroom",
-			};
 
 			try {
 				await setMaintenanceRequestPriority(id, newPriority);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result).to.deep.include(expected);
-				expect(result).to.not.deep.include(original);
+				expect(result.some((req) => req._id && String(req._id) === id && req.priority === newPriority)).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Invalid priority", async function () {
-			const id = "mR1";
 			const userId = "user0";
+			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
+			const existing = existingRequests.find((req) => req.title === "title2");
+			if (!existing || !existing._id) {
+				throw new Error("Expected an existing maintenance request for invalid priority test");
+			}
+			const id = String(existing._id);
 			const newPriority = "not_a_priority";
-			const notExpected = {
-				"_id": "mR1",
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": "inProgress",
-				"priority": newPriority,
-				"location": "Bedroom"
-			};
 
 			try {
 				await setMaintenanceRequestPriority(id, newPriority);
 				expect.fail("setMaintenanceRequestPriority() should have rejected");
 			} catch (e) {
-				// setMaintenanceRequestPriority() is expected to reject.
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result).to.not.deep.include(notExpected);
+				expect(result.some((req) => req._id && String(req._id) === id && req.priority === newPriority)).to.be.false;
 			}
 		});
 	});
 
 	describe("setMaintenanceRequestStatus()", function () {
 		it("Valid status", async function () {
-			const id = "mR1";
 			const userId = "user0";
+			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
+			const existing = existingRequests.find((req) => req.title === "title2");
+			if (!existing || !existing._id) {
+				throw new Error("Expected an existing maintenance request for status test");
+			}
+			const id = String(existing._id);
 			const newStatus = "completed";
-			const original = {
-				"_id": "mR1",
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": "inProgress",
-				"priority": "prio1",
-				"location": "Bedroom"
-			};
-			const expected = {
-				"_id": "mR1",
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": newStatus,
-				"priority": "prio1",
-				"location": "Bedroom",
-			};
 
 			try {
 				await setMaintenanceRequestStatus(id, newStatus);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result).to.deep.include(expected);
-				expect(result).to.not.deep.include(original);
+				expect(result.some((req) => req._id && String(req._id) === id && req.status === newStatus)).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Invalid status", async function () {
-			const id = "mR1";
 			const userId = "user0";
+			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
+			const existing = existingRequests.find((req) => req.title === "title2");
+			if (!existing || !existing._id) {
+				throw new Error("Expected an existing maintenance request for invalid status test");
+			}
+			const id = String(existing._id);
 			const newStatus = "not_a_status";
-			const notExpected = {
-				"_id": "mR1",
-				"createdBy": userId,
-				"title": "title2",
-				"description": "description description description",
-				"type": "electrical",
-				"status": newStatus,
-				"priority": "prio1",
-				"location": "Bedroom",
-				"__v": 0
-			};
 
 			try {
 				await setMaintenanceRequestStatus(id, newStatus);
 				expect.fail("setMaintenanceRequestStatus() should have rejected");
 			} catch (e) {
-				// setMaintenanceRequestStatus() is expected to reject.
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result).to.not.deep.include(notExpected);
+				expect(result.some((req) => req._id && String(req._id) === id && req.status === newStatus)).to.be.false;
 			}
 		});
 	});

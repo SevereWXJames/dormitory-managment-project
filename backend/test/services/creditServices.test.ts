@@ -17,7 +17,7 @@ describe("creditServices", function () {
 
 	describe("getCreditBalanceByUserId()", function () {
 		it("Existing userId", async function () {
-			const userId = "user1";
+			const userId = "507f191e810c19729de860eb";
 			const expectedBalanceCents = 10000;
 			const actual = await getCreditBalanceByUserId(userId);
 			expect(actual).to.deep.include({balanceCents: expectedBalanceCents});
@@ -31,7 +31,7 @@ describe("creditServices", function () {
 
 	describe("getTransactionHistoryByUserId()", function () {
 		it("Existing userId", async function () {
-			const userId = "user1";
+			const userId = "507f191e810c19729de860eb";
 			const expectedLength = 1;
 			const actual = await getTransactionHistoryByUserId(userId);
 			expect(actual).to.be.an.instanceOf(Array);

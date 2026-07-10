@@ -1,4 +1,3 @@
-import userJson from "../../test_data/users.json" with {type: "json"};
 import jwt,{type Secret} from "jsonwebtoken";
 import {type User, UserModel} from "../dataTypes/user.ts";
 
@@ -7,14 +6,29 @@ export async function checkLogIn(username: string | undefined, email: string | u
         return false;
     }
 
-    const usernameUser = username ? userJson.users.find((user) => user.username === username) : undefined;
-    const emailUser = email ? userJson.users.find((user) => user.email === email) : undefined;
-
     if (username && email) {
-        return Boolean(usernameUser && emailUser && usernameUser._id === emailUser._id);
+        const [usernameUser, emailUser] = await Promise.all([
+            UserModel.findOne({ username }).lean().exec(),
+            UserModel.findOne({ email }).lean().exec()
+        ]);
+
+        if (!usernameUser || !emailUser) {
+            return false;
+        }
+        return String(usernameUser._id) === String(emailUser._id);
     }
 
-    return Boolean(usernameUser ?? emailUser);
+    if (username) {
+        const user = await UserModel.findOne({ username }).lean().exec();
+        return Boolean(user);
+    }
+
+    if (email) {
+        const user = await UserModel.findOne({ email }).lean().exec();
+        return Boolean(user);
+    }
+
+    return false;
 }
 
 export async function getExistingUserFromUsername(username: string): Promise<User | undefined> {
