@@ -1,4 +1,5 @@
 import type {Machine, Slot} from "@/components/residents/facilitiesBooking/MachineDialog.tsx";
+import {useGetServicesQuery} from "@/context/api/apiServices/servicesApi.ts";
 
 export function useMachineOptions(){
     const MACHINES: Machine[] = [
@@ -13,6 +14,9 @@ export function useMachineOptions(){
         {duration: "1:00:00 hr", startTime: "5:00pm", date: "April 26, 2026"}
     ];
 
+    const {data: services, isLoading, isError, error} = useGetServicesQuery();
+    const serviceIds = services?.map((service) => service._id);
+    const serviceNames = services?.map((service) => service.name);
 
-    return {MACHINES, slots};
+    return {MACHINES, slots, serviceIds, serviceNames, isLoading, isError, error};
 }
