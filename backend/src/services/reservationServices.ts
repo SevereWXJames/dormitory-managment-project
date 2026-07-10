@@ -35,7 +35,7 @@ export async function getReservationsSlotsByServiceId(serviceId: string): Promis
     return Promise.resolve(results);
 }
 
-export async function bookReservationSlot(serviceId: string, slotId: string, userId: string){
+export async function bookReservationSlot(serviceId: string | string[], slotId: string, userId: string){
     //TODO:
     // Given a service id and a slot id, set the slot with given slotId and serviceId to be booked by userData
     // 1. Check that the slot is available
