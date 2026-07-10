@@ -3,7 +3,7 @@ import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminMaintenanceData } from "@/pages/common/buildingManager/pageHooks/useAdminMaintenanceData.tsx";
 import { useUpdateMaintenanceRequestStatusMutation } from "@/context/api/apiServices/maintenanceRequestApi.ts";
 
-type StatusFilter = "All" | string;
+type StatusFilter = "All" | { id: string; text: string };
 
 export function AdminMaintenancePage() {
     const { loading, error, requests, requestsStatus, requestsTypes } = useAdminMaintenanceData();
@@ -21,17 +21,18 @@ export function AdminMaintenancePage() {
         if (activeFilter === "All") {
             return requests;
         }
+        const filterId = (activeFilter as any).id;
         return requests.filter((request) => {
-            const displayStatus = statusOverrides[String(request._id)] ?? requestsStatus.find((status) => status._id === request.status)?.text ?? request.status;
-            return displayStatus === activeFilter;
+            const overrideStatusId = statusOverrides[String(request._id)];
+            const activeStatusId = overrideStatusId ?? request.status;
+            return String(activeStatusId) === String(filterId);
         });
-    }, [activeFilter, requests, requestsStatus, statusOverrides]);
+    }, [activeFilter, requests, statusOverrides]);
 
     const getDisplayStatus = (request: (typeof requests)[number]) => {
         const overrideStatusId = statusOverrides[String(request._id)];
         const activeStatusId = overrideStatusId ?? request.status;
-        const fallbackLabel = typeof request.status === "string" ? request.status : "Unknown";
-        return requestsStatus.find((status) => status._id === activeStatusId)?.text ?? fallbackLabel;
+        return requestsStatus.find((status) => status._id === activeStatusId)?.text ?? "Unknown";
     };
 
     const getStatusIndex = (statusId: string | undefined) => {
@@ -75,9 +76,6 @@ export function AdminMaintenancePage() {
                         <h1>Maintenance Requests</h1>
                         <p>Review current work orders and track their status.</p>
                     </div>
-                    <div className="page-actions">
-                        <button type="button" className="primary-button" onClick={() => setSelectedRequest(requests[0] ?? null)}>New request</button>
-                    </div>
                 </div>
 
                 {feedback && <div className="info-banner">{feedback}</div>}
@@ -89,14 +87,25 @@ export function AdminMaintenancePage() {
                         <div className="section-title-row">
                             <h2>Active requests</h2>
                             <div className="filter-row">
-                                {(["All", ...orderedStatuses.map((status) => status.text)] as StatusFilter[]).map((filter) => (
+                                <button
+                                    type="button"
+                                    className={activeFilter === "All" ? "pill-button active" : "pill-button"}
+                                    onClick={() => setActiveFilter("All")}
+                                >
+                                    All
+                                </button>
+                                {orderedStatuses.map((status) => (
                                     <button
-                                        key={filter}
+                                        key={status._id}
                                         type="button"
-                                        className={filter === activeFilter ? "pill-button active" : "pill-button"}
-                                        onClick={() => setActiveFilter(filter)}
+                                        className={
+                                            activeFilter !== "All" && (activeFilter as any).id === status._id
+                                                ? "pill-button active"
+                                                : "pill-button"
+                                        }
+                                        onClick={() => setActiveFilter({ id: String(status._id), text: status.text })}
                                     >
-                                        {filter}
+                                        {status.text}
                                     </button>
                                 ))}
                             </div>
