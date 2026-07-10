@@ -19,7 +19,7 @@ type MachineDialogProps = {
     machine : Machine;
 }
 export function MachineDialog(props : MachineDialogProps) {
-    const {slots, isLoading, isError, error} = useMachineDialog(props.machine.name);
+    const {slots, isLoading, isError, error, selectedSlot, setSelectedSlot} = useMachineDialog(props.machine.name);
     let message;
     let reservations: ReservationSlot[] = [];
     if(isLoading) message = <p>...Loading</p>
@@ -50,7 +50,12 @@ export function MachineDialog(props : MachineDialogProps) {
                 </DialogHeader>
                 {(isError || !slots || slots.length <= 0) && message}
                 <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4 flex flex-col">
-                    {reservations.map((slot)=>(<TimeSlot key={slot._id} slot={slot}/>))}
+                    {reservations.map((slot)=>
+                        (<TimeSlot
+                            key={slot._id}
+                            slot={slot}
+                            selected={selectedSlot?._id === slot._id}
+                            onClick={() => setSelectedSlot(slot)}/>))}
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
