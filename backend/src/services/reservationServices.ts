@@ -54,8 +54,7 @@ export async function bookReservationSlot(serviceId: string | string[], slotId: 
     if(!res){
         throw Error("Error, slot already booked!");
     }
-
-
+    return res;
 }
 export async function getAllSlots(serviceId: string){
     //TODO:
