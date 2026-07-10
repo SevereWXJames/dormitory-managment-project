@@ -39,3 +39,22 @@ Both of these fields are required for the MQTT to work properly with the app.
 
 Given the complexity of these rules, example files have been provided in the `data/examples` folder.
 I strongly recomend you use them as templates or reference when writing your own.
+
+## Examples
+
+To send a message from file use the command: `node mqtt-test-app.js -f`.
+
+The expected output with the multi-message example data file should be:
+
+```
+sending message: "{"UUID":"1586d8a9-3559-42ee-a7ed-36ee249506bb","type":"machineStart"}" on topic: "SmartAPT/facility/washingMachine"
+sending message: "{"UUID":"1586d8a9-3559-42ee-a7ed-36ee249506bb","type":"machineStop"}" on topic: "SmartAPT/facility/washingMachine"
+```
+
+To send a message from command line use the command: `node mqtt-test-app.js -u 1586d8a9-3559-42ee-a7ed-36ee249506bb -c machineStart -t washingMachine`
+
+The expected output with the multi-message example data file should be:
+
+```
+sending message: "{"UUID":"1586d8a9-3559-42ee-a7ed-36ee249506bb","type":"machineStart"}" on topic: "SmartAPT/facility/washingMachine"
+```
