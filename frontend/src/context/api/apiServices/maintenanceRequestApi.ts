@@ -49,7 +49,7 @@ export const maintenanceRequestApi = api.injectEndpoints({
 
         put: builder.mutation<MaintenanceRequestState, MaintenanceRequest>({
             query: (maintenanceRequest) => ({
-                url: "/put",
+                url: "/maintenance-request/",
                 method: "PUT",
                 body: maintenanceRequest
             })

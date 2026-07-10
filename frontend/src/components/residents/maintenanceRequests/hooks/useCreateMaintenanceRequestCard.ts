@@ -1,6 +1,8 @@
-import { useGetMaintenanceRequestByUserQuery, usePutMutation } from "@/context/api/apiServices/maintenanceRequestApi";
+import { usePutMutation } from "@/context/api/apiServices/maintenanceRequestApi";
+import { getUserId } from "@/context/authenticationSlice";
 import type { MaintenanceRequest } from "@/dataTypes/maintenanceRequest";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 /**
  * Hook that stores the local state of the “Create Maintenance Request” card,
@@ -9,18 +11,18 @@ import { useState } from "react";
  * createMaintenanceRequest function.
  */
 export function useCreateMaintenanceRequestCard() {
+	const userId = useSelector(getUserId);
     const [priority, setPriority] = useState("");
     const [issueType, setIssueType] = useState("");
     const [issue, setIssue] = useState("");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
 	const [put] = usePutMutation();
-	const getByUser = useGetMaintenanceRequestByUserQuery("test1");
 
 	const handleCreateMaintenanceRequest = async () => {
 		try {
 			await put({
-				createdBy: "test1", // Replace this with correct user.
+				createdBy: userId,
 				title: issue,
 				description: description,
 				type: issueType,
@@ -28,6 +30,7 @@ export function useCreateMaintenanceRequestCard() {
 				priority: priority,
 				location: location,
 			} as MaintenanceRequest);
+
 		} catch (error) {
 			// Ideally there should be an error message shown in the front-end.
 			console.error(error as Error);

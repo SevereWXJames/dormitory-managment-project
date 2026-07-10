@@ -26,6 +26,15 @@
       "status": "completed",
       "priority": "prio0",
       "location": "Kitchen"
+    },
+    {
+      "createdBy": "test1",
+      "title": "hvac - thermostat broken",
+      "description": "Thermostat does not turn on heater",
+      "type": "hvac",
+      "status": "inProgress",
+      "priority": "prio0",
+      "location": null
     }
   ]
 }

@@ -112,7 +112,7 @@ maintenanceRequestRouter.get("/get-priorities/", async (req: Request, res: Respo
     }
 });
 
-maintenanceRequestRouter.put("/put/", async (req: Request, res: Response) => {
+maintenanceRequestRouter.put("/", async (req: Request, res: Response) => {
     try {
         const result = await addMaintenanceRequest(req.body);
         return res.status(200).json({success: true});
