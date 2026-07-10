@@ -1,13 +1,13 @@
 import * as chai from "chai";
 import chaiHttp from "chai-http";
 import {after, before, describe, it} from "mocha";
-import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
+import {clearTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
-import mongoose, {Types} from "mongoose";
-import {ServiceModel} from "../../src/dataTypes/service.ts";
-import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalance.table.js";
-import {BOOKING_COST} from "../../src/utility/pricesForBookings.js";
+import {Types} from "mongoose";
+import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalance.table.ts";
+import {BOOKING_COST} from "../../src/utility/pricesForBookings.ts";
+import {CreditBalances} from "../../src/database/models/creditBalance.model.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -21,7 +21,7 @@ describe('FACILITY BOOKING SERVICES', () => {
     });
 
     after(async () => {
-        await closeTestDB();
+        await clearTestDB();
     });
 
     const validSignupPayload = {
@@ -169,13 +169,21 @@ describe('FACILITY BOOKING SERVICES', () => {
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
             const booking = res.body.data;
             expect(res).to.have.status(500);
+
+            const userId = new Types.ObjectId(testUserId);
+            const balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
+            expect(balanceDoc?.balanceCents).to.equal(0);
         });
 
         it('Book a slot by service Id - enough credits', async () => {
             const serviceId = "service0";
             const balanceTable = new CreditBalanceTable();
-            const userId = new Types.ObjectId(testUserId)
-            await balanceTable.incrementBalance(userId, BOOKING_COST);
+            const userId = new Types.ObjectId(testUserId);
+            const update = await balanceTable.incrementBalance(userId, BOOKING_COST);
+
+            let balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
+            expect(balanceDoc?.balanceCents).to.equal(5);
+
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -188,10 +196,14 @@ describe('FACILITY BOOKING SERVICES', () => {
                 .set('Cookie', `${testJwt}`)
                 .send({userId: testUserId, slotId: slotId});
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+
             const booking = res.body.data;
             expect(res).to.have.status(200);
             expect(booking.booked).to.be.true;
             expect(booking.bookedBy).to.be.equal(testUserId);
+
+            balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
+            expect(balanceDoc?.balanceCents).to.equal(0);
         });
 
         it('Unbook a slot by service Id', async () => {
