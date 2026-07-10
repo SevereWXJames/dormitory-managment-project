@@ -22,7 +22,7 @@ export function useMachineDialog(machineName: string){
 
         console.log(`date: ${JSON.stringify(datevalues)}`);
 
-        return `${datevalues.year} ${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
+        return `${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
     }
     const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machineName);
     const slots = slotsData?.map(slot => ({...slot, startTime: getTime(slot.startTime)}));
