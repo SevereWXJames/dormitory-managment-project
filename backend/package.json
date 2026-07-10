@@ -9,7 +9,8 @@
     "auth-test": "mocha -r ts-node/register --exit --timeout 10000 test/auth/*.test.ts",
     "start": "node src/server.ts",
     "build": "npx tsc --noEmit",
-    "database": "docker start team07-mongo-1"
+    "database": "docker start team07-mongo-1",
+    "docker-mqtt": "docker run -it -p 1883:1883 eclipse-mosquitto"
   },
   "keywords": [],
   "author": "",

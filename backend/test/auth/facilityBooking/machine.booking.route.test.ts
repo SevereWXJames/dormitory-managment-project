@@ -4,15 +4,18 @@ import {after, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../../src/app.ts";
 import loadSampleData from "../../../src/database/loadDatabase.ts";
+import mongoose from "mongoose";
+import {ServiceModel} from "../../../src/dataTypes/service.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
 
-describe('IOT SERVICES', () => {
+describe('FACILITY BOOKING SERVICES', () => {
     before(async () => {
         console.log('file loaded');
         await connectTestDB();
         await loadSampleData();
+        console.log('SEED conn:', mongoose.connection.host, mongoose.connection.port, mongoose.connection.name);
         console.log("Loaded sample data");
     });
 
@@ -65,10 +68,6 @@ describe('IOT SERVICES', () => {
             }
         });
 
-        after(async () => {
-            await clearTestDB();
-        });
-
         it('Get status of IoT service by Id', async () => {
             const serviceId = "service0";
             const res = await chaiWithHttp.request.execute(app)
@@ -92,6 +91,32 @@ describe('IOT SERVICES', () => {
             const serviceId = "service0";
             const res = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+            expect(res).to.have.status(200);
+        });
+
+        it('Get all services', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/services/`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+            expect(res).to.have.status(200);
+        });
+
+        it('Get service by id', async () => {
+            const getServices = await chaiWithHttp.request.execute(app)
+                .get(`/services/`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const data = getServices.body.data;
+            const serviceId = data[0]._id;
+            console.log(`services: ${JSON.stringify(getServices.body, null, 2)}`);
+            console.log(`serviceId: ${serviceId}`);
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/services/get-by-id/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
                 .send();
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
