@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import {TimeSlot} from "@/components/residents/facilitiesBooking/TimeSlot.tsx";
 import {useMachineDialog} from "@/components/residents/facilitiesBooking/hooks/useMachineDialog.tsx";
+import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 
 export type Machine = {
     id: string;
@@ -18,15 +19,21 @@ type MachineDialogProps = {
     machine : Machine;
 }
 export function MachineDialog(props : MachineDialogProps) {
-    const {slots, isLoading, isError, error} = useMachineDialog(props.machine.id);
-    if(isLoading) return <p>...Loading</p>
+    const {slots, isLoading, isError, error} = useMachineDialog(props.machine.name);
+    let message;
+    let reservations : ReservationSlot[] = [];
+    if(isLoading) message = <p>...Loading</p>
     if(isError){
         console.log(`Error: ${error}`);
-        return <p>Error retrieving time slots</p>
+        message = <p>Error retrieving time slots</p>
     }
+
     if(!slots){
-        return <p>No available slots</p>
+        message = <p>No available slots</p>
+    }else{
+        reservations = slots;
     }
+
 
     const handleClick = () => {};
 
@@ -41,8 +48,9 @@ export function MachineDialog(props : MachineDialogProps) {
                     <DialogTitle className="!text-black">Book a time:</DialogTitle>
                     <DialogDescription>Select a time slot below:</DialogDescription>
                 </DialogHeader>
+                {(isError || !slots) && message}
                 <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
-                    {slots.map((slot)=>(<TimeSlot slot={slot}/>))}
+                    {reservations.map((slot)=>(<TimeSlot slot={slot}/>))}
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
