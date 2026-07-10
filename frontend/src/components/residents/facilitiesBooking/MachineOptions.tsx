@@ -4,7 +4,15 @@ import {MachineDialog} from "@/components/residents/facilitiesBooking/MachineDia
 import {useMachineOptions} from "@/components/residents/facilitiesBooking/hooks/useMachineOptions.tsx";
 
 export function MachineOptions() {
-    const {machines} = useMachineOptions();
+    const {machines, isLoading, isError, error} = useMachineOptions();
+    if(isLoading) return <p>Loading...</p>;
+    if(isError){
+        console.log(`Error: ${error}`);
+        return <p>Error: Unable to find machines</p>;
+    }
+    if(machines.length <= 0) return <p>No available machines</p>;
+
+
     return (
         <div className="machineOptions">
             {machines.map((machine) => (
