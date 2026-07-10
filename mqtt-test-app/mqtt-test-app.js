@@ -31,6 +31,7 @@ async function readData() {
 function parseSingleFileContents(rawJSON) {
     try {
         const data = JSON.parse(rawJSON);
+        console.log(`data: ${JSON.stringify(data)}`);
         if (!Object.hasOwn(data, "topic") || !Object.hasOwn(data, "message")) {
             console.error("Not all data provided.");
             process.exit(2);
@@ -55,7 +56,7 @@ async function sendMessageFromFile(client) {
 function parseMultiFileContents(rawJSON) {
     try {
         const data = JSON.parse(rawJSON);
-        if (!Object.hasOwn(data, "topic") || !Object.hasOwn(data, "messages")) {
+        if (!Object.hasOwn(data, "topic") || !Object.hasOwn(data, "message")) {
             console.error("Not all data provided.");
             process.exit(2);
         }
