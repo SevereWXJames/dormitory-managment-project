@@ -24,12 +24,20 @@ export const reservationSlotsApi = api.injectEndpoints({
             providesTags: ["ReservationSlots"],
         }),
 
-        getSlotsByService: builder.query<ReservationSlot[], string>({
-            query: (serviceId) => ({ url: `/get-slots-by-service/${encodeURIComponent(serviceId)}`}),
+        getSlotsByServiceId: builder.query<ReservationSlot[], string>({
+            query: (serviceId) => ({ url: `/reservations/get-slots-by-service/${encodeURIComponent(serviceId)}`}),
+            providesTags: ["ReservationSlots"],
+        }),
+
+        getSlotsByServiceName: builder.query<ReservationSlot[], string>({
+            query: (serviceName) => ({ url: `/reservations/get-slots-by-service-name/${encodeURIComponent(serviceName)}`}),
             providesTags: ["ReservationSlots"],
         }),
 
     }),
 });
 
-export const {useGetBookingsQuery, useLazyGetBookingsQuery, useGetSlotsByServiceQuery} = reservationSlotsApi;
+export const {useGetBookingsQuery,
+    useLazyGetBookingsQuery,
+    useGetSlotsByServiceIdQuery,
+useGetSlotsByServiceNameQuery} = reservationSlotsApi;
