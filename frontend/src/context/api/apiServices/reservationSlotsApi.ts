@@ -1,7 +1,6 @@
 import { api } from "../api";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import type {Booking} from "@/types/residents/types.tsx";
-
 //Helper to convert response to Booking
 function toBooking(slot: ReservationSlot): Booking {
     const startDate = new Date(slot.startTime * 1000);
@@ -24,6 +23,13 @@ export const reservationSlotsApi = api.injectEndpoints({
             transformResponse: (reservations: ReservationSlot[]) => reservations.map(toBooking),
             providesTags: ["ReservationSlots"],
         }),
+
+        getSlotsByService: builder.query<ReservationSlot[], string>({
+            query: (serviceId) => ({ url: `/get-slots-by-service/${encodeURIComponent(serviceId)}`}),
+            providesTags: ["ReservationSlots"],
+        }),
+
+
     }),
 });
 
