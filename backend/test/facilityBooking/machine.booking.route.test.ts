@@ -233,6 +233,12 @@ describe('FACILITY BOOKING SERVICES', () => {
 
                 testJwt = rawCookie?.split(';')[0];
                 testUserId = userId;
+
+                //Reset balance:
+                const id = new Types.ObjectId(userId);
+                const update = {$set: {balanceCents: 0}};
+                await CreditBalances.findOneAndUpdate({userId: id}, update);
+
             }catch(error){
                 throw Error(`Error with setup! ${error}`);
             }
@@ -336,6 +342,8 @@ describe('FACILITY BOOKING SERVICES', () => {
             const balanceTable = new CreditBalanceTable();
             const id = new Types.ObjectId(testUserId);
             await balanceTable.incrementBalance(id, BOOKING_COST * 2);
+            let balance = await CreditBalances.findOne({userId: id});
+            expect(balance?.balanceCents).to.equal(BOOKING_COST * 2);
 
             const res = await chaiWithHttp.request.execute(app)
                 .put(`/reservations/cancel-booking-by-service/${serviceId}`)
@@ -344,7 +352,7 @@ describe('FACILITY BOOKING SERVICES', () => {
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
 
             expect(res).to.have.status(500);
-            const balance = await CreditBalances.findOne({userId: id});
+            balance = await CreditBalances.findOne({userId: id});
             expect(balance?.balanceCents).to.equal(BOOKING_COST * 2);
         });
     })
