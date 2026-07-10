@@ -3,7 +3,7 @@ import {
     bookReservationSlot, cancelReservationSlot,
     getAllFreeSlots, getAllReservedSlots,
     getReservationsBookedByUserId,
-    getReservationsSlotsByServiceId
+    getReservationsSlotsByServiceId, getReservationsSlotsByServiceName
 } from "../services/reservationServices.ts";
 
 const reservationRouter = express.Router();
@@ -40,7 +40,7 @@ reservationRouter.get("/get-slots-by-service/:serviceId", async (req: Request, r
     }
 });
 
-reservationRouter.get("/get-slots-by-serviceName/:serviceName", async (req: Request, res: Response)=> {
+reservationRouter.get("/get-slots-by-service-name/:serviceName", async (req: Request, res: Response)=> {
     if (req.params.serviceName === undefined) {
         return res.status(400).json({success: false, message: "No name provided."});
     }
@@ -50,7 +50,7 @@ reservationRouter.get("/get-slots-by-serviceName/:serviceName", async (req: Requ
         return res.status(200).json({success: true, data: reservationSlots});
     }
     catch (error) {
-        return res.status(500).json({success: false, message: "Internal server error."});
+        return res.status(500).json({success: false, message: "Internal server error.", error: error});
     }
 });
 
