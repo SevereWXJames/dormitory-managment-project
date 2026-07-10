@@ -22,6 +22,7 @@ export function MachineDialog(props : MachineDialogProps) {
 
     const handleClick = () => {};
 
+
     return (
         <Dialog>
             <DialogTrigger asChild>
