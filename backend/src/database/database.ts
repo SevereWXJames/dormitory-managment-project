@@ -85,8 +85,15 @@ export function getCollection(collectionName: CollectionName) {
  */
 export async function load(collectionName: CollectionName, data: any[]): Promise<void> {
     // console.debug(`database.load(${collectionName})`);
+    const preparedData = data.map((entry) => {
+        if (entry != null && typeof entry === "object" && typeof entry._id === "string" && mongoose.Types.ObjectId.isValid(entry._id)) {
+            return { ...entry, _id: new mongoose.Types.ObjectId(entry._id) };
+        }
+        return entry;
+    });
+
     try {
-        return getCollection(collectionName).insertMany(data).then(() => {
+        return getCollection(collectionName).insertMany(preparedData).then(() => {
             Promise.resolve();
         });
     } catch (e) {

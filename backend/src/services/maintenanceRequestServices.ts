@@ -1,10 +1,13 @@
-import type { Model, Document } from "mongoose";
 import {
     type MaintenanceRequest, MaintenanceRequestModel,
+    type MaintenanceRequestInput,
     type MaintenanceRequestPriority, MaintenanceRequestPriorityModel,
     type MaintenanceRequestStatus, MaintenanceRequestStatusModel,
-    type MaintenanceRequestType, MaintenanceRequestTypeModel
+    type MaintenanceRequestType, MaintenanceRequestTypeModel,
+    type MongoId
 } from "../dataTypes/maintenanceRequest.ts";
+
+type MaintenanceRequestWithId = MaintenanceRequest;
 
 export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]> {
     const cursor = MaintenanceRequestModel.find({ }).lean();
@@ -137,7 +140,7 @@ export async function getAllMaintenanceRequestPriorities(): Promise<MaintenanceR
  * @returns Promise indicating whether the maintenance request was added
  * successfully.
  */
-export async function addMaintenanceRequest(maintenanceRequest: MaintenanceRequest) : Promise<void> {
+export async function addMaintenanceRequest(maintenanceRequest: MaintenanceRequestInput) : Promise<void> {
     return MaintenanceRequestModel.insertOne(maintenanceRequest).then((result) => {
         return Promise.resolve();
     }).catch((e) => {
@@ -158,7 +161,7 @@ async function setMaintenanceRequestFields(_id: string, updateFields: any): Prom
     return MaintenanceRequestModel.updateOne({_id: _id}, {$set: updateFields}).then((result) => {
         return Promise.resolve();
     }).catch((e) => {
-        return Promise.reject();
+        return Promise.reject(e);
     });
 }
 
@@ -171,9 +174,9 @@ async function setMaintenanceRequestFields(_id: string, updateFields: any): Prom
  * @returns Promise indicating whether the maintenance request was set
  * successfully.
  */
-export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequest) : Promise<void> {
-    if (_id != maintenanceRequest._id) {
-        return Promise.reject(new Error("The passed _id and the _id in the maintenanceRequest are different."));
+export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequestWithId) : Promise<void> {
+    if (String(_id) !== String(maintenanceRequest._id)) {
+        throw new Error("The passed _id and the _id in the maintenanceRequest are different.");
     }
 
     return setMaintenanceRequestFields(_id, maintenanceRequest);

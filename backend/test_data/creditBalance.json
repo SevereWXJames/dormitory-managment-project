@@ -1,18 +1,15 @@
 {
   "creditBalances": [
     {
-      "_id": "credit0",
-      "userId": "user0",
+      "userId": "507f191e810c19729de860ea",
       "balanceCents": 100
     },
     {
-      "_id": "credit1",
-      "userId": "user1",
+      "userId": "507f191e810c19729de860eb",
       "balanceCents": 10000
     },
     {
-      "_id": "credit2",
-      "userId": "user2",
+      "userId": "507f191e810c19729de860ec",
       "balanceCents": 10000
     }
   ]
