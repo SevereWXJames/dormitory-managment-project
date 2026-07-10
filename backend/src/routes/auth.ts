@@ -3,7 +3,7 @@ import {
     logIn,
     signUp
 } from "../services/usersServices.ts";
-import {createJWTToken} from "../utils/tokens.ts";
+import {createJWTToken} from "../auth-utils/tokens.ts";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {

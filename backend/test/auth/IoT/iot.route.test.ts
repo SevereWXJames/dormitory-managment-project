@@ -1,0 +1,93 @@
+import * as chai from "chai";
+import chaiHttp from "chai-http";
+import {after, before, describe, it} from "mocha";
+import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
+import app from "../../../src/app.ts";
+import loadSampleData from "../../../src/database/loadDatabase.ts";
+
+const chaiWithHttp = chai.use(chaiHttp);
+const {expect} = chai;
+
+describe('IOT SERVICES', () => {
+    before(async () => {
+        console.log('file loaded');
+        await connectTestDB();
+        await loadSampleData();
+        console.log("Loaded sample data");
+    });
+
+    after(async () => {
+        await closeTestDB();
+    });
+
+    const validSignupPayload = {
+        name: 'Alice Dyer',
+        username: 'alice123',
+        email: 'alice@tmp.com',
+        password: 'password123',
+        phoneNUmber: '123456789',
+        roles: ["RESIDENT"],
+    };
+
+    const validLoginPayload = {
+        username: 'alice123',
+        email: 'alice@tmp.com',
+        password: 'password123',
+    };
+
+    describe('HTTP Response - Sign In', () => {
+        let testJwt : string | undefined;
+        let testUserId: string | undefined;
+
+        before('Create an account', async () => {
+            try{
+                const res = await chaiWithHttp.request.execute(app)
+                    .post('/signup')
+                    .send(validSignupPayload);
+            }catch(error){
+                throw Error(`Error with signup! ${error}`);
+            }
+        });
+
+        beforeEach('HTTP Response - Log in', async () => {
+            try{
+                const res = await chaiWithHttp.request.execute(app)
+                    .post('/login')
+                    .send(validLoginPayload);
+                const userId = res.body.data._id;
+                const cookies = res.headers['set-cookie'] as unknown as string[];
+                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+
+                testJwt = rawCookie?.split(';')[0];
+                testUserId = userId;
+            }catch(error){
+                throw Error(`Error with logging in! ${error}`);
+            }
+        });
+
+        after(async () => {
+            await clearTestDB();
+        });
+
+        it('Get status of IoT service by Id', async () => {
+            const serviceId = "service0";
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/IoT/get-status-by-id/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            console.log(`res: ${JSON.stringify(res.body)}`);
+            expect(res).to.have.status(200);
+        });
+
+        it('Get events from N days ago', async () => {
+            // const messageBody = {daysAgo: 3};
+            const res = await chaiWithHttp.request.execute(app)
+                .post(`/IoT/get-events-from-n-days-ago`)
+                .set('Cookie', `${testJwt}`)
+                .send({ daysAgo: 3 });
+            console.log(`res: ${JSON.stringify(res.body)}`);
+            expect(res).to.have.status(200);
+        });
+    })
+
+});

@@ -7,17 +7,25 @@ export async function getStatusForServiceId(serviceId: string): Promise<IoTStatu
 }
 
 export async function getEventsForLastNDays(nDays: number) {
-    let dataArr = [];
-    for (let i = 1; i <= nDays; i++) {
-        const iDaysAgo = new Date();
-        iDaysAgo.setDate(iDaysAgo.getDate() - i);
-        iDaysAgo.setHours(0, 0, 0, 0);
-        const iMinusOneDaysAgo = new Date();
-        iMinusOneDaysAgo.setDate(iMinusOneDaysAgo.getDate() - (i - 1));
-        iMinusOneDaysAgo.setHours(0, 0, 0, 0);
-        console.log(`from ${iDaysAgo.toUTCString()} to ${iMinusOneDaysAgo.toUTCString()}`);
-        const events = await IoTEventModel.find({$and: [ {createdAt: {$gte: iDaysAgo}}, {createdAt: {$lt: iMinusOneDaysAgo}}]}).lean().exec() as IoTEvent[];
-        dataArr.push({daysAgo: i, events: events});
+    try{
+        let dataArr = [];
+        for (let i = 1; i <= nDays; i++) {
+            const iDaysAgo = new Date();
+            const iMinusOneDaysAgo = new Date();
+
+            iDaysAgo.setDate(iDaysAgo.getDate() - i);
+            iDaysAgo.setHours(0, 0, 0, 0);
+
+            iMinusOneDaysAgo.setDate(iMinusOneDaysAgo.getDate() - (i - 1));
+            iMinusOneDaysAgo.setHours(0, 0, 0, 0);
+
+            console.log(`from ${iDaysAgo.toUTCString()} to ${iMinusOneDaysAgo.toUTCString()}`);
+            const events = await IoTEventModel.find({$and: [ {createdAt: {$gte: iDaysAgo}}, {createdAt: {$lt: iMinusOneDaysAgo}}]}).lean().exec() as IoTEvent[];
+            dataArr.push({daysAgo: i, events: events});
+        }
+        return dataArr;
+    }catch(error){
+        console.log(`error: ${error}`);
+        throw Error("Error getting events", {cause: error} );
     }
-    return dataArr;
 }
