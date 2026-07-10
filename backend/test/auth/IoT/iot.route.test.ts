@@ -75,19 +75,27 @@ describe('IOT SERVICES', () => {
                 .get(`/IoT/get-status-by-id/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
                 .send();
-            console.log(`res: ${JSON.stringify(res.body)}`);
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
             expect(res).to.have.status(200);
         });
 
         it('Get events from N days ago', async () => {
-            // const messageBody = {daysAgo: 3};
             const res = await chaiWithHttp.request.execute(app)
                 .post(`/IoT/get-events-from-n-days-ago`)
                 .set('Cookie', `${testJwt}`)
                 .send({ daysAgo: 3 });
-            console.log(`res: ${JSON.stringify(res.body)}`);
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
             expect(res).to.have.status(200);
         });
-    })
 
+        it('Get slots by service Id', async () => {
+            const serviceId = "service0";
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+            expect(res).to.have.status(200);
+        });
+    });
 });
