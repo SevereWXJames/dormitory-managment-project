@@ -38,7 +38,7 @@ export async function getReservationsSlotsByServiceId(serviceId: string): Promis
 }
 
 export async function getReservationsSlotsByServiceName(serviceName: string): Promise<ReservationSlot[]> {
-    const cursor = ReservationSlotModel.find({name: serviceName}).lean();
+    const cursor = ReservationSlotModel.find({serviceName: serviceName}).lean();
     const results: ReservationSlot[] = [];
 
     for await (const result of cursor) {
