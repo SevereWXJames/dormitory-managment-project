@@ -7,6 +7,6 @@ export const api = createApi({
     baseQuery: apiBaseQuery,
     tagTypes: ["Booking", "MachineStatus", "Room", "Credits",
         "Transactions", "ReservationSlots",
-        "MaintenanceRequests", "Notices", "User", "Residents", "CurrentUser"],
+        "MaintenanceRequests", "Notices", "User", "Residents", "CurrentUser", "IoTServices"],
     endpoints: () => ({}),
 });
