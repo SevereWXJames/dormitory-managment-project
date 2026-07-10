@@ -23,6 +23,7 @@ app.use(cors({
 }));
 
 app.use(json());
+app.use(express.json());
 
 app.use("/residents", authenticateRequest, requireRole(Role.ADMIN), residentsRouter);
 app.use("/notices", authenticateRequest, requireRole(Role.ADMIN, Role.RESIDENT), noticeRouter)

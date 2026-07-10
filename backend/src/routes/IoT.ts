@@ -23,16 +23,17 @@ IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response
 
 IoTRouter.post("/get-events-from-n-days-ago", async (req: Request, res: Response)=> {
     try {
-        const daysAgo = req.body.daysAgo;
+        const {daysAgo} = req.body;
         if (typeof daysAgo !== "number") {
             return res.status(400).json({success: false, message: "Invalid days provided."})
         }
         const events = await getEventsForLastNDays(daysAgo);
-
         return res.status(200).json({success: true, data: events});
     }
     catch (error) {
-        return res.status(500).json({success: false, message: "Internal server error."});
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error."});
     }
 });
 

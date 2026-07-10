@@ -1,4 +1,4 @@
-import {handleIncomingIoTData} from "./IoT/IoTDeviceServices.ts";
+import {handleIncomingIoTData} from "./IoTDeviceServices.ts";
 
 export async function handleMQTTMessage(topic: string, message: string) {
     const topicParts = topic.split("/");

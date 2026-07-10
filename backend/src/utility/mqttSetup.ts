@@ -1,5 +1,5 @@
 import mqtt from "mqtt";
-import {handleMQTTError, handleMQTTMessage} from "../services/mqttServices.ts";
+import {handleMQTTError, handleMQTTMessage} from "../services/IoT/mqttServices.ts";
 import {facilityTopics, topicBaseString} from "./IoTConstants.ts";
 
 function constructTopicString(topic: string) {
