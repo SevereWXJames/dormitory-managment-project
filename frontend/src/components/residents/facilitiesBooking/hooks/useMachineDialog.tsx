@@ -3,7 +3,7 @@ import {useGetSlotsByServiceNameQuery,} from "@/context/api/apiServices/reservat
 export function useMachineDialog(machineName: string){
 
     const getTime = (timestamp: number) => {
-        const date = new Date(timestamp);
+        const date = new Date(timestamp * 1000);
         const datevalues = {
             year: date.getFullYear(),
             month: date.getMonth()+1,
