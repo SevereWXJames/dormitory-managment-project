@@ -13,14 +13,9 @@ export interface Service {
     reservationDurationSeconds: number;
     reservationStartHour: number;
     reservationEndHour: number;
-    // IoTName: string;
 }
 
 export type ServiceInput = Omit<Service, "_id"> & { _id?: MongoId };
-
-// const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
-//     IoTUUID: String, IoTType: String, reservationDurationSeconds: Number,
-//     reservationStartHour: Number, reservationEndHour: Number});
 const serviceSchema = new Schema({name: String, description: String, hasIoT: Boolean,
     IoTUUID: String, IoTType: String, reservationDurationSeconds: Number,
     reservationStartHour: Number, reservationEndHour: Number});
