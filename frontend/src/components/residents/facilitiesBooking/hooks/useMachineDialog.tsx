@@ -3,7 +3,7 @@ import {useGetSlotsByServiceQuery} from "@/context/api/apiServices/reservationSl
 export function useMachineDialog(machineId: string){
     const {data: slots, isLoading, isError, error} = useGetSlotsByServiceQuery(machineId);
     return {
-        slots: slots ?? [],
+        slots,
         isLoading,
         isError,
         error};

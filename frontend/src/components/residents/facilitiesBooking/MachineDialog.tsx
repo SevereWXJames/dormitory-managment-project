@@ -18,7 +18,15 @@ type MachineDialogProps = {
     machine : Machine;
 }
 export function MachineDialog(props : MachineDialogProps) {
-    const {slots} = useMachineDialog(props.machine.id);
+    const {slots, isLoading, isError, error} = useMachineDialog(props.machine.id);
+    if(isLoading) return <p>...Loading</p>
+    if(isError){
+        console.log(`Error: ${error}`);
+        return <p>Error retrieving time slots</p>
+    }
+    if(!slots){
+        return <p>No available slots</p>
+    }
 
     const handleClick = () => {};
 
