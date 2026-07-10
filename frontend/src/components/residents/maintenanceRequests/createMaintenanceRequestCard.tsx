@@ -41,6 +41,14 @@ export function CreateMaintenanceRequestCard() {
     const issueMenuItems = getIssueMenuItems();
     const isIssueDisabled = issueMenuItems.length === 0;
     const createMaintenanceRequest = () => {
+        dispatch(addMaintenanceRequest({
+            unit: "0", // Add correct unit number
+            priority: priority,
+            issue: issue,
+            issueType: issueType,
+            location: location,
+            description: description
+        }))
         handleCreateMaintenanceRequest();
     }
 

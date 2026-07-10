@@ -15,6 +15,7 @@ export function useCreateMaintenanceRequestCard() {
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
 	const [put] = usePutMutation();
+	const getByUser = useGetMaintenanceRequestByUserQuery("test1");
 
 	const handleCreateMaintenanceRequest = async () => {
 		try {
