@@ -2,10 +2,10 @@ import * as chai from "chai";
 import chaiHttp from "chai-http";
 import {after, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
-import app from "../../../src/app.ts";
-import loadSampleData from "../../../src/database/loadDatabase.ts";
+import app from "../../src/app.ts";
+import loadSampleData from "../../src/database/loadDatabase.ts";
 import mongoose from "mongoose";
-import {ServiceModel} from "../../../src/dataTypes/service.ts";
+import {ServiceModel} from "../../src/dataTypes/service.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -18,7 +18,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         console.log("Loaded sample data");
     });
 
-    afterEach(async () => {
+    after(async () => {
         await closeTestDB();
     });
 
@@ -65,6 +65,10 @@ describe('FACILITY BOOKING SERVICES', () => {
             }catch(error){
                 throw Error(`Error with logging in! ${error}`);
             }
+        });
+
+        afterEach(async () => {
+            await closeTestDB();
         });
 
         it('Get status of IoT service by Id', async () => {
@@ -141,6 +145,10 @@ describe('FACILITY BOOKING SERVICES', () => {
             }
         });
 
+        afterEach(async () => {
+            await closeTestDB();
+        });
+
         it('Get slots by service Id', async () => {
             const serviceId = "service0";
             const res = await chaiWithHttp.request.execute(app)
@@ -153,6 +161,19 @@ describe('FACILITY BOOKING SERVICES', () => {
 
         it('Book a slot by service Id', async () => {
             const serviceId = "service0";
+            const slotsRes = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const slots = slotsRes.body.data;
+            const slotId = slots[0]._id;
+
+            const res = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/book-slot-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send(slotId);
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+            expect(res).to.have.status(200);
         });
 
         it('Unbook a slot by service Id', async () => {
