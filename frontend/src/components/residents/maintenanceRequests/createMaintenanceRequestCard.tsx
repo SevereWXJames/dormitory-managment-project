@@ -1,7 +1,6 @@
 import {Button, Card, CardContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {addMaintenanceRequest} from "../../../context/residents/maintenanceRequestsSlice";
-import {useState} from "react";
 import issues from "../../../assets/residents/placeholderData/maintenanceIssues.json";
 import { useCreateMaintenanceRequestCard } from "./hooks/useCreateMaintenanceRequestCard";
 
