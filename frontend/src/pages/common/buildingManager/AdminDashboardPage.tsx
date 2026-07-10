@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminData } from "@/pages/common/buildingManager/pageHooks/useAdminData.tsx";
 
@@ -26,10 +27,24 @@ const initialDashboardData: DashboardData = {
     recent_published_notices: [],
 };
 
+const todaysPriorities = [
+    { title: "Assign two urgent plumbing tickets", detail: "High priority follow-up needed", badge: "Urgent" },
+    { title: "Confirm resident notice broadcast", detail: "Sent at 10:30 AM", badge: "Scheduled" },
+    { title: "Review temporary guest access", detail: "Three passes expire today", badge: "Review" },
+];
+
+const upcomingInspections = [
+    { title: "Elevator check", detail: "2:00 PM · Service room B", badge: "Today" },
+    { title: "Fire alarm test", detail: "4:30 PM · Main lobby", badge: "Today" },
+    { title: "Laundry room audit", detail: "Tomorrow · Basement", badge: "Tomorrow" },
+];
+
 export function AdminDashboardPage() {
     const { loading, error, managerData, maintenanceRequests, notices } = useAdminData();
+    const navigate = useNavigate();
     const [activeModal, setActiveModal] = useState<"queue" | "notice" | null>(null);
     const [selectedNotice, setSelectedNotice] = useState<NoticeItem | null>(null);
+    const [feedback, setFeedback] = useState<string | null>(null);
 
     const dashboardData: DashboardData = useMemo(() => {
         if (!loading && !error && managerData && maintenanceRequests && notices) {
@@ -52,6 +67,20 @@ export function AdminDashboardPage() {
         setActiveModal("notice");
     };
 
+    const handleReviewResidents = () => {
+        navigate("/admin/residents");
+    };
+
+    const handleOpenMaintenance = () => {
+        setActiveModal(null);
+        navigate("/admin/maintenance");
+    };
+
+    const handleShareNotice = () => {
+        setFeedback("The notice draft is ready to be shared with residents.");
+        setActiveModal(null);
+    };
+
     return (
         <CommonFrame commonFrameType="BUILDING_MANAGER">
             <div className="admin-dashboard-page">
@@ -62,10 +91,12 @@ export function AdminDashboardPage() {
                     </div>
                     <div className="page-actions">
                         <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
+                        <button type="button" className="secondary-button" onClick={handleReviewResidents}>Review residents</button>
                         <button type="button" className="primary-button" onClick={() => setActiveModal("notice")}>Publish notice</button>
                     </div>
                 </div>
 
+                {feedback && <div className="info-banner">{feedback}</div>}
                 {loading && <p>Loading dashboard data...</p>}
                 {error && <p className="form-error">{error}</p>}
 
@@ -93,6 +124,24 @@ export function AdminDashboardPage() {
 
                         <section className="content-card">
                             <div className="section-title-row">
+                                <h2>Today's priorities</h2>
+                                <span className="section-pill">Demo-ready</span>
+                            </div>
+                            <div className="list-stack">
+                                {todaysPriorities.map((item) => (
+                                    <div key={item.title} className="list-item">
+                                        <div>
+                                            <strong>{item.title}</strong>
+                                            <p>{item.detail}</p>
+                                        </div>
+                                        <span className="status-chip">{item.badge}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        <section className="content-card">
+                            <div className="section-title-row">
                                 <h2>Active facilities occupancy</h2>
                                 <span className="section-pill">Live overview</span>
                             </div>
@@ -102,6 +151,24 @@ export function AdminDashboardPage() {
                                         <div className="facility-card-title">{facility.name}</div>
                                         <div className="facility-card-value">{(facility.occupancy_rate * 100).toFixed(0)}%</div>
                                         <div className="facility-card-caption">Current occupancy trend</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        <section className="content-card">
+                            <div className="section-title-row">
+                                <h2>Upcoming inspections</h2>
+                                <span className="section-pill">Planned</span>
+                            </div>
+                            <div className="list-stack">
+                                {upcomingInspections.map((item) => (
+                                    <div key={item.title} className="list-item">
+                                        <div>
+                                            <strong>{item.title}</strong>
+                                            <p>{item.detail}</p>
+                                        </div>
+                                        <span className="status-chip">{item.badge}</span>
                                     </div>
                                 ))}
                             </div>
@@ -146,9 +213,9 @@ export function AdminDashboardPage() {
                             <div className="modal-actions">
                                 <button type="button" className="secondary-button" onClick={() => setActiveModal(null)}>Close</button>
                                 {activeModal === "queue" ? (
-                                    <button type="button" className="primary-button" onClick={() => setActiveModal(null)}>Open maintenance</button>
+                                    <button type="button" className="primary-button" onClick={handleOpenMaintenance}>Open maintenance</button>
                                 ) : (
-                                    <button type="button" className="primary-button" onClick={() => setActiveModal(null)}>Share notice</button>
+                                    <button type="button" className="primary-button" onClick={handleShareNotice}>Share notice</button>
                                 )}
                             </div>
                         </div>
