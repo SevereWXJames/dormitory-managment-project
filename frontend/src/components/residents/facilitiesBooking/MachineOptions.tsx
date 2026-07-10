@@ -4,12 +4,12 @@ import {MachineDialog} from "@/components/residents/facilitiesBooking/MachineDia
 import {useMachineOptions} from "@/components/residents/facilitiesBooking/hooks/useMachineOptions.tsx";
 
 export function MachineOptions() {
-    const {MACHINES, slots} = useMachineOptions();
+    const {machines} = useMachineOptions();
     return (
         <div className="machineOptions">
-            {MACHINES.map((machine) => (
+            {machines.map((machine) => (
                 <React.Fragment key={machine.id}>
-                    <MachineDialog machine={machine} slots={slots} />
+                    <MachineDialog machine={machine}/>
                     <Separator className="my-2" />
                 </React.Fragment>
             ))}
