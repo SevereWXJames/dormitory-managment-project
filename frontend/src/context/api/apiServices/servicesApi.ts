@@ -1,10 +1,4 @@
 import { api } from "../api";
-import {reservationSlotsApi} from "@/context/api/apiServices/reservationSlotsApi.ts";
-
-type ServicesApiResponse = {
-    success: boolean,
-    data: ServicesApiResponseData[],
-}
 
 type ServicesApiResponseData = {
     _id: string,
@@ -20,11 +14,11 @@ type ServicesApiResponseData = {
 
 export const servicesApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        getServices: builder.query<ServicesApiResponse, void>({
+        getServices: builder.query<ServicesApiResponseData[], void>({
             query: () => ({ url: `/services/`}),
             providesTags: ["IoTServices"],
         }),
     }),
 });
 
-export const {useGetBookingsQuery, useLazyGetBookingsQuery} = reservationSlotsApi;
+export const {useGetServicesQuery} = servicesApi;
