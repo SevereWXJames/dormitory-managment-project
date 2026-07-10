@@ -1,12 +1,11 @@
 import {Button} from "@/components/ui/button";
-import type {Slot} from "./MachineDialog.tsx"
+import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 
 type TimeSlotProps = {
-    slot: Slot
+    slot: ReservationSlot
 }
 export function TimeSlot(props: TimeSlotProps){
     return(<>
-        <Button className="p-4 m-2" variant="outline">{`${props.slot.date} | 
-        ${props.slot.duration} | ${props.slot.startTime}`}</Button>
+        <Button className="p-4 m-2" variant="outline">{`${props.slot.startTime} | 1 hr`}</Button>
     </>)
 }

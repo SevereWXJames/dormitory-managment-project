@@ -206,7 +206,7 @@ describe('FACILITY BOOKING SERVICES', () => {
             balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
             expect(balanceDoc?.balanceCents).to.equal(0);
 
-            const userBooking = await ReservationSlotModel.findOne({bookedBy: userId}).lean().exec();
+            const userBooking = await ReservationSlotModel.findOne({bookedBy: userId.toString()}).lean().exec();
             expect(userBooking).to.exist;
         });
     });
@@ -279,7 +279,7 @@ describe('FACILITY BOOKING SERVICES', () => {
             expect(booking.booked).to.be.false;
             expect(booking.bookedBy).to.be.equal(null);
 
-            const userBooking = await ReservationSlotModel.findOne({bookedBy: userId}).lean().exec();
+            const userBooking = await ReservationSlotModel.findOne({bookedBy: userId.toString()}).lean().exec();
             expect(userBooking).to.equal(null);
         });
 

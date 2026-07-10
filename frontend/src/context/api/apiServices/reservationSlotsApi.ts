@@ -29,8 +29,7 @@ export const reservationSlotsApi = api.injectEndpoints({
             providesTags: ["ReservationSlots"],
         }),
 
-
     }),
 });
 
-export const {useGetBookingsQuery, useLazyGetBookingsQuery} = reservationSlotsApi;
+export const {useGetBookingsQuery, useLazyGetBookingsQuery, useGetSlotsByServiceQuery} = reservationSlotsApi;
