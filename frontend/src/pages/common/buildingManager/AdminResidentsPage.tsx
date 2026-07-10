@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminResidentsData } from "@/pages/common/buildingManager/pageHooks/useAdminResidentsData.tsx";
@@ -7,22 +7,35 @@ interface ResidentEntry {
     _id: string;
     userId: string;
     roomId: string;
+    note?: string;
 }
 
 export function AdminResidentsPage() {
     const { loading, isError, error, residents } = useAdminResidentsData();
     const navigate = useNavigate();
+    const [localResidents, setLocalResidents] = useState<ResidentEntry[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedResident, setSelectedResident] = useState<ResidentEntry | null>(null);
+    const [residentForm, setResidentForm] = useState({ userId: "", roomId: "", note: "" });
     const [feedback, setFeedback] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!loading && !isError && localResidents.length === 0) {
+            setLocalResidents(residents.map((resident) => ({
+                _id: resident._id,
+                userId: resident.userId,
+                roomId: resident.roomId,
+            })));
+        }
+    }, [loading, isError, residents, localResidents.length]);
 
     const filteredResidents = useMemo(() => {
         const lower = searchTerm.trim().toLowerCase();
         if (!lower) {
-            return residents;
+            return localResidents;
         }
-        return residents.filter((resident) => [resident._id, resident.userId, resident.roomId].some((value) => value.toLowerCase().includes(lower)));
-    }, [residents, searchTerm]);
+        return localResidents.filter((resident) => [resident._id, resident.userId, resident.roomId].some((value) => value.toLowerCase().includes(lower)));
+    }, [localResidents, searchTerm]);
 
     const summaryCards = useMemo(() => [
         { label: "Active residents", value: residents.length.toString(), caption: "Current occupied units" },
@@ -31,7 +44,9 @@ export function AdminResidentsPage() {
     ], [residents.length]);
 
     const openNewResident = () => {
-        setSelectedResident({ _id: "new", userId: "pending", roomId: "TBD" });
+        const newId = `new-${Date.now()}`;
+        setSelectedResident({ _id: newId, userId: "", roomId: "", note: "" });
+        setResidentForm({ userId: "", roomId: "", note: "" });
         setFeedback("Onboarding flow opened for a new resident assignment.");
     };
 
@@ -39,8 +54,34 @@ export function AdminResidentsPage() {
         navigate("/admin/maintenance");
     };
 
-    const handleSaveNote = () => {
-        setFeedback("Resident note was saved and the update is visible to the team.");
+    const openResidentDetails = (resident: ResidentEntry) => {
+        setSelectedResident(resident);
+        setResidentForm({ userId: resident.userId, roomId: resident.roomId, note: resident.note ?? "" });
+    };
+
+    const handleSaveResident = () => {
+        if (!selectedResident) {
+            return;
+        }
+
+        if (selectedResident._id.startsWith("new-")) {
+            setLocalResidents((previous) => [
+                {
+                    _id: selectedResident._id,
+                    userId: residentForm.userId || "pending",
+                    roomId: residentForm.roomId || "TBD",
+                    note: residentForm.note,
+                },
+                ...previous,
+            ]);
+            setFeedback("New resident added in the current session.");
+        } else {
+            setLocalResidents((previous) => previous.map((resident) => (
+                resident._id === selectedResident._id ? { ...resident, userId: residentForm.userId, roomId: residentForm.roomId, note: residentForm.note } : resident
+            )));
+            setFeedback("Resident details updated in the current session.");
+        }
+
         setSelectedResident(null);
     };
 
@@ -105,7 +146,7 @@ export function AdminResidentsPage() {
                                             <td>{resident.userId}</td>
                                             <td>{resident.roomId}</td>
                                             <td>
-                                                <button type="button" className="text-link" onClick={() => setSelectedResident(resident)}>
+                                                <button type="button" className="text-link" onClick={() => openResidentDetails(resident)}>
                                                     View details
                                                 </button>
                                             </td>
@@ -139,18 +180,47 @@ export function AdminResidentsPage() {
                     <div className="modal-backdrop" onClick={() => setSelectedResident(null)}>
                         <div className="modal-card" onClick={(event) => event.stopPropagation()}>
                             <div className="modal-header">
-                                <h3>{selectedResident._id === "new" ? "Resident onboarding" : "Resident details"}</h3>
+                                <h3>{selectedResident._id.startsWith("new-") ? "Resident onboarding" : "Resident details"}</h3>
                                 <button type="button" className="icon-button" onClick={() => setSelectedResident(null)}>×</button>
                             </div>
-                            <p>
-                                {selectedResident._id === "new"
-                                    ? "This action opens the onboarding flow for a new resident assignment."
-                                    : `Resident ${selectedResident._id} is assigned to room ${selectedResident.roomId}.`}
-                            </p>
-                            <p className="small-muted">A short note can be attached to prepare the move-in or follow-up task.</p>
+                            <div className="form-row">
+                                <label>
+                                    User ID
+                                    <input
+                                        value={residentForm.userId}
+                                        onChange={(event) => setResidentForm((prev) => ({ ...prev, userId: event.target.value }))}
+                                        className="search-input"
+                                        placeholder="Enter user ID"
+                                    />
+                                </label>
+                            </div>
+                            <div className="form-row">
+                                <label>
+                                    Room ID
+                                    <input
+                                        value={residentForm.roomId}
+                                        onChange={(event) => setResidentForm((prev) => ({ ...prev, roomId: event.target.value }))}
+                                        className="search-input"
+                                        placeholder="Enter room ID"
+                                    />
+                                </label>
+                            </div>
+                            <div className="form-row">
+                                <label>
+                                    Notes
+                                    <textarea
+                                        value={residentForm.note}
+                                        onChange={(event) => setResidentForm((prev) => ({ ...prev, note: event.target.value }))}
+                                        className="search-input"
+                                        placeholder="Add a note for this resident"
+                                        rows={4}
+                                    />
+                                </label>
+                            </div>
+                            <p className="small-muted">This page edits the current session state only. Refreshing will revert the changes.</p>
                             <div className="modal-actions">
                                 <button type="button" className="secondary-button" onClick={() => setSelectedResident(null)}>Close</button>
-                                <button type="button" className="primary-button" onClick={handleSaveNote}>Save note</button>
+                                <button type="button" className="primary-button" onClick={handleSaveResident}>Save resident</button>
                             </div>
                         </div>
                     </div>

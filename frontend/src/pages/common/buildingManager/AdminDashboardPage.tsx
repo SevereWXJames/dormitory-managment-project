@@ -42,29 +42,33 @@ const upcomingInspections = [
 export function AdminDashboardPage() {
     const { loading, error, managerData, maintenanceRequests, notices } = useAdminData();
     const navigate = useNavigate();
-    const [activeModal, setActiveModal] = useState<"queue" | "notice" | null>(null);
+    const [activeModal, setActiveModal] = useState<"queue" | "publish" | "preview" | null>(null);
     const [selectedNotice, setSelectedNotice] = useState<NoticeItem | null>(null);
+    const [noticeDraft, setNoticeDraft] = useState({ title: "", body: "" });
+    const [localNotices, setLocalNotices] = useState<NoticeItem[]>([]);
     const [feedback, setFeedback] = useState<string | null>(null);
 
     const dashboardData: DashboardData = useMemo(() => {
-        if (!loading && !error && managerData && maintenanceRequests && notices) {
+        const publishedNotices = localNotices.length > 0 ? localNotices : (notices ?? []).slice(0, 3).map((notice) => ({
+            notice_id: notice._id,
+            title: notice.title,
+            created_at: notice.createAt ?? null,
+        }));
+
+        if (!loading && !error && managerData && maintenanceRequests) {
             return {
                 ...initialDashboardData,
                 name: managerData.username,
                 pending_maintenance_count: maintenanceRequests.length,
-                recent_published_notices: notices.slice(0, 3).map((notice) => ({
-                    notice_id: notice._id,
-                    title: notice.title,
-                    created_at: notice.createAt ?? null,
-                })),
+                recent_published_notices: publishedNotices.slice(0, 3),
             };
         }
         return initialDashboardData;
-    }, [loading, error, managerData, maintenanceRequests, notices]);
+    }, [loading, error, managerData, maintenanceRequests, notices, localNotices]);
 
     const openNotice = (notice: NoticeItem) => {
         setSelectedNotice(notice);
-        setActiveModal("notice");
+        setActiveModal("preview");
     };
 
     const handleReviewResidents = () => {
@@ -77,7 +81,20 @@ export function AdminDashboardPage() {
     };
 
     const handleShareNotice = () => {
-        setFeedback("The notice draft is ready to be shared with residents.");
+        if (!noticeDraft.title.trim()) {
+            setFeedback("Please enter a notice title before publishing.");
+            return;
+        }
+
+        const newNotice: NoticeItem = {
+            notice_id: `draft-${Date.now()}`,
+            title: noticeDraft.title,
+            created_at: Date.now(),
+        };
+
+        setLocalNotices((prev) => [newNotice, ...prev]);
+        setNoticeDraft({ title: "", body: "" });
+        setFeedback("Notice published in this session and added to the dashboard feed.");
         setActiveModal(null);
     };
 
@@ -92,7 +109,7 @@ export function AdminDashboardPage() {
                     <div className="page-actions">
                         <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
                         <button type="button" className="secondary-button" onClick={handleReviewResidents}>Review residents</button>
-                        <button type="button" className="primary-button" onClick={() => setActiveModal("notice")}>Publish notice</button>
+                        <button type="button" className="primary-button" onClick={() => setActiveModal("publish")}>Publish notice</button>
                     </div>
                 </div>
 
@@ -202,20 +219,76 @@ export function AdminDashboardPage() {
                     <div className="modal-backdrop" onClick={() => setActiveModal(null)}>
                         <div className="modal-card" onClick={(event) => event.stopPropagation()}>
                             <div className="modal-header">
-                                <h3>{activeModal === "queue" ? "Maintenance queue" : "Notice preview"}</h3>
+                                <h3>
+                                    {activeModal === "queue" && "Maintenance queue"}
+                                    {activeModal === "preview" && "Notice preview"}
+                                    {activeModal === "publish" && "Publish new notice"}
+                                </h3>
                                 <button type="button" className="icon-button" onClick={() => setActiveModal(null)}>×</button>
                             </div>
-                            <p>
-                                {activeModal === "queue"
-                                    ? `There are ${dashboardData.pending_maintenance_count} maintenance items waiting for review.`
-                                    : selectedNotice?.title ?? "This notice is ready for publication."}
-                            </p>
+                            {activeModal === "queue" && (
+                                <>
+                                    <p>There are {dashboardData.pending_maintenance_count} maintenance items waiting for review.</p>
+                                    <div className="list-stack">
+                                        {(maintenanceRequests ?? []).slice(0, 3).map((request) => (
+                                            <div key={request._id} className="list-item">
+                                                <div>
+                                                    <strong>{request.title || "Maintenance item"}</strong>
+                                                    <p>{request.location ? `Location: ${request.location}` : "Review this issue for next steps."}</p>
+                                                </div>
+                                                <span className="status-chip">Open</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                            {activeModal === "preview" && (
+                                <>
+                                    <p>{selectedNotice?.title ?? "This notice is ready for publication."}</p>
+                                    <div className="content-card">
+                                        <p className="small-muted">Published {selectedNotice?.created_at ? new Date(selectedNotice.created_at).toLocaleDateString() : "recently"}</p>
+                                        <p>{selectedNotice?.title && "Notice content preview is available here for review before sharing."}</p>
+                                    </div>
+                                </>
+                            )}
+                            {activeModal === "publish" && (
+                                <>
+                                    <div className="form-row">
+                                        <label>
+                                            Notice title
+                                            <input
+                                                value={noticeDraft.title}
+                                                onChange={(event) => setNoticeDraft((prev) => ({ ...prev, title: event.target.value }))}
+                                                className="search-input"
+                                                placeholder="Enter notice title"
+                                            />
+                                        </label>
+                                    </div>
+                                    <div className="form-row">
+                                        <label>
+                                            Notice body
+                                            <textarea
+                                                value={noticeDraft.body}
+                                                onChange={(event) => setNoticeDraft((prev) => ({ ...prev, body: event.target.value }))}
+                                                className="search-input"
+                                                placeholder="Enter notice content"
+                                                rows={5}
+                                            />
+                                        </label>
+                                    </div>
+                                    <p className="small-muted">This publishes a session-only notice draft for demo purposes only.</p>
+                                </>
+                            )}
                             <div className="modal-actions">
                                 <button type="button" className="secondary-button" onClick={() => setActiveModal(null)}>Close</button>
-                                {activeModal === "queue" ? (
+                                {activeModal === "queue" && (
                                     <button type="button" className="primary-button" onClick={handleOpenMaintenance}>Open maintenance</button>
-                                ) : (
-                                    <button type="button" className="primary-button" onClick={handleShareNotice}>Share notice</button>
+                                )}
+                                {activeModal === "preview" && (
+                                    <button type="button" className="primary-button" onClick={() => setActiveModal("publish")}>Create similar notice</button>
+                                )}
+                                {activeModal === "publish" && (
+                                    <button type="button" className="primary-button" onClick={handleShareNotice}>Publish notice</button>
                                 )}
                             </div>
                         </div>
