@@ -6,13 +6,19 @@
   "type": "module",
   "scripts": {
     "test": "npx mocha test/**/*.test.ts",
-    "start": "node src/server.ts"
+    "auth-test": "mocha -r ts-node/register --exit --timeout 10000 test/auth/*.test.ts",
+    "start": "node src/server.ts",
+    "build": "npx tsc --noEmit",
+    "database": "docker start team07-mongo-1",
+    "docker-mqtt": "docker run -it -p 1883:1883 eclipse-mosquitto"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/express": "^5.0.6",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "chai": "^6.2.2",
     "chai-as-promised": "^8.0.2",
     "cors": "^2.8.6",
@@ -30,6 +36,14 @@
     "@types/chai-as-promised": "^8.0.2",
     "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/mocha": "^10.0.10"
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^26.1.0",
+    "chai-http": "^5.1.2",
+    "mocha": "^11.7.6",
+    "mongodb-memory-server": "^11.2.0",
+    "ts-node": "^10.9.2"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.7"
   }
 }

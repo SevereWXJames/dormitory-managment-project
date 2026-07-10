@@ -1,8 +1,10 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
+export type MongoId = string | mongoose.Types.ObjectId;
+
 export interface Service {
-    _id: string;
+    _id: MongoId;
     name: string;
     description: string;
     hasIoT: boolean;
@@ -14,7 +16,12 @@ export interface Service {
     // IoTName: string;
 }
 
-const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
+export type ServiceInput = Omit<Service, "_id"> & { _id?: MongoId };
+
+// const serviceSchema = new Schema({_id: String, name: String, description: String, hasIoT: Boolean,
+//     IoTUUID: String, IoTType: String, reservationDurationSeconds: Number,
+//     reservationStartHour: Number, reservationEndHour: Number});
+const serviceSchema = new Schema({name: String, description: String, hasIoT: Boolean,
     IoTUUID: String, IoTType: String, reservationDurationSeconds: Number,
     reservationStartHour: Number, reservationEndHour: Number});
 export const ServiceModel = mongoose.model("Services"  as CollectionName, serviceSchema, "Services"  as CollectionName);

@@ -1,7 +1,7 @@
 import {connectMongo} from "./database/database.ts";
 import app from "./app.ts";
 import {setUpMQTT} from "./utility/mqttSetup.ts";
-import loadSampleData from "./database/loadDatabase.js";
+import loadSampleData from "./database/loadDatabase.ts";
 
 const port: number = 3000;
 

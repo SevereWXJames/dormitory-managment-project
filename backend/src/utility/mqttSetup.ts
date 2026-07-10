@@ -7,6 +7,7 @@ function constructTopicString(topic: string) {
 }
 
 export function setUpMQTT() {
+    console.log("uri", process.env.MQTT_URI);
     const client = mqtt.connect(process.env.MQTT_URI as string);
 
     client.on("connect", () => {
