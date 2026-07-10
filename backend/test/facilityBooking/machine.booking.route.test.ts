@@ -205,10 +205,147 @@ describe('FACILITY BOOKING SERVICES', () => {
             balanceDoc = await CreditBalances.findOne({userId}).lean().exec();
             expect(balanceDoc?.balanceCents).to.equal(0);
         });
+    });
 
-        it('Unbook a slot by service Id', async () => {
-            const serviceId = "service0";
+    describe('Canceling bookings', () => {
+        let testJwt : string | undefined;
+        let testUserId: string | undefined;
+
+        before('Create an account', async () => {
+            try{
+                const res = await chaiWithHttp.request.execute(app)
+                    .post('/signup')
+                    .send(validSignupPayload);
+            }catch(error){
+                throw Error(`Error with signup! ${error}`);
+            }
         });
 
-    });
+        beforeEach('HTTP Response - Log in', async () => {
+            try{
+                const res = await chaiWithHttp.request.execute(app)
+                    .post('/login')
+                    .send(validLoginPayload);
+
+                const userId = res.body.data._id;
+                const cookies = res.headers['set-cookie'] as unknown as string[];
+                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+
+                testJwt = rawCookie?.split(';')[0];
+                testUserId = userId;
+            }catch(error){
+                throw Error(`Error with setup! ${error}`);
+            }
+        });
+
+        it('Cancel booking by service Id - successful response', async () => {
+            const serviceId = "service0";
+            const slotsRes = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const slots = slotsRes.body.data;
+            const slotId = slots[0]._id;
+
+            const balanceTable = new CreditBalanceTable();
+            const id = new Types.ObjectId(testUserId);
+            await balanceTable.incrementBalance(id, BOOKING_COST * 2);
+            let balance = await CreditBalances.findOne({userId: id});
+            console.log(`balance before booking: ${JSON.stringify(balance)}`);
+
+            await chaiWithHttp.request.execute(app)
+                .put(`/reservations/book-slot-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+
+            const res = await chaiWithHttp.request.execute(app)
+                .put(`/reservations/cancel-booking-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+
+            const booking = res.body.data;
+            expect(res).to.have.status(200);
+            expect(booking.booked).to.be.false;
+            expect(booking.bookedBy).to.be.equal(null);
+
+        });
+
+        it('Cancel booking by service Id - successful refund', async () => {
+            const serviceId = "service0";
+            const slotsRes = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const slots = slotsRes.body.data;
+            const slotId = slots[0]._id;
+
+            const balanceTable = new CreditBalanceTable();
+            const id = new Types.ObjectId(testUserId);
+            await balanceTable.incrementBalance(id, BOOKING_COST * 2);
+            let balance = await CreditBalances.findOne({userId: id});
+            console.log(`balance before booking: ${JSON.stringify(balance)}`);
+
+            await chaiWithHttp.request.execute(app)
+                .put(`/reservations/book-slot-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+
+            const res = await chaiWithHttp.request.execute(app)
+                .put(`/reservations/cancel-booking-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+
+            balance = await CreditBalances.findOne({userId: id});
+            console.log(`balance after cancelling booking: ${JSON.stringify(balance)}`);
+            expect(balance?.balanceCents).to.equal(BOOKING_COST * 2);
+        });
+
+        it('Cancel booking by service Id - failure response', async () => {
+            const serviceId = "service0";
+            const slotsRes = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const slots = slotsRes.body.data;
+            const slotId = slots[0]._id;
+
+            const balanceTable = new CreditBalanceTable();
+            const id = new Types.ObjectId(testUserId);
+            await balanceTable.incrementBalance(id, BOOKING_COST * 2);
+
+            const res = await chaiWithHttp.request.execute(app)
+                .put(`/reservations/cancel-booking-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+
+            expect(res).to.have.status(500);
+        });
+
+        it('Cancel booking by service Id - failure, same balance', async () => {
+            const serviceId = "service0";
+            const slotsRes = await chaiWithHttp.request.execute(app)
+                .get(`/reservations/get-slots-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send();
+            const slots = slotsRes.body.data;
+            const slotId = slots[0]._id;
+
+            const balanceTable = new CreditBalanceTable();
+            const id = new Types.ObjectId(testUserId);
+            await balanceTable.incrementBalance(id, BOOKING_COST * 2);
+
+            const res = await chaiWithHttp.request.execute(app)
+                .put(`/reservations/cancel-booking-by-service/${serviceId}`)
+                .set('Cookie', `${testJwt}`)
+                .send({userId: testUserId, slotId: slotId});
+            console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+
+            expect(res).to.have.status(500);
+            const balance = await CreditBalances.findOne({userId: id});
+            expect(balance?.balanceCents).to.equal(BOOKING_COST * 2);
+        });
+    })
 });

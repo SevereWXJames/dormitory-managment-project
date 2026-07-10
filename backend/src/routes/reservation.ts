@@ -1,6 +1,6 @@
 import express, {type Request, type Response} from "express";
 import {
-    bookReservationSlot,
+    bookReservationSlot, cancelReservationSlot,
     getAllFreeSlots, getAllReservedSlots,
     getReservationsBookedByUserId,
     getReservationsSlotsByServiceId
@@ -70,7 +70,6 @@ reservationRouter.get("/get-all-reserved-slots-by-service/:serviceId", async (re
 
 reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, res: Response)=> {
     const {userId, slotId} = req.body;
-    console.log(`body: ${JSON.stringify(req.body, null, 2)}`);
     const {serviceId} = req.params;
 
     if (!serviceId) {
@@ -82,6 +81,26 @@ reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, r
 
     try {
         const reservationSlots = await bookReservationSlot(serviceId, slotId, userId);
+        return res.status(200).json({success: true,  data: reservationSlots});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: "Internal server error.", error: error});
+    }
+});
+
+reservationRouter.put("/cancel-booking-by-service/:serviceId", async (req: Request, res: Response)=> {
+    const {userId, slotId} = req.body;
+    const {serviceId} = req.params;
+
+    if (!serviceId) {
+        return res.status(400).json({success: false, message: "No ID provided."});
+    }
+    if(!slotId){
+        return res.status(400).json({success: false, message: "No slot provided."});
+    }
+
+    try {
+        const reservationSlots = await cancelReservationSlot(serviceId, slotId, userId);
         return res.status(200).json({success: true,  data: reservationSlots});
     }
     catch (error) {
