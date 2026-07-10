@@ -4,7 +4,7 @@ import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import { CreateMaintenanceRequestCard } from "../../../../../components/residents/maintenanceRequests/createMaintenanceRequestCard.tsx";
 import { MaintenanceRequestHistoryCard } from "../../../../../components/residents/maintenanceRequests/MaintenanceRequestHistoryCard.tsx";
 import { setMaintenanceRequests } from "../../../../../context/residents/maintenanceRequestsSlice.ts";
-import {useMaintenanceRequestData} from "@/pages/common/residents/pageHooks/useMaintenanceRequestData.tsx";
+import { useMaintenanceRequestData } from "@/pages/common/residents/pageHooks/useMaintenanceRequestData.tsx";
 
 export function MaintenanceRequestsPage() {
     const dispatch = useDispatch();

@@ -14,13 +14,13 @@ loginRouter.post("/login", async (req: Request, res: Response)=> {
     let existingUser: User | undefined;
     try {
         if (!await checkLogIn(username, email, password)) {
-            return res.status(200).json({success: false, message: "Wrong username/email or password."});
+            return res.status(401).json({success: false, message: "Wrong username/email or password."});
         }
         if (username && email) {
             const usernameUser = await getExistingUserFromUsername(username);
             const emailUser = await getExistingUserFromEmail(email);
-            if (!usernameUser || !emailUser || usernameUser._id !== emailUser._id) {
-                return res.status(200).json({success: false, message: "Wrong username/email or password."});
+            if (!usernameUser || !emailUser || String(usernameUser._id) !== String(emailUser._id)) {
+                return res.status(401).json({success: false, message: "Wrong username/email or password."});
             }
             existingUser = usernameUser;
         } else if (username) {
@@ -29,7 +29,7 @@ loginRouter.post("/login", async (req: Request, res: Response)=> {
             existingUser = await getExistingUserFromEmail(email);
         }
         if (!existingUser) {
-            return res.status(200).json({success: false, message: "Wrong username/email or password."});
+            return res.status(401).json({success: false, message: "Wrong username/email or password."});
         }
     }
     catch (error) {
@@ -38,21 +38,18 @@ loginRouter.post("/login", async (req: Request, res: Response)=> {
 
     let token: string;
     try {
-        token = createToken(existingUser._id, existingUser.username);
+        token = createToken(existingUser._id as string, existingUser.username);
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error in JWT."});
     }
 
     res.status(200).json({
-       success: true,
-       data: {
            _id: existingUser._id,
-           username: username,
+           username: existingUser.username,
            email: existingUser.email,
            roles: existingUser.roles,
            token: token
-       }
     });
 });
 

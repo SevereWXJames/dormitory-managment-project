@@ -3,7 +3,8 @@ import {
     getAllMaintenanceRequests, getAllMaintenanceRequestsByUserId,
     getAllMaintenanceRequestTypes, getAllMaintenanceRequestStatuses, getMaintenanceRequestPriorityById,
     getMaintenanceRequestStatusById,
-    getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities
+    getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities,
+    addMaintenanceRequest
 } from "../services/maintenanceRequestServices.ts";
 
 const maintenanceRequestRouter = express.Router();
@@ -105,6 +106,16 @@ maintenanceRequestRouter.get("/get-priorities/", async (req: Request, res: Respo
     try {
         const priorities = await getAllMaintenanceRequestPriorities();
         return res.status(200).json({success: true, data: priorities});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: "Internal server error."});
+    }
+});
+
+maintenanceRequestRouter.put("/put/", async (req: Request, res: Response) => {
+    try {
+        const result = await addMaintenanceRequest(req.body);
+        return res.status(200).json({success: true});    
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
