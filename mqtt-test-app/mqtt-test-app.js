@@ -7,7 +7,6 @@ const mosquittoURI = "mqtt://localhost:1883"
 
 const options = {
     fileReadMode: {type: "boolean", short: "f", default: false},
-    multiMessageMode: {type: "boolean", short: "m", default: false},
     uuid: {type: "string", short: "u"},
     type: {type: "string", short: "e"},
     topic: {type: "string", short: "t"}
@@ -28,30 +27,6 @@ async function readData() {
     }
 }
 
-function parseSingleFileContents(rawJSON) {
-    try {
-        const data = JSON.parse(rawJSON);
-        if (!Object.hasOwn(data, "topic") || !Object.hasOwn(data, "message")) {
-            console.error("Not all data provided.");
-            process.exit(2);
-        }
-        return data;
-    }
-    catch (error) {
-        console.log("Invalid file contents.");
-        process.exit(2);
-        return {};
-    }
-}
-
-async function sendMessageFromFile(client) {
-    const rawJSON = await readData();
-    const data = parseSingleFileContents(rawJSON);
-    const fullTopicString = baseTopicString + data.topic;
-
-    await sendMQTTMessage(client, data.message, fullTopicString);
-}
-
 function parseMultiFileContents(rawJSON) {
     try {
         const data = JSON.parse(rawJSON);
@@ -68,7 +43,7 @@ function parseMultiFileContents(rawJSON) {
     }
 }
 
-async function sendMultiMessageFromFile(client) {
+async function sendMessageFromFile(client) {
     const rawJSON = await readData();
     const data = parseMultiFileContents(rawJSON);
     const fullTopicString = baseTopicString + data.topic;
@@ -118,12 +93,7 @@ async function main() {
     client.on("connect", async () => {
         if (client.connected === true) {
             if (values.fileReadMode) {
-                if (values.multiMessageMode) {
-                    await sendMultiMessageFromFile(client);
-                }
-                else {
-                    await sendMessageFromFile(client);
-                }
+                await sendMessageFromFile(client);
             }
             else {
                 await sendSingleMessageFromArgs(client, values, fullTopicString);

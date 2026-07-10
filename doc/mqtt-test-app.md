@@ -9,13 +9,8 @@ The app sends MQTT messages to the broker url contained in the app. To run the a
 
 ### -f
 
-File read mode flag. If this flag is added, all other flags other than `-m` are ignored, and instead the app will read from the `data/data.json` file. 
+File read mode flag. If this flag is added, all other flags are ignored, and instead the app will read from the `data/data.json` file. 
 `data.json` structure reference can be found in the `examples` folder.
-
-### -m
-
-Multi-message mode flag. Only used with the -f flag, converts the single message in the `data.json` file into a multi message version. 
-The single `message` field is replaced with a `messages` array, containing multiple instances of messages. See `examples` folder for an example.
 
 ### -u
 The UUID argument. All IoT devices registered to the app have a UUID that corresponds to the physical ID of the machine.
