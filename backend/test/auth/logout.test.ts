@@ -1,7 +1,7 @@
 import * as chai from "chai";
 import chaiHttp from "chai-http";
 import {after, afterEach, before, describe, it} from "mocha";
-import {clearTestDB, closeTestDB, connectTestDB} from "./setup/setup.ts";
+import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
