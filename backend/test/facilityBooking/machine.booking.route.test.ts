@@ -234,7 +234,7 @@ describe('FACILITY BOOKING SERVICES', () => {
             expect(booking.booked).to.be.true;
             expect(booking.bookedBy).to.be.equal(testUserId);
 
-            const userBooking = ReservationSlotModel.findOne({bookedBy: userId});
+            const userBooking = await ReservationSlotModel.findOne({bookedBy: userId}).lean().exec();
             expect(userBooking).to.exist;
         });
     });
@@ -286,9 +286,9 @@ describe('FACILITY BOOKING SERVICES', () => {
             const slotId = slots[0]._id;
 
             const balanceTable = new CreditBalanceTable();
-            const id = new Types.ObjectId(testUserId);
-            await balanceTable.incrementBalance(id, BOOKING_COST * 2);
-            let balance = await CreditBalances.findOne({userId: id});
+            const userId = new Types.ObjectId(testUserId);
+            await balanceTable.incrementBalance(userId, BOOKING_COST * 2);
+            let balance = await CreditBalances.findOne({userId: userId});
             console.log(`balance before booking: ${JSON.stringify(balance)}`);
 
             await chaiWithHttp.request.execute(app)
@@ -307,6 +307,8 @@ describe('FACILITY BOOKING SERVICES', () => {
             expect(booking.booked).to.be.false;
             expect(booking.bookedBy).to.be.equal(null);
 
+            const userBooking = await ReservationSlotModel.findOne({bookedBy: userId}).lean().exec();
+            expect(userBooking).to.equal(null);
         });
 
         it('Cancel booking by service Id - successful refund', async () => {
