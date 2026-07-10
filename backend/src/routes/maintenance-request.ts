@@ -115,7 +115,7 @@ maintenanceRequestRouter.get("/get-priorities/", async (req: Request, res: Respo
 maintenanceRequestRouter.put("/put/", async (req: Request, res: Response) => {
     try {
         const result = await addMaintenanceRequest(req.body);
-        return res.status(200).json({success: true});    
+        return res.status(200).json({success: true});
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});

@@ -8,7 +8,7 @@ import { useGetMaintenanceRequestByUserQuery } from "@/context/api/apiServices/m
  * createMaintenanceRequest function.
  */
 export function useMaintenanceRequestHistoryCard() {
-	const data = useGetMaintenanceRequestByUserQuery("user"); // Replace with correct user.
+	const data = useGetMaintenanceRequestByUserQuery("test1"); // Replace with correct user.
 	const handleGetMaintenanceRequestsByUser = () => {
 		try {
 			return data; 
