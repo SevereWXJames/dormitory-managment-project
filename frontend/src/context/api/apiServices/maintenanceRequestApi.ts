@@ -47,7 +47,7 @@ export const maintenanceRequestApi = api.injectEndpoints({
             providesTags: ["MaintenanceRequests"],
         }),
 
-        put: builder.mutation<MaintenanceRequestState, void>({
+        put: builder.mutation<MaintenanceRequestState, MaintenanceRequest>({
             query: (maintenanceRequest) => ({
                 url: "/put",
                 method: "PUT",
