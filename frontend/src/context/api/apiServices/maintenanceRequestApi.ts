@@ -1,6 +1,6 @@
 import {api} from "../api";
 import {
-    type MaintenanceRequest,
+    MaintenanceRequest,
     MaintenanceRequestStatus,
     MaintenanceRequestType
 } from "@/dataTypes/maintenanceRequest.ts";
@@ -47,6 +47,14 @@ export const maintenanceRequestApi = api.injectEndpoints({
             providesTags: ["MaintenanceRequests"],
         }),
 
+        put: builder.mutation<MaintenanceRequestState, void>({
+            query: (maintenanceRequest) => ({
+                url: "/put",
+                method: "PUT",
+                body: maintenanceRequest
+            })
+        }),
+
         updateMaintenanceRequestStatus: builder.mutation<unknown, { requestId: string; statusId: string }>({
             query: ({ requestId, statusId }) => ({
                 url: `/maintenance-request/${encodeURIComponent(requestId)}/status`,
@@ -63,5 +71,6 @@ export const {
     useGetMaintenanceRequestsQuery,
     useGetRequestStatusesQuery,
     useGetRequestTypesQuery,
+    usePutMutation,
     useUpdateMaintenanceRequestStatusMutation,
 } = maintenanceRequestApi;
