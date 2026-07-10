@@ -13,7 +13,7 @@ export interface Service {
     reservationDurationSeconds: number;
     reservationStartHour: number;
     reservationEndHour: number;
-    IoTName: string;
+    // IoTName: string;
 }
 
 export type ServiceInput = Omit<Service, "_id"> & { _id?: MongoId };

@@ -1,5 +1,5 @@
 import express, {type Request, type Response, type NextFunction} from "express"
-import {getEventsForLastNDays, getStatusForServiceId} from "../services/IoTDataServices.ts";
+import {getEventsForLastNDays, getStatusForServiceId} from "../services/IoT/IoTDataServices.ts";
 
 const IoTRouter = express.Router();
 

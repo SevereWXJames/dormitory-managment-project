@@ -1,5 +1,5 @@
-import {type IoTStatus, IoTStatusModel} from "../dataTypes/IoT/IoTStatus.ts";
-import {type IoTEvent, IoTEventModel} from "../dataTypes/IoT/IoTEvent.ts";
+import {type IoTStatus, IoTStatusModel} from "../../dataTypes/IoT/IoTStatus.ts";
+import {type IoTEvent, IoTEventModel} from "../../dataTypes/IoT/IoTEvent.ts";
 
 export async function getStatusForServiceId(serviceId: string): Promise<IoTStatus> {
     const status = await IoTStatusModel.findOne({facilityID: serviceId}).lean().exec();
