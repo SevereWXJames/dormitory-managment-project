@@ -69,8 +69,8 @@ reservationRouter.get("/get-all-reserved-slots-by-service/:serviceId", async (re
 });
 
 reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, res: Response)=> {
-    const {slotId} = req.body;
-    const {id} = req.user;
+    const {userId, slotId} = req.body;
+    console.log(`body: ${JSON.stringify(req.body, null, 2)}`);
     const {serviceId} = req.params;
 
     if (!serviceId) {
@@ -81,8 +81,8 @@ reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, r
     }
 
     try {
-        const reservationSlots = await bookReservationSlot(serviceId, slotId, id);
-        return res.status(200).json({success: true, data: reservationSlots});
+        const reservationSlots = await bookReservationSlot(serviceId, slotId, userId);
+        return res.status(200).json({success: true,  data: reservationSlots});
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error.", error: error});

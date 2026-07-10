@@ -67,10 +67,6 @@ describe('FACILITY BOOKING SERVICES', () => {
             }
         });
 
-        afterEach(async () => {
-            await closeTestDB();
-        });
-
         it('Get status of IoT service by Id', async () => {
             const serviceId = "service0";
             const res = await chaiWithHttp.request.execute(app)
@@ -145,10 +141,6 @@ describe('FACILITY BOOKING SERVICES', () => {
             }
         });
 
-        afterEach(async () => {
-            await closeTestDB();
-        });
-
         it('Get slots by service Id', async () => {
             const serviceId = "service0";
             const res = await chaiWithHttp.request.execute(app)
@@ -169,11 +161,14 @@ describe('FACILITY BOOKING SERVICES', () => {
             const slotId = slots[0]._id;
 
             const res = await chaiWithHttp.request.execute(app)
-                .get(`/reservations/book-slot-by-service/${serviceId}`)
+                .put(`/reservations/book-slot-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
-                .send(slotId);
+                .send({userId: testUserId, slotId: slotId});
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
+            const booking = res.body.data;
             expect(res).to.have.status(200);
+            expect(booking.booked).to.be.true;
+            expect(booking.bookedBy).to.be.equal(testUserId);
         });
 
         it('Unbook a slot by service Id', async () => {
