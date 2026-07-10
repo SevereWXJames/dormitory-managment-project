@@ -15,7 +15,6 @@ describe('FACILITY BOOKING SERVICES', () => {
         console.log('file loaded');
         await connectTestDB();
         await loadSampleData();
-        console.log('SEED conn:', mongoose.connection.host, mongoose.connection.port, mongoose.connection.name);
         console.log("Loaded sample data");
     });
 
@@ -113,8 +112,6 @@ describe('FACILITY BOOKING SERVICES', () => {
                 .send();
             const data = getServices.body.data;
             const serviceId = data[0]._id;
-            console.log(`services: ${JSON.stringify(getServices.body, null, 2)}`);
-            console.log(`serviceId: ${serviceId}`);
             const res = await chaiWithHttp.request.execute(app)
                 .get(`/services/get-by-id/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
