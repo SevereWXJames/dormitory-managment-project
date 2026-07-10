@@ -33,3 +33,20 @@ export async function getReservationsSlotsByServiceId(serviceId: string): Promis
 
     return Promise.resolve(results);
 }
+
+export function bookReservationSlot(serviceId: string, slotId: string, userData: object[]): void{
+    //TODO:
+    // Given a service id and a slot id, set the slot with given slotId and serviceId to be booked by userData
+}
+export function getAllFreeSlots(serviceId: string): void{
+    // TODO:
+    // Given a service id, get all free slots for that service.
+}
+export function getAllReservedSlots(serviceId: string): void{
+    // TODO:
+    // Given a service id, get all booked slots for that service.
+}
+export function getAllSlots(serviceId: string): void{
+    // TODO:
+    // Given a service id, get all slots for that service.
+}
