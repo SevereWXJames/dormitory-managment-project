@@ -1,6 +1,9 @@
 import {useGetSlotsByServiceNameQuery,} from "@/context/api/apiServices/reservationSlotsApi.ts";
+import {useState} from "react";
+import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 
 export function useMachineDialog(machineName: string){
+    const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
 
     const getTime = (timestamp: number) => {
         const date = new Date(timestamp * 1000);
@@ -30,5 +33,7 @@ export function useMachineDialog(machineName: string){
         slots,
         isLoading,
         isError,
+        selectedSlot,
+        setSelectedSlot,
         error};
 }
