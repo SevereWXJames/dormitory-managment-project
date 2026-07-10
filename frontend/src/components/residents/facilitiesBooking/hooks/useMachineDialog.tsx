@@ -25,7 +25,7 @@ export function useMachineDialog(machineName: string){
         return `${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
     }
     const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machineName);
-    const slots = slotsData?.map(slot => ({...slot, startTime: getTime(slot.startTime)}));
+    const slots = slotsData?.map(slot => ({...slot, startTimeString: getTime(slot.startTime)}));
     return {
         slots,
         isLoading,
