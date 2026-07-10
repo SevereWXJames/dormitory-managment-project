@@ -37,6 +37,23 @@ export async function getReservationsSlotsByServiceId(serviceId: string): Promis
     return Promise.resolve(results);
 }
 
+export async function getReservationsSlotsByServiceName(serviceName: string): Promise<ReservationSlot[]> {
+    const cursor = ReservationSlotModel.find({name: serviceName}).lean();
+    const results: ReservationSlot[] = [];
+
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as ReservationSlot);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+
+    return Promise.resolve(results);
+}
+
 export async function hasEnoughCredits(userId: string){
     const id = new Types.ObjectId(userId);
     const balanceDoc = await CreditBalances.findOne({userId: id}).lean().exec();

@@ -40,6 +40,20 @@ reservationRouter.get("/get-slots-by-service/:serviceId", async (req: Request, r
     }
 });
 
+reservationRouter.get("/get-slots-by-serviceName/:serviceName", async (req: Request, res: Response)=> {
+    if (req.params.serviceName === undefined) {
+        return res.status(400).json({success: false, message: "No name provided."});
+    }
+
+    try {
+        const reservationSlots = await getReservationsSlotsByServiceName(req.params.serviceName as string);
+        return res.status(200).json({success: true, data: reservationSlots});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: "Internal server error."});
+    }
+});
+
 reservationRouter.get("/get-free-slots-by-service/:serviceId", async (req: Request, res: Response)=> {
     if (req.params.serviceId === undefined) {
         return res.status(400).json({success: false, message: "No ID provided."});
