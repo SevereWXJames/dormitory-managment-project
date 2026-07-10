@@ -6,6 +6,6 @@ type TimeSlotProps = {
 }
 export function TimeSlot(props: TimeSlotProps){
     return(<>
-        <Button className="p-4 m-2" variant="outline">{`${props.slot.startTime} | 1 hr`}</Button>
+        <Button className="p-4 m-2 text-left" variant="outline">{`Starting Time: ${props.slot.startTime} | Duration: 1 hour`}</Button>
     </>)
 }

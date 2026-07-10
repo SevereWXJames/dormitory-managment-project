@@ -28,7 +28,7 @@ export function MachineDialog(props : MachineDialogProps) {
         message = <p>Error retrieving time slots</p>
     }
 
-    if(!slots){
+    if(!slots || slots.length <= 0){
         message = <p>No available slots</p>
     }else{
         reservations = slots;
@@ -48,8 +48,8 @@ export function MachineDialog(props : MachineDialogProps) {
                     <DialogTitle className="!text-black">Book a time:</DialogTitle>
                     <DialogDescription>Select a time slot below:</DialogDescription>
                 </DialogHeader>
-                {(isError || !slots) && message}
-                <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4">
+                {(isError || !slots || slots.length <= 0) && message}
+                <div className="-mx-4 no-scrollbar max-h-[50vh] overflow-y-auto px-4 flex flex-col">
                     {reservations.map((slot)=>(<TimeSlot slot={slot}/>))}
                 </div>
                 <DialogFooter>
