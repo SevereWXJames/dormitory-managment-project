@@ -50,7 +50,7 @@ export async function payBooking(userId: string){
     const filter = {userId: id};
     const update = {$inc: {balanceCents: -1 * BOOKING_COST}};
     const options = {new: true}
-    return await CreditBalances.findOneAndUpdate(filter, update, options);
+    return await CreditBalances.findOneAndUpdate(filter, update, options).lean().exec();
 }
 
 export async function bookReservationSlot(serviceId: string | string[], slotId: string, userId: string){
@@ -79,6 +79,36 @@ export async function bookReservationSlot(serviceId: string | string[], slotId: 
     await payBooking(userId);
     return res;
 }
+
+export async function refundBooking(userId: string){
+    const id = new Types.ObjectId(userId);
+    const filter = {userId: id};
+    const update = {$inc: {balanceCents: BOOKING_COST}};
+    const options = {new: true}
+    return await CreditBalances.findOneAndUpdate(filter, update, options).lean().exec();
+}
+
+export async function cancelReservationSlot(serviceId: string | string[], slotId: string, userId: string){
+    //TODO:
+    // Given a service id and a slot id, set the slot with given slotId and serviceId to be booked by userData
+    // 1. Check that the slot has been booked.
+    // 2. Set slot bookedBy to be null
+    // 3. Set slot booked to be false
+    // 4. Refund the balance
+    // 5. Return status of action
+    const id = new Types.ObjectId(slotId);
+    const filter = {serviceId: serviceId, _id: id, booked: true};
+    const update = {$set: {booked: false, bookedBy: null}};
+    const options = { new: true } as const;
+    const res = await ReservationSlotModel
+        .findOneAndUpdate(filter, update, options).lean().exec();
+    if(!res){
+        throw Error("Error canceling booking!");
+    }
+    await refundBooking(userId);
+    return res;
+}
+
 export async function getAllSlots(serviceId: string){
     //TODO:
     // Given a service id, get all slots for that service.
