@@ -3,7 +3,7 @@ import {
     getAllMaintenanceRequests, getAllMaintenanceRequestsByUserId,
     getAllMaintenanceRequestTypes, getAllMaintenanceRequestStatuses, getMaintenanceRequestPriorityById,
     getMaintenanceRequestStatusById,
-    getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities
+    getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities, setMaintenanceRequestStatus
 } from "../services/maintenanceRequestServices.ts";
 
 const maintenanceRequestRouter = express.Router();
@@ -81,6 +81,22 @@ maintenanceRequestRouter.get("/get-statuses/", async (req: Request, res: Respons
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
+    }
+});
+
+maintenanceRequestRouter.patch("/:requestId/status", async (req: Request, res: Response) => {
+    const { statusId } = req.body as { statusId?: string };
+
+    if (!statusId) {
+        return res.status(400).json({success: false, message: "No status provided."});
+    }
+
+    try {
+        await setMaintenanceRequestStatus(req.params.requestId as string, statusId);
+        return res.status(200).json({success: true, data: {message: "Status updated successfully."}});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: error instanceof Error ? error.message : "Internal server error."});
     }
 });
 

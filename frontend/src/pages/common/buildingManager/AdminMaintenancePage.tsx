@@ -1,14 +1,21 @@
 import { useMemo, useState } from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminMaintenanceData } from "@/pages/common/buildingManager/pageHooks/useAdminMaintenanceData.tsx";
+import { useUpdateMaintenanceRequestStatusMutation } from "@/context/api/apiServices/maintenanceRequestApi.ts";
 
-type StatusFilter = "All" | "New" | "InProgress" | "Resolved";
+type StatusFilter = "All" | string;
 
 export function AdminMaintenancePage() {
     const { loading, error, requests, requestsStatus, requestsTypes } = useAdminMaintenanceData();
     const [activeFilter, setActiveFilter] = useState<StatusFilter>("All");
     const [selectedRequest, setSelectedRequest] = useState<(typeof requests)[number] | null>(null);
     const [statusOverrides, setStatusOverrides] = useState<Record<string, string>>({});
+    const [feedback, setFeedback] = useState<string | null>(null);
+    const [updateMaintenanceRequestStatus] = useUpdateMaintenanceRequestStatusMutation();
+
+    const orderedStatuses = useMemo(() => {
+        return [...requestsStatus].sort((left, right) => Number(left.order ?? 0) - Number(right.order ?? 0));
+    }, [requestsStatus]);
 
     const filteredRequests = useMemo(() => {
         if (activeFilter === "All") {
@@ -20,8 +27,44 @@ export function AdminMaintenancePage() {
         });
     }, [activeFilter, requests, requestsStatus, statusOverrides]);
 
-    const updateStatus = (requestId: string, newStatus: string) => {
-        setStatusOverrides((previous) => ({ ...previous, [requestId]: newStatus }));
+    const getDisplayStatus = (request: (typeof requests)[number]) => {
+        const overrideStatusId = statusOverrides[String(request._id)];
+        const activeStatusId = overrideStatusId ?? request.status;
+        const fallbackLabel = typeof request.status === "string" ? request.status : "Unknown";
+        return requestsStatus.find((status) => status._id === activeStatusId)?.text ?? fallbackLabel;
+    };
+
+    const getStatusIndex = (statusId: string | undefined) => {
+        return orderedStatuses.findIndex((status) => status._id === statusId);
+    };
+
+    const updateStatus = async (requestId: string, direction: "next" | "previous") => {
+        const request = requests.find((item) => String(item._id) === requestId);
+        if (!request) {
+            return;
+        }
+
+        const currentStatusId = statusOverrides[requestId] ?? request.status;
+        const currentIndex = getStatusIndex(String(currentStatusId));
+        if (currentIndex === -1) {
+            setFeedback("This request currently has no status mapping available.");
+            return;
+        }
+
+        const targetIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
+        if (targetIndex < 0 || targetIndex >= orderedStatuses.length) {
+            setFeedback(direction === "next" ? "This request is already at the final status." : "This request is already at the initial status.");
+            return;
+        }
+
+        const targetStatus = orderedStatuses[targetIndex];
+        try {
+            await updateMaintenanceRequestStatus({ requestId, statusId: String(targetStatus._id) }).unwrap();
+            setStatusOverrides((previous) => ({ ...previous, [requestId]: String(targetStatus._id) }));
+            setFeedback(`Status updated to ${targetStatus.text}.`);
+        } catch {
+            setFeedback("Could not update the request status. Please try again.");
+        }
     };
 
     return (
@@ -37,6 +80,7 @@ export function AdminMaintenancePage() {
                     </div>
                 </div>
 
+                {feedback && <div className="info-banner">{feedback}</div>}
                 {loading && <p>Loading maintenance requests...</p>}
                 {error && <p className="form-error">{error}</p>}
 
@@ -45,7 +89,7 @@ export function AdminMaintenancePage() {
                         <div className="section-title-row">
                             <h2>Active requests</h2>
                             <div className="filter-row">
-                                {(["All", "New", "InProgress", "Resolved"] as StatusFilter[]).map((filter) => (
+                                {(["All", ...orderedStatuses.map((status) => status.text)] as StatusFilter[]).map((filter) => (
                                     <button
                                         key={filter}
                                         type="button"
@@ -69,7 +113,7 @@ export function AdminMaintenancePage() {
                             </thead>
                             <tbody>
                                 {filteredRequests.map((request) => {
-                                    const displayStatus = statusOverrides[String(request._id)] ?? requestsStatus.find((status) => status._id === request.status)?.text ?? request.status;
+                                    const displayStatus = getDisplayStatus(request);
                                     const displayType = requestsTypes.find((type) => type._id === request.type)?.text ?? request.type;
                                     return (
                                         <tr key={request._id}>
@@ -99,22 +143,25 @@ export function AdminMaintenancePage() {
                             </div>
                             <p><strong>ID:</strong> {selectedRequest._id}</p>
                             <p><strong>Location:</strong> {selectedRequest.location ?? "N/A"}</p>
-                            <p><strong>Status:</strong> {statusOverrides[String(selectedRequest._id)] ?? requestsStatus.find((status) => status._id === selectedRequest.status)?.text ?? selectedRequest.status}</p>
+                            <p><strong>Status:</strong> {getDisplayStatus(selectedRequest)}</p>
                             <div className="filter-row">
-                                {(["New", "InProgress", "Resolved"] as StatusFilter[]).map((status) => (
-                                    <button
-                                        key={status}
-                                        type="button"
-                                        className={status === (statusOverrides[String(selectedRequest._id)] ?? requestsStatus.find((item) => item._id === selectedRequest.status)?.text ?? selectedRequest.status) ? "pill-button active" : "pill-button"}
-                                        onClick={() => updateStatus(String(selectedRequest._id), status)}
-                                    >
-                                        {status}
-                                    </button>
-                                ))}
+                                <button
+                                    type="button"
+                                    className="secondary-button"
+                                    onClick={() => updateStatus(String(selectedRequest._id), "previous")}
+                                >
+                                    Move back
+                                </button>
+                                <button
+                                    type="button"
+                                    className="primary-button"
+                                    onClick={() => updateStatus(String(selectedRequest._id), "next")}
+                                >
+                                    Advance status
+                                </button>
                             </div>
                             <div className="modal-actions">
                                 <button type="button" className="secondary-button" onClick={() => setSelectedRequest(null)}>Close</button>
-                                <button type="button" className="primary-button" onClick={() => setSelectedRequest(null)}>Save update</button>
                             </div>
                         </div>
                     </div>

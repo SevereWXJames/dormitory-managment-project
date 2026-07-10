@@ -33,9 +33,10 @@ export const MaintenanceRequestTypeModel = mongoose.model("MaintenanceRequestTyp
 export interface MaintenanceRequestStatus {
     _id: MongoId;
     text: string;
+    order?: number;
 }
 
-const maintenanceRequestStatusSchema = new Schema({_id: String, text: String});
+const maintenanceRequestStatusSchema = new Schema({_id: String, text: String, order: Number});
 export const MaintenanceRequestStatusModel = mongoose.model("MaintenanceRequestStatuses"  as CollectionName, maintenanceRequestStatusSchema, "MaintenanceRequestStatuses"  as CollectionName);
 
 
