@@ -33,12 +33,11 @@ This flag is necessary if `-f` is not used.
 The data folder contains a `data.json` file that will be read when running the script. It specifies the MQTT topic and message data.
 Like before, a `topic` field is required for the file mode to run successfully.
 
-Depending on if the multi-message mode `-m` flag is set, the file will either need a `message` field or a `messages` field.
-This is either a single object, or array of objects that will be sent as MQTT messages. It is **strongly recommended** that these objects have a `UUID` and `type` field as mentioned above, but this is **not enforced**.
+Secondly there is a `messages` field which is an array of objects that will be sent as MQTT messages. It is **strongly recommended** that these objects have a `UUID` and `type` field as mentioned above, but this is **not enforced**.
 Both of these fields are required for the MQTT to work properly with the app.
 
 Given the complexity of these rules, example files have been provided in the `data/examples` folder.
-I strongly recomend you use them as templates or reference when writing your own.
+I strongly recommend you use them as templates or reference when writing your own.
 
 ## Examples
 
