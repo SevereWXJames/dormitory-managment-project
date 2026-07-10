@@ -6,15 +6,16 @@ import loadSampleData from "./database/loadDatabase.ts";
 const port: number = 3000;
 
 await connectMongo().then(() => {
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        })
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
     })
-    .then(async () => {
-        if (process.env.LOAD_SAMPLE_DATA !== undefined) {
-            await loadSampleData();
-        }
-        setUpMQTT()})
-    .catch((err) => {
+}).then(async () => {
+    if (process.env.LOAD_SAMPLE_DATA) {
+        await loadSampleData();
+        console.log("Loaded sample data!");
+    }
+}).then(() => {
+    setUpMQTT();
+}).catch((err) => {
     console.log("Connection failed: " + err.message)
 });

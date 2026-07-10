@@ -3,17 +3,26 @@ import {useGetSlotsByServiceNameQuery,} from "@/context/api/apiServices/reservat
 export function useMachineDialog(machineName: string){
 
     const getTime = (timestamp: number) => {
-        const date = new Date(timestamp * 1000);
+        const date = new Date(timestamp);
         const datevalues = {
             year: date.getFullYear(),
             month: date.getMonth()+1,
-            date: date.getDate(),
+            monthName: date.toLocaleDateString('en-US', { month: 'long' }),
+            dayName: date.getDay(),
+            day:date.getDate(),
+            timestring: date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+            }),
             hours: date.getHours(),
             minutes: date.getMinutes(),
             seconds: date.getSeconds(),
         }
 
-        return `${datevalues.date}`;
+        console.log(`date: ${JSON.stringify(datevalues)}`);
+
+        return `${datevalues.year} ${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
     }
     const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machineName);
     const slots = slotsData?.map(slot => ({...slot, startTime: getTime(slot.startTime)}));
