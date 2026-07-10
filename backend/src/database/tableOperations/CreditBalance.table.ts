@@ -24,6 +24,13 @@ export class CreditBalanceTable extends BaseTable<ICreditBalance> {
 
     }
 
+    async incrementBalance(userId: Types.ObjectId, amount: number){
+        const filter = {userId: userId};
+        const update = {$inc: {balanceCents: amount}};
+        const options = {new: true};
+        return await this.CreditBalancesModel.findOneAndUpdate(filter, update, options).lean().exec();
+    }
+
     async findNewlyCreatedBalance(userId: Types.ObjectId) {
         return await this.CreditBalancesModel.findOne({userId: userId}).exec();
     }

@@ -1,7 +1,7 @@
 import pkg from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import {Types} from "mongoose";
-import type {Role} from "../database/types/user.service.types.ts";
+import type {Role} from "../../database/types/user.service.types.ts";
 
 const {sign} = pkg;
 
