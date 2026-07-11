@@ -9,7 +9,8 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": ["mocha"],
+    "types": ["mocha", "node", "express"],
+    "typeRoots": ["./node_modules/@types", "./types"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -40,6 +41,7 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true
-  }
+    "allowImportingTsExtensions": true,
+  },
+  "include": ["src/**/*", "types/**/*.d.ts"]
 }
