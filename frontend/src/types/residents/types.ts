@@ -10,8 +10,7 @@ export type Booking = {
     serviceName: string | null;
     booked: boolean;
     bookedBy: string | null;
-    startTime: string | null;
-    date :string | null;
+    startTime: number;
     durationSeconds?: number;
 }
 

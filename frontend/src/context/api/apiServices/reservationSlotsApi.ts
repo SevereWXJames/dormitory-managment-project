@@ -3,7 +3,6 @@ import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import type {Booking} from "@/types/residents/types.tsx";
 //Helper to convert response to Booking
 function toBooking(slot: ReservationSlot): Booking {
-    const startDate = new Date(slot.startTime * 1000);
     return {
         _id: slot._id,
         eventName: `Machine ${slot.serviceId}`,
@@ -11,8 +10,7 @@ function toBooking(slot: ReservationSlot): Booking {
         serviceName: slot.serviceName ?? null,
         booked: slot.booked,
         bookedBy: slot.bookedBy,
-        startTime: startDate.toISOString(),
-        date: startDate.toLocaleDateString(),
+        startTime: slot.startTime,
         durationSeconds: slot.durationSeconds,
     };
 }
