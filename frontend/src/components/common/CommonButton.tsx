@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button"
 type CommonButtonProps = {
     text: string
     value: string,
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 export function CommonButton(props: CommonButtonProps) {
