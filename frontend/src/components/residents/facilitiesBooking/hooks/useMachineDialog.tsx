@@ -3,6 +3,7 @@ import {useState} from "react";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {useReservationApi} from "@/components/residents/facilitiesBooking/hooks/useReservationApi.tsx";
 import { toast } from "sonner"
+import {useGetHumanReadableTime} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
 
 export type Machine = {
     id: string;
@@ -18,6 +19,7 @@ export function useMachineDialog(machine: Machine){
     const serviceUUID = machine.uuid;
     const {confirmReservation, isReserveError, isReserveLoading, reserveError} = useReservationApi({slotId, serviceName});
     const [pendingToast, setPendingToast] = useState<(() => void) | null>(null);
+    const {getTime} = useGetHumanReadableTime();
 
     const onCancel = () => {
         setSelectedSlot(null);}
@@ -34,25 +36,6 @@ export function useMachineDialog(machine: Machine){
         }
     }
 
-    const getTime = (timestamp: number) => {
-        const date = new Date(timestamp * 1000);
-        const datevalues = {
-            year: date.getFullYear(),
-            month: date.getMonth()+1,
-            monthName: date.toLocaleDateString('en-US', { month: 'long' }),
-            dayName: date.getDay(),
-            day:date.getDate(),
-            timestring: date.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-            }),
-            hours: date.getHours(),
-            minutes: date.getMinutes(),
-            seconds: date.getSeconds(),
-        }
-        return `${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
-    }
     const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machine.name);
     const slots = slotsData?.map(slot => ({...slot, startTimeString: getTime(slot.startTime)}));
     return {

@@ -9,52 +9,43 @@ import {
     TableRow,
 } from "@/components/ui/table.tsx"
 import {RowDropDown} from "@/components/residents/facilitiesBooking/RowDropDown.tsx";
-import type {Booking} from "@/types/residents/types.ts";
-
-// type Row = {
-//     machineId: string,
-//     date: string,
-//     startTime: string,
-//     endTime: string,
-//     amountPaid: number,
-// }
+import {useGetHumanReadableTime} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
+import {useGetUserBookingsApi} from "@/components/residents/facilitiesBooking/hooks/useGetUserBookingsApi.tsx";
 
 type TableProps = {
-    rows: Booking[],
+    // rows: Booking[],
     caption: string,
 }
+
 export function BookingsTable(props: TableProps) {
+    const {bookings} = useGetUserBookingsApi();
+    const {getTime} = useGetHumanReadableTime();
+    const rows = bookings.map((row) =>
+        ({...row, timeString: getTime(row.startTime)}));
     return (
         <Table>
             <TableCaption>{props.caption}</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[100px]">Date</TableHead>
-                    <TableHead>Machine Id</TableHead>
+                    <TableHead className="w-[100px]">Booking ID</TableHead>
+                    <TableHead>Machine Name</TableHead>
                     <TableHead className="text-right">Start Time</TableHead>
-                    <TableHead className="text-right">End Time</TableHead>
                     <TableHead className="text-right">Duration (sec)</TableHead>
-                    <TableHead className="text-right">Amount Paid</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {props.rows.map((row) => (
-                    <TableRow key={row.date}>
-                        <TableCell className="font-medium">{row.date}</TableCell>
-                        <TableCell className="font-medium">{row.serviceId}</TableCell>
-                        <TableCell className="text-right">{row.startTime}</TableCell>
+                {rows.map((row) => (
+                    <TableRow key={row._id}>
+                        <TableCell className="font-medium">{row._id}</TableCell>
+                        <TableCell className="font-medium">{row.serviceName}</TableCell>
+                        <TableCell className="text-right">{row.timeString}</TableCell>
                         <TableCell className="text-right">{row.durationSeconds}</TableCell>
-                        <TableCell className="text-right">N/A</TableCell>
-                        <TableCell className="text-right">{<RowDropDown/>}</TableCell>
+                        <TableCell className="text-right">{<RowDropDown bookingInfo={row}/>}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
             <TableFooter>
-                <TableRow>
-                    <TableCell colSpan={5}>Total</TableCell>
-                    <TableCell className="text-right">N/A</TableCell>
-                </TableRow>
             </TableFooter>
         </Table>
     )

@@ -23,6 +23,7 @@ import {AdminSignUpPage} from "@/pages/common/buildingManager/AdminSignUpPage.ts
 import {UnauthorizedPage} from "@/pages/UnauthorizedPage.tsx";
 import {ProtectedRoute} from "@/components/common/Auth/ProtectedRoute.tsx";
 import {Role} from "@/dataTypes/user.ts";
+import {Toaster} from "@/components/ui/sonner.tsx";
 
 /**
  * App React component, containing routes to other pages.
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/resident-signup" element={<ResidentSignUpPage/>}/>
                     <Route path="/dashboard" element={
                         <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <Toaster/>
                             <DashboardPage/>
                         </ProtectedRoute>
                     }/>

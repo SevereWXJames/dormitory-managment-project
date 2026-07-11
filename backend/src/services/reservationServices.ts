@@ -59,6 +59,7 @@ export async function hasEnoughCredits(userId: string){
     const balanceDoc = await CreditBalances.findOne({userId: id}).lean().exec();
     if(!balanceDoc) throw Error("Error, no credit balance!");
     const balanceCents = balanceDoc.balanceCents;
+    console.log(`balance: ${JSON.stringify(balanceDoc, null, 2)}`);
     return balanceCents >= BOOKING_COST;
 }
 
