@@ -59,7 +59,8 @@ export function LaundryBookingsPage() {
                         <Card style={{gridArea: "bookings"}}>
                             <CardTitle>Upcoming bookings</CardTitle>
                             <CardContent>
-                                <BookingsTable rows={bookings} caption={"Upcoming bookings"}/>
+                                <BookingsTable caption={"Upcoming bookings"}/>
+                                {/*<BookingsTable rows={bookings} caption={"Upcoming bookings"}/>*/}
                             </CardContent>
                         </Card>
                     </div>

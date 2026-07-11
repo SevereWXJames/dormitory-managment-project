@@ -20,7 +20,7 @@ export const reservationSlotsApi = api.injectEndpoints({
         getBookings: builder.query<Booking[], string>({
             query: (userId) => ({ url: `/reservations/get-booked-by-user/${encodeURIComponent(userId)}`}),
             transformResponse: (reservations: ReservationSlot[]) => reservations.map(toBooking),
-            providesTags: ["ReservationSlots"],
+            providesTags: ["ReservationSlots", "Booking"],
         }),
 
         getSlotsByServiceId: builder.query<ReservationSlot[], string>({
