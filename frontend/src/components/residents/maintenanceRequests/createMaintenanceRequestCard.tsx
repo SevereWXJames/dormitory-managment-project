@@ -1,8 +1,8 @@
 import {Button, Card, CardContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {addMaintenanceRequest} from "../../../context/residents/maintenanceRequestsSlice";
-import {useState} from "react";
 import issues from "../../../assets/residents/placeholderData/maintenanceIssues.json";
+import { useCreateMaintenanceRequestCard } from "./hooks/useCreateMaintenanceRequestCard";
 
 /**
  * React components for the Create Maintenance Request card.
@@ -18,11 +18,14 @@ export function CreateMaintenanceRequestCard() {
     const descriptionID = "description";
 
     const dispatch = useDispatch();
-    const [priority, setPriority] = useState("");
-    const [issueType, setIssueType] = useState("");
-    const [issue, setIssue] = useState("");
-    const [location, setLocation] = useState("");
-    const [description, setDescription] = useState("");
+    const {
+		priority, setPriority,
+		issueType, setIssueType,
+		issue, setIssue,
+		location, setLocation,
+		description, setDescription,
+		handleCreateMaintenanceRequest
+    } = useCreateMaintenanceRequestCard();
 
     const issueTypeMenuItems = issues.map((i) => <MenuItem value={i.category_id}>{i.category_name}</MenuItem>);
     const getIssueMenuItems = () => {
@@ -38,13 +41,14 @@ export function CreateMaintenanceRequestCard() {
     const isIssueDisabled = issueMenuItems.length === 0;
     const createMaintenanceRequest = () => {
         dispatch(addMaintenanceRequest({
-            unit: 1,
+            unit: "0", // Add correct unit number
             priority: priority,
-            issueType: issueType,
             issue: issue,
+            issueType: issueType,
             location: location,
             description: description
-        }));
+        }))
+        handleCreateMaintenanceRequest();
     }
 
     return (

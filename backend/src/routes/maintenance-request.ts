@@ -3,7 +3,8 @@ import {
     getAllMaintenanceRequests, getAllMaintenanceRequestsByUserId,
     getAllMaintenanceRequestTypes, getAllMaintenanceRequestStatuses, getMaintenanceRequestPriorityById,
     getMaintenanceRequestStatusById,
-    getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities, setMaintenanceRequestStatus
+    getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities,
+    addMaintenanceRequest
 } from "../services/maintenanceRequestServices.ts";
 
 const maintenanceRequestRouter = express.Router();
@@ -84,22 +85,6 @@ maintenanceRequestRouter.get("/get-statuses/", async (req: Request, res: Respons
     }
 });
 
-maintenanceRequestRouter.patch("/:requestId/status", async (req: Request, res: Response) => {
-    const { statusId } = req.body as { statusId?: string };
-
-    if (!statusId) {
-        return res.status(400).json({success: false, message: "No status provided."});
-    }
-
-    try {
-        await setMaintenanceRequestStatus(req.params.requestId as string, statusId);
-        return res.status(200).json({success: true, data: {message: "Status updated successfully."}});
-    }
-    catch (error) {
-        return res.status(500).json({success: false, message: error instanceof Error ? error.message : "Internal server error."});
-    }
-});
-
 maintenanceRequestRouter.get("/get-priority-by-id/:priorityId", async (req: Request, res: Response)=> {
     if (req.params.priorityId === undefined) {
         return res.status(400).json({success: false, message: "No ID provided."});
@@ -121,6 +106,16 @@ maintenanceRequestRouter.get("/get-priorities/", async (req: Request, res: Respo
     try {
         const priorities = await getAllMaintenanceRequestPriorities();
         return res.status(200).json({success: true, data: priorities});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: "Internal server error."});
+    }
+});
+
+maintenanceRequestRouter.put("/", async (req: Request, res: Response) => {
+    try {
+        const result = await addMaintenanceRequest(req.body);
+        return res.status(200).json({success: true});
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
