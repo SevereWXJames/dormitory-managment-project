@@ -32,9 +32,7 @@ export function BookingsTable(props: TableProps) {
                     <TableHead className="w-[100px]">Date</TableHead>
                     <TableHead>Machine Id</TableHead>
                     <TableHead className="text-right">Start Time</TableHead>
-                    <TableHead className="text-right">End Time</TableHead>
                     <TableHead className="text-right">Duration (sec)</TableHead>
-                    <TableHead className="text-right">Amount Paid</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
             </TableHeader>
@@ -45,16 +43,11 @@ export function BookingsTable(props: TableProps) {
                         <TableCell className="font-medium">{row.serviceId}</TableCell>
                         <TableCell className="text-right">{row.startTime}</TableCell>
                         <TableCell className="text-right">{row.durationSeconds}</TableCell>
-                        <TableCell className="text-right">N/A</TableCell>
                         <TableCell className="text-right">{<RowDropDown bookingInfo={row}/>}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
             <TableFooter>
-                <TableRow>
-                    <TableCell colSpan={5}>Total</TableCell>
-                    <TableCell className="text-right">N/A</TableCell>
-                </TableRow>
             </TableFooter>
         </Table>
     )
