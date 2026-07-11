@@ -71,20 +71,29 @@ export async function payBooking(userId: string){
 }
 
 export async function bookReservationSlot(serviceId: string | string[], slotId: string, userId: string){
-    //TODO:
-    // Given a service id and a slot id, set the slot with given slotId and serviceId to be booked by userData
-    // 1. Check that the slot is available
-    // 2. Check that the slot has not been booked, and that the user has enough balance.
-    // 3. Set slot bookedBy to be userId
-    // 4. Set slot booked to be true
-    // 5. Decrement the balance.
-    // 6. Return status of action
-
     const id = new Types.ObjectId(slotId);
     const hasEnough = await hasEnoughCredits(userId);
     if(!hasEnough) throw Error("Error, not enough credits.");
 
     const filter = {serviceId: serviceId, _id: id, booked: false};
+    const update = {$set: {booked: true, bookedBy: userId}};
+    const options = { new: true } as const;
+
+    const res = await ReservationSlotModel
+        .findOneAndUpdate(filter, update, options).lean().exec();
+    if(!res){
+        throw Error("Error, slot already booked!");
+    }
+    await payBooking(userId);
+    return res;
+}
+
+export async function bookReservationSlotByName(serviceName: string | string[], slotId: string, userId: string){
+    const id = new Types.ObjectId(slotId);
+    const hasEnough = await hasEnoughCredits(userId);
+    if(!hasEnough) throw Error("Error, not enough credits.");
+
+    const filter = {serviceName: serviceName, _id: id, booked: false};
     const update = {$set: {booked: true, bookedBy: userId}};
     const options = { new: true } as const;
 
@@ -106,15 +115,22 @@ export async function refundBooking(userId: string){
 }
 
 export async function cancelReservationSlot(serviceId: string | string[], slotId: string, userId: string){
-    //TODO:
-    // Given a service id and a slot id, set the slot with given slotId and serviceId to be booked by userData
-    // 1. Check that the slot has been booked.
-    // 2. Set slot bookedBy to be null
-    // 3. Set slot booked to be false
-    // 4. Refund the balance
-    // 5. Return status of action
     const id = new Types.ObjectId(slotId);
     const filter = {serviceId: serviceId, _id: id, booked: true};
+    const update = {$set: {booked: false, bookedBy: null}};
+    const options = { new: true } as const;
+    const res = await ReservationSlotModel
+        .findOneAndUpdate(filter, update, options).lean().exec();
+    if(!res){
+        throw Error("Error canceling booking!");
+    }
+    await refundBooking(userId);
+    return res;
+}
+
+export async function cancelReservationSlotByName(serviceName: string | string[], slotId: string, userId: string){
+    const id = new Types.ObjectId(slotId);
+    const filter = {serviceName: serviceName, _id: id, booked: true};
     const update = {$set: {booked: false, bookedBy: null}};
     const options = { new: true } as const;
     const res = await ReservationSlotModel
