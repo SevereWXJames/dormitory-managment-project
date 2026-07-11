@@ -104,6 +104,7 @@ reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, r
 
 reservationRouter.put("/book-slot-by-service-name", async (req: Request, res: Response)=> {
     const {userId, slotId, serviceName} = req.body;
+    console.log(`req: ${JSON.stringify(req.body)}`);
     if (!serviceName) {
         return res.status(500).json({success: false, error: "No service name provided."});
     }
@@ -116,6 +117,7 @@ reservationRouter.put("/book-slot-by-service-name", async (req: Request, res: Re
         return res.status(200).json({success: true,  data: reservationSlots});
     }
     catch (error) {
+        console.log(`Error: ${error}`);
         return res.status(500).json({success: false, message: "Internal server error.", error: error});
     }
 });
