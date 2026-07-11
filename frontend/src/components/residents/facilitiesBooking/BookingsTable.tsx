@@ -9,16 +9,18 @@ import {
     TableRow,
 } from "@/components/ui/table.tsx"
 import {RowDropDown} from "@/components/residents/facilitiesBooking/RowDropDown.tsx";
-import type {Booking} from "@/types/residents/types.ts";
 import {useGetHumanReadableTime} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
+import {useGetUserBookingsApi} from "@/components/residents/facilitiesBooking/hooks/useGetUserBookingsApi.tsx";
 
 type TableProps = {
-    rows: Booking[],
+    // rows: Booking[],
     caption: string,
 }
+
 export function BookingsTable(props: TableProps) {
+    const {bookings} = useGetUserBookingsApi();
     const {getTime} = useGetHumanReadableTime();
-    const rows = props.rows.map((row) =>
+    const rows = bookings.map((row) =>
         ({...row, timeString: getTime(row.startTime)}));
     return (
         <Table>
