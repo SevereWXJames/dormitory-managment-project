@@ -48,6 +48,22 @@ maintenanceRequestRouter.get("/get-type-by-id/:typeId", async (req: Request, res
     }
 });
 
+maintenanceRequestRouter.patch("/:requestId/status", async (req: Request, res: Response) => {
+    const { statusId } = req.body as { statusId?: string };
+
+    if (!statusId) {
+        return res.status(400).json({success: false, message: "No status provided."});
+    }
+
+    try {
+        await setMaintenanceRequestStatus(req.params.requestId as string, statusId);
+        return res.status(200).json({success: true, data: {message: "Status updated successfully."}});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: error instanceof Error ? error.message : "Internal server error."});
+    }
+});
+
 maintenanceRequestRouter.get("/get-types/", async (req: Request, res: Response)=> {
     try {
         const types = await getAllMaintenanceRequestTypes();
