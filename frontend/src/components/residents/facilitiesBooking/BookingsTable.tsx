@@ -46,7 +46,7 @@ export function BookingsTable(props: TableProps) {
                         <TableCell className="text-right">{row.startTime}</TableCell>
                         <TableCell className="text-right">{row.durationSeconds}</TableCell>
                         <TableCell className="text-right">N/A</TableCell>
-                        <TableCell className="text-right">{<RowDropDown/>}</TableCell>
+                        <TableCell className="text-right">{<RowDropDown bookingInfo={row}/>}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
