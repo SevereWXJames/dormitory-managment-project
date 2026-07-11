@@ -9,19 +9,20 @@ export function useMachineDialog(machineName: string){
     const slotId = selectedSlot?._id ?? null;
     const serviceName = selectedSlot?.serviceName ?? null;
     const {confirmReservation, isReserveError, isReserveLoading, reserveError} = useReservationApi({slotId, serviceName});
+    const [pendingToast, setPendingToast] = useState<(() => void) | null>(null);
 
     const onCancel = () => {
         setSelectedSlot(null);}
 
     const onConfirm = async () => {
-        await confirmReservation();
-        setSelectedSlot(null);
-
-        if(isReserveError){
-            toast.error("Error: failed to reserve slot");
-            return;
-        }else{
-            toast.success("Successfully reserved slot!");
+        try {
+            await confirmReservation();
+            setSelectedSlot(null);
+            setPendingToast(() => () => toast.success("Successfully reserved slot!"));
+        } catch (err) {
+            console.log(`Error booking slot: ${err}`);
+            setSelectedSlot(null);
+            setPendingToast(() => () => toast.error("Error: failed to reserve slot"));
         }
     }
 
@@ -50,6 +51,7 @@ export function useMachineDialog(machineName: string){
         slots,
         isLoading,
         isError,
+        error,
         onCancel,
         onConfirm,
         isConfirmLoading: isReserveLoading,
@@ -57,5 +59,5 @@ export function useMachineDialog(machineName: string){
         confirmError: reserveError,
         selectedSlot,
         setSelectedSlot,
-        error};
+        pendingToast, setPendingToast,};
 }
