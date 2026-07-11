@@ -61,8 +61,10 @@ export const maintenanceRequestApi = api.injectEndpoints({
                 url: "/maintenance-request/",
                 method: "PUT",
                 body: maintenanceRequest
-            })
-        })
+            }),
+            invalidatesTags: ["MaintenanceRequests"]
+        }),
+
     }),
 });
 
