@@ -1,22 +1,25 @@
 {
   "notices": [
     {
-      "createdBy": "507f191e810c19729de860ed",
+      "_id": "notice0",
+      "createdBy": "000000000000000000000003",
       "viewableBy": null,
       "title": "test1",
       "text": "test",
       "createdAt": 0
     },
     {
-      "createdBy": "507f191e810c19729de860ed",
-      "viewableBy": ["507f191e810c19729de860ea"],
+      "_id": "notice1",
+      "createdBy": "000000000000000000000003",
+      "viewableBy": ["000000000000000000000000"],
       "title": "test2",
       "text": "test",
       "createdAt": 1
     },
     {
-      "createdBy": "507f191e810c19729de860ed",
-      "viewableBy": ["507f191e810c19729de860eb", "507f191e810c19729de860ea"],
+      "_id": "notice2",
+      "createdBy": "admin0",
+      "viewableBy": ["user1", "user0"],
       "title": "test3",
       "text": "test",
       "createdAt": 2
