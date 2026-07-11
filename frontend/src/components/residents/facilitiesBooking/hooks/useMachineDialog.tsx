@@ -4,10 +4,18 @@ import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {useReservationApi} from "@/components/residents/facilitiesBooking/hooks/useReservationApi.tsx";
 import { toast } from "sonner"
 
-export function useMachineDialog(machineName: string){
+export type Machine = {
+    id: string;
+    name: string;
+    uuid: string;
+};
+
+
+export function useMachineDialog(machine: Machine){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
     const slotId = selectedSlot?._id ?? null;
     const serviceName = selectedSlot?.serviceName ?? null;
+    const serviceUUID = machine.uuid;
     const {confirmReservation, isReserveError, isReserveLoading, reserveError} = useReservationApi({slotId, serviceName});
     const [pendingToast, setPendingToast] = useState<(() => void) | null>(null);
 
@@ -45,7 +53,7 @@ export function useMachineDialog(machineName: string){
         }
         return `${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
     }
-    const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machineName);
+    const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machine.name);
     const slots = slotsData?.map(slot => ({...slot, startTimeString: getTime(slot.startTime)}));
     return {
         slots,
@@ -59,5 +67,6 @@ export function useMachineDialog(machineName: string){
         confirmError: reserveError,
         selectedSlot,
         setSelectedSlot,
-        pendingToast, setPendingToast,};
+        pendingToast, setPendingToast,
+        serviceUUID};
 }
