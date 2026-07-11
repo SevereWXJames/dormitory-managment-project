@@ -8,6 +8,7 @@ function toBooking(slot: ReservationSlot): Booking {
         _id: slot._id,
         eventName: `Machine ${slot.serviceId}`,
         serviceId: slot.serviceId,
+        serviceName: slot.serviceName ?? null,
         booked: slot.booked,
         bookedBy: slot.bookedBy,
         startTime: startDate.toISOString(),
