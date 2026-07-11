@@ -20,8 +20,11 @@ export function AddCreditsCard() {
     const amountID = "amount";
 
     const {
-        processPayment, handleAmountInput, setCardNumber,
-        setExpirationDate, setSecurityCode, setName
+        setCardNumber,
+        handleAmountInput,
+        setExpirationDate, setName,
+        setSecurityCode,
+        handleAddCredits
     } = useAddCreditsCard();
 
     /**
@@ -87,7 +90,7 @@ export function AddCreditsCard() {
                     />
                 </FormControl>
                 <FormControl>
-                    <Button id="open-nav-bar-button" variant="contained" onClick={processPayment}>Pay</Button>
+                    <Button id="open-nav-bar-button" variant="contained" onClick={handleAddCredits}>Pay</Button>
                 </FormControl>
             </CardContent>
         </Card>
