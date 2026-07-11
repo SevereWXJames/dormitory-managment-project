@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 export interface IoTStatus {
     UUID: string;
     facilityID: string;
+    facilityName?: string;
     inUse: boolean;
     outOfService: boolean;
+
 }
 
 const IoTStatusSchema = new mongoose.Schema({
@@ -12,6 +14,13 @@ const IoTStatusSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
+    facilityName: {
+        type: String,
+        required: false,
+        default: null,
+    },
+
     UUID: {
         type: String,
         required: true

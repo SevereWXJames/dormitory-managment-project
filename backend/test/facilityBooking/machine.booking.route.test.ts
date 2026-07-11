@@ -84,7 +84,7 @@ describe('FACILITY BOOKING SERVICES', () => {
             const res = await chaiWithHttp.request.execute(app)
                 .post(`/IoT/get-events-from-n-days-ago`)
                 .set('Cookie', `${testJwt}`)
-                .send({ daysAgo: 3 });
+                .send({ daysAgo: 30 });
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
             expect(res).to.have.status(200);
         });
