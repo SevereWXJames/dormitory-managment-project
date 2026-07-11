@@ -1,9 +1,17 @@
 import {useGetSlotsByServiceNameQuery,} from "@/context/api/apiServices/reservationSlotsApi.ts";
 import {useState} from "react";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
+import {useReservationApi} from "@/components/residents/facilitiesBooking/hooks/useReservationApi.tsx";
+import {useSelector} from "react-redux";
+import {getUserId} from "@/context/authenticationSlice.ts";
 
 export function useMachineDialog(machineName: string){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
+    const slotId = selectedSlot?._id;
+    const serviceName = selectedSlot?.serviceName;
+
+    const {} = useReservationApi({slotId, serviceName});
+
     const onCancel = () => {setSelectedSlot(null);}
     const onConfirm = () => {setSelectedSlot(null);}
 
