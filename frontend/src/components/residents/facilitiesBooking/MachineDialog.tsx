@@ -19,7 +19,7 @@ type MachineDialogProps = {
     machine : Machine;
 }
 export function MachineDialog(props : MachineDialogProps) {
-    const {slots, isLoading, isError, error, selectedSlot, setSelectedSlot} = useMachineDialog(props.machine.name);
+    const {slots, isLoading, isError, error, onCancel, onConfirm, selectedSlot, setSelectedSlot} = useMachineDialog(props.machine.name);
     let message;
     let reservations: ReservationSlot[] = [];
     if(isLoading) message = <p>...Loading</p>
@@ -59,10 +59,10 @@ export function MachineDialog(props : MachineDialogProps) {
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button variant="outline">Confirm</Button>
+                        <Button variant="outline" onClick={onConfirm}>Confirm</Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
+                        <Button variant="outline" onClick={onCancel}>Cancel</Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>
