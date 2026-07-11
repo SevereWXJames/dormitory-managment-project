@@ -24,7 +24,7 @@ IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response
     }
 });
 
-IoTRouter.get(`/get-status-by-service-uuid/:iotUUID}`, async (req: Request, res: Response)=> {
+IoTRouter.get(`/get-status-by-service-uuid/:iotUUID`, async (req: Request, res: Response)=> {
     try {
         const {iotUUID} = req.params
         if (typeof iotUUID !== "string" || !iotUUID) {
