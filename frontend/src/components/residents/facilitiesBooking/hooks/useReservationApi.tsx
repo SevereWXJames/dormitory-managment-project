@@ -23,7 +23,7 @@ export function useReservationApi(props: useReservationApiProps) {
     }] = useCancelBookingMutation();
 
     const confirmReservation = async () => {
-        await cancelBooking({
+        await makeBooking({
             serviceName: props.serviceName,
             slotId: props.slotId,
             userId: userId,
