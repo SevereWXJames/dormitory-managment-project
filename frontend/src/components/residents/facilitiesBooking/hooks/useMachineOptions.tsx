@@ -4,7 +4,7 @@ export function useMachineOptions(){
     const {data: machineServices, isLoading, isError, error} = useGetServicesQuery();
 
     const machines = machineServices?.map((service) =>
-        ({id: service._id, name: service.name}));
+        ({id: service._id, name: service.name, uuid: service.IoTUUID}));
 
     return {isLoading,
         isError : isError,

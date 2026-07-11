@@ -18,7 +18,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 app.use(cors({
-    origin: process.env.FRONT_END_URL,
+    origin: process.env.FRONT_END_URL ?? "http://localhost:5173",
     credentials: true, // required for cookies to be sent/received cross-origin
 }));
 

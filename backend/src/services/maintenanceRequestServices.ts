@@ -190,6 +190,31 @@ export async function setMaintenanceRequest(_id: string, maintenanceRequest: Mai
  * @returns Promise indicating whether the maintenance request was set
  * successfully.
  */
+export function getAdjacentMaintenanceRequestStatusId(
+    currentStatusId: string | undefined,
+    statuses: MaintenanceRequestStatus[],
+    direction: "next" | "previous"
+): string | undefined {
+    const orderedStatuses = [...statuses].sort((left, right) => Number(left.order ?? 0) - Number(right.order ?? 0));
+    if (orderedStatuses.length === 0) {
+        return undefined;
+    }
+
+    const currentIndex = orderedStatuses.findIndex((status) => String(status._id) === String(currentStatusId));
+    if (currentIndex === -1) {
+        const fallbackStatus = direction === "next" ? orderedStatuses[0] : orderedStatuses[orderedStatuses.length - 1];
+        return fallbackStatus ? String(fallbackStatus._id) : undefined;
+    }
+
+    const targetIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
+    if (targetIndex < 0 || targetIndex >= orderedStatuses.length) {
+        return undefined;
+    }
+
+    const targetStatus = orderedStatuses[targetIndex];
+    return targetStatus ? String(targetStatus._id) : undefined;
+}
+
 export async function setMaintenanceRequestStatus(_id: string, statusId: string) : Promise<void> {
     await getAllMaintenanceRequestStatuses().then((result) => {
         if (result.find((status) => status._id === statusId) === undefined) {

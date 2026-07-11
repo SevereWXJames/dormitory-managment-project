@@ -3,7 +3,7 @@ import {CommonButton} from "@/components/common/CommonButton.tsx";
 type MachineButtonProps = {
     text: string,
     value: string,
-    onClick: () => void
+    onClick?: () => void
 }
 
 export function MachineButton(props: MachineButtonProps){

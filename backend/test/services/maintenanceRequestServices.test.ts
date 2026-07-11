@@ -6,7 +6,8 @@ import { getAllMaintenanceRequests, getAllMaintenanceRequestsByUserId, getMainte
 	addMaintenanceRequest,
 	setMaintenanceRequest,
 	setMaintenanceRequestPriority,
-	setMaintenanceRequestStatus} 
+	setMaintenanceRequestStatus,
+	getAdjacentMaintenanceRequestStatusId} 
 	from "../../src/services/maintenanceRequestServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
@@ -23,6 +24,19 @@ describe("maintenanceRequestServices", function () {
 	});
 
 	// Get functions
+
+	describe("getAdjacentMaintenanceRequestStatusId()", function () {
+		it("returns the next status in order", function () {
+			const statuses = [
+				{ _id: "new", text: "New", order: 1 },
+				{ _id: "investigating", text: "Investigating", order: 2 },
+				{ _id: "done", text: "Done", order: 3 },
+			];
+
+			expect(getAdjacentMaintenanceRequestStatusId("new", statuses, "next")).to.equal("investigating");
+			expect(getAdjacentMaintenanceRequestStatusId("investigating", statuses, "previous")).to.equal("new");
+		});
+	});
 
 	describe("getAllMaintenanceRequests()", function () {
 		it("Test", async function () {
@@ -112,9 +126,8 @@ describe("maintenanceRequestServices", function () {
 	describe("getAllMaintenanceRequestStatuses()", function () {
 		it("Test", async function () {
 			const actual = await getAllMaintenanceRequestStatuses();
-			const expectedEntry = {_id: "completed", text: "Completed"};
 			expect(actual).to.be.an.instanceOf(Array);
-			expect(actual).to.deep.include(expectedEntry);
+			expect(actual.some((status) => status._id === "completed" && status.text === "Completed")).to.be.true;
 		});
 	});
 

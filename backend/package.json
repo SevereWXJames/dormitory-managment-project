@@ -10,6 +10,7 @@
     "start": "node src/server.ts",
     "build": "npx tsc --noEmit",
     "database": "docker start team07-mongo-1",
+    "docker-database": "docker run -d --name team07-mongo-1 -p 27017:27017 mongo:7",
     "docker-mqtt": "docker run -it -p 1883:1883 eclipse-mosquitto"
   },
   "keywords": [],

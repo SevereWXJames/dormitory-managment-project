@@ -1,4 +1,4 @@
-# Milestone 2 Test Plan
+# Milestone 2 Test Plan (Updated for Milestone 3)
 
 ## Purpose
 

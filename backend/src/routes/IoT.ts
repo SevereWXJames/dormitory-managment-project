@@ -1,5 +1,8 @@
 import express, {type Request, type Response, type NextFunction} from "express"
-import {getEventsForLastNDays, getStatusForServiceId} from "../services/IoT/IoTDataServices.ts";
+import {
+    getEventsForLastNDays, getStatusForServiceByUUID,
+    getStatusForServiceId,
+} from "../services/IoT/IoTDataServices.ts";
 
 const IoTRouter = express.Router();
 
@@ -18,6 +21,24 @@ IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response
     }
     catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
+    }
+});
+
+IoTRouter.get(`/get-status-by-service-uuid/:iotUUID`, async (req: Request, res: Response)=> {
+    try {
+        const {iotUUID} = req.params
+        if (typeof iotUUID !== "string" || !iotUUID) {
+            return res.status(400).json({success: false, message: "Invalid uuid."})
+        }
+        const status = await getStatusForServiceByUUID(iotUUID);
+
+        if (status === null) {
+            return res.status(400).json({success: false, message: "That service uuid matches no status."});
+        }
+        return res.status(200).json({success: true, data: status});
+    }
+    catch (error) {
+        return res.status(500).json({success: false, message: "Internal server error.", error: error});
     }
 });
 

@@ -2,9 +2,24 @@
   "IoTStatuses": [
     {
       "facilityID": "service0",
+      "facilityName": "Washing Machine 1",
       "UUID": "1586d8a9-3559-42ee-a7ed-36ee249506bb",
       "inUse": false,
       "outOfService": false
+    },
+    {
+      "facilityID": "service1",
+      "facilityName": "Washing Machine 2",
+      "UUID": "1586d8a9-3559-42ee-a7ed-36ee249506bc",
+      "inUse": true,
+      "outOfService": false
+    },
+    {
+      "facilityID": "service2",
+      "facilityName": "Dryer 1",
+      "UUID": "1586d8a9-3559-42ee-a7ed-36ee249506bd",
+      "inUse": false,
+      "outOfService": true
     }
   ]
 }
