@@ -27,7 +27,7 @@ export function useReservationApi(props: useReservationApiProps) {
             serviceName: props.serviceName,
             slotId: props.slotId,
             userId: userId,
-        });
+        }).unwrap();
     };
 
     const cancelReservation = async () => {
@@ -35,7 +35,7 @@ export function useReservationApi(props: useReservationApiProps) {
             serviceName: props.serviceName,
             slotId: props.slotId,
             userId: userId,
-        });
+        }).unwrap();
     };
 
     return {

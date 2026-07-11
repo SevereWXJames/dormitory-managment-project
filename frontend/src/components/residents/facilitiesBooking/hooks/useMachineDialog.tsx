@@ -2,6 +2,7 @@ import {useGetSlotsByServiceNameQuery,} from "@/context/api/apiServices/reservat
 import {useState} from "react";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {useReservationApi} from "@/components/residents/facilitiesBooking/hooks/useReservationApi.tsx";
+import { toast } from "sonner"
 
 export function useMachineDialog(machineName: string){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
@@ -11,9 +12,18 @@ export function useMachineDialog(machineName: string){
 
     const onCancel = () => {
         setSelectedSlot(null);}
+
     const onConfirm = async () => {
         await confirmReservation();
-        setSelectedSlot(null);}
+        setSelectedSlot(null);
+
+        if(isReserveError){
+            toast.error("Error: failed to reserve slot");
+            return;
+        }else{
+            toast.success("Successfully reserved slot!");
+        }
+    }
 
     const getTime = (timestamp: number) => {
         const date = new Date(timestamp * 1000);
