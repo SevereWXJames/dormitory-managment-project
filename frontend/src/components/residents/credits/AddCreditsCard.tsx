@@ -6,6 +6,8 @@ import { DateField } from '@mui/x-date-pickers/DateField';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/en-ca';
+import { usePutAddCreditsMutation } from "@/context/api/apiServices/creditsApi";
+import { useAddCreditsCard } from "./hooks/useAddCreditsCard";
 
 /**
  * React components for the Add Credits display.
@@ -18,13 +20,15 @@ export function AddCreditsCard() {
 	const securityCodeID = "security-code";
 	const nameID = "cardholder-name";
 	const amountID = "amount";
-
-	const dispatch = useDispatch();
-	const [cardNumber, setCardNumber] = useState("");
-	const [_expirationDate, setExpirationDate] = useState("");
-	const [_securityCode, setsecurityCode] = useState("");
-	const [_name, setName] = useState("");
-	const [amount, setAmount] = useState("");
+	
+	const {
+		cardNumber, setCardNumber,
+		_expirationDate, setExpirationDate,
+		_securityCode, setsecurityCode, 
+		_name, setName,
+		amount, setAmount,
+		handleAddCredits
+	} = useAddCreditsCard();
 
 	/**
 	 * TODO. For M2, no front-end validation is done: the provided amount is
@@ -35,13 +39,7 @@ export function AddCreditsCard() {
 	 * and amount adding.
 	 */
 	const processPayment = () => {
-		const parsedAmount = parseFloat(amount);
-		if (!Number.isNaN(parsedAmount)) {
-			const amountCents = Math.round(parsedAmount * 100);
-
-			dispatch(addCredits({amount: amountCents}));
-			dispatch(addTransactionHistoryEntry({cardNumber, amount: amountCents}));
-		}
+		handleAddCredits();
 	}
 
     const handleAmountInput = (e: React.InputEvent<HTMLInputElement>) => {

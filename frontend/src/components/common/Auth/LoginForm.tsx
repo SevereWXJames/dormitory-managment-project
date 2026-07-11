@@ -1,5 +1,5 @@
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
-import {useLoginForm} from "@/components/common/hooks/useLoginForm.tsx";
+import {Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
+import {useLoginForm} from "@/components/common/Auth/hooks/useLoginForm.tsx";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -13,8 +13,8 @@ import {useLoginForm} from "@/components/common/hooks/useLoginForm.tsx";
  */
 export function LoginForm() {
     const emailFieldID = "email-field";
-	const passwordFieldID = "password-field";
-    const usernameFieldID="username-field";
+    const passwordFieldID = "password-field";
+    const usernameFieldID = "username-field";
 
     const {
         username, setUsername,
@@ -28,7 +28,7 @@ export function LoginForm() {
         handleLogIn,
     } = useLoginForm();
 
-	return (
+    return (
         <div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
              style={{width: 'fit-content', margin: '0 auto'}}>
             <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
@@ -80,7 +80,7 @@ export function LoginForm() {
             <FormControl>
                 <Button id="open-nav-bar-button" variant="contained" onClick={handleLogIn}>Log in</Button>
             </FormControl>
-            {loginError && <p style={{ color: "red" }}>{loginError}</p>}
+            {loginError && <p style={{color: "red"}}>{loginError}</p>}
         </div>
-	)
+    )
 }

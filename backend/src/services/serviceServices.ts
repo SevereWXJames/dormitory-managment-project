@@ -1,4 +1,5 @@
 import {type Service, ServiceModel} from "../dataTypes/service.ts";
+import {Types} from "mongoose";
 
 export async function getAllServices(): Promise<Service[]> {
     const cursor = ServiceModel.find({ }).lean();
@@ -18,7 +19,7 @@ export async function getAllServices(): Promise<Service[]> {
 }
 
 export async function getServiceById(_id: string): Promise<Service | undefined> {
-    return ServiceModel.findOne({_id: _id}).lean().exec()
+    return ServiceModel.findById({_id}).lean().exec()
         .then((result) => {
             if (result != null) {
                 return Promise.resolve(result as Service);

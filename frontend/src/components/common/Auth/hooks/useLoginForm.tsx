@@ -1,6 +1,6 @@
 // hooks/useLogin.ts
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {useLoginMutation} from "@/context/api/apiServices/authApi.ts";
 
 export function useLoginForm() {
@@ -10,7 +10,7 @@ export function useLoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [loginError, setLoginError] = useState<string | null>(null);
 
-    const [login, { isLoading }] = useLoginMutation();
+    const [login, {isLoading}] = useLoginMutation();
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);

@@ -1,0 +1,28 @@
+{
+  "notices": [
+    {
+      "_id": "notice0",
+      "createdBy": "admin0",
+      "viewableBy": null,
+      "title": "test1",
+      "text": "test",
+      "createdAt": 0
+    },
+    {
+      "_id": "notice1",
+      "createdBy": "admin0",
+      "viewableBy": ["user0"],
+      "title": "test2",
+      "text": "test",
+      "createdAt": 1
+    },
+    {
+      "_id": "notice2",
+      "createdBy": "admin0",
+      "viewableBy": ["user1", "user0"],
+      "title": "test3",
+      "text": "test",
+      "createdAt": 2
+    }
+  ]
+}
