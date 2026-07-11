@@ -1,7 +1,6 @@
 {
   "maintenanceRequests": [
     {
-      "_id": "mR0",
       "createdBy": "000000000000000000000000",
       "title": "title1",
       "description": "description description description",
@@ -9,7 +8,6 @@
       "status": "new"
     },
     {
-      "_id": "mR1",
       "createdBy": "000000000000000000000000",
       "title": "title2",
       "description": "description description description",
@@ -17,7 +15,6 @@
       "status": "inProgress"
     },
     {
-      "_id": "mR2",
       "createdBy": "000000000000000000000001",
       "title": "title3",
       "description": "description description description",
