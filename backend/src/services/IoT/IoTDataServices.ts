@@ -6,6 +6,11 @@ export async function getStatusForServiceId(serviceId: string): Promise<IoTStatu
     return status as IoTStatus;
 }
 
+export async function getStatusForServiceName(serviceName: string): Promise<IoTStatus> {
+    const status = await IoTStatusModel.findOne({facilityName: serviceName}).lean().exec();
+    return status as IoTStatus;
+}
+
 export async function getEventsForLastNDays(nDays: number) {
     try{
         let dataArr = [];
