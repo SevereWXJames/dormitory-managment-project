@@ -4,13 +4,8 @@ import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 
 export function useMachineDialog(machineName: string){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
-    const onCancel = () => {
-        setSelectedSlot(null);
-    }
-
-    const onConfirm = () => {
-        setSelectedSlot(null);
-    }
+    const onCancel = () => {setSelectedSlot(null);}
+    const onConfirm = () => {setSelectedSlot(null);}
 
     const getTime = (timestamp: number) => {
         const date = new Date(timestamp * 1000);
@@ -29,9 +24,6 @@ export function useMachineDialog(machineName: string){
             minutes: date.getMinutes(),
             seconds: date.getSeconds(),
         }
-
-        console.log(`date: ${JSON.stringify(datevalues)}`);
-
         return `${datevalues.monthName} ${datevalues.day}, ${datevalues.timestring}`;
     }
     const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machineName);
