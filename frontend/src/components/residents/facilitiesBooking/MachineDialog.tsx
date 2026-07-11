@@ -26,22 +26,16 @@ export function MachineDialog(props : MachineDialogProps) {
     if(isError){
         console.log(`Error: ${error}`);
         message = <p>Error retrieving time slots</p>
-    }
-
-    if(!slots || slots.length <= 0){
+    }else if(!slots || slots.length <= 0){
         message = <p>No available slots</p>
     }else{
         reservations = slots;
     }
 
-
-    const handleClick = () => {};
-
-
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <MachineButton text={props.machine.name} value={props.machine.id} onClick={handleClick} />
+                <MachineButton text={props.machine.name} value={props.machine.id} />
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
@@ -59,7 +53,7 @@ export function MachineDialog(props : MachineDialogProps) {
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button variant="outline" onClick={onConfirm} disabled={isConfirmLoading}>Confirm</Button>
+                        <Button variant="outline" onClick={onConfirm} disabled={!selectedSlot || isConfirmLoading}>Confirm</Button>
                     </DialogClose>
                     <DialogClose asChild>
                         <Button variant="outline" onClick={onCancel}>Cancel</Button>
