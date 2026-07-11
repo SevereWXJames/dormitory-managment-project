@@ -1,6 +1,6 @@
 import express, {type Request, type Response, type NextFunction} from "express"
 import {
-    getEventsForLastNDays,
+    getEventsForLastNDays, getStatusForServiceByUUID,
     getStatusForServiceId,
     getStatusForServiceName
 } from "../services/IoT/IoTDataServices.ts";
@@ -25,16 +25,16 @@ IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response
     }
 });
 
-IoTRouter.get("/get-status-by-service-name/", async (req: Request, res: Response)=> {
+IoTRouter.get("/get-status-by-service-uuid/", async (req: Request, res: Response)=> {
     try {
-        const {serviceName} = req.params
-        if (typeof serviceName !== "string" || !serviceName) {
-            return res.status(400).json({success: false, message: "Invalid name."})
+        const {iotUUID} = req.params
+        if (typeof iotUUID !== "string" || !iotUUID) {
+            return res.status(400).json({success: false, message: "Invalid uuid."})
         }
-        const status = await getStatusForServiceName(serviceName);
+        const status = await getStatusForServiceByUUID(iotUUID);
 
         if (status === null) {
-            return res.status(400).json({success: false, message: "That service name matches no status."});
+            return res.status(400).json({success: false, message: "That service uuid matches no status."});
         }
         return res.status(200).json({success: true, data: status});
     }
