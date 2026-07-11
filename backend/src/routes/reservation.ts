@@ -104,13 +104,11 @@ reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, r
 
 reservationRouter.put("/book-slot-by-service-name", async (req: Request, res: Response)=> {
     const {userId, slotId, serviceName} = req.body;
-    const {serviceId} = req.params;
-
-    if (!serviceId) {
-        return res.status(400).json({success: false, message: "No service name provided."});
+    if (!serviceName) {
+        return res.status(500).json({success: false, error: "No service name provided."});
     }
     if(!slotId){
-        return res.status(400).json({success: false, message: "No slot provided."});
+        return res.status(500).json({success: false, error: "No slot provided."});
     }
 
     try {
@@ -145,10 +143,10 @@ reservationRouter.put("/cancel-booking-by-service/:serviceId", async (req: Reque
 reservationRouter.put("/cancel-booking-by-service-name/", async (req: Request, res: Response)=> {
     const {userId, slotId, serviceName} = req.body;
     if (!serviceName) {
-        return res.status(400).json({success: false, message: "No service name provided."});
+        return res.status(500).json({success: false, error: "No service name provided."});
     }
     if(!slotId){
-        return res.status(400).json({success: false, message: "No slot provided."});
+        return res.status(500).json({success: false, error: "No slot provided."});
     }
 
     try {
