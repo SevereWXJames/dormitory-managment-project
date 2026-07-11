@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, {Schema, Types} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 import {CreditBalances} from "../database/models/creditBalance.model.ts";
 
@@ -18,8 +18,9 @@ export const CreditBalanceModel = CreditBalances;
 //     description: string;
 //     transaction: number;
 // }
+
 export interface Transaction {
-    id: string;
+    _id: Types.ObjectId;
     userId: string;
     description: string;
     transaction: number;
