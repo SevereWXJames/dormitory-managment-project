@@ -7,10 +7,13 @@ export function useMachineDialog(machineName: string){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
     const slotId = selectedSlot?._id ?? null;
     const serviceName = selectedSlot?.serviceName ?? null;
-    const {confirmReservation, cancelReservation} = useReservationApi({slotId, serviceName});
+    const {confirmReservation, isReserveError, isReserveLoading, reserveError} = useReservationApi({slotId, serviceName});
 
-    const onCancel = () => {setSelectedSlot(null);}
-    const onConfirm = () => {setSelectedSlot(null);}
+    const onCancel = () => {
+        setSelectedSlot(null);}
+    const onConfirm = async () => {
+        await confirmReservation();
+        setSelectedSlot(null);}
 
     const getTime = (timestamp: number) => {
         const date = new Date(timestamp * 1000);
@@ -39,6 +42,9 @@ export function useMachineDialog(machineName: string){
         isError,
         onCancel,
         onConfirm,
+        isConfirmLoading: isReserveLoading,
+        isConfirmError: isReserveError,
+        confirmError: reserveError,
         selectedSlot,
         setSelectedSlot,
         error};
