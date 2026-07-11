@@ -6,8 +6,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {useRowDropDown} from "@/components/residents/facilitiesBooking/hooks/useRowDropDown.tsx";
+import type {Booking} from "@/types/residents/types.ts";
 
-export function RowDropDown() {
+type RowDropDownProps = {
+    bookingInfo : Booking;
+}
+export function RowDropDown(props : RowDropDownProps) {
+    const {onCancel} = useRowDropDown(props);
+
     return (
         <>
             <DropdownMenu>
@@ -18,7 +25,7 @@ export function RowDropDown() {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem variant="destructive">
+                    <DropdownMenuItem variant="destructive" onClick={onCancel}>
                         Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>

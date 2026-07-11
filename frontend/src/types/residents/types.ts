@@ -7,6 +7,7 @@ export type Booking = {
     _id: string;
     eventName: string,
     serviceId: string;
+    serviceName?: string;
     booked: boolean;
     bookedBy: string | null;
     startTime: string | null;
