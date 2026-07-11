@@ -27,7 +27,7 @@ export function useAddCreditsCard() {
 
 			dispatch(addCredits({amount: amountCents}));
 			dispatch(addTransactionHistoryEntry({cardNumber, amount: amountCents}));
-			await putAddCredits({userId: userId, creditsCents: amountCents} as AddCreditsRequestType);
+			await putAddCredits({userId: userId, creditsCents: amountCents} as AddCreditsRequestType).unwrap();
 		}
 	}
 
