@@ -18,18 +18,18 @@ export const reservationsApi = api.injectEndpoints({
 
         cancelBooking: builder.mutation<void, BookingArgs>({
             query: ({serviceName, userId, slotId}) => ({
-                url: `/reservations/cancel-booking-by-service/${serviceName}`,
+                url: `/reservations/cancel-booking-by-service-name/`,
                 method: "PUT",
-                body: {userId, slotId}
+                body: {userId, slotId, serviceName}
             }),
             invalidatesTags: ["Booking", "ReservationSlots"],
         }),
 
         makeBooking: builder.mutation<void, BookingArgs>({
             query: ({serviceName, userId, slotId}) => ({
-                url: `/reservations/book-slot-by-service/${serviceName}`,
+                url: `/reservations/book-slot-by-service-name/`,
                 method: "PUT",
-                body: {userId, slotId}}),
+                body: {userId, slotId, serviceName}}),
             invalidatesTags: ["Booking", "ReservationSlots"],
         }),
     }),
