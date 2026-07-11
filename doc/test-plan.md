@@ -21,6 +21,23 @@ cp frontend/.env.example frontend/.env
 
 ## Manual Tests
 
+### M3 admin and documentation checks
+
+- **Admin sign-up and login flow**
+  - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
+  - Execution: Create an admin account using the admin sign-up route at /admin-signup, or use an existing admin account from the seeded sample data if available.
+  - Validation: After a successful login, the user should land on the admin dashboard and be able to access admin-only pages. A resident account should not be able to access the same admin routes.
+
+- **Unread / read notice behavior**
+  - Setup: Sign in as a resident and open the notices page.
+  - Execution: Open a notice that is marked unread and confirm that it can be marked as read.
+  - Validation: The notice state updates correctly and remains reflected in the resident view after refresh.
+
+- **Admin maintenance request triage**
+  - Setup: Sign in as an admin and ensure at least one maintenance request exists.
+  - Execution: Open the maintenance page and update the status of an existing request.
+  - Validation: The updated status is displayed in the admin view and remains after refresh.
+
 ### Deployment and smoke tests
 
 #### 1. Docker deployment
@@ -99,7 +116,7 @@ Expected result:
 
 - **Admin notices / announcements management**
     - Setup: Sign in as an admin and open the notices page.
-    - Execution: Create a new notice, edit an existing notice, and remove a notice.
+    - Execution: Create a new notice, edit an existing notice, remove a notice, and verify the unread/read state for residents.
     - Validation: Each action updates the list correctly and the changes are visible to the resident view after refresh.
 
 - **Admin residents / facility management**
@@ -139,14 +156,10 @@ Expected result:
     - Test case 3: Login function as an admin
         1) Setup: Open the login page.
         2) Execution:
-            - Enter a valid username (for M2, any username is valid)
-            - Enter an e-mail and ensure that it contains the word "admin" (For M2, any input is valid so long as it
-              contains "admin")
-            - Enter password combination (for M2, any username and password combination is valid) in their respective
-              fields,
-            - Press the “Log in” button twice.
-        3) Validation: The user should be navigated to the admin dashboard page on the second click (This is a known bug
-           issue and we will fix it).
+            - Use a valid admin account created through the admin sign-up flow, or a seeded admin account available in the local environment.
+            - Enter the correct username, email, and password for that admin account.
+            - Press the “Log in” button.
+        3) Validation: The user should be navigated to the admin dashboard page and should be able to access admin-only screens such as the maintenance or notices pages.
 - **Settings**
   - Test case 1: Viewing user information as a Resident:
     1) Setup: Follow the instructions to log in as a Resident as detailed in Test case 2 for the Login page.
