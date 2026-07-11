@@ -20,7 +20,7 @@ export function MaintenanceRequestTable(props: TableProps) {
                 <TableCaption>{"Recent maintenance requests"}</TableCaption>
                 <TableHeader className="sticky top-0 bg-background z-10">
                     <TableRow>
-                        <TableHead className="text-right">Unit #</TableHead>
+                        {/* <TableHead className="text-right">Unit #</TableHead> */}
                         <TableHead className="text-right">Status</TableHead>
                         <TableHead className="text-right">Priority</TableHead>
                         <TableHead className="text-right">Issue</TableHead>
@@ -31,7 +31,7 @@ export function MaintenanceRequestTable(props: TableProps) {
                 <TableBody>
                     {props.rows.map((row, index) => (
                         <TableRow key={index}>
-                            <TableCell className="font-medium">{row.unit}</TableCell>
+                            {/* <TableCell className="font-medium">{row.unit}</TableCell> */}
                             <TableCell className="font-medium">{row.status}</TableCell>
                             <TableCell className="text-right">{row.priority}</TableCell>
                             <TableCell className="text-right">{row.issue}</TableCell>
