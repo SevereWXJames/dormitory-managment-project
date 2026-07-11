@@ -22,7 +22,7 @@ export const reservationsApi = api.injectEndpoints({
                 method: "PUT",
                 body: {userId, slotId, serviceName}
             }),
-            invalidatesTags: ["Booking", "ReservationSlots"],
+            invalidatesTags: ["Booking", "ReservationSlots", "Credits"],
         }),
 
         makeBooking: builder.mutation<void, BookingArgs>({
@@ -30,7 +30,7 @@ export const reservationsApi = api.injectEndpoints({
                 url: `/reservations/book-slot-by-service-name/`,
                 method: "PUT",
                 body: {userId, slotId, serviceName}}),
-            invalidatesTags: ["Booking", "ReservationSlots"],
+            invalidatesTags: ["Booking", "ReservationSlots", "Credits"],
         }),
     }),
 });
