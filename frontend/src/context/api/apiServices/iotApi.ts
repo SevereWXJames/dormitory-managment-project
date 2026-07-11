@@ -14,8 +14,8 @@ type IoTStatusArgs = {
 export const iotStatusApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getIotStatusByUUID: builder.query<IoTStatusAPIResponse, IoTStatusArgs>({
-            query: (uuid) => ({
-                url: `/IoT/get-status-by-service-uuid/${uuid}`,
+            query: (statusArgs) => ({
+                url: `/IoT/get-status-by-service-uuid/${statusArgs.iotUUID}`,
             }),
             providesTags: ["IoTStatus"],
         }),
