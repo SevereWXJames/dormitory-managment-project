@@ -15,8 +15,8 @@ export function MachineStatus({uuid}: MachineStatusProps){
         return <div>No status available</div>;
     }
 
-    return(<div className="status">
-        <p>in use: ${status.inUse}</p>
-        <p>out of service: ${status.outOfService}</p>
+    return(<div className="status flex flex-col sm:flex-row">
+        <p>In use: {status.inUse ? "True": "False"}</p>
+        <p>Out of service: {status.outOfService ? "True": "False"}</p>
     </div>)
 }
