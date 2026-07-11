@@ -20,14 +20,14 @@ export function useAddCreditsCard() {
 	const [amount, setAmount] = useState("");
 	const [putAddCredits] = usePutAddCreditsMutation();
 
-	const handleAddCredits = () => {
+	const handleAddCredits = async () => {
 		const parsedAmount = parseFloat(amount);
 		if (!Number.isNaN(parsedAmount)) {
 			const amountCents = Math.round(parsedAmount * 100);
 
 			dispatch(addCredits({amount: amountCents}));
 			dispatch(addTransactionHistoryEntry({cardNumber, amount: amountCents}));
-			putAddCredits({userId: userId, creditsCents: amountCents} as AddCreditsRequestType);
+			await putAddCredits({userId: userId, creditsCents: amountCents} as AddCreditsRequestType);
 		}
 	}
 

@@ -2,7 +2,7 @@
 import { api } from "../api";
 import type { CreditBalance, Transaction } from "@/dataTypes/creditBalance.ts";
 
-export type AddCreditsRequestType = {userId: string, creditsCents: Number};
+export type AddCreditsRequestType = {userId: string, creditsCents: number};
 
 export const creditsApi = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -14,12 +14,13 @@ export const creditsApi = api.injectEndpoints({
             query: (userId) => ({ url: `/credits/get-transaction-history/${encodeURIComponent(userId)}` }),
             providesTags: ["Transactions"],
         }),
-        putAddCredits: builder.mutation<Number, AddCreditsRequestType>({
+        putAddCredits: builder.mutation<number, AddCreditsRequestType>({
             query: ({userId: userId, creditsCents: creditsCents}) => ({
                 url: `/credits/add-credits/${encodeURIComponent(userId)}`,
                 method: "PUT",
                 body: {amount: creditsCents}
-            })
+            }),
+            invalidatesTags: ["Transactions", "Credits"]
         })
     }),
 });
