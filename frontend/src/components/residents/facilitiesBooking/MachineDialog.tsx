@@ -18,8 +18,14 @@ export type Slot = {duration: string, startTime: string, date: string}
 type MachineDialogProps = {
     machine : Machine;
 }
+
 export function MachineDialog(props : MachineDialogProps) {
-    const {slots, isLoading, isError,isConfirmLoading, error, onCancel, onConfirm, selectedSlot, setSelectedSlot} = useMachineDialog(props.machine.name);
+    const {slots,
+        isLoading, isError,
+        isConfirmLoading, error,
+        onCancel, onConfirm,
+        selectedSlot, setSelectedSlot,
+        pendingToast, setPendingToast} = useMachineDialog(props.machine.name);
     let message;
     let reservations: ReservationSlot[] = [];
     if(isLoading) message = <p>...Loading</p>
@@ -37,7 +43,10 @@ export function MachineDialog(props : MachineDialogProps) {
             <DialogTrigger asChild>
                 <MachineButton text={props.machine.name} value={props.machine.id} />
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent onCloseAutoFocus={() => {
+                pendingToast?.();
+                setPendingToast(null);
+            }}>
                 <DialogHeader>
                     <DialogTitle className="!text-black">Book a time:</DialogTitle>
                     <DialogDescription>Select a time slot below:</DialogDescription>
