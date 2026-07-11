@@ -6,20 +6,22 @@ import { TransactionHistoryCard } from "../../../../../components/residents/cred
 import {useCreditsData} from "@/pages/common/residents/pageHooks/useCreditsData.tsx";
 import {useDispatch} from "react-redux";
 import {setCredits, setTransactionHistory} from "@/context/residents/creditsSlice.ts";
+import { useEffect } from "react";
 
 export function CreditsPage() {
-    const { loading, error, balanceCents, transactions} = useCreditsData();//apiHook
+    const { loading, error, balanceCents, transactions } = useCreditsData();//apiHook
     const dispatch = useDispatch();//reduxHook
 
-    //Since the database is not implemented, we still rely on using local state
-    if(!loading && !error){
-        if(balanceCents){
-            dispatch(setCredits(balanceCents));
+    useEffect(() => {
+        if(!loading && !error){
+            if(balanceCents){
+                dispatch(setCredits(balanceCents));
+            }
+            if(transactions){
+                dispatch(setTransactionHistory(transactions));
+            }
         }
-        if(transactions){
-            dispatch(setTransactionHistory(transactions));
-        }
-    }
+    }, [loading, error, balanceCents, transactions]);
 
     return (<>
         <CommonFrame commonFrameType={"RESIDENT"}>
