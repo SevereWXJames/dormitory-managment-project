@@ -12,9 +12,13 @@ const options = {
     topic: {type: "string", short: "t"}
 }
 
+const mqttOptions = {
+    qos: 1
+}
+
 async function sendMQTTMessage(client, obj, topic) {
     console.log(`sending message: \"${JSON.stringify(obj)}\" on topic: \"${topic}\"`);
-    await client.publishAsync(topic, JSON.stringify(obj));
+    await client.publishAsync(topic, JSON.stringify(obj), mqttOptions);
 }
 
 async function readData() {
