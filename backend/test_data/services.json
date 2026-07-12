@@ -1,6 +1,7 @@
 {
   "services": [
     {
+      "_id": "6a52f45de9f73aca080caf85",
       "name": "Washing Machine 1",
       "description": "test",
       "hasIoT": true,
@@ -11,6 +12,7 @@
       "reservationEndHour": 18
     },
     {
+      "_id": "6a52f45de9f73aca080caf86",
       "name": "Washing Machine 2",
       "description": "test",
       "hasIoT": true,
@@ -21,6 +23,7 @@
       "reservationEndHour": 18
     },
     {
+      "_id": "6a52f45de9f73aca080caf87",
       "name": "Dryer 1",
       "description": "test",
       "hasIoT": true,
