@@ -431,6 +431,68 @@ Expected result:
      2) Execution: Authenticate as an Admin and trigger the deletion endpoint for "Laundry Machine Alpha".
      3) Validation: Query the database collections. Assert that the facility document is expunged from the facilities collection, AND assert that an empty array is returned when querying the bookings collection for that removed facility ID.
 
+## Manual IoT Tests
+
+### M3 Manual IoT Tests
+
+**Background**
+
+To run IoT tests start app with `docker compose up --build` in the root folder.
+
+IoT requires the use of the `mqtt-test-app`.
+This a separate app that is meant to simulate the functionality of an IoT device sending our app updates.
+To run this app:
+
+1. Install NodeJS and NPM
+2. Navigate to the `mqtt-test-app` folder.
+3. Run `npm install`
+4. Follow the instructions in `mqtt-test-app.md`. Example command for running a series of messages in the `data/data.json` file: `node mqtt-test-app.js -f`.
+
+If the following instructions above fail, try running `docker compose up --build` in the `mqtt-test-app` folder.
+This will read from the `data.json` file and execute the test app as if it is manually running the command `node mqtt-test-app.js -f`.
+
+- **Machine Status Update Capabilities Tests**
+  - Test that machines can be set to be in use. (Test 1)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "In use" is **false**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test1data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal. 
+    8. Confirm that the status value "In use" is **true**.
+
+  - Test that machines can be set to no longer be in use. (Test 2)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "In use" is **true**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test2data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal.
+    8. Confirm that the status value "In use" is **false**.
+
+  - Test that machines can be set to be out of service. (Test 3)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "Out of service" is **false**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test3data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal.
+    8. Confirm that the status value "Out of service" is **true**.
+
+  - Test that machines can be set to be no longer out of service. (Test 4)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "Out of service" is **true**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test4data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal.
+    8. Confirm that the status value "Out of service" is **false**.
+
+
 ## Bugs
 
 Bugs that have been found before the M2 submission date have been recorded as github issues.
