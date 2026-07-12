@@ -8,6 +8,7 @@ const IoTRouter = express.Router();
 
 IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response)=> {
     try {
+        res.set('Cache-Control', 'no-store');
         const serviceId = req.params.serviceId;
         if (typeof serviceId !== "string") {
             return res.status(400).json({success: false, message: "Invalid ID."})
@@ -26,6 +27,7 @@ IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response
 
 IoTRouter.get(`/get-status-by-service-uuid/:iotUUID`, async (req: Request, res: Response)=> {
     try {
+        res.set('Cache-Control', 'no-store');
         const {iotUUID} = req.params
         if (typeof iotUUID !== "string" || !iotUUID) {
             return res.status(400).json({success: false, message: "Invalid uuid."})
@@ -44,6 +46,7 @@ IoTRouter.get(`/get-status-by-service-uuid/:iotUUID`, async (req: Request, res: 
 
 IoTRouter.post("/get-events-from-n-days-ago", async (req: Request, res: Response)=> {
     try {
+        res.set('Cache-Control', 'no-store');
         const {daysAgo} = req.body;
         if (typeof daysAgo !== "number") {
             return res.status(400).json({success: false, message: "Invalid days provided."})

@@ -22,4 +22,4 @@ export const iotStatusApi = api.injectEndpoints({
     }),
 });
 
-export const {useGetIotStatusByUUIDQuery} = iotStatusApi;
+export const {useGetIotStatusByUUIDQuery, useLazyGetIotStatusByUUIDQuery} = iotStatusApi;

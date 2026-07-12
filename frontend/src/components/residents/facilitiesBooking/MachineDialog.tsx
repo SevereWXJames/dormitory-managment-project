@@ -8,6 +8,7 @@ import {TimeSlot} from "@/components/residents/facilitiesBooking/TimeSlot.tsx";
 import {type Machine, useMachineDialog} from "@/components/residents/facilitiesBooking/hooks/useMachineDialog.tsx";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {MachineStatus} from "@/components/residents/facilitiesBooking/MachineStatus.tsx";
+import {DialogOpenProvider} from "@/components/residents/facilitiesBooking/context/DialogOpenContext.tsx";
 
 
 export type Slot = { duration: string, startTime: string, date: string }
@@ -25,6 +26,7 @@ export function MachineDialog(props: MachineDialogProps) {
         selectedSlot, setSelectedSlot,
         pendingToast, setPendingToast,
         serviceUUID,
+        open, setOpen,
     } = useMachineDialog(props.machine);
     let message;
     let reservations: ReservationSlot[] = [];
@@ -39,7 +41,7 @@ export function MachineDialog(props: MachineDialogProps) {
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <MachineButton text={props.machine.name} value={props.machine.id}/>
             </DialogTrigger>
@@ -47,6 +49,7 @@ export function MachineDialog(props: MachineDialogProps) {
                 pendingToast?.();
                 setPendingToast(null);
             }}>
+                <DialogOpenProvider value={open}>
                 <DialogHeader>
                     <DialogTitle className="!text-black">Book a time:</DialogTitle>
                     <DialogDescription>Select a time slot below:</DialogDescription>
@@ -70,6 +73,7 @@ export function MachineDialog(props: MachineDialogProps) {
                         <Button variant="outline" onClick={onCancel}>Cancel</Button>
                     </DialogClose>
                 </DialogFooter>
+            </DialogOpenProvider>
             </DialogContent>
         </Dialog>
     );
