@@ -3,7 +3,7 @@ import {readFile} from "node:fs/promises";
 import {connect} from "mqtt";
 
 const baseTopicString = "SmartAPT/facility/";
-const mosquittoURI = "mqtt://localhost:1883"
+const mosquittoURI = process.env.IS_DOCKER !== undefined ? "mqtt://host.docker.internal:1883" : "mqtt://localhost:1883"
 
 const options = {
     fileReadMode: {type: "boolean", short: "f", default: false},
