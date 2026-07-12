@@ -8,6 +8,7 @@ const IoTRouter = express.Router();
 
 IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response)=> {
     try {
+        res.set('Cache-Control', 'no-store');
         const serviceId = req.params.serviceId;
         if (typeof serviceId !== "string") {
             return res.status(400).json({success: false, message: "Invalid ID."})
