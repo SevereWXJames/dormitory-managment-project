@@ -8,7 +8,6 @@ import {TimeSlot} from "@/components/residents/facilitiesBooking/TimeSlot.tsx";
 import {type Machine, useMachineDialog} from "@/components/residents/facilitiesBooking/hooks/useMachineDialog.tsx";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {MachineStatus} from "@/components/residents/facilitiesBooking/MachineStatus.tsx";
-import {useState} from "react";
 import {DialogOpenProvider} from "@/components/residents/facilitiesBooking/context/DialogOpenContext.tsx";
 
 
@@ -19,8 +18,6 @@ type MachineDialogProps = {
 }
 
 export function MachineDialog(props: MachineDialogProps) {
-    const [open, setOpen] = useState(false);
-
     const {
         slots,
         isLoading, isError,
@@ -29,6 +26,7 @@ export function MachineDialog(props: MachineDialogProps) {
         selectedSlot, setSelectedSlot,
         pendingToast, setPendingToast,
         serviceUUID,
+        open, setOpen,
     } = useMachineDialog(props.machine);
     let message;
     let reservations: ReservationSlot[] = [];

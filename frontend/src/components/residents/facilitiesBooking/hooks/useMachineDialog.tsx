@@ -14,7 +14,7 @@ export type Machine = {
 
 export function useMachineDialog(machine: Machine){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const slotId = selectedSlot?._id ?? null;
     const serviceName = selectedSlot?.serviceName ?? null;
     const serviceUUID = machine.uuid;
@@ -52,6 +52,6 @@ export function useMachineDialog(machine: Machine){
         selectedSlot,
         setSelectedSlot,
         pendingToast, setPendingToast,
-        isOpen, setIsOpen,
+        open, setOpen,
         serviceUUID};
 }
