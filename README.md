@@ -139,22 +139,11 @@ The following parts are visible in the frontend but should not be treated as ful
 
 ### How to verify Milestone 3 functionality
 
-#### Residents:
 1. Start the stack with `docker compose up --build` and open `http://localhost:5173`.
-2. Create an account by clicking on the sign-up link for residents located below the login-form. 
-3. Enter appropriate values in the fields and click the sign-up button.
-4. To log in back to your newly create account, use the same username, email, and password that you chose to create the account. 
-5. After signing up for the first time or after logging back in, verify the resident dashboard pages for bookings, maintenance, notices, credits, and account settings. Keep in mind that notification-related widgets and any static help/demo content are not yet full features.
-
-#### Admin:
-1. Create a new account by clicking on the sign-up link for admins located below the login-form.
-2. Similarly, enter appropriate values in the fields and click on the sing-up button. Ensure that the email and the username are different than the one you used to sign-in as a Resident.
-3. After signing up as an admin and verify the admin dashboard, facilities, maintenance, notices, residents, access codes, and settings pages.
-4. After creating an adnin account, you can continue to log back in as an admin using the login form.
-
+2. Create and log in as a resident and verify the resident dashboard pages for bookings, maintenance, notices, credits, and account settings. Keep in mind that notification-related widgets and any static help/demo content are not yet full features.
+3. Create and log in as an admin and verify the admin dashboard, facilities, maintenance, notices, residents, access codes, and settings pages. After creating an account, both resident and admin accounts can be used on the login page.
+4. Confirm admin-protected routes require an admin role and correctly deny unauthorized access.
 5. Verify that notice visibility, request status updates, and resident/admin navigation work as expected in the running app.
-
-6. To confirm that role authorization and authentication are working as intended, you can try copying one of the page URIs specific to the admin interface. Then log out and or log back in as a resident and copy and paste the uri link in the address bar.
 
 ## Standard Features (Design Alignment)
 

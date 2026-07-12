@@ -48,7 +48,7 @@ cp frontend/.env.example frontend/.env
   - Validation: The dashboard should show resident-relevant sections such as bookings, notices, maintenance, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
 
 - **Resident facility booking**
-  - Setup: Sign in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input 5 credits in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
+  - Setup: Sign in as a resident and navigate to the facilities page.
   - Execution: Open a machine, choose a time slot, and submit a booking.
   - Validation: The booking should appear in the resident booking list or related view. If it fails, verify whether the issue is a real backend problem or a known placeholder flow.
 
@@ -221,31 +221,40 @@ Expected result:
             - Log in as a valid resident.
             - Navigate to the "Credits" page
             - Follow the instructions detailed in the test plans for "Credits page" and ensure the balance has at least
-              1 dollar worth of credits. (For M3, 1 credit costs $0.01, and booking a slot costs 5 credits)
+              1 dollar worth of credits. (For M2, 1 credit costs $0.01, and booking a slot costs 100 credits or $1)
             - Navigate to the “Facilities” page.
-            - Select a machine that you wish to book. 
-            - A modal window should open with a list of times.
-            - Select the time you can pick. 
-        2) Execution: Press the “Confirm” button.
+            - There are two ways to access the input form:
+                - a) Using the submission form under "Make a booking"
+                - b) Selecting a machine option from the list on the upper left. This should open a dialog window. Scroll down and you should see the input form.
+            - For either method, select an option for each of the input fields and write an event name.
+        2) Execution: Press the “Submit” button.
         3) Validation:
-            - A notification window should pop up, stating the success of the action. 
-            - Clicking on the same machine option again, the time slot selected should be disabled.
-            - The table under "Recent Bookings" should have a single row containing following information about the booking the user has inputted.
-            - The credit balance on the facilities booking page should have 5 credits deducted.
+            - The table under "Recent Bookings" should have a single row containing following information about the
+              booking the user has inputted.
+            - Navigate to the "Credits" page. The credit balance should now be at 0.
             - Navigate to the "Dashboard" page. The table under "Recent Bookings" should have a single row containing following information about the
               booking the user has inputted.
 
-    - Test case 3: Removing a booked slot.
+    - Test case 3: Viewing booked slots through the calendar.
+        1) Setup:
+            - Select the machine you wish to book a slot from the list of options from the left.
+            - Verify that the calendar is empty.
+            - Follow the instructions in test case 2. Ensure that no conflicting bookings have been made.
+        2) Execution: Click the corresponding machine booked from the list of options from the left.
+        3) Validation:
+            - A dialog window should open, displaying a calendar with a booked slot.
+            - The slot should be titled the event name you chose.
+            - The slot should be located in the same date and time you chose.
+            - The duration of the booking should be 1 hour.
+    - Test case 4: Removing a booked slot.
         1) Setup:
             - Follow the instructions detailed in Test case 2.
             - Ensure that you have made at least 1 booking confirmed by the "Recent Bookings" table.
         2) Execution:
-           - In the table 'Upcoming bookings' on the far right on the row should be '...' button.
-           - Click on the button and click 'delete'
+           - Below "Cancel Booking", click on the button called "Cancel booking".
+           - Select an event you wish to remove from the drop-down menu.
         3) Validation:
-           - The event should be removed from the "Recent Bookings" table.
-           - The slot should now be available to book once clicking on the same machine option again.
-           - The balance should be refunded with 5 credits.
+           - The event should be removed from the "Recent Bookings" table. (For M2, bookings are non-refundable)
     - Test case 5: Viewing the status of machines.
         1) Setup: Log in as a valid resident, then navigate to the “Facilities” page.
         2) Execution:
@@ -254,6 +263,24 @@ Expected result:
             - Click the Submit button below
         3) Validation:
             - A dialog window should pop up, stating that at the moment the machine is "idle" (For M2, responses are hardcoded)
+- **Shared facilities page, building manager view:**
+    - Test case 1: UI elements
+        1) Setup: None
+        2) Execution: Log in as a valid building manager, then navigate to the “Facilities” page.
+        3) Validation: There is a list of named items corresponding to each shared facility with an indication of
+           current availability, and buttons to add, edit and remove facilities. Each item has a checkbox to select it.
+    - Test case 2: “Add Device” form
+        1) Setup: Log in as a valid building manager, then navigate to the “Facilities” page.
+        2) Execution: Press the “Add Device” button
+        3) Validation: The add button opens a form with the fields “name” (text input) and “type” (dropdown menu).
+           Pressing “confirm changes” adds a new item to the list.
+    - Test case 3: “Edit Device”
+        1) Setup: Log in as a valid building manager, then navigate to the “Facilities” page.
+        2) Execution: Press the “Edit” button in a listed device.
+        3) Validation: The edit button opens a form with the fields “name” (text input) and “type” (dropdown menu) and
+           an “available” checkbox. Pressing “confirm changes” with the “available” checkbox ticked lists the item as
+           available, and without the checkbox ticked the item is listed as unavailable but is still present in the
+           list. Pressing the “Remove” button removes the device from the list.
 - **Credits page, resident view:**
     - Test case 1: UI elements
         1) Setup: None.
