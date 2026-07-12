@@ -1,4 +1,5 @@
 import {useIoTStatusApi} from "@/components/residents/facilitiesBooking/hooks/useIoTStatusApi.tsx";
+import {useDialogOpen} from "@/components/residents/facilitiesBooking/context/DialogOpenContext.tsx";
 
 type MachineStatusProps = {
     uuid: string,
@@ -6,7 +7,8 @@ type MachineStatusProps = {
 
 
 export function MachineStatus({uuid}: MachineStatusProps){
-    const {status, isLoading,  isError,  error} = useIoTStatusApi({uuid: uuid});
+    const isOpen = useDialogOpen();
+    const {status, isLoading,  isError,  error} = useIoTStatusApi({uuid: uuid, isOpen});
     if(isLoading) return <div>Loading...</div>;
     else if(isError){
         console.log(`Error getting machine status: ${error}`);
