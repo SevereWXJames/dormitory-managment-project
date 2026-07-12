@@ -30,8 +30,6 @@ This project is deployable with Docker Desktop using the root `docker-compose.ym
 ### Required setup (Docker instructions)
 
 1. In the repository root, place the actual `.env` file provided by Canvas.
-2. Do not commit the real `.env` file to GitHub.
-3. The frontend uses `frontend/.env.example` only as a local development reference. The frontend container build generates its own `frontend/.env` from the `VITE_API_URL` build argument.
 
 ### Build and run
 
@@ -41,7 +39,12 @@ From the repository root:
 docker compose up --build
 ```
 
-Use the same command again after a code change to rebuild the containers. To stop the stack, press Ctrl+C in the terminal that is running Docker Compose.
+Use the same command again after a code change to rebuild the containers. 
+To stop and remove the running containers:
+
+```bash
+docker compose down
+```
 
 ### App URLs
 
@@ -118,11 +121,27 @@ This milestone documents the near-submittable Milestone 3 branch state. It build
 | **Notice / Announcement Management** | Standard | **Partially implemented** | Manager notice pages and resident notice views exist; unread/read behavior should be verified manually during review. |
 | **Backend / Docker Stability** | Standard | **Implemented** | Docker Compose runs MongoDB, backend, frontend, and MQTT infrastructure reliably for local development. |
 
+## Resident-facing changes in Milestone3 branch
+
+Compared with the Milestone 2 branch, the current branch is less demo-like and more data-driven for resident workflows. The main differences are:
+- Resident login and route handling now follow the same role-aware flow as the rest of the app, rather than relying on a single generic landing page.
+- Facility booking, maintenance submission, and notice viewing are now backed by the shared backend and sample data, so they can be exercised in a more realistic local flow.
+- The credits page now exposes balance and history information in a more structured way, although the checkout experience is still a mock/demo flow rather than a real payment integration.
+- The resident settings area now includes account/profile and notification-related sections, but the notification controls remain visual placeholders rather than persisted preferences.
+
+### Non-admin feature status and limitations 
+
+The following parts are visible in the frontend but should not be treated as fully implemented product features yet:
+- Notification center and push notification behavior: the UI can show notification-related elements, but there is no real inbox, delivery pipeline, or persistent notification state.
+- Notice read/unread flow: the resident notices page is available, but the read-state behaviour and follow-up alerts are still limited and should be tested as a partial workflow rather than a complete notification system.
+- Credit checkout and payment processing: the form is present and can be exercised locally, but it is still a mock/demo flow and should not be validated as a live payment integration.
+- Some dashboard cards, help text, and settings panels are still static or demo-oriented and should be considered UI placeholders until they are backed by real data or persistence.
+
 ### How to verify Milestone 3 functionality
 
 1. Start the stack with `docker compose up --build` and open `http://localhost:5173`.
-2. Create and Log in as a resident and verify the resident dashboard pages for bookings, maintenance, notices, and account settings.
-3. Create and log in as an admin and verify the admin dashboard, facilities, maintenance, notices, residents, access codes, and settings pages. (after create account, both resident and admin account can login in the http://localhost:5173/login page)
+2. Create and log in as a resident and verify the resident dashboard pages for bookings, maintenance, notices, credits, and account settings. Keep in mind that notification-related widgets and any static help/demo content are not yet full features.
+3. Create and log in as an admin and verify the admin dashboard, facilities, maintenance, notices, residents, access codes, and settings pages. After creating an account, both resident and admin accounts can be used on the login page.
 4. Confirm admin-protected routes require an admin role and correctly deny unauthorized access.
 5. Verify that notice visibility, request status updates, and resident/admin navigation work as expected in the running app.
 

@@ -5,6 +5,8 @@
 This test plan supports the Milestone 3 submission for SmartAPT. It describes how to verify Docker deployment, frontend
 availability, backend startup, and the current state of application functionality.
 
+Compared with the Milestone 2 branch, the current branch adds more data-backed resident flows for bookings, maintenance, notices, and credits, while still leaving some notification and payment UI elements as partial or demo-only functionality.
+
 The items marked as "(M3 branch)" are new validation steps added for the M3 branch and should be prioritized when validating the admin-page changes.
 
 ## Setup
@@ -38,29 +40,66 @@ cp frontend/.env.example frontend/.env
   - Execution: Open the maintenance page and update the status of an existing request.
   - Validation: The updated status is displayed in the admin view and remains after refresh.
 
+### Resident-side checks (non-admin)
+
+- **Resident sign-in and dashboard**
+  - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
+  - Execution: Sign in with a resident account and confirm that the resident dashboard loads.
+  - Validation: The dashboard should show resident-relevant sections such as bookings, notices, maintenance, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
+
+- **Resident facility booking**
+  - Setup: Sign in as a resident and navigate to the facilities page.
+  - Execution: Open a machine, choose a time slot, and submit a booking.
+  - Validation: The booking should appear in the resident booking list or related view. If it fails, verify whether the issue is a real backend problem or a known placeholder flow.
+
+- **Resident maintenance submission**
+  - Setup: Sign in as a resident and open the maintenance page.
+  - Execution: Submit a maintenance request with a category, description, and priority.
+  - Validation: The request should be accepted by the app and appear in the resident/manager workflow. The UI should not be treated as fully complete if the request is only locally displayed.
+
+- **Resident notices and read-state**
+  - Setup: Sign in as a resident and open the notices page.
+  - Execution: Open a notice and confirm that it appears in the resident notice list.
+  - Validation: The notice content should be visible and the resident view should update after refresh. Full notification delivery and automatic unread/alert behavior remain partial and should not be treated as a complete feature.
+
+- **Credits / balance**
+  - Setup: Sign in as a resident and open the credits page.
+  - Execution: Review the balance and transaction history, then attempt a credit top-up using the mock form.
+  - Validation: The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout.
+
+- **Settings / profile**
+  - Setup: Sign in as a resident and open the settings page.
+  - Execution: Review the account/profile information and notification-related controls.
+  - Validation: Information should display correctly, but notification switches should be treated as UI-only until persistence is implemented.
+
+### Non-admin features that are still not fully testable
+
+The following frontend elements are visible in the current branch but should not be treated as complete, production-ready features:
+- Notification center and push notifications: the UI exposes notification-related concepts, but there is no real inbox, delivery mechanism, or persisted notification state.
+- Notification preference toggles: visual switches are present, but changing them does not currently persist or affect real notification behavior.
+- Payment checkout: the credits form exists, but it is still a mock/demo flow and should not be tested as a live payment integration.
+- Static dashboard/help/demo content: some cards and helper copy are present for orientation but are not backed by full product logic.
+
 ### Deployment and smoke tests
 
 #### 1. Docker deployment
 
-Steps:
+Step:
 
-1. Open a terminal and change to the frontend folder:
-
-```bash
-cd frontend
-```
-
-2. Start the containers:
-
+1. Start the containers:
 ```bash
 docker compose up --build
 ```
 
 3. Verify the Docker Compose start process finishes without errors.
 4. Confirm the following containers are running:
+```bash
+docker compose ps
+```
     - frontend
     - backend
     - mongo
+    - mosquitto
 
 Expected result:
 
