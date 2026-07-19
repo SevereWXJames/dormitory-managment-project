@@ -12,6 +12,19 @@ import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import serviceJSON from "../../test_data/services.json" with {type: "json"};
 import userJSON from "../../test_data/users.json" with {type: "json"};
 import IoTStatusJSON from "../../test_data/IoTStatus.json" with {type: "json"};
+import {CreditBalanceModel, TransactionModel} from "../dataTypes/creditBalance.ts";
+import {
+	MaintenanceRequestModel,
+	MaintenanceRequestPriorityModel, MaintenanceRequestStatusModel,
+	MaintenanceRequestTypeModel
+} from "../dataTypes/maintenanceRequest.ts";
+import {NoticeModel} from "../dataTypes/notice.ts";
+import {ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
+import {RoomModel} from "../dataTypes/room.ts";
+import {ResidentModel, UserModel} from "../dataTypes/user.ts";
+import Services from "../routes/services.ts";
+import {ServiceModel} from "../dataTypes/service.ts";
+import {IoTStatusModel} from "../dataTypes/IoT/IoTStatus.ts";
 
 /**
  * Loads the sample data from the backend/test_data folder into the SmartAPT
@@ -25,19 +38,19 @@ export default function loadSampleData(): Promise<void> {
 	// console.debug("loadSampleData(): Loading sample data");
 
 	return getConnection().dropDatabase().then((value) =>
-		Promise.all([load("CreditBalances", creditBalanceJSON.creditBalances),
-			load("Transactions", transactionHistoryJSON.transactions),
-			load("MaintenanceRequests", requestJSON.maintenanceRequests),
-			load("MaintenanceRequestTypes", requestTypeJSON.maintenanceRequestTypes),
-			load("MaintenanceRequestStatuses", requestStatusJSON.maintenanceRequestStatuses),
-			load("MaintenanceRequestPriorities", requestPriorityJSON.maintenanceRequestPriorities),
-			load("Notices", noticeJSON.notices),
-			load("ReservationSlots", reservationJSON.reservationSlots),
-			load("Rooms", roomJSON.rooms),
-			load("Residents", residentJSON.residents),
-			load("Services", serviceJSON.services),
-			load("Users", userJSON.users),
-			load("IoTStatuses", IoTStatusJSON.IoTStatuses)]),
+		Promise.all([load("CreditBalances", CreditBalanceModel, creditBalanceJSON.creditBalances),
+			load("Transactions", TransactionModel, transactionHistoryJSON.transactions),
+			load("MaintenanceRequests", MaintenanceRequestModel, requestJSON.maintenanceRequests),
+			load("MaintenanceRequestTypes", MaintenanceRequestTypeModel, requestTypeJSON.maintenanceRequestTypes),
+			load("MaintenanceRequestStatuses", MaintenanceRequestStatusModel, requestStatusJSON.maintenanceRequestStatuses),
+			load("MaintenanceRequestPriorities", MaintenanceRequestPriorityModel, requestPriorityJSON.maintenanceRequestPriorities),
+			load("Notices", NoticeModel, noticeJSON.notices),
+			load("ReservationSlots", ReservationSlotModel, reservationJSON.reservationSlots),
+			load("Rooms", RoomModel, roomJSON.rooms),
+			load("Residents", ResidentModel, residentJSON.residents),
+			load("Services", ServiceModel, serviceJSON.services),
+			load("Users", UserModel, userJSON.users),
+			load("IoTStatuses", IoTStatusModel, IoTStatusJSON.IoTStatuses)]),
 		).then((value) => {
 			Promise.resolve();
 		}).catch((error) => {throw Error(`Error loading the database! ${error}`)});
