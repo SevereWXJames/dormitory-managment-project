@@ -41,21 +41,6 @@ describe("reservationServices", function () {
 	describe("getReservationsSlotsByServiceId()", function () {
 		it("Service with both booked and not booked slots", async function () {
 			const serviceId = "service1";
-			const expectedSlotBooked = {
-				"_id": "slot5",
-				"serviceId": "service1",
-				"booked": true,
-				"bookedBy": "user2",
-				"startTime": 7200,
-				"durationSeconds": 3600
-			};
-			const expectedSlotNotBooked = {
-				"_id": "slot3",
-				"serviceId": "service1",
-				"booked": false,
-				"startTime": 0,
-				"durationSeconds": 3600
-			}
 			const expectedLength = 3;
 			const actual = await getReservationsSlotsByServiceId(serviceId);
 			expect(actual).to.be.instanceOf(Array);
