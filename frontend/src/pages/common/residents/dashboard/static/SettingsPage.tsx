@@ -1,7 +1,7 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import {FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
 import {useSelector} from "react-redux";
-import {getEmail, getUsername} from "../../../../../context/authenticationSlice.ts";
+import {getEmail, getName, getPhoneNumber, getUsername} from "../../../../../context/authenticationSlice.ts";
 
 
 export type FieldProps = {
@@ -51,10 +51,12 @@ export function ProfileFields({name, username, email, phone}: ProfileFieldProps)
 }
 
 export function SettingsPage() {
+    const name = useSelector(getName);
     const email = useSelector(getEmail);
     const username = useSelector(getUsername);
+    const phone = useSelector(getPhoneNumber);
     console.log("email:", email, "username:", username);
-    const user: ProfileFieldProps = {name: "Lem Lemmings", username, email, phone: "12345678"};
+    const user: ProfileFieldProps = {name, username, email, phone};
     return (
         <div>
             <CommonFrame commonFrameType={"RESIDENT"}>
