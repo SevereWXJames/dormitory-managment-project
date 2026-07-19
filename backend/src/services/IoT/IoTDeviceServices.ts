@@ -1,13 +1,13 @@
 import {type Service, ServiceModel} from "../../dataTypes/service.ts";
 import {type IoTEvent, IoTEventModel} from "../../dataTypes/IoT/IoTEvent.ts";
 import {IoTStatusModel} from "../../dataTypes/IoT/IoTStatus.ts";
+import mongoose from "mongoose";
 
 export async function handleIncomingIoTData(incomingObj: object) {
     let finalIoTEvent = incomingObj as IoTEvent;
 
-    let facilityID = "";
     try {
-        facilityID = await getFacilityID(finalIoTEvent.UUID);
+        const facilityID = await getFacilityID(finalIoTEvent.UUID);
         finalIoTEvent.facilityID = facilityID;
 
         await saveIoTEvent(finalIoTEvent);
@@ -24,12 +24,12 @@ export async function handleIncomingIoTData(incomingObj: object) {
     }
 }
 
-async function getFacilityID(uuid: string): Promise<string> {
+async function getFacilityID(uuid: string): Promise<mongoose.Types.ObjectId> {
     const result = await ServiceModel.findOne({IoTUUID: uuid}).lean().exec();
     if (result === null) {
         throw new Error("No service has this IoT UUID");
     }
-    return (result as Service)._id.toString();
+    return (result as Service)._id;
 }
 
 async function saveIoTEvent(iotEvent: IoTEvent) {

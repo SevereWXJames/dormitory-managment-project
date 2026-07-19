@@ -5,6 +5,7 @@ import {
     getReservationsBookedByUserId,
     getReservationsSlotsByServiceId, getReservationsSlotsByServiceName
 } from "../services/reservationServices.ts";
+import mongoose from "mongoose";
 
 const reservationRouter = express.Router();
 
@@ -18,7 +19,7 @@ reservationRouter.get("/get-booked-by-user/:userId", async (req: Request, res: R
     }
 
     try {
-        const reservationSlots = await getReservationsBookedByUserId(req.params.userId as string);
+        const reservationSlots = await getReservationsBookedByUserId(new mongoose.Types.ObjectId(req.params.userId as string));
         return res.status(200).json({success: true, data: reservationSlots});
     }
     catch (error) {
@@ -32,7 +33,7 @@ reservationRouter.get("/get-slots-by-service/:serviceId", async (req: Request, r
     }
 
     try {
-        const reservationSlots = await getReservationsSlotsByServiceId(req.params.serviceId as string);
+        const reservationSlots = await getReservationsSlotsByServiceId(new mongoose.Types.ObjectId(req.params.serviceId as string));
         return res.status(200).json({success: true, data: reservationSlots});
     }
     catch (error) {
@@ -60,7 +61,7 @@ reservationRouter.get("/get-free-slots-by-service/:serviceId", async (req: Reque
     }
 
     try {
-        const reservationSlots = await getAllFreeSlots(req.params.serviceId as string);
+        const reservationSlots = await getAllFreeSlots(new mongoose.Types.ObjectId(req.params.serviceId as string));
         return res.status(200).json({success: true, data: reservationSlots});
     }
     catch (error) {
@@ -74,7 +75,7 @@ reservationRouter.get("/get-all-reserved-slots-by-service/:serviceId", async (re
     }
 
     try {
-        const reservationSlots = await getAllReservedSlots(req.params.serviceId as string);
+        const reservationSlots = await getAllReservedSlots(new mongoose.Types.ObjectId(req.params.serviceId as string));
         return res.status(200).json({success: true, data: reservationSlots});
     }
     catch (error) {
@@ -94,7 +95,7 @@ reservationRouter.put("/book-slot-by-service/:serviceId", async (req: Request, r
     }
 
     try {
-        const reservationSlots = await bookReservationSlot(serviceId, slotId, userId);
+        const reservationSlots = await bookReservationSlot(new mongoose.Types.ObjectId(serviceId as string), new mongoose.Types.ObjectId(slotId as string), new mongoose.Types.ObjectId(userId as string));
         return res.status(200).json({success: true,  data: reservationSlots});
     }
     catch (error) {
@@ -134,7 +135,7 @@ reservationRouter.put("/cancel-booking-by-service/:serviceId", async (req: Reque
     }
 
     try {
-        const reservationSlots = await cancelReservationSlot(serviceId, slotId, userId);
+        const reservationSlots = await cancelReservationSlot(new mongoose.Types.ObjectId(serviceId as string), new mongoose.Types.ObjectId(slotId as string), new mongoose.Types.ObjectId(userId as string));
         return res.status(200).json({success: true,  data: reservationSlots});
     }
     catch (error) {

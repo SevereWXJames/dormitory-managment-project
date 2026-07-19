@@ -1,6 +1,7 @@
 import express, {type Request, type Response} from "express";
 import {getCreditBalanceByUserId, getTransactionHistoryByUserId} from "../services/creditServices.ts";
 import {getAllNotices, getNoticesForUserId} from "../services/noticeServices.ts";
+import mongoose from "mongoose";
 
 const noticeRouter = express.Router();
 
@@ -20,7 +21,7 @@ noticeRouter.get("/get-for-user/:userId", async (req: Request, res: Response)=> 
     }
 
     try {
-        const notices = await getNoticesForUserId(req.params.userId as string);
+        const notices = await getNoticesForUserId(new mongoose.Types.ObjectId(req.params.userId as string));
         return res.status(200).json({success: true, data: notices});
     }
     catch (error) {
