@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 export interface IoTStatus {
+    _id: mongoose.Types.ObjectId;
     UUID: string;
-    facilityID: string;
+    facilityID: mongoose.Types.ObjectId;
     facilityName?: string;
     inUse: boolean;
     outOfService: boolean;
@@ -11,7 +12,7 @@ export interface IoTStatus {
 
 const IoTStatusSchema = new mongoose.Schema({
     facilityID: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true
     },
 

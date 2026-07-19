@@ -2,7 +2,7 @@ import {Model, Document} from "mongoose";
 import {fileURLToPath} from "url";
 import path from "path";
 import fs from "fs";
-import type {IUser} from "../models/users.model.ts";
+import {type User} from "../../dataTypes/user.ts"
 
 type TransformFn<T> = (docs: T[]) => Promise<T[]>;
 
@@ -25,7 +25,7 @@ export class BaseTable<T extends Document>{
         return JSON.parse(fs.readFileSync(relpath, 'utf8'));
     }
 
-    async seedTable(filepath: string, transformFn?: TransformFn<IUser>) {
+    async seedTable(filepath: string, transformFn?: TransformFn<User>) {
         try {
             const docs = await this.readFile(filepath)
             const transformed = transformFn ? await transformFn(docs) : docs;

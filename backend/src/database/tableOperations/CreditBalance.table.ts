@@ -1,12 +1,12 @@
 import {BaseTable} from "./Base.table.ts";
 import type {Model} from "mongoose";
 import {Types} from "mongoose"
-import {CreditBalances, type ICreditBalance} from "../models/creditBalance.model.ts";
+import {type CreditBalance, CreditBalanceModel} from "../../dataTypes/creditBalance.ts";
 
-export class CreditBalanceTable extends BaseTable<ICreditBalance> {
-    private readonly CreditBalancesModel : Model<ICreditBalance>;
+export class CreditBalanceTable extends BaseTable<CreditBalance> {
+    private readonly CreditBalancesModel : Model<CreditBalance>;
     constructor() {
-        super(CreditBalances);
+        super(CreditBalanceModel);
         this.CreditBalancesModel = super.getModel();
     }
 

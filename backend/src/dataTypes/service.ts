@@ -1,10 +1,8 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
-export type MongoId = string | mongoose.Types.ObjectId;
-
 export interface Service {
-    _id: MongoId;
+    _id: mongoose.Types.ObjectId;
     name: string;
     description: string;
     hasIoT: boolean;
@@ -15,7 +13,7 @@ export interface Service {
     reservationEndHour: number;
 }
 
-export type ServiceInput = Omit<Service, "_id"> & { _id?: MongoId };
+export type ServiceInput = Omit<Service, "_id"> & { _id?: mongoose.Types.ObjectId };
 const serviceSchema = new Schema({name: String, description: String, hasIoT: Boolean,
     IoTUUID: String, IoTType: String, reservationDurationSeconds: Number,
     reservationStartHour: Number, reservationEndHour: Number});
