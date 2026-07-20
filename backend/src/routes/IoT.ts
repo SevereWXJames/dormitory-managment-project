@@ -3,6 +3,7 @@ import {
     getEventsForLastNDays, getStatusForServiceByUUID,
     getStatusForServiceId,
 } from "../services/IoT/IoTDataServices.ts";
+import mongoose from "mongoose";
 
 const IoTRouter = express.Router();
 
@@ -13,7 +14,7 @@ IoTRouter.get("/get-status-by-id/:serviceId", async (req: Request, res: Response
         if (typeof serviceId !== "string") {
             return res.status(400).json({success: false, message: "Invalid ID."})
         }
-        const status = await getStatusForServiceId(serviceId);
+        const status = await getStatusForServiceId(new mongoose.Types.ObjectId(serviceId));
 
         if (status === null) {
             return res.status(400).json({success: false, message: "That ID matches no status."});

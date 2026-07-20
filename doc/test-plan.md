@@ -5,6 +5,8 @@
 This test plan supports the Milestone 3 submission for SmartAPT. It describes how to verify Docker deployment, frontend
 availability, backend startup, and the current state of application functionality.
 
+Compared with the Milestone 2 branch, the current branch adds more data-backed resident flows for bookings, maintenance, notices, and credits, while still leaving some notification and payment UI elements as partial or demo-only functionality.
+
 The items marked as "(M3 branch)" are new validation steps added for the M3 branch and should be prioritized when validating the admin-page changes.
 
 ## Setup
@@ -21,29 +23,83 @@ cp frontend/.env.example frontend/.env
 
 ## Manual Tests
 
+### M3 admin and documentation checks
+
+- **Admin sign-up and login flow**
+  - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
+  - Execution: Create an admin account using the admin sign-up route at /admin-signup, or use an existing admin account from the seeded sample data if available.
+  - Validation: After a successful login, the user should land on the admin dashboard and be able to access admin-only pages. A resident account should not be able to access the same admin routes.
+
+- **Unread / read notice behavior**
+  - Setup: Sign in as a resident and open the notices page.
+  - Execution: Open a notice that is marked unread and confirm that it can be marked as read.
+  - Validation: The notice state updates correctly and remains reflected in the resident view after refresh.
+
+- **Admin maintenance request triage**
+  - Setup: Sign in as an admin and ensure at least one maintenance request exists.
+  - Execution: Open the maintenance page and update the status of an existing request.
+  - Validation: The updated status is displayed in the admin view and remains after refresh.
+
+### Resident-side checks (non-admin)
+
+- **Resident sign-in and dashboard**
+  - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
+  - Execution: Sign in with a resident account and confirm that the resident dashboard loads.
+  - Validation: The dashboard should show resident-relevant sections such as bookings, notices, maintenance, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
+
+- **Resident facility booking**
+  - Setup: Sign in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input 5 credits in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
+  - Execution: Open a machine, choose a time slot, and submit a booking.
+  - Validation: The booking should appear in the resident booking list or related view. If it fails, verify whether the issue is a real backend problem or a known placeholder flow.
+
+- **Resident maintenance submission**
+  - Setup: Sign in as a resident and open the maintenance page.
+  - Execution: Submit a maintenance request with a category, description, and priority.
+  - Validation: The request should be accepted by the app and appear in the resident/manager workflow. The UI should not be treated as fully complete if the request is only locally displayed.
+
+- **Resident notices and read-state**
+  - Setup: Sign in as a resident and open the notices page.
+  - Execution: Open a notice and confirm that it appears in the resident notice list.
+  - Validation: The notice content should be visible and the resident view should update after refresh. Full notification delivery and automatic unread/alert behavior remain partial and should not be treated as a complete feature.
+
+- **Credits / balance**
+  - Setup: Sign in as a resident and open the credits page.
+  - Execution: Review the balance and transaction history, then attempt a credit top-up using the mock form.
+  - Validation: The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout.
+
+- **Settings / profile**
+  - Setup: Sign in as a resident and open the settings page.
+  - Execution: Review the account/profile information and notification-related controls.
+  - Validation: Information should display correctly, but notification switches should be treated as UI-only until persistence is implemented.
+
+### Non-admin features that are still not fully testable
+
+The following frontend elements are visible in the current branch but should not be treated as complete, production-ready features:
+- Notification center and push notifications: the UI exposes notification-related concepts, but there is no real inbox, delivery mechanism, or persisted notification state.
+- Notification preference toggles: visual switches are present, but changing them does not currently persist or affect real notification behavior.
+- Payment checkout: the credits form exists, but it is still a mock/demo flow and should not be tested as a live payment integration.
+- Static dashboard/help/demo content: some cards and helper copy are present for orientation but are not backed by full product logic.
+
 ### Deployment and smoke tests
 
 #### 1. Docker deployment
 
-Steps:
+Step:
 
-1. Open a terminal and change to the frontend folder:
-
-```bash
-cd frontend
-```
-
-2. Start the containers:
-
+1. Start the containers:
 ```bash
 docker compose up --build
 ```
 
 3. Verify the Docker Compose start process finishes without errors.
 4. Confirm the following containers are running:
+```bash
+docker compose ps
+```
     - frontend
     - backend
     - mongo
+    - mosquitto
 
 Expected result:
 
@@ -99,7 +155,7 @@ Expected result:
 
 - **Admin notices / announcements management**
     - Setup: Sign in as an admin and open the notices page.
-    - Execution: Create a new notice, edit an existing notice, and remove a notice.
+    - Execution: Create a new notice, edit an existing notice, remove a notice, and verify the unread/read state for residents.
     - Validation: Each action updates the list correctly and the changes are visible to the resident view after refresh.
 
 - **Admin residents / facility management**
@@ -139,14 +195,10 @@ Expected result:
     - Test case 3: Login function as an admin
         1) Setup: Open the login page.
         2) Execution:
-            - Enter a valid username (for M2, any username is valid)
-            - Enter an e-mail and ensure that it contains the word "admin" (For M2, any input is valid so long as it
-              contains "admin")
-            - Enter password combination (for M2, any username and password combination is valid) in their respective
-              fields,
-            - Press the “Log in” button twice.
-        3) Validation: The user should be navigated to the admin dashboard page on the second click (This is a known bug
-           issue and we will fix it).
+            - Use a valid admin account created through the admin sign-up flow, or a seeded admin account available in the local environment.
+            - Enter the correct username, email, and password for that admin account.
+            - Press the “Log in” button.
+        3) Validation: The user should be navigated to the admin dashboard page and should be able to access admin-only screens such as the maintenance or notices pages.
 - **Settings**
   - Test case 1: Viewing user information as a Resident:
     1) Setup: Follow the instructions to log in as a Resident as detailed in Test case 2 for the Login page.
@@ -169,40 +221,31 @@ Expected result:
             - Log in as a valid resident.
             - Navigate to the "Credits" page
             - Follow the instructions detailed in the test plans for "Credits page" and ensure the balance has at least
-              1 dollar worth of credits. (For M2, 1 credit costs $0.01, and booking a slot costs 100 credits or $1)
+              1 dollar worth of credits. (For M3, 1 credit costs $0.01, and booking a slot costs 5 credits)
             - Navigate to the “Facilities” page.
-            - There are two ways to access the input form:
-                - a) Using the submission form under "Make a booking"
-                - b) Selecting a machine option from the list on the upper left. This should open a dialog window. Scroll down and you should see the input form.
-            - For either method, select an option for each of the input fields and write an event name.
-        2) Execution: Press the “Submit” button.
+            - Select a machine that you wish to book. 
+            - A modal window should open with a list of times.
+            - Select the time you can pick. 
+        2) Execution: Press the “Confirm” button.
         3) Validation:
-            - The table under "Recent Bookings" should have a single row containing following information about the
-              booking the user has inputted.
-            - Navigate to the "Credits" page. The credit balance should now be at 0.
+            - A notification window should pop up, stating the success of the action. 
+            - Clicking on the same machine option again, the time slot selected should be disabled.
+            - The table under "Recent Bookings" should have a single row containing following information about the booking the user has inputted.
+            - The credit balance on the facilities booking page should have 5 credits deducted.
             - Navigate to the "Dashboard" page. The table under "Recent Bookings" should have a single row containing following information about the
               booking the user has inputted.
 
-    - Test case 3: Viewing booked slots through the calendar.
-        1) Setup:
-            - Select the machine you wish to book a slot from the list of options from the left.
-            - Verify that the calendar is empty.
-            - Follow the instructions in test case 2. Ensure that no conflicting bookings have been made.
-        2) Execution: Click the corresponding machine booked from the list of options from the left.
-        3) Validation:
-            - A dialog window should open, displaying a calendar with a booked slot.
-            - The slot should be titled the event name you chose.
-            - The slot should be located in the same date and time you chose.
-            - The duration of the booking should be 1 hour.
-    - Test case 4: Removing a booked slot.
+    - Test case 3: Removing a booked slot.
         1) Setup:
             - Follow the instructions detailed in Test case 2.
             - Ensure that you have made at least 1 booking confirmed by the "Recent Bookings" table.
         2) Execution:
-           - Below "Cancel Booking", click on the button called "Cancel booking".
-           - Select an event you wish to remove from the drop-down menu.
+           - In the table 'Upcoming bookings' on the far right on the row should be '...' button.
+           - Click on the button and click 'delete'
         3) Validation:
-           - The event should be removed from the "Recent Bookings" table. (For M2, bookings are non-refundable)
+           - The event should be removed from the "Recent Bookings" table.
+           - The slot should now be available to book once clicking on the same machine option again.
+           - The balance should be refunded with 5 credits.
     - Test case 5: Viewing the status of machines.
         1) Setup: Log in as a valid resident, then navigate to the “Facilities” page.
         2) Execution:
@@ -211,24 +254,6 @@ Expected result:
             - Click the Submit button below
         3) Validation:
             - A dialog window should pop up, stating that at the moment the machine is "idle" (For M2, responses are hardcoded)
-- **Shared facilities page, building manager view:**
-    - Test case 1: UI elements
-        1) Setup: None
-        2) Execution: Log in as a valid building manager, then navigate to the “Facilities” page.
-        3) Validation: There is a list of named items corresponding to each shared facility with an indication of
-           current availability, and buttons to add, edit and remove facilities. Each item has a checkbox to select it.
-    - Test case 2: “Add Device” form
-        1) Setup: Log in as a valid building manager, then navigate to the “Facilities” page.
-        2) Execution: Press the “Add Device” button
-        3) Validation: The add button opens a form with the fields “name” (text input) and “type” (dropdown menu).
-           Pressing “confirm changes” adds a new item to the list.
-    - Test case 3: “Edit Device”
-        1) Setup: Log in as a valid building manager, then navigate to the “Facilities” page.
-        2) Execution: Press the “Edit” button in a listed device.
-        3) Validation: The edit button opens a form with the fields “name” (text input) and “type” (dropdown menu) and
-           an “available” checkbox. Pressing “confirm changes” with the “available” checkbox ticked lists the item as
-           available, and without the checkbox ticked the item is listed as unavailable but is still present in the
-           list. Pressing the “Remove” button removes the device from the list.
 - **Credits page, resident view:**
     - Test case 1: UI elements
         1) Setup: None.
@@ -430,6 +455,68 @@ Expected result:
      1) Setup: Insert a facility item "Laundry Machine Alpha". Inject 3 active future reservation documents into the bookings collection linked to this facility ID.
      2) Execution: Authenticate as an Admin and trigger the deletion endpoint for "Laundry Machine Alpha".
      3) Validation: Query the database collections. Assert that the facility document is expunged from the facilities collection, AND assert that an empty array is returned when querying the bookings collection for that removed facility ID.
+
+## Manual IoT Tests
+
+### M3 Manual IoT Tests
+
+**Background**
+
+To run IoT tests start app with `docker compose up --build` in the root folder.
+
+IoT requires the use of the `mqtt-test-app`.
+This a separate app that is meant to simulate the functionality of an IoT device sending our app updates.
+To run this app:
+
+1. Install NodeJS and NPM
+2. Navigate to the `mqtt-test-app` folder.
+3. Run `npm install`
+4. Follow the instructions in `mqtt-test-app.md`. Example command for running a series of messages in the `data/data.json` file: `node mqtt-test-app.js -f`.
+
+If the following instructions above fail, try running `docker compose up --build` in the `mqtt-test-app` folder.
+This will read from the `data.json` file and execute the test app as if it is manually running the command `node mqtt-test-app.js -f`.
+
+- **Machine Status Update Capabilities Tests**
+  - Test that machines can be set to be in use. (Test 1)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "In use" is **false**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test1data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal. 
+    8. Confirm that the status value "In use" is **true**.
+
+  - Test that machines can be set to no longer be in use. (Test 2)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "In use" is **true**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test2data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal.
+    8. Confirm that the status value "In use" is **false**.
+
+  - Test that machines can be set to be out of service. (Test 3)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "Out of service" is **false**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test3data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal.
+    8. Confirm that the status value "Out of service" is **true**.
+
+  - Test that machines can be set to be no longer out of service. (Test 4)
+    1. Confirm the app is running.
+    2. Open the facilities page as a resident user.
+    3. Navigate to "Washing Machine 1" and modal by clicking on it.
+    4. Confirm that the status value "Out of service" is **true**.
+    5. Copy the contents of `mqtt-test-app/data/testData/test4data.json` into `mqtt-test-app/data/data.json`.
+    6. Run the MQTT test app using the instructions above.
+    7. Close and then reopen the "Washing Machine 1" modal.
+    8. Confirm that the status value "Out of service" is **false**.
+
 
 ## Bugs
 

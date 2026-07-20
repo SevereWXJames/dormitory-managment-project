@@ -17,10 +17,11 @@ residents and building managers. The goal is to let residents book shared
 facilities, submit maintenance requests, view building notices, and manage
 facility status data in one place.
 
-## Milestone 2 Branch
+## Milestone 3 Branch
 
-- Branch: `Milestone2` (or the submitted branch link for this milestone)
-- This README documents the Milestone 2 submission state and Docker deployment.
+- Branch: `Milestone3` (or the submitted branch link for this milestone)
+- This README documents the Milestone 3 submission state and Docker deployment.
+- The Milestone 2 section below remains for comparison with prior-stage functionality.
 
 ## Docker Instructions
 
@@ -29,8 +30,6 @@ This project is deployable with Docker Desktop using the root `docker-compose.ym
 ### Required setup (Docker instructions)
 
 1. In the repository root, place the actual `.env` file provided by Canvas.
-2. Do not commit the real `.env` file to GitHub.
-3. The frontend uses `frontend/.env.example` only as a local development reference. The frontend container build generates its own `frontend/.env` from the `VITE_API_URL` build argument.
 
 ### Build and run
 
@@ -40,6 +39,13 @@ From the repository root:
 docker compose up --build
 ```
 
+Use the same command again after a code change to rebuild the containers. 
+To stop and remove the running containers:
+
+```bash
+docker compose down
+```
+
 ### App URLs
 
 - Frontend: http://localhost:5173
@@ -47,6 +53,17 @@ docker compose up --build
 - MongoDB: localhost:27017
 
 > **Important:** Do not store `.env` in GitHub. Only `.env.example` is tracked in this repo.
+
+### Admin access and testing
+
+The current M3 branch includes protected admin routes for the building-manager experience. To test the admin experience:
+
+1. Open the app at http://localhost:5173 and navigate to the login page.
+2. Create an admin account through the admin sign-up flow at /admin-signup, or use an existing admin account from the seeded sample data if your local environment includes it.
+3. After login, the app should route an admin user to the admin dashboard at /admin/dashboard.
+4. If you want to confirm access control, sign in as a resident user and verify that admin-only routes are blocked.
+
+> The current admin experience is role-based. The app should not rely on the email containing the word "admin" to grant access.
 
 ## Milestone 2 Functionality
 
@@ -88,12 +105,65 @@ To evaluate the prototype operations post-Docker startup, follow these interface
 
 ---
 
+## Milestone 3 Functionality
+
+This milestone documents the near-submittable Milestone 3 branch state. It builds on the Milestone 2 prototype by adding a building manager admin console, improved role-based auth, and richer manager/resident workflows.
+
+### Feature Breakdown & Implementation Status
+
+| Feature Name & Scope | Feature Type | Status in M3 | Description |
+| :--- | :--- | :--- | :--- |
+| **Admin Management Console** | Non-Trivial | **Partially implemented** | Protected admin routes and manager-facing pages are present for dashboard, facilities, maintenance, notices, residents, access codes, settings, and help. Some screens are still UI-focused and should be treated as M3 work-in-progress. |
+| **Resident Role Dashboard** | Standard | **Implemented** | Resident-facing pages for bookings, maintenance requests, notices, credits, settings, and help are available. |
+| **Role-Based Authentication / Authorization** | Standard | **Implemented** | Login, admin signup, protected routes, and role validation are wired through JWT-based auth middleware. |
+| **Facility & Booking Management** | Standard | **Partially implemented** | Resident booking flows and admin facility views exist, but some interaction details and management workflows are still being refined. |
+| **Maintenance Request Triage** | Standard | **Implemented** | Residents can submit requests and managers can review/update request status. |
+| **Notice / Announcement Management** | Standard | **Partially implemented** | Manager notice pages and resident notice views exist; unread/read behavior should be verified manually during review. |
+| **Backend / Docker Stability** | Standard | **Implemented** | Docker Compose runs MongoDB, backend, frontend, and MQTT infrastructure reliably for local development. |
+
+## Resident-facing changes in Milestone3 branch
+
+Compared with the Milestone 2 branch, the current branch is less demo-like and more data-driven for resident workflows. The main differences are:
+- Resident login and route handling now follow the same role-aware flow as the rest of the app, rather than relying on a single generic landing page.
+- Facility booking, maintenance submission, and notice viewing are now backed by the shared backend and sample data, so they can be exercised in a more realistic local flow.
+- The credits page now exposes balance and history information in a more structured way, although the checkout experience is still a mock/demo flow rather than a real payment integration.
+- The resident settings area now includes account/profile and notification-related sections, but the notification controls remain visual placeholders rather than persisted preferences.
+
+### Non-admin feature status and limitations 
+
+The following parts are visible in the frontend but should not be treated as fully implemented product features yet:
+- Notification center and push notification behavior: the UI can show notification-related elements, but there is no real inbox, delivery pipeline, or persistent notification state.
+- Notice read/unread flow: the resident notices page is available, but the read-state behaviour and follow-up alerts are still limited and should be tested as a partial workflow rather than a complete notification system.
+- Credit checkout and payment processing: the form is present and can be exercised locally, but it is still a mock/demo flow and should not be validated as a live payment integration.
+- Some dashboard cards, help text, and settings panels are still static or demo-oriented and should be considered UI placeholders until they are backed by real data or persistence.
+
+### How to verify Milestone 3 functionality
+
+#### Residents:
+1. Start the stack with `docker compose up --build` and open `http://localhost:5173`.
+2. Create an account by clicking on the sign-up link for residents located below the login-form. 
+3. Enter appropriate values in the fields and click the sign-up button.
+4. To log in back to your newly create account, use the same username, email, and password that you chose to create the account. 
+5. After signing up for the first time or after logging back in, verify the resident dashboard pages for bookings, maintenance, notices, credits, and account settings. Keep in mind that notification-related widgets and any static help/demo content are not yet full features.
+
+#### Admin:
+1. Create a new account by clicking on the sign-up link for admins located below the login-form.
+2. Similarly, enter appropriate values in the fields and click on the sing-up button. Ensure that the email and the username are different than the one you used to sign-in as a Resident.
+3. After signing up as an admin and verify the admin dashboard, facilities, maintenance, notices, residents, access codes, and settings pages.
+4. After creating an adnin account, you can continue to log back in as an admin using the login form.
+
+5. Verify that notice visibility, request status updates, and resident/admin navigation work as expected in the running app.
+
+6. To confirm that role authorization and authentication are working as intended, you can try copying one of the page URIs specific to the admin interface. Then log out and or log back in as a resident and copy and paste the uri link in the address bar.
+
 ## Standard Features (Design Alignment)
 
-In alignment with our Milestone 1 Design Specification, this submission fulfills the following structural deliverables:
-* **Decoupled Service Architecture:** Complete programmatic separation of front-end client components and back-end RESTful API routers.
-* **Persistent Document Storage:** Integration of official MongoDB images ensuring data mutations (bookings, notice posts, user credentials) survive container lifecycles.
-* **Environment Sandboxing:** Strict environment decoupling via `.env.example` configurations, keeping sensitive parameters out of source control.
+In alignment with the Milestone 1 design and the current M3 state, the submission includes the following structural deliverables:
+* **Decoupled Service Architecture:** Front-end pages and back-end routers are separated into distinct application layers.
+* **Persistent Document Storage:** MongoDB-backed collections store bookings, notices, maintenance requests, and user-related data for local development and testing.
+* **Environment Sandboxing:** `.env.example` is available as a template, while the real environment file stays private and out of source control.
+* **Role-Based Access Control:** Resident and admin users are routed through protected pages and role-aware middleware.
+* **Payment / Credit Flow:** The current implementation includes a mock-style credits flow for demo purposes; it does not yet integrate a production payment provider.
 
 ## Test Plan
 

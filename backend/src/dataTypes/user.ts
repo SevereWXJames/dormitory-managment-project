@@ -1,32 +1,72 @@
-import mongoose, {Schema} from "mongoose";
-import type {CollectionName} from "../database/databaseConstants.ts";
-import {Users} from "../database/models/users.model.ts";
-import {Residents} from "../database/models/residents.model.ts";
+import mongoose, {Document, Schema, Types} from "mongoose";
+import type {Role} from "../database/types/user.service.types.ts";
 
-export type MongoId = string | mongoose.Types.ObjectId;
-
-export interface User {
-    _id: MongoId;
-    username: string;
-    email: string;
-    phoneNumber: string;
-    roles: string[];
+export interface User extends Document{
+    _id: Types.ObjectId;
+    name: string,
+    username: string,
+    email: string,
+    phoneNumber: string,
+    password: string,
+    roles: Role[],
 }
 
-export type UserInput = Omit<User, "_id"> & { _id?: MongoId };
+export type UserInput = Omit<User, "_id"> & { _id?: mongoose.Types.ObjectId };
 
-// const userSchema = new Schema({username: String, email: String, phoneNumber: String, roles: Array});
-// export const UserModel = mongoose.model("Users"  as CollectionName, userSchema, "Users"  as CollectionName);
-export const UserModel = Users;
+const UsersSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, "Please enter a name"],
+    },
+    username: {
+        type: String,
+        required: [true, "Please enter a username"],
+    },
+    email: {
+        type: String,
+        required: [true, "Please enter an email"],
+        unique: true
+    },
+    phoneNumber: {
+        type: String,
+        required: false,
+        unique: false,
+    },
+    roles: {
+        type: Array<Role>,
+        required: [true, "Please enter a role"],
+        default: null
+    },
+    password: {
+        type: String,
+        required: [true, "Please enter a password"]
+    },
+});
 
-export interface Resident {
-    _id: MongoId;
-    userId: string;
-    roomId: string;
+export const UserModel = mongoose.model<User>("Users", UsersSchema, "Users");
+
+export interface Resident extends Document{
+    _id: mongoose.Types.ObjectId;
+    userId: mongoose.Types.ObjectId;
+    roomId: mongoose.Types.ObjectId | null;
 }
 
-export type ResidentInput = Omit<Resident, "_id"> & { _id?: MongoId };
+export type ResidentInput = Omit<Resident, "_id"> & { _id?: mongoose.Types.ObjectId };
 
-const residentSchema = new Schema({_id: String, userId: String, roomId: String});
-//export const ResidentModel = mongoose.model("Residents"  as CollectionName, residentSchema, "Residents"  as CollectionName);
-export const ResidentModel = Residents;
+const ResidentSchema = new Schema({
+    userId: {
+        type: Types.ObjectId,
+        ref: 'Users',
+        unique: true,
+        required: [true, "Please enter a userId"],
+    },
+
+    roomId: {
+        type: Types.ObjectId,
+        required: false,
+        default: null,
+        unique: false,
+    }
+});
+
+export const ResidentModel = mongoose.model<Resident>("Residents", ResidentSchema, "Residents");

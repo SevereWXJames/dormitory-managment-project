@@ -1,5 +1,6 @@
 import express, {type Request, type Response} from "express";
 import {addCredits, getCreditBalanceByUserId, getTransactionHistoryByUserId} from "../services/creditServices.ts";
+import mongoose from "mongoose";
 
 const creditRouter = express.Router();
 
@@ -9,7 +10,7 @@ creditRouter.get("/get-for-user/:userId", async (req: Request, res: Response)=> 
     }
 
     try {
-        const balance = await getCreditBalanceByUserId(req.params.userId as string);
+        const balance = await getCreditBalanceByUserId(new mongoose.Types.ObjectId(req.params.userId as string));
         if (balance === undefined) {
             return res.status(400).json({success: false, message: "Provided ID matches no status."});
         }
@@ -26,7 +27,7 @@ creditRouter.get("/get-transaction-history/:userId", async (req: Request, res: R
     }
 
     try {
-        const transactions = await getTransactionHistoryByUserId(req.params.userId as string);
+        const transactions = await getTransactionHistoryByUserId(new mongoose.Types.ObjectId(req.params.userId as string));
         return res.status(200).json({success: true, data: transactions});
     }
     catch (error) {
@@ -45,7 +46,7 @@ creditRouter.put("/add-credits/:userId", async (req: Request, res: Response) => 
         if (amount === undefined) {
             return res.status(400).json({success: false, message: "No amount passed."});
         }
-        await addCredits(userId as string, amount);
+        await addCredits(new mongoose.Types.ObjectId(userId as string), amount);
         return res.status(200).json({success: true});
     } catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});

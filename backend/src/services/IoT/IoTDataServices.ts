@@ -1,7 +1,8 @@
 import {type IoTStatus, IoTStatusModel} from "../../dataTypes/IoT/IoTStatus.ts";
 import {type IoTEvent, IoTEventModel} from "../../dataTypes/IoT/IoTEvent.ts";
+import mongoose from "mongoose";
 
-export async function getStatusForServiceId(serviceId: string): Promise<IoTStatus> {
+export async function getStatusForServiceId(serviceId: mongoose.Types.ObjectId): Promise<IoTStatus> {
     const status = await IoTStatusModel.findOne({facilityID: serviceId}).lean().exec();
     return status as IoTStatus;
 }

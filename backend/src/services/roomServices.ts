@@ -1,5 +1,6 @@
 import {type Room, RoomModel} from "../dataTypes/room.ts";
 import {type Resident, ResidentModel} from "../dataTypes/user.ts";
+import mongoose from "mongoose";
 
 export async function getAllRooms(): Promise<Room[]> {
     const cursor = RoomModel.find({ }).lean();
@@ -18,7 +19,7 @@ export async function getAllRooms(): Promise<Room[]> {
     return Promise.resolve(results);
 }
 
-export async function getRoomById(_id: string): Promise<Room | undefined> {
+export async function getRoomById(_id: mongoose.Types.ObjectId): Promise<Room | undefined> {
     return RoomModel.findOne({_id: _id}).lean().exec()
         .then((result) => {
             if (result != null) {
@@ -31,7 +32,7 @@ export async function getRoomById(_id: string): Promise<Room | undefined> {
         });
 }
 
-export async function getRoomByUserId(_id: string): Promise<Room | undefined> {
+export async function getRoomByUserId(_id: mongoose.Types.ObjectId): Promise<Room | undefined> {
     const resident = await getResidentByUserId(_id);
     
     if (resident === undefined) {
@@ -67,7 +68,7 @@ export async function getAllResidents(): Promise<Resident[]> {
     return Promise.resolve(results);
 }
 
-export async function getResidentByUserId(userId: string): Promise<Resident | undefined> {
+export async function getResidentByUserId(userId: mongoose.Types.ObjectId): Promise<Resident | undefined> {
     return ResidentModel.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {

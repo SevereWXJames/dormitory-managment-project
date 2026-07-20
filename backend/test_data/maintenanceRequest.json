@@ -1,7 +1,7 @@
 {
   "maintenanceRequests": [
     {
-      "createdBy": "user0",
+      "createdBy": "507f191e810c19729de860ea",
       "title": "title1",
       "description": "description description description",
       "type": "plumbing",
@@ -10,7 +10,7 @@
       "location": null
     },
     {
-      "createdBy": "user0",
+      "createdBy": "507f191e810c19729de860ea",
       "title": "title2",
       "description": "description description description",
       "type": "electrical",
@@ -19,7 +19,7 @@
       "location": "Bedroom"
     },
     {
-      "createdBy": "user1",
+      "createdBy": "507f191e810c19729de860eb",
       "title": "title3",
       "description": "description description description",
       "type": "misc",

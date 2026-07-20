@@ -1,5 +1,6 @@
 import express, {type Request, type Response} from "express";
 import {getAllServices, getServiceById} from "../services/serviceServices.ts";
+import mongoose from "mongoose";
 
 const servicesRouter = express.Router();
 
@@ -18,7 +19,7 @@ servicesRouter.get("/get-by-id/:serviceId", async (req: Request, res: Response)=
     }
 
     try {
-        const service = await getServiceById(req.params.serviceId as string);
+        const service = await getServiceById(new mongoose.Types.ObjectId(req.params.serviceId as string));
         if (service === undefined) {
             return res.status(400).json({success: false, message: "Provided ID matches no service."});
         }

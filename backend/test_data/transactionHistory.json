@@ -1,19 +1,16 @@
 {
   "transactions": [
     {
-      "_id": "transaction0",
       "userId": "507f191e810c19729de860ea",
       "description": "test",
       "transaction": 100
     },
     {
-      "_id": "transaction1",
       "userId": "507f191e810c19729de860eb",
       "description": "test",
       "transaction": 200
     },
     {
-      "_id": "transaction2",
       "userId": "507f191e810c19729de860ec",
       "description": "test",
       "transaction": 300

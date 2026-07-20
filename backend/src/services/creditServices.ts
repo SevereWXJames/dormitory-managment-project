@@ -4,8 +4,9 @@ import {
     type Transaction,
     TransactionModel
 } from "../dataTypes/creditBalance.ts";
+import mongoose from "mongoose";
 
-export async function getCreditBalanceByUserId(userId: string): Promise<CreditBalance | undefined> {
+export async function getCreditBalanceByUserId(userId: mongoose.Types.ObjectId): Promise<CreditBalance | undefined> {
     return CreditBalanceModel.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {
@@ -18,7 +19,7 @@ export async function getCreditBalanceByUserId(userId: string): Promise<CreditBa
         });
 }
 
-export async function getTransactionHistoryByUserId(userId: string): Promise<Transaction[]> {
+export async function getTransactionHistoryByUserId(userId: mongoose.Types.ObjectId): Promise<Transaction[]> {
     const cursor = TransactionModel.find({userId: userId}).lean();
     const results: Transaction[] = [];
 
@@ -35,7 +36,7 @@ export async function getTransactionHistoryByUserId(userId: string): Promise<Tra
     return Promise.resolve(results);
 }
 
-export async function addCredits(userId: string, creditsCents: number): Promise<void> {
+export async function addCredits(userId: mongoose.Types.ObjectId, creditsCents: number): Promise<void> {
     return CreditBalanceModel.findOne({userId: userId}).lean().then(async (result) => {
         if (result == null) {
             return Promise.reject(new Error("userId not found."));

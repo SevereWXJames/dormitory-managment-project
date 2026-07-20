@@ -1,18 +1,15 @@
 {
   "residents": [
     {
-      "_id": "resident0",
-      "userId": "user0",
+      "userId": "507f191e810c19729de860ea",
       "roomId": "507f1f77bcf86cd799439011"
     },
     {
-      "_id": "resident1",
-      "userId": "user1",
+      "userId": "507f191e810c19729de860eb",
       "roomId": "507f1f77bcf86cd799439011"
     },
     {
-      "_id": "resident2",
-      "userId": "user2",
+      "userId": "507f191e810c19729de860ec",
       "roomId": "507f1f77bcf86cd799439012"
     }
   ]
