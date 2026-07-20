@@ -62,7 +62,7 @@ const ResidentSchema = new Schema({
     },
 
     roomId: {
-        type: String,
+        type: Types.ObjectId,
         required: false,
         default: null,
         unique: false,
