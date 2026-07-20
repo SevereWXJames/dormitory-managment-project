@@ -3,10 +3,11 @@ import chaiHttp from "chai-http";
 import {after, afterEach, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
-import {Users} from "../../src/database/models/users.model.ts";
+import {UserModel} from "../../src/dataTypes/user.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
+const Users = UserModel;
 
 describe('POST /login', () => {
     before(async () => {

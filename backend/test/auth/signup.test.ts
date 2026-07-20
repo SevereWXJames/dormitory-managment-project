@@ -5,12 +5,13 @@ import {assert} from "chai";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 import {ResidentModel} from "../../src/dataTypes/user.ts";
-import {Users} from "../../src/database/models/users.model.ts";
+import {UserModel} from "../../src/dataTypes/user.ts";
 import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
 
 
 const chaiWithHttp = chai.use(chaiHttp);
 const { expect } = chai;
+const Users = UserModel;
 
 describe('POST /signup', () => {
     before(async () => {

@@ -7,11 +7,12 @@ import loadSampleData from "../../src/database/loadDatabase.ts";
 import {Types} from "mongoose";
 import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalance.table.ts";
 import {BOOKING_COST} from "../../src/utility/pricesForBookings.ts";
-import {CreditBalances} from "../../src/database/models/creditBalance.model.ts";
+import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
 import {ReservationSlotModel} from "../../src/dataTypes/reservationSlot.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
+const CreditBalances = CreditBalanceModel;
 
 describe('FACILITY BOOKING SERVICES', () => {
     before(async () => {
@@ -161,6 +162,7 @@ describe('FACILITY BOOKING SERVICES', () => {
                 .set('Cookie', `${testJwt}`)
                 .send();
             const slots = slotsRes.body.data;
+            console.log(`slots: ${JSON.stringify(slotsRes.body)}`);
             const slotId = slots[0]._id;
 
             const res = await chaiWithHttp.request.execute(app)
@@ -255,6 +257,7 @@ describe('FACILITY BOOKING SERVICES', () => {
                 .set('Cookie', `${testJwt}`)
                 .send();
             const slots = slotsRes.body.data;
+            console.log(`slots: ${JSON.stringify(slots)}`);
             const slotId = slots[0]._id;
 
             const balanceTable = new CreditBalanceTable();
