@@ -8,13 +8,11 @@ type ApiError = { status: number; message: string };
 
 const rawBaseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
+    credentials: "include",
 });
 
-export const apiBaseQuery: BaseQueryFn<
-    { url: string; method?: string; body?: unknown },
-    unknown,
-    ApiError
-> = async (args, api, extraOptions) => {
+export const apiBaseQuery: BaseQueryFn<{ url: string; method?: string; body?: unknown }, unknown, ApiError> =
+    async (args, api, extraOptions) => {
     const result = await rawBaseQuery(args, api, extraOptions);
 
     if (result.error) {

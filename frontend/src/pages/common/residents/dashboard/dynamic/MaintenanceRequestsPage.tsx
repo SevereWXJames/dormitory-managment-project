@@ -4,14 +4,17 @@ import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import { CreateMaintenanceRequestCard } from "../../../../../components/residents/maintenanceRequests/createMaintenanceRequestCard.tsx";
 import { MaintenanceRequestHistoryCard } from "../../../../../components/residents/maintenanceRequests/MaintenanceRequestHistoryCard.tsx";
 import { setMaintenanceRequests } from "../../../../../context/residents/maintenanceRequestsSlice.ts";
-import {useMaintenanceRequestData} from "@/pages/common/residents/pageHooks/useMaintenanceRequestData.tsx";
+import { useMaintenanceRequestData } from "@/pages/common/residents/pageHooks/useMaintenanceRequestData.tsx";
+import { useEffect } from "react";
 
 export function MaintenanceRequestsPage() {
     const dispatch = useDispatch();
     const {requests, isLoading, isError, error} = useMaintenanceRequestData();
-    if(!isLoading && !isError && requests){
-        dispatch(setMaintenanceRequests(requests));
-    }
+    useEffect(() => {
+        if (!isLoading && !isError && requests){
+            dispatch(setMaintenanceRequests(requests));
+        }
+    }, [requests, isLoading, isError]);
 
     return (
         <>

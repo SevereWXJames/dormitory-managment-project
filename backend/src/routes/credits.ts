@@ -1,5 +1,5 @@
 import express, {type Request, type Response} from "express";
-import {getCreditBalanceByUserId, getTransactionHistoryByUserId} from "../services/creditServices.ts";
+import {addCredits, getCreditBalanceByUserId, getTransactionHistoryByUserId} from "../services/creditServices.ts";
 
 const creditRouter = express.Router();
 
@@ -30,6 +30,24 @@ creditRouter.get("/get-transaction-history/:userId", async (req: Request, res: R
         return res.status(200).json({success: true, data: transactions});
     }
     catch (error) {
+        return res.status(500).json({success: false, message: "Internal server error."});
+    }
+});
+
+creditRouter.put("/add-credits/:userId", async (req: Request, res: Response) => {
+    if (req.params.userId === undefined) {
+        return res.status(400).json({success: false, message: "No ID provided."});
+    }
+
+    try {
+        const {amount} = req.body;
+        const {userId} = req.params;
+        if (amount === undefined) {
+            return res.status(400).json({success: false, message: "No amount passed."});
+        }
+        await addCredits(userId as string, amount);
+        return res.status(200).json({success: true});
+    } catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
     }
 });

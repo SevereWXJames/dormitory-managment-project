@@ -1,30 +1,34 @@
 {
   "services": [
     {
-      "_id": "service0",
+      "_id": "6a52f45de9f73aca080caf85",
       "name": "Washing Machine 1",
       "description": "test",
       "hasIoT": true,
-      "IoTName": "WashingMachineType1",
+      "IoTUUID": "1586d8a9-3559-42ee-a7ed-36ee249506bb",
+      "IoTType": "washingMachine",
       "reservationDurationSeconds": 3600,
       "reservationStartHour": 8,
       "reservationEndHour": 18
     },
     {
-      "_id": "service1",
+      "_id": "6a52f45de9f73aca080caf86",
       "name": "Washing Machine 2",
       "description": "test",
       "hasIoT": true,
-      "IoTName": "WashingMachineType1",
+      "IoTUUID": "1586d8a9-3559-42ee-a7ed-36ee249506bc",
+      "IoTType": "washingMachine",
       "reservationDurationSeconds": 3600,
       "reservationStartHour": 8,
       "reservationEndHour": 18
     },
     {
-      "_id": "service2",
+      "_id": "6a52f45de9f73aca080caf87",
       "name": "Dryer 1",
       "description": "test",
-      "hasIoT": false,
+      "hasIoT": true,
+      "IoTUUID": "1586d8a9-3559-42ee-a7ed-36ee249506bd",
+      "IoTType": "dryer",
       "reservationDurationSeconds": 3600,
       "reservationStartHour": 8,
       "reservationEndHour": 18

@@ -1,17 +1,15 @@
-import { Schema } from "mongoose";
-import database from "../database/database.ts";
-import type { CollectionName } from "../database/databaseConstants.ts";
+import mongoose, {Schema} from "mongoose";
+import type {CollectionName} from "../database/databaseConstants.ts";
 
-export class Room {
-    public _id: string;
-    public roomName: string;
-    public verificationCode: string;
-    public static model = database.mongoose.model("rooms" as CollectionName,
-        new Schema({_id: String, roomName: String, verificationCode: String}));
+export type MongoId = string | mongoose.Types.ObjectId;
 
-    constructor({_id, roomName, verificationCode}: {_id: string, roomName: string, verificationCode: string}) {
-        this._id = _id;
-        this.roomName = roomName;
-        this.verificationCode = verificationCode;
-    }
+export interface Room {
+    _id: MongoId;
+    roomName: string;
+    verificationCode: string;
 }
+
+export type RoomInput = Omit<Room, "_id"> & { _id?: MongoId };
+
+const roomSchema = new Schema({roomName: String, verificationCode: String});
+export const RoomModel = mongoose.model("Rooms"  as CollectionName, roomSchema, "Rooms"  as CollectionName);

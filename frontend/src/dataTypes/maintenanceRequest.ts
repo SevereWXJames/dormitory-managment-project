@@ -42,10 +42,12 @@ export class MaintenanceRequestType {
 export class MaintenanceRequestStatus {
     public _id: string;
     public text: string;
+    public order?: number;
 
-    constructor({_id, text}: { _id: string, text: string }) {
+    constructor({_id, text, order}: { _id: string, text: string, order?: number }) {
         this._id = _id;
         this.text = text;
+        this.order = order;
     }
 }
 

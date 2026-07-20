@@ -1,13 +1,15 @@
-import creditBalanceJSON from "../../test_data/creditBalance.json" with {type: "json"};
-import transactionHistoryJSON from "../../test_data/transactionHistory.json" with {type: "json"};
-import database from "../database/database.ts";
-import {CreditBalance, Transaction} from "../dataTypes/creditBalance.ts";
+import {
+    type CreditBalance,
+    CreditBalanceModel,
+    type Transaction,
+    TransactionModel
+} from "../dataTypes/creditBalance.ts";
 
 export async function getCreditBalanceByUserId(userId: string): Promise<CreditBalance | undefined> {
-    return CreditBalance.model.findOne({userId: userId}).lean().exec()
+    return CreditBalanceModel.findOne({userId: userId}).lean().exec()
         .then((result) => {
             if (result != null) {
-                return Promise.resolve(result as CreditBalance);
+                return Promise.resolve(result as unknown as CreditBalance);
             }
             return Promise.resolve(undefined);
         })
@@ -17,7 +19,7 @@ export async function getCreditBalanceByUserId(userId: string): Promise<CreditBa
 }
 
 export async function getTransactionHistoryByUserId(userId: string): Promise<Transaction[]> {
-    const cursor = Transaction.model.find({userId: userId}).lean();
+    const cursor = TransactionModel.find({userId: userId}).lean();
     const results: Transaction[] = [];
 
     for await (const result of cursor) {
@@ -31,4 +33,22 @@ export async function getTransactionHistoryByUserId(userId: string): Promise<Tra
     }
 
     return Promise.resolve(results);
+}
+
+export async function addCredits(userId: string, creditsCents: number): Promise<void> {
+    return CreditBalanceModel.findOne({userId: userId}).lean().then(async (result) => {
+        if (result == null) {
+            return Promise.reject(new Error("userId not found."));
+        }
+        
+        const newBalance = result.balanceCents + creditsCents;
+        return Promise.all([
+            CreditBalanceModel.updateOne({userId: userId}, {$set: {balanceCents: newBalance}}),
+            TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents})
+        ]).then((result) => {
+            Promise.resolve();
+        }).catch((error) => {
+            Promise.reject(error as Error);
+        });
+    });
 }

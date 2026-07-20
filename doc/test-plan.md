@@ -1,9 +1,11 @@
-# Milestone 2 Test Plan
+# Milestone 3 Test Plan (Updated from Milestone 2 Test Plan)
 
 ## Purpose
 
-This test plan supports the Milestone 2 submission for SmartAPT. It describes how to verify Docker deployment, frontend
+This test plan supports the Milestone 3 submission for SmartAPT. It describes how to verify Docker deployment, frontend
 availability, backend startup, and the current state of application functionality.
+
+The items marked as "(M3 branch)" are new validation steps added for the M3 branch and should be prioritized when validating the admin-page changes.
 
 ## Setup
 
@@ -82,6 +84,28 @@ Expected result:
 - The real `.env` file is kept private and uploaded to Canvas as required.
 
 ## Manual Front-End Tests
+
+### M3 admin page changes (M3 branch)
+
+- **Admin access and navigation**
+    - Setup: Start the app and sign in with an admin account.
+    - Execution: Open the admin landing page / management page from the app navigation.
+    - Validation: The admin-only page is visible and accessible, and non-admin users are blocked from entering it.
+
+- **Admin maintenance request management**
+    - Setup: Sign in as an admin and ensure at least one maintenance request exists.
+    - Execution: Open the maintenance page, choose an existing request, and change its status (for example to "Contractor Requested" or "Resolved").
+    - Validation: The status update is reflected in the UI and persists after refreshing the page.
+
+- **Admin notices / announcements management**
+    - Setup: Sign in as an admin and open the notices page.
+    - Execution: Create a new notice, edit an existing notice, and remove a notice.
+    - Validation: Each action updates the list correctly and the changes are visible to the resident view after refresh.
+
+- **Admin residents / facility management**
+    - Setup: Sign in as an admin and open the relevant admin management page.
+    - Execution: Review resident/facility data and perform one add/edit/remove action if available.
+    - Validation: The admin page updates correctly and the resulting data is shown in the UI without errors.
 
 - **All pages:**
     - Test case 1: Style
@@ -296,6 +320,23 @@ Expected result:
 
 ## Manual Back-End Tests
 
+### M3 admin backend checks (M3 branch)
+
+- **Admin-only route access**
+    - Setup: Create one resident account and one admin account.
+    - Execution: Send requests to the admin-only endpoints using both accounts.
+    - Validation: The resident account is rejected with an authorization error, while the admin account is accepted.
+
+- **Maintenance request status update**
+    - Setup: Create or load a maintenance request record.
+    - Execution: Send an admin update request changing the request status to a valid value.
+    - Validation: The record is updated in MongoDB and the new status is returned by the API.
+
+- **Notice CRUD flow**
+    - Setup: Start the backend with MongoDB running.
+    - Execution: Create, update, and delete a notice via the backend routes.
+    - Validation: The notice is created, edited, and removed correctly in the database.
+
 - **All forms and lists:**
     - Test Plan 1: Adding a record to the database:
         - Description:  When a request associated with a “create” function in a form is received, then all the received
@@ -397,9 +438,14 @@ Please view them for instructions on how to reproduce them.
 
 ## Automated Tests
 
-At present, there are no automated unit or integration tests configured in this branch. The following commands can be used if tests are added later:
+Recommended M3 validation commands:
 
 ```bash
 cd frontend
+npm run build
+```
+
+```bash
+cd backend
 npm test
 ```

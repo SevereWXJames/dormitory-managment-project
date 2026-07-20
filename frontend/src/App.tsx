@@ -18,6 +18,13 @@ import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPag
 import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
 import {AdminAccessCodesPage} from "./pages/common/buildingManager/AdminAccessCodesPage.tsx";
 import CssBaseline from "@mui/material/CssBaseline";
+import {ResidentSignUpPage} from "@/pages/common/residents/ResidentSignUpPage.tsx";
+import {AdminSignUpPage} from "@/pages/common/buildingManager/AdminSignUpPage.tsx";
+import {UnauthorizedPage} from "@/pages/UnauthorizedPage.tsx";
+import {ProtectedRoute} from "@/components/common/Auth/ProtectedRoute.tsx";
+import {Role} from "@/dataTypes/user.ts";
+import {Toaster} from "@/components/ui/sonner.tsx";
+
 /**
  * App React component, containing routes to other pages.
  *
@@ -26,30 +33,99 @@ import CssBaseline from "@mui/material/CssBaseline";
 function App() {
     return (
         <>
-            <CssBaseline />
+            <CssBaseline/>
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
-                    {/* Resident-only: */}
                     <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/dashboard" element={<DashboardPage/>}/>
-                    <Route path="/facilities" element={<LaundryBookingsPage/>}/>
-                    <Route path="/maintenance" element={<MaintenanceRequestsPage/>}/>
-                    <Route path="/help" element={<HelpPage/>}/>
-                    <Route path="/notices" element={<NoticesPage/>}/>
-                    <Route path="/credits" element={<CreditsPage/>}/>
-                    <Route path="/settings" element={<SettingsPage/>}/>
+                    <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
+
+                    {/* Resident-only: */}
+                    <Route path="/resident-signup" element={<ResidentSignUpPage/>}/>
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <Toaster/>
+                            <DashboardPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/facilities" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <LaundryBookingsPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/maintenance" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <MaintenanceRequestsPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/help" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <HelpPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/notices" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <NoticesPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/credits" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <CreditsPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/settings" element={
+                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                            <SettingsPage/>
+                        </ProtectedRoute>
+                    }/>
 
                     {/* Building manager routes */}
-                    <Route path="/admin" element={<AdminDashboardPage/>}/>
-                    <Route path="/admin/dashboard" element={<AdminDashboardPage/>}/>
-                    <Route path="/admin/facilities" element={<AdminFacilitiesPage/>}/>
-                    <Route path="/admin/maintenance" element={<AdminMaintenancePage/>}/>
-                    <Route path="/admin/notices" element={<AdminNoticesPage/>}/>
-                    <Route path="/admin/residents" element={<AdminResidentsPage/>}/>
-                    <Route path="/admin/access-codes" element={<AdminAccessCodesPage/>}/>
-                    <Route path="/admin/settings" element={<AdminSettingsPage/>}/>
-                    <Route path="/admin/help" element={<AdminHelpPage/>}/>
+                    <Route path="/admin-signup" element={<AdminSignUpPage/>}/>
+                    <Route path="/admin" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminDashboardPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/dashboard" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminDashboardPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/facilities" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminFacilitiesPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/maintenance" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminMaintenancePage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/notices" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminNoticesPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/residents" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminResidentsPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/access-codes" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminAccessCodesPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/settings" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminSettingsPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/help" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminHelpPage/>
+                        </ProtectedRoute>
+                    }/>
                 </Routes>
             </BrowserRouter>
         </>

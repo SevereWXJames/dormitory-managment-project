@@ -6,5 +6,4 @@ import {useCreditsData} from "@/pages/common/residents/pageHooks/useCreditsData.
 export function useCreditsBalanceCard() {
     const {loading, error, balanceCents} = useCreditsData();
     return {balance: balanceCents, error, loading}
-
 }

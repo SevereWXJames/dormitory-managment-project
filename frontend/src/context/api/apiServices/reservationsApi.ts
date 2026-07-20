@@ -3,17 +3,38 @@
 import { api } from "../api.ts";
 import type { Booking } from "@/types/residents/types.tsx";
 
+type BookingArgs = {
+    serviceName: string | null;
+    userId: string | null;
+    slotId: string | null;
+};
+
 export const reservationsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getUserBookings: builder.query<Booking[], string>({
             query: (userId) => ({ url: `/reservations/get-booked-by-user/${encodeURIComponent(userId)}` }),
             providesTags: ["Booking"],
         }),
-        cancelBooking: builder.mutation<void, string>({
-            query: (bookingId) => ({ url: `/reservations/${bookingId}`, method: "DELETE" }),
-            invalidatesTags: ["Booking"],
+
+        cancelBooking: builder.mutation<void, BookingArgs>({
+            query: ({serviceName, userId, slotId}) => ({
+                url: `/reservations/cancel-booking-by-service-name/`,
+                method: "PUT",
+                body: {userId, slotId, serviceName}
+            }),
+            invalidatesTags: ["Booking", "ReservationSlots", "Credits"],
+        }),
+
+        makeBooking: builder.mutation<void, BookingArgs>({
+            query: ({serviceName, userId, slotId}) => ({
+                url: `/reservations/book-slot-by-service-name/`,
+                method: "PUT",
+                body: {userId, slotId, serviceName}}),
+            invalidatesTags: ["Booking", "ReservationSlots", "Credits"],
         }),
     }),
 });
 
-export const { useGetUserBookingsQuery, useCancelBookingMutation } = reservationsApi;
+export const { useGetUserBookingsQuery,
+    useCancelBookingMutation,
+    useMakeBookingMutation } = reservationsApi;

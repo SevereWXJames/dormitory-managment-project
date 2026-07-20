@@ -30,7 +30,7 @@ export const maintenanceRequestsSlice = createSlice({
 		 * @param parameters An object with format {unit, priority,
 		 * issueType, issue, location, description}
 		 */
-			addMaintenanceRequest: (state, parameters) => {
+		addMaintenanceRequest: (state, parameters) => {
 			const id = state.maintenanceRequests.length + 1;
 			const unit = parameters.payload.unit;
 			const priority = parameters.payload.priority;

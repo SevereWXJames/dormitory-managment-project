@@ -7,10 +7,10 @@ export type Booking = {
     _id: string;
     eventName: string,
     serviceId: string;
+    serviceName: string | null;
     booked: boolean;
     bookedBy: string | null;
-    startTime: string | null;
-    date :string | null;
+    startTime: number;
     durationSeconds?: number;
 }
 

@@ -1,48 +1,48 @@
 {
   "reservationSlots": [
     {
-      "_id": "slot0",
       "serviceId": "service0",
+      "serviceName": "Washing Machine 1",
       "booked": false,
       "startTime": 0,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot1",
       "serviceId": "service0",
+      "serviceName": "Washing Machine 1",
       "booked": true,
-      "bookedBy": "user0",
+      "bookedBy": "000000000000000000000000",
       "startTime": 3600,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot2",
       "serviceId": "service0",
+      "serviceName": "Washing Machine 1",
       "booked": true,
-      "bookedBy": "user1",
+      "bookedBy": "000000000000000000000001",
       "startTime": 7200,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot3",
       "serviceId": "service1",
+      "serviceName": "Washing Machine 2",
       "booked": false,
       "startTime": 0,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot4",
       "serviceId": "service1",
+      "serviceName": "Washing Machine 2",
       "booked": true,
-      "bookedBy": "user1",
+      "bookedBy": "000000000000000000000001",
       "startTime": 3600,
       "durationSeconds": 3600
     },
     {
-      "_id": "slot5",
       "serviceId": "service1",
+      "serviceName": "Washing Machine 2",
       "booked": true,
-      "bookedBy": "user2",
+      "bookedBy": "000000000000000000000002",
       "startTime": 7200,
       "durationSeconds": 3600
     }

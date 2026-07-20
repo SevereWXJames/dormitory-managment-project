@@ -1,7 +1,8 @@
 // hooks/useLogin.ts
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {useLoginMutation} from "@/context/api/apiServices/authApi.ts";
+import {Role} from "@/dataTypes/user.ts";
 
 export function useLoginForm() {
     const [username, setUsername] = useState("");
@@ -10,7 +11,7 @@ export function useLoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [loginError, setLoginError] = useState<string | null>(null);
 
-    const [login, { isLoading }] = useLoginMutation();
+    const [login, {isLoading}] = useLoginMutation();
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -39,8 +40,9 @@ export function useLoginForm() {
                 password,
             }).unwrap();
 
+            console.log(`data roles: ${data.roles}`);
             const targetPath = (data.roles ?? []).some((role) =>
-                role === "Admin" || role === "Staff") ?
+                role === Role.ADMIN || role == "Staff") ?
                 "/admin/dashboard" : "/dashboard";
             navigate(targetPath);
         } catch (error) {
