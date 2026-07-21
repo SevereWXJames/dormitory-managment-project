@@ -9,6 +9,7 @@ import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalan
 import {BOOKING_COST} from "../../src/utility/pricesForBookings.ts";
 import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
 import {ReservationSlotModel} from "../../src/dataTypes/reservationSlot.ts";
+import jwt from "jsonwebtoken";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -62,7 +63,7 @@ describe('FACILITY BOOKING SERVICES', () => {
                     .send(validLoginPayload);
                 const userId = res.body.data._id;
                 const cookies = res.headers['set-cookie'] as unknown as string[];
-                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+                const rawCookie = cookies.find((c) => c.startsWith('access='));
 
                 testJwt = rawCookie?.split(';')[0];
                 testUserId = userId;
@@ -136,7 +137,7 @@ describe('FACILITY BOOKING SERVICES', () => {
                     .send(validLoginPayload);
                 const userId = res.body.data._id;
                 const cookies = res.headers['set-cookie'] as unknown as string[];
-                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+                const rawCookie = cookies.find((c) => c.startsWith('access='));
 
                 testJwt = rawCookie?.split(';')[0];
                 testUserId = userId;
@@ -235,7 +236,7 @@ describe('FACILITY BOOKING SERVICES', () => {
 
                 const userId = res.body.data._id;
                 const cookies = res.headers['set-cookie'] as unknown as string[];
-                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+                const rawCookie = cookies.find((c) => c.startsWith('access='));
 
                 testJwt = rawCookie?.split(';')[0];
                 testUserId = userId;
