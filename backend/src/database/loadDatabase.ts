@@ -22,10 +22,8 @@ import {NoticeModel} from "../dataTypes/notice.ts";
 import {ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
 import {RoomModel} from "../dataTypes/room.ts";
 import {ResidentModel, UserModel} from "../dataTypes/user.ts";
-import Services from "../routes/services.ts";
 import {ServiceModel} from "../dataTypes/service.ts";
 import {IoTStatusModel} from "../dataTypes/IoT/IoTStatus.ts";
-import handle from "mqtt/lib/handlers/index";
 import {hash} from "bcryptjs";
 
 /**
