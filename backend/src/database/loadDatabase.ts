@@ -22,9 +22,9 @@ import {NoticeModel} from "../dataTypes/notice.ts";
 import {ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
 import {RoomModel} from "../dataTypes/room.ts";
 import {ResidentModel, UserModel} from "../dataTypes/user.ts";
-import Services from "../routes/services.ts";
 import {ServiceModel} from "../dataTypes/service.ts";
 import {IoTStatusModel} from "../dataTypes/IoT/IoTStatus.ts";
+import {hash} from "bcryptjs";
 
 /**
  * Loads the sample data from the backend/test_data folder into the SmartAPT
@@ -34,11 +34,12 @@ import {IoTStatusModel} from "../dataTypes/IoT/IoTStatus.ts";
  * @returns A promise of void, which resolves if the data has been loaded into
  * the database correctly.
  */
-export default function loadSampleData(): Promise<void> {
+export default async function loadSampleData(): Promise<void> {
 	// console.debug("loadSampleData(): Loading sample data");
 
-	return getConnection().dropDatabase().then((value) =>
-		Promise.all([load("CreditBalances", CreditBalanceModel, creditBalanceJSON.creditBalances),
+	try {
+		await getConnection().dropDatabase();
+		await Promise.all([load("CreditBalances", CreditBalanceModel, creditBalanceJSON.creditBalances),
 			load("Transactions", TransactionModel, transactionHistoryJSON.transactions),
 			load("MaintenanceRequests", MaintenanceRequestModel, requestJSON.maintenanceRequests),
 			load("MaintenanceRequestTypes", MaintenanceRequestTypeModel, requestTypeJSON.maintenanceRequestTypes),
@@ -50,8 +51,18 @@ export default function loadSampleData(): Promise<void> {
 			load("Residents", ResidentModel, residentJSON.residents),
 			load("Services", ServiceModel, serviceJSON.services),
 			load("Users", UserModel, userJSON.users),
-			load("IoTStatuses", IoTStatusModel, IoTStatusJSON.IoTStatuses)]),
-		).then((value) => {
-			Promise.resolve();
-		}).catch((error) => {throw Error(`Error loading the database! ${error}`)});
-};
+			load("IoTStatuses", IoTStatusModel, IoTStatusJSON.IoTStatuses)]);
+
+		await handleSetPassword();
+	} catch (error) {
+		throw Error(`Error loading the database! ${error}`);
+	}
+}
+
+async function handleSetPassword() {
+	const examplePassword = process.env.SAMPLE_PASSWORD;
+	if (examplePassword !== undefined) {
+		const hashedPassword = await hash(examplePassword, 10);
+		await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
+	}
+}
