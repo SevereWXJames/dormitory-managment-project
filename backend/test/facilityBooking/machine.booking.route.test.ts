@@ -9,7 +9,6 @@ import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalan
 import {BOOKING_COST} from "../../src/utility/pricesForBookings.ts";
 import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
 import {ReservationSlotModel} from "../../src/dataTypes/reservationSlot.ts";
-import jwt from "jsonwebtoken";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
