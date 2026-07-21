@@ -3,7 +3,7 @@ import {
     logIn,
     signUp
 } from "../services/usersServices.ts";
-import {createAccessToken} from "../utility/auth-utils/tokens.ts";
+import {createAccessToken, createRefreshToken} from "../utility/auth-utils/tokens.ts";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
@@ -11,15 +11,17 @@ authRouter.post("/signup", async (req, res) => {
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles };
         const user = await signUp(profileData);
-        const token = createAccessToken(user._id, user.roles);
-        const cookiePayload : CookieOptions = {
-            httpOnly: true,       // JS cannot read this cookie — protects against XSS
-            secure: true,          // only sent over HTTPS (set false only for local http dev)
-            sameSite: "strict",    // or "lax" — see note below on cross-site setups
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
-            path: "/",
-        };
-        res.cookie("jwt", token, cookiePayload);
+        // const accessToken = createAccessToken(user._id, user.roles);
+        // const refreshToken = createRefreshToken(user._id, user.roles);
+        // const cookiePayload : CookieOptions = {
+        //     httpOnly: true,       // JS cannot read this cookie — protects against XSS
+        //     secure: true,          // only sent over HTTPS (set false only for local http dev)
+        //     sameSite: "strict",    // or "lax" — see note below on cross-site setups
+        //     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
+        //     path: "/",
+        // };
+        // res.cookie("access", accessToken, cookiePayload);
+        // res.cookie("refresh", refreshToken, cookiePayload);
 
         res.status(200).json({
             message: "Signed up successfully!",
@@ -44,14 +46,19 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
     let {username, email, password} = req.body;
     try {
         const user = await logIn(username, email, password);
-        const token = createAccessToken(user._id, user.roles);
-        res.cookie("jwt", token, {
+        const accessToken = createAccessToken(user._id, user.roles);
+        const refreshToken = createRefreshToken(user._id, user.roles);
+        const cookiePayload : CookieOptions = {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: true,          // only sent over HTTPS (set false only for local http dev)
             sameSite: "strict",    // or "lax" — see note below on cross-site setups
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
             path: "/",
-        });
+        };
+
+        res.cookie("access", accessToken, cookiePayload);
+        res.cookie("refresh", refreshToken, cookiePayload);
+
         res.status(200).json({
             success: true,
             message: "Logged in successfully!",
