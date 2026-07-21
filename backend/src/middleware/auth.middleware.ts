@@ -1,5 +1,5 @@
 import type {NextFunction,Response, Request} from "express";
-import {verifyRequestHeader, verifyRoles} from "./services/middlerware.service.ts";
+import {verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
 import type {Role} from "../database/types/user.service.types.ts";
 
 //Auth Middleware

@@ -4,8 +4,25 @@ import {
     signUp
 } from "../services/usersServices.ts";
 import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
+import {extractRefreshToken} from "../utility/auth-utils/request.js";
+import {validateRefreshToken} from "../utility/auth-utils/tokens.js";
 
 const authRouter = express.Router();
+
+authRouter.post("/refresh", async(req, res) => {
+    try{
+        const refreshToken = extractRefreshToken(req);
+        validateRefreshToken(refreshToken);
+
+    }catch(error){
+        res.status(500).json({
+            type: "error",
+            message: "Error refreshing token",
+            error: (error as Error).message
+        })
+    }
+});
+
 authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
