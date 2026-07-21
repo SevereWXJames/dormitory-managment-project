@@ -7,9 +7,9 @@ export interface RefreshToken {
     refreshToken: string;
 }
 
-const noticeSchema = new Schema({
+const refreshTokenSchema = new Schema({
     userId: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
     },
     refreshToken: {
@@ -17,4 +17,4 @@ const noticeSchema = new Schema({
         required: true
     }
 });
-export const RefreshTokenModel = mongoose.model("RefreshTokens"  as CollectionName, noticeSchema, "RefreshTokens"  as CollectionName);
+export const RefreshTokenModel = mongoose.model("RefreshTokens"  as CollectionName, refreshTokenSchema, "RefreshTokens"  as CollectionName);

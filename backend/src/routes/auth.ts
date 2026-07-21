@@ -4,14 +4,14 @@ import {
     signUp
 } from "../services/usersServices.ts";
 import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
-import {extractRefreshToken} from "../utility/auth-utils/request.ts";
+import {extractRefreshTokenFromReq} from "../utility/auth-utils/request.ts";
 import {extractUserPayloadFromToken} from "../utility/auth-utils/tokens.ts";
 import {Types} from "mongoose";
 const authRouter = express.Router();
 
 authRouter.post("/refresh", async(req, res) => {
     try{
-        const refreshToken = extractRefreshToken(req);
+        const refreshToken = extractRefreshTokenFromReq(req);
         const {id, roles} = extractUserPayloadFromToken(refreshToken);
         const userId = id ? id as Types.ObjectId : null;
         setAuthCookie(userId, roles, res);
