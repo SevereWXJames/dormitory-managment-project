@@ -6,7 +6,7 @@ import type {SignUpRequest} from "../database/types/user.service.types.ts";
 import {compare, hash} from "bcryptjs";
 import {type User, UserModel, ResidentModel} from "../dataTypes/user.ts";
 import pkg, {type Secret} from "jsonwebtoken";
-import {Types} from "mongoose";
+import mongoose, {Types} from "mongoose";
 import {ResidentTable} from "../database/tableOperations/Resident.table.ts";
 import {CreditBalanceTable} from "../database/tableOperations/CreditBalance.table.ts";
 
@@ -42,7 +42,7 @@ export async function getExistingUserFromEmail(email: string): Promise<User | un
         });
 }
 
-export async function getExistingUserFromId(_id: string): Promise<User | undefined> {
+export async function getExistingUserFromId(_id: mongoose.Types.ObjectId): Promise<User | undefined> {
     try {
         const id = new Types.ObjectId(_id);
         const doc = await UserModel.findOne({_id: id }).lean().exec();

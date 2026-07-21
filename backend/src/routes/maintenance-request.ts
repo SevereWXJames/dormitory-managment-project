@@ -6,6 +6,7 @@ import {
     getMaintenanceRequestTypeById, getAllMaintenanceRequestPriorities,
     addMaintenanceRequest, setMaintenanceRequestStatus
 } from "../services/maintenanceRequestServices.ts";
+import mongoose from "mongoose";
 
 const maintenanceRequestRouter = express.Router();
 
@@ -24,7 +25,7 @@ maintenanceRequestRouter.get("/get-for-user/:userId", async (req: Request, res: 
     }
 
     try {
-        const maintenanceRequests = await getAllMaintenanceRequestsByUserId(req.params.userId as string);
+        const maintenanceRequests = await getAllMaintenanceRequestsByUserId(new mongoose.Types.ObjectId(req.params.userId as string));
         return res.status(200).json({success: true, data: maintenanceRequests});
     } catch (error) {
         return res.status(500).json({success: false, message: "Internal server error."});
@@ -56,7 +57,7 @@ maintenanceRequestRouter.patch("/:requestId/status", async (req: Request, res: R
     }
 
     try {
-        await setMaintenanceRequestStatus(req.params.requestId as string, statusId);
+        await setMaintenanceRequestStatus(new mongoose.Types.ObjectId(req.params.requestId as string), statusId);
         return res.status(200).json({success: true, data: {message: "Status updated successfully."}});
     }
     catch (error) {

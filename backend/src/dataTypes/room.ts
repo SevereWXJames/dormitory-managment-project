@@ -1,15 +1,13 @@
 import mongoose, {Schema} from "mongoose";
 import type {CollectionName} from "../database/databaseConstants.ts";
 
-export type MongoId = string | mongoose.Types.ObjectId;
-
 export interface Room {
-    _id: MongoId;
+    _id: mongoose.Types.ObjectId;
     roomName: string;
     verificationCode: string;
 }
 
-export type RoomInput = Omit<Room, "_id"> & { _id?: MongoId };
+export type RoomInput = Omit<Room, "_id"> & { _id?: mongoose.Types.ObjectId };
 
 const roomSchema = new Schema({roomName: String, verificationCode: String});
 export const RoomModel = mongoose.model("Rooms"  as CollectionName, roomSchema, "Rooms"  as CollectionName);

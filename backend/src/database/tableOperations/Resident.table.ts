@@ -1,12 +1,12 @@
 import {BaseTable} from "./Base.table.ts";
-import {type IResident, Residents} from "../models/residents.model.ts";
 import type {Model} from "mongoose";
 import {Types} from "mongoose"
+import {ResidentModel, type Resident} from "../../dataTypes/user.ts";
 
-export class ResidentTable extends BaseTable<IResident> {
-    private ResidentModel : Model<IResident>;
+export class ResidentTable extends BaseTable<Resident> {
+    private ResidentModel : Model<Resident>;
     constructor() {
-        super(Residents);
+        super(ResidentModel);
         this.ResidentModel = super.getModel();
     }
 

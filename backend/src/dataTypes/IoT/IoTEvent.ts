@@ -1,15 +1,16 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, {Schema, Types} from "mongoose";
 
 export interface IoTEvent {
+    _id: mongoose.Types.ObjectId;
     UUID: string;
-    facilityID: string;
+    facilityID: mongoose.Types.ObjectId;
     type: string;
     data?: object;
  }
 
  const IoTEventSchema = new mongoose.Schema({
      facilityID: {
-         type: String,
+         type: mongoose.Types.ObjectId,
          required: true
      },
      UUID: {

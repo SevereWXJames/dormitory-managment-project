@@ -1,5 +1,6 @@
 import express, {type Request, type Response, type NextFunction} from "express";
 import {getAllRooms, getRoomById, getRoomByUserId} from "../services/roomServices.ts";
+import mongoose from "mongoose";
 
 const roomsRouter = express.Router();
 
@@ -18,7 +19,7 @@ roomsRouter.get("/get-by-id/:roomId", async (req: Request, res: Response)=> {
     }
 
     try {
-        const room = await getRoomById(req.params.roomId as string);
+        const room = await getRoomById(new mongoose.Types.ObjectId(req.params.roomId as string));
         if (room === undefined) {
             return res.status(400).json({success: false, message: "Provided ID matches no room."});
         }
@@ -35,7 +36,7 @@ roomsRouter.get("/get-by-user/:userId", async (req: Request, res: Response)=> {
     }
 
     try {
-        const room = await getRoomByUserId(req.params.userId as string);
+        const room = await getRoomByUserId(new mongoose.Types.ObjectId(req.params.userId as string));
         if (room === undefined) {
             return res.status(400).json({success: false, message: "Provided ID matches no room."});
         }

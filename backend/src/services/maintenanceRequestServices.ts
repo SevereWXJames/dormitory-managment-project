@@ -4,8 +4,8 @@ import {
     type MaintenanceRequestPriority, MaintenanceRequestPriorityModel,
     type MaintenanceRequestStatus, MaintenanceRequestStatusModel,
     type MaintenanceRequestType, MaintenanceRequestTypeModel,
-    type MongoId
 } from "../dataTypes/maintenanceRequest.ts";
+import mongoose from "mongoose";
 
 type MaintenanceRequestWithId = MaintenanceRequest;
 
@@ -26,7 +26,7 @@ export async function getAllMaintenanceRequests(): Promise<MaintenanceRequest[]>
     return Promise.resolve(results);
 }
 
-export async function getAllMaintenanceRequestsByUserId(userId: string): Promise<MaintenanceRequest[]> {
+export async function getAllMaintenanceRequestsByUserId(userId: mongoose.Types.ObjectId): Promise<MaintenanceRequest[]> {
     const cursor = MaintenanceRequestModel.find({createdBy: userId}).lean();
     const results: MaintenanceRequest[] = [];
 
@@ -157,7 +157,7 @@ export async function addMaintenanceRequest(maintenanceRequest: MaintenanceReque
  * @returns Promise indicating whether the maintenance request was set
  * successfully.
  */
-async function setMaintenanceRequestFields(_id: string, updateFields: any): Promise<void> {
+async function setMaintenanceRequestFields(_id: mongoose.Types.ObjectId, updateFields: any): Promise<void> {
     return MaintenanceRequestModel.updateOne({_id: _id}, {$set: updateFields}).then((result) => {
         return Promise.resolve();
     }).catch((e) => {
@@ -174,8 +174,8 @@ async function setMaintenanceRequestFields(_id: string, updateFields: any): Prom
  * @returns Promise indicating whether the maintenance request was set
  * successfully.
  */
-export async function setMaintenanceRequest(_id: string, maintenanceRequest: MaintenanceRequestWithId) : Promise<void> {
-    if (String(_id) !== String(maintenanceRequest._id)) {
+export async function setMaintenanceRequest(_id: mongoose.Types.ObjectId, maintenanceRequest: MaintenanceRequestWithId) : Promise<void> {
+    if (_id.toString() !== String(maintenanceRequest._id)) {
         throw new Error("The passed _id and the _id in the maintenanceRequest are different.");
     }
 
@@ -215,7 +215,7 @@ export function getAdjacentMaintenanceRequestStatusId(
     return targetStatus ? String(targetStatus._id) : undefined;
 }
 
-export async function setMaintenanceRequestStatus(_id: string, statusId: string) : Promise<void> {
+export async function setMaintenanceRequestStatus(_id: mongoose.Types.ObjectId, statusId: string) : Promise<void> {
     await getAllMaintenanceRequestStatuses().then((result) => {
         if (result.find((status) => status._id === statusId) === undefined) {
             return Promise.reject(new Error("Status not available in the database."));
@@ -233,7 +233,7 @@ export async function setMaintenanceRequestStatus(_id: string, statusId: string)
  * @returns Promise indicating whether the maintenance request was set
  * successfully.
  */
-export async function setMaintenanceRequestPriority(_id: string, priorityId: string) : Promise<void> {
+export async function setMaintenanceRequestPriority(_id: mongoose.Types.ObjectId, priorityId: string) : Promise<void> {
     await getAllMaintenanceRequestPriorities().then((result) => {
         if (result.find((priority) => priority._id === priorityId) === undefined) {
             return Promise.reject(new Error("Priority not available in the database."));

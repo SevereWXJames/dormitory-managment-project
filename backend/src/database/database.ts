@@ -94,11 +94,11 @@ export function getCollection(collectionName: CollectionName) {
  * @param data JSON data as an array of JSON objects.
  * @returns A Promise, to either be resolved with void or be rejected.
  */
-export async function load(collectionName: CollectionName, data: any[]): Promise<void> {
+export async function load(collectionName: CollectionName, model: mongoose.Model<any>, data: any[]): Promise<void> {
     // console.debug(`database.load(${collectionName})`);
     const preparedData = data.map((entry) => {
-        if (entry != null && typeof entry === "object" && typeof entry._id === "string" && mongoose.Types.ObjectId.isValid(entry._id)) {
-            return { ...entry, _id: new mongoose.Types.ObjectId(entry._id) };
+        if (entry != null && typeof entry === "object") {
+            return model.castObject(entry);
         }
         return entry;
     });
