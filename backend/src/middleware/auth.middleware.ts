@@ -1,9 +1,22 @@
 import type {NextFunction,Response, Request} from "express";
-import {verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
+import {validateRefreshToken, verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
 import type {Role} from "../database/types/user.service.types.ts";
 import {TokenExpiredError} from "jsonwebtoken";
 
 //Auth Middleware
+export const checkRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await validateRefreshToken(req);
+        next();
+    }catch(error){
+        return res.status(500).json({
+            message: "Invalid refresh token",
+            type: "error",
+            error: (error as Error).message,
+        });
+    }
+}
+
 export const authenticateRequest = async (req: Request, res: Response, next: NextFunction) => {
     // get the token from the header
     try{
@@ -39,4 +52,3 @@ export const requireRole = (... requiredRoles: Role[]) => {
         return await checkRole(requiredRoles, req, res, next);
     }
 }
-
