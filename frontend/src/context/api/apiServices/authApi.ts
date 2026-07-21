@@ -26,8 +26,10 @@ export interface LoginRequest {
 
 export interface AuthUser {
     _id: string;
+    name: string;
     username: string;
     email: string;
+    phoneNumber: string;
     roles: string[];
 }
 
@@ -43,7 +45,7 @@ export const authApi = api.injectEndpoints({
             async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    dispatch(logIn({ username: data.username, email: data.email, userId: data._id, roles: data.roles }));
+                    dispatch(logIn({ name: data.name, username: data.username, email: data.email, phoneNumber: data.phoneNumber, userId: data._id, roles: data.roles }));
                 } catch {
                     // login failed — no dispatch needed, error surfaces via the mutation's own error state
                 }
@@ -61,7 +63,7 @@ export const authApi = api.injectEndpoints({
                 try {
                     const { data: responseBody } = await queryFulfilled;
                     const user = responseBody.data;
-                    dispatch(logIn({ username: user.username, email: user.email, userId: user._id, roles: user.roles }));
+                    dispatch(logIn({ name: user.name, username: user.username, email: user.email, phoneNumber: user.phoneNumber, userId: user._id, roles: user.roles }));
                 } catch(err) {
                     console.error('Signup mutation failed:', err);
                     // signup failed — no dispatch needed, error surfaces via the mutation's own error state

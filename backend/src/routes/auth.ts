@@ -24,8 +24,10 @@ authRouter.post("/signup", async (req, res) => {
             message: "Signed up successfully!",
             data: {
                 _id: user._id,
+                name: user.name,
                 username: user.username,
                 email: user.email,
+                phoneNumber: user.phoneNumber,
                 roles: user.roles,
             },
             type: "success",
@@ -56,8 +58,10 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
             message: "Logged in successfully!",
             data: {
                 _id: user._id,
+                name: user.name,
                 username: user.username,
                 email: user.email,
+                phoneNumber: user.phoneNumber,
                 roles: user.roles,
             }
         });

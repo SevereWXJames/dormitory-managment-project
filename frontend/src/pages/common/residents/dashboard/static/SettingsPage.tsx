@@ -1,83 +1,47 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
-import {FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
 import {useSelector} from "react-redux";
-import {getEmail, getUsername} from "../../../../../context/authenticationSlice.ts";
-
-
-export type FieldProps = {
-    input: string
-}
-export type ProfileFieldProps = {
-    name: string;
-    username: string;
-    email: string;
-    phone: string;
-}
-
-export function NotificationControls() {
-    return (
-        <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked/>} label="Email Notifications"/>
-            <FormControlLabel control={<Switch defaultChecked/>} label="Maintenance Notifications"/>
-            <FormControlLabel control={<Switch defaultChecked/>} label="Notice Alerts"/>
-        </FormGroup>
-    )
-}
-
-export function ProfileField({input}: FieldProps) {
-    return (
-        <TextField
-            id="outlined-read-only-input"
-            label="Read Only"
-            defaultValue={input}
-            sx={{'& .MuiInputBase-input': {color: 'black'}}}
-            slotProps={{
-                input: {
-                    readOnly: true,
-                },
-            }}/>
-    )
-}
-
-export function ProfileFields({name, username, email, phone}: ProfileFieldProps) {
-    return (
-        <div className="flex flex-col p-4 m-4 gap-4 max-w-96">
-            <ProfileField input={name}/>
-            <ProfileField input={username}/>
-            <ProfileField input={email}/>
-            <ProfileField input={phone}/>
-        </div>
-    )
-}
+import {getEmail, getName, getPhoneNumber, getUsername} from "../../../../../context/authenticationSlice.ts";
 
 export function SettingsPage() {
-    const email = useSelector(getEmail);
+    const name = useSelector(getName);
     const username = useSelector(getUsername);
-    console.log("email:", email, "username:", username);
-    const user: ProfileFieldProps = {name: "Lem Lemmings", username, email, phone: "12345678"};
+    const email = useSelector(getEmail);
+    const phone = useSelector(getPhoneNumber);
+
+    const profileItems = [
+        { label: "Name", value: name || "Not available" },
+        { label: "Username", value: username || "Not available" },
+        { label: "Email", value: email || "Not available" },
+        { label: "Phone number", value: phone || "Not available" },
+    ];
+
     return (
-        <div>
-            <CommonFrame commonFrameType={"RESIDENT"}>
-                <div className="settingsPage flex flex-col">
-                    <div className="contents w-fit">
-                        <div className="profile-settings text-left">
-                            <h1>Profile</h1>
-                            <ProfileFields name={user.name}
-                                           username={user.username}
-                                           email={user.email} phone={user.phone}/>
-                        </div>
-                        <div className="notifications-settings text-left">
-                            <h1>Notifications</h1>
-                            <NotificationControls/>
-                        </div>
-                        <div className="security-settings flex flex-col text-left">
-                            <h1>Security</h1>
-                            <button className="text-left font-bold">Change password</button>
-                            <FormControlLabel control={<Switch defaultChecked/>} label="Two factor auth"/>
+        <CommonFrame commonFrameType="RESIDENT">
+            <div className="settingsPage flex flex-col gap-6">
+                <div className="contents w-full max-w-2xl text-left">
+                    <div className="profile-settings">
+                        <h1>Profile</h1>
+                        <p className="text-sm text-muted-foreground">
+                            These details are pulled from your signed-in account.
+                        </p>
+                        <div className="mt-4 rounded-lg border border-border p-4">
+                            {profileItems.map((item) => (
+                                <div key={item.label} className="flex justify-between gap-4 border-b border-border py-3 last:border-b-0">
+                                    <span className="font-medium">{item.label}</span>
+                                    <span className="text-right text-sm text-muted-foreground">{item.value}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
+
+                    <div className="rounded-lg border border-border p-4">
+                        <h2 className="text-lg font-semibold">Account status</h2>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                            Your resident account is active and ready for building services and maintenance requests.
+                        </p>
+                    </div>
                 </div>
-            </CommonFrame>
-        </div>
+            </div>
+        </CommonFrame>
     )
 }
