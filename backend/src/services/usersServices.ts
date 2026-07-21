@@ -55,36 +55,26 @@ export async function getExistingUserFromId(_id: mongoose.Types.ObjectId): Promi
 
 //Looks for account, verifies information, returns user.
 export async function logIn(username: string, email: string, password: string) {
-    if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
-        throw Error("Username or email is required.");
+    const normalizedUsername = username ? username.trim() : "";
+    const normalizedEmail = email ? email.trim().toLowerCase() : "";
+
+    if (normalizedUsername === "") {
+        throw Error("Username is required.");
+    }
+    if (normalizedEmail === "") {
+        throw Error("Email is required.");
     }
     if (!password) {
         throw Error("Password is required.");
     }
 
     const simpleEmailRegex = /^\S+@\S+\.\S+$/;
-
-    const normalizedUsername = username ? username.trim() : "";
-    const normalizedEmail = email ? email.trim().toLowerCase() : "";
-
-    // If both username and email were provided, require both to match the same account.
-    let user: any = null;
-    if (normalizedUsername !== "" && normalizedEmail !== "") {
-        if (!simpleEmailRegex.test(normalizedEmail)) {
-            throw Error("Invalid email format.");
-        }
-        user = await userModel.findOne({ username: normalizedUsername, email: normalizedEmail });
-        if (!user) throw Error("Username and email do not match any account.");
-    } else if (normalizedUsername !== "") {
-        user = await userModel.findOne({ username: normalizedUsername });
-        if (!user) throw Error("Username not found.");
-    } else if (normalizedEmail !== "") {
-        if (!simpleEmailRegex.test(normalizedEmail)) {
-            throw Error("Invalid email format.");
-        }
-        user = await userModel.findOne({ email: normalizedEmail });
-        if (!user) throw Error("Email not found.");
+    if (!simpleEmailRegex.test(normalizedEmail)) {
+        throw Error("Invalid email format.");
     }
+
+    const user = await userModel.findOne({ username: normalizedUsername, email: normalizedEmail });
+    if (!user) throw Error("Username and email do not match any account.");
 
     const isMatch = await compare(password, user.password);
     if (!isMatch) throw Error("Incorrect password.");

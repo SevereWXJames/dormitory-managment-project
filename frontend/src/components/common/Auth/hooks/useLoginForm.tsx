@@ -32,21 +32,55 @@ export function useLoginForm() {
         setPasswordError(null);
     };
 
+    const getErrorMessage = (error: unknown): string => {
+        if (typeof error === "string") {
+            return error;
+        }
+
+        if (error && typeof error === "object") {
+            const maybeError = error as {
+                message?: unknown;
+                error?: unknown;
+                data?: unknown;
+            };
+
+            if (typeof maybeError.message === "string") {
+                return maybeError.message;
+            }
+
+            if (typeof maybeError.error === "string") {
+                return maybeError.error;
+            }
+
+            if (maybeError.data && typeof maybeError.data === "object") {
+                const data = maybeError.data as { message?: unknown; error?: unknown };
+                if (typeof data.message === "string") {
+                    return data.message;
+                }
+                if (typeof data.error === "string") {
+                    return data.error;
+                }
+            }
+        }
+
+        return "Login failed.";
+    };
+
     const setFieldErrorMessages = (message: string) => {
         const normalized = message.toLowerCase();
-        if (normalized.includes("username or email") && normalized.includes("required")) {
+        if (normalized.includes("username") && normalized.includes("email") && normalized.includes("required")) {
             setLoginError(message);
             setUsernameError(message);
             setEmailError(message);
             return;
         }
 
-        if (normalized.includes("username") && normalized.includes("not found")) {
+        if (normalized.includes("username") && normalized.includes("required")) {
             setUsernameError(message);
             return;
         }
 
-        if (normalized.includes("email") && normalized.includes("not found")) {
+        if (normalized.includes("email") && normalized.includes("required")) {
             setEmailError(message);
             return;
         }
@@ -72,22 +106,26 @@ export function useLoginForm() {
 
     const handleLogIn = async () => {
         clearFieldErrors();
-        if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
-            const message = "Username or email is required.";
+        if (!username || username.trim() === "") {
+            const message = "Username is required.";
             setLoginError(message);
             setUsernameError(message);
+            return;
+        }
+
+        if (!email || email.trim() === "") {
+            const message = "Email is required.";
+            setLoginError(message);
             setEmailError(message);
             return;
         }
-        // If an email is provided, ensure it looks like an email address.
-        if (email && email.trim() !== "") {
-            const simpleEmailRegex = /^\S+@\S+\.\S+$/;
-            if (!simpleEmailRegex.test(email.trim())) {
-                const message = "Invalid email format.";
-                setLoginError(message);
-                setEmailError(message);
-                return;
-            }
+
+        const simpleEmailRegex = /^\S+@\S+\.\S+$/;
+        if (!simpleEmailRegex.test(email.trim())) {
+            const message = "Invalid email format.";
+            setLoginError(message);
+            setEmailError(message);
+            return;
         }
         if (!password) {
             const message = "Password is required.";
@@ -109,10 +147,7 @@ export function useLoginForm() {
                 "/admin/dashboard" : "/dashboard";
             navigate(targetPath);
         } catch (error) {
-            const message =
-                error && typeof error === "object" && "message" in error
-                    ? String((error as { message: unknown }).message)
-                    : "Login failed.";
+            const message = getErrorMessage(error);
             setFieldErrorMessages(message);
         }
     };

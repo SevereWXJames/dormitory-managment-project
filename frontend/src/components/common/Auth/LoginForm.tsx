@@ -19,7 +19,7 @@ export function LoginForm() {
     const {
         username, setUsername,
         email, setEmail,
-        setPassword,
+        password, setPassword,
         showPassword,
         handleClickShowPassword,
         handleMouseDownPassword,
@@ -61,6 +61,7 @@ export function LoginForm() {
                 <OutlinedInput
                     id={`${passwordFieldID}-input`}
                     type={showPassword ? 'text' : 'password'}
+                    value={password}
                     onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
                     endAdornment={
                         <InputAdornment position="end">
