@@ -68,7 +68,7 @@ describe('AUTHORIZATION', () => {
                     .send(adminLoginPayload);
                 const userId = res.body.data._id;
                 const cookies = res.headers['set-cookie'] as unknown as string[];
-                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+                const rawCookie = cookies.find((c) => c.startsWith('access='));
 
                 testJwt = rawCookie?.split(';')[0];
                 testUserId = userId;
@@ -125,7 +125,7 @@ describe('AUTHORIZATION', () => {
                     .send(residentLoginPayload);
                 const userId = res.body.data._id;
                 const cookies = res.headers['set-cookie'] as unknown as string[];
-                const rawCookie = cookies.find((c) => c.startsWith('jwt='));
+                const rawCookie = cookies.find((c) => c.startsWith('access='));
 
                 testJwt = rawCookie?.split(';')[0];
                 testUserId = userId;
