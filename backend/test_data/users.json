@@ -2,6 +2,7 @@
   "users": [
     {
       "_id": "507f191e810c19729de860ea",
+      "name": "Test Resident Name 1",
       "username": "test1",
       "email": "test1@test.com",
       "phoneNumber": "6045550001",
@@ -9,6 +10,7 @@
     },
     {
       "_id": "507f191e810c19729de860eb",
+      "name": "Test Resident Name 2",
       "username": "test2",
       "email": "test2@test.com",
       "phoneNumber": "6045550002",
@@ -16,6 +18,7 @@
     },
     {
       "_id": "507f191e810c19729de860ec",
+      "name": "Test Resident Name 3",
       "username": "test3",
       "email": "test3@test.com",
       "phoneNumber": "6045550003",
@@ -23,6 +26,7 @@
     },
     {
       "_id": "507f191e810c19729de860ed",
+      "name": "Test Building Manager Name 1",
       "username": "admin1",
       "email": "admin1@test.com",
       "phoneNumber": "6045550004",
@@ -30,6 +34,7 @@
     },
     {
       "_id": "507f191e810c19729de860ee",
+      "name": "Test Staff Name 1",
       "username": "staff1",
       "email": "staff1@test.com",
       "phoneNumber": "6045550005",
