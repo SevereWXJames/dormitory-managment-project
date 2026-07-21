@@ -5,8 +5,8 @@ import type {Role} from "@/dataTypes/user.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
-	email: string,
     name: string,
+	email: string,
     username: string,
     phoneNumber: string,
     userId: string,
@@ -15,8 +15,8 @@ type AuthenticationSliceState = {
 
 const initialState: AuthenticationSliceState = {
 	authenticationState: "UNAUTHENTICATED",
-	email: "",
     name: "",
+	email: "",
     username: "",
     phoneNumber: "",
     userId: "",
@@ -34,10 +34,10 @@ export const authenticationSlice = createSlice({
 		logIn: (state, action) => {
             const { name, username, email, phoneNumber, userId, roles } = action.payload;
             console.log(`action payload: ${JSON.stringify(action.payload)}`);
-            state.name = name ?? "";
+            state.name = name;
             state.username = username;
             state.email = email;
-            state.phoneNumber = phoneNumber ?? "";
+            state.phoneNumber = phoneNumber;
             state.userId = userId ?? "";
             state.userRole = roles ?? [];
 
@@ -51,12 +51,6 @@ export const authenticationSlice = createSlice({
 		},
 		logOut: (state) => {
 			state.authenticationState = "UNAUTHENTICATED";
-            state.name = "";
-            state.username = "";
-            state.email = "";
-            state.phoneNumber = "";
-            state.userId = "";
-            state.userRole = [];
 		}
 	}
 });

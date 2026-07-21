@@ -6,34 +6,6 @@ import {
 import {createJWTToken} from "../utility/auth-utils/tokens.ts";
 
 const authRouter = express.Router();
-
-function getErrorMessage(error: unknown): string {
-    if (error instanceof Error) {
-        const nestedCause = (error as Error & {cause?: unknown}).cause;
-        if (nestedCause) {
-            return getErrorMessage(nestedCause);
-        }
-        return error.message;
-    }
-
-    return String(error);
-}
-
-function getStatusCode(message: string): number {
-    const normalizedMessage = message.toLowerCase();
-    const isValidationError = [
-        "required",
-        "not found",
-        "invalid email",
-        "incorrect password",
-        "do not match",
-        "already exists",
-        "already in use",
-    ].some((indicator) => normalizedMessage.includes(indicator));
-
-    return isValidationError ? 400 : 500;
-}
-
 authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
@@ -52,21 +24,17 @@ authRouter.post("/signup", async (req, res) => {
             message: "Signed up successfully!",
             data: {
                 _id: user._id,
-                name: user.name,
                 username: user.username,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
                 roles: user.roles,
             },
             type: "success",
         });
     }catch(error){
-        const message = getErrorMessage(error);
-        const status = getStatusCode(message);
-        res.status(status).json({
+        res.status(500).json({
             type: "error",
-            message: message,
-            error: message,
+            message: "Error signing up.",
+            error: error instanceof Error ? error.message : String(error),
         });
     }
 });
@@ -77,10 +45,10 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
         const user = await logIn(username, email, password);
         const token = createJWTToken(user._id, user.roles);
         res.cookie("jwt", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,       // JS cannot read this cookie — protects against XSS
+            secure: true,          // only sent over HTTPS (set false only for local http dev)
+            sameSite: "strict",    // or "lax" — see note below on cross-site setups
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
             path: "/",
         });
         res.status(200).json({
@@ -92,18 +60,14 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
                 username: user.username,
                 email: user.email,
                 phoneNumber: user.phoneNumber,
-                roles: user.roles,
+                roles: user.roles
             }
         });
     }catch(error){
-        const message = getErrorMessage(error);
-        const status = getStatusCode(message);
-        res.status(status).json({
+        res.status(500).json({
             type: "error",
-            // expose the specific error message to the caller so the frontend
-            // can display field-specific guidance (e.g. "Incorrect password.")
-            message: message,
-            error: message,
+            message: "Error logging in.",
+            error: error instanceof Error ? error.message : String(error),
         });
     }
 });

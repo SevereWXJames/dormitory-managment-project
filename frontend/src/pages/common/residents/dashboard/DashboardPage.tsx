@@ -23,17 +23,7 @@ export function DashboardPage() {
                             <Card className="p-4 m-4" style={{gridArea: "finance-summary"}}>
                                 <CardTitle>Finance Summary</CardTitle>
                                 <CardContent className="flex flex-col">
-                                    <strong>Application for Winter: Sept 2026</strong>
                                     <strong>Laundry Credit Balance: {formattedBalance} credits</strong>
-                                    <strong>Meal Card Balance: 300 credits</strong>
-                                </CardContent>
-                            </Card>
-                            <Card className="p-4 m-4" style={{gridArea: "recent-activity"}}>
-                                <CardTitle>Recent Activity:</CardTitle>
-                                <CardContent className="flex flex-col">
-                                    <strong>Laundry-Booked - Washer 2, Jun 5, 10:00</strong>
-                                    <strong>Rent-payment confirmed - $1420</strong>
-                                    <strong>Notice: Water boiler repairs on 6 June</strong>
                                 </CardContent>
                             </Card>
                             <Card className="p-4 m-4" style={{gridArea: "bookings"}}>
