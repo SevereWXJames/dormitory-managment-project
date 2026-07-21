@@ -1,5 +1,5 @@
 import type {Request} from "express"
-import jwt from "jsonwebtoken";
+import jwt, {TokenExpiredError} from "jsonwebtoken";
 import type {Role} from "../../database/types/user.service.types.ts";
 import type {JWTPayload} from "../../utility/auth-utils/tokens.js";
 import {extractAccessToken} from "../../utility/auth-utils/request.js";
@@ -9,10 +9,10 @@ export async function verifyRequestHeader(req: Request) {
     // if(!req.headers) throw Error("Invalid request!");
     // const token = req.headers['cookie']?.split("access=")[1];
     const token = extractAccessToken(req);
-    if(!token) throw Error("Invalid Token!");
+    if (!token) throw Error("Invalid Token!");
 
     const key = process.env.ACCESS_TOKEN_SECRET;
-    if(!key) throw Error("Error authenticating request");
+    if (!key) throw Error("Error authenticating request");
 
     try {
         // 2. Verify signature + expiration
@@ -22,6 +22,8 @@ export async function verifyRequestHeader(req: Request) {
         // 3. Attach decoded payload to request for downstream use
         req.user = {id: payload.id, roles: payload.roles};
     } catch (error) {
+        if(error instanceof TokenExpiredError) throw error;
+
         throw Error(`Error verifying request! ${error}`, {cause: error});
     }
 }
