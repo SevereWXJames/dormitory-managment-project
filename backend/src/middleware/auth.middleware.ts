@@ -1,6 +1,7 @@
 import type {NextFunction,Response, Request} from "express";
 import {verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
 import type {Role} from "../database/types/user.service.types.ts";
+import {TokenExpiredError} from "jsonwebtoken";
 
 //Auth Middleware
 export const authenticateRequest = async (req: Request, res: Response, next: NextFunction) => {
@@ -9,6 +10,8 @@ export const authenticateRequest = async (req: Request, res: Response, next: Nex
         await verifyRequestHeader(req);
         next();
     }catch(error){
+        if(error instanceof TokenExpiredError)
+            return res.status(401).json({message: "Token expired"})
         return res.status(500).json({
             message: "Authentication failed",
             type: "error",
