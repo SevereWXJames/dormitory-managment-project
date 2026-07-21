@@ -5,21 +5,22 @@ import {
 } from "../services/usersServices.ts";
 import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
 import {extractRefreshToken} from "../utility/auth-utils/request.js";
-import {validateRefreshToken} from "../utility/auth-utils/tokens.js";
-
 const authRouter = express.Router();
 
 authRouter.post("/refresh", async(req, res) => {
     try{
+        //TODO:
+        // extract the userId and role from the refresh token
+        // generate new access token
+        // set the accessToken
         const refreshToken = extractRefreshToken(req);
-        validateRefreshToken(refreshToken);
 
     }catch(error){
         res.status(500).json({
             type: "error",
             message: "Error refreshing token",
-            error: (error as Error).message
-        })
+            error: error instanceof Error ? error.message : String(error),
+        });
     }
 });
 

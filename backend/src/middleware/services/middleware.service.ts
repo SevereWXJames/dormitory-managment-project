@@ -2,7 +2,7 @@ import type {Request} from "express"
 import jwt, {TokenExpiredError} from "jsonwebtoken";
 import type {Role} from "../../database/types/user.service.types.ts";
 import type {JWTPayload} from "../../utility/auth-utils/tokens.js";
-import {extractAccessToken} from "../../utility/auth-utils/request.js";
+import {extractAccessToken, extractRefreshToken} from "../../utility/auth-utils/request.js";
 
 export async function verifyRequestHeader(req: Request) {
     //Verify jwt token
@@ -23,7 +23,6 @@ export async function verifyRequestHeader(req: Request) {
         req.user = {id: payload.id, roles: payload.roles};
     } catch (error) {
         if(error instanceof TokenExpiredError) throw error;
-
         throw Error(`Error verifying request! ${error}`, {cause: error});
     }
 }
@@ -33,4 +32,25 @@ export async function verifyRoles(req: Request, allowedRoles: Role[]){
     if(!roles) throw Error("Unauthorized request!");
     const hasPermission = roles.some((role : Role) => allowedRoles.includes(role));
     if(!hasPermission) throw Error("Insufficient permissions!");
+}
+
+export const validateRefreshToken = (req: Request) => {
+    //TODO:
+    // Verify the userId matches the userId in the payload
+    // Verify the refresh token is in DB
+    const token = extractRefreshToken(req);
+    if(!token) throw Error ("Error, undefined refresh token");
+
+    const key = process.env.REFRESH_TOKEN_SECRET;
+    if (!key) throw Error("Error validating refresh token");
+
+    try {
+        // 2. Verify signature + expiration
+        jwt.verify(token, key, {
+            algorithms: ['HS256'], // pin the algorithm to avoid alg-confusion attacks
+        });
+    } catch (error) {
+        throw Error(`Error verifying request! ${error}`,
+            {cause: (error as Error).message});
+    }
 }
