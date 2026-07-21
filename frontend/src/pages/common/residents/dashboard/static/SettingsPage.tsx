@@ -1,5 +1,5 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
-import {FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 import {useSelector} from "react-redux";
 import {getEmail, getName, getPhoneNumber, getUsername} from "../../../../../context/authenticationSlice.ts";
 
@@ -12,16 +12,6 @@ export type ProfileFieldProps = {
     username: string;
     email: string;
     phone: string;
-}
-
-export function NotificationControls() {
-    return (
-        <FormGroup>
-            <FormControlLabel control={<Switch defaultChecked/>} label="Email Notifications"/>
-            <FormControlLabel control={<Switch defaultChecked/>} label="Maintenance Notifications"/>
-            <FormControlLabel control={<Switch defaultChecked/>} label="Notice Alerts"/>
-        </FormGroup>
-    )
 }
 
 export function ProfileField({input}: FieldProps) {
@@ -68,14 +58,9 @@ export function SettingsPage() {
                                            username={user.username}
                                            email={user.email} phone={user.phone}/>
                         </div>
-                        <div className="notifications-settings text-left">
-                            <h1>Notifications</h1>
-                            <NotificationControls/>
-                        </div>
                         <div className="security-settings flex flex-col text-left">
                             <h1>Security</h1>
-                            <button className="text-left font-bold">Change password</button>
-                            <FormControlLabel control={<Switch defaultChecked/>} label="Two factor auth"/>
+                            <Button className="text-left font-bold">Change password</Button>
                         </div>
                     </div>
                 </div>
