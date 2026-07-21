@@ -2,12 +2,13 @@ import type {Request} from "express"
 import jwt from "jsonwebtoken";
 import type {Role} from "../../database/types/user.service.types.ts";
 import type {JWTPayload} from "../../utility/auth-utils/tokens.js";
+import {extractAccessToken} from "../../utility/auth-utils/request.js";
 
 export async function verifyRequestHeader(req: Request) {
     //Verify jwt token
-    if(!req.headers) throw Error("Invalid request!");
-    const token = req.headers['cookie']?.split("jwt=")[1];
-
+    // if(!req.headers) throw Error("Invalid request!");
+    // const token = req.headers['cookie']?.split("access=")[1];
+    const token = extractAccessToken(req);
     if(!token) throw Error("Invalid Token!");
 
     const key = process.env.ACCESS_TOKEN_SECRET;
