@@ -64,8 +64,7 @@ export default async function loadSampleData(): Promise<void> {
 async function handleSetPassword() {
 	const examplePassword = process.env.SAMPLE_PASSWORD;
 	if (examplePassword !== undefined) {
-		const hashedPassword = await hash("pass.word", 10);
-		console.log(hashedPassword);
+		const hashedPassword = await hash(examplePassword, 10);
 		await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
 	}
 }
