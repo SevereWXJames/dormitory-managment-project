@@ -4,8 +4,8 @@ import {
     signUp
 } from "../services/usersServices.ts";
 import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
-import {extractRefreshToken} from "../utility/auth-utils/request.js";
-import {extractUserPayloadFromToken} from "../utility/auth-utils/tokens.js";
+import {extractRefreshToken} from "../utility/auth-utils/request.ts";
+import {extractUserPayloadFromToken} from "../utility/auth-utils/tokens.ts";
 import {Types} from "mongoose";
 const authRouter = express.Router();
 
@@ -14,7 +14,7 @@ authRouter.post("/refresh", async(req, res) => {
         const refreshToken = extractRefreshToken(req);
         const {id, roles} = extractUserPayloadFromToken(refreshToken);
         const userId = id ? id as Types.ObjectId : null;
-        setAuthCookie( userId, roles, res);
+        setAuthCookie(userId, roles, res);
         res.status(200).json({
             message: "Refresh token successfully!",
             type: "success"

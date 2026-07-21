@@ -1,7 +1,7 @@
 import type {NextFunction,Response, Request} from "express";
 import {validateRefreshToken, verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
 import type {Role} from "../database/types/user.service.types.ts";
-import {TokenExpiredError} from "jsonwebtoken";
+import {TokenExpiredError} from "./services/middleware.service.ts";
 
 //Auth Middleware
 export const checkRefreshToken = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,8 +1,11 @@
 import type {Request} from "express"
-import jwt, {TokenExpiredError} from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import pkg from "jsonwebtoken";
 import type {Role} from "../../database/types/user.service.types.ts";
-import type {JWTPayload} from "../../utility/auth-utils/tokens.js";
-import {extractAccessToken, extractRefreshToken} from "../../utility/auth-utils/request.js";
+import type {JWTPayload} from "../../utility/auth-utils/tokens.ts";
+import {extractAccessToken, extractRefreshToken} from "../../utility/auth-utils/request.ts";
+
+export const {TokenExpiredError} = pkg;
 
 export async function verifyRequestHeader(req: Request) {
     //Verify jwt token
