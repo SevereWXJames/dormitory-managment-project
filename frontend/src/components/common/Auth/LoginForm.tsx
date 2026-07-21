@@ -1,4 +1,4 @@
-import {Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
+import {Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput} from "@mui/material";
 import {useLoginForm} from "@/components/common/Auth/hooks/useLoginForm.tsx";
 
 /**
@@ -25,33 +25,38 @@ export function LoginForm() {
         handleMouseDownPassword,
         handleMouseUpPassword,
         loginError,
+        usernameError,
+        emailError,
+        passwordError,
         handleLogIn,
     } = useLoginForm();
 
     return (
         <div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
              style={{width: 'fit-content', margin: '0 auto'}}>
-            <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
+            <FormControl error={Boolean(usernameError)} sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
                 <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
                 <OutlinedInput
                     id={`${usernameFieldID}-input`}
                     type='text'
                     label="Username"
                     value={username}
-                    onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
+                    onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
                 />
+                {usernameError && <FormHelperText>{usernameError}</FormHelperText>}
             </FormControl>
-            <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
+            <FormControl error={Boolean(emailError)} sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
                 <InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
                 <OutlinedInput
                     id={`${emailFieldID}-input`}
                     type='text'
                     label="E-mail"
                     value={email}
-                    onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
+                    onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
                 />
+                {emailError && <FormHelperText>{emailError}</FormHelperText>}
             </FormControl>
-            <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
+            <FormControl error={Boolean(passwordError)} sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
                 <InputLabel htmlFor={`${passwordFieldID}-input`}>Password</InputLabel>
                 <OutlinedInput
                     id={`${passwordFieldID}-input`}
@@ -66,7 +71,6 @@ export function LoginForm() {
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 onMouseUp={handleMouseUpPassword}
-                                onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
                                 edge="end"
                             >
                                 {showPassword ? <span className="password-field-edge-button">Hide</span> :
@@ -76,6 +80,7 @@ export function LoginForm() {
                     }
                     label="Password"
                 />
+                {passwordError && <FormHelperText>{passwordError}</FormHelperText>}
             </FormControl>
             <FormControl>
                 <Button id="open-nav-bar-button" variant="contained" onClick={handleLogIn}>Log in</Button>

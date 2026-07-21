@@ -55,10 +55,39 @@ export async function getExistingUserFromId(_id: mongoose.Types.ObjectId): Promi
 
 //Looks for account, verifies information, returns user.
 export async function logIn(username: string, email: string, password: string) {
-    const user = await userModel.findOne({ username, email });
-    if (!user) throw Error("Invalid username, email, or password");
-    const isMatch = await compare(password, user.password); // correct verification
-    if (!isMatch) throw Error("Invalid username, email, or password");
+    if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
+        throw Error("Username or email is required.");
+    }
+    if (!password) {
+        throw Error("Password is required.");
+    }
+
+    const simpleEmailRegex = /^\S+@\S+\.\S+$/;
+
+    const normalizedUsername = username ? username.trim() : "";
+    const normalizedEmail = email ? email.trim().toLowerCase() : "";
+
+    // If both username and email were provided, require both to match the same account.
+    let user: any = null;
+    if (normalizedUsername !== "" && normalizedEmail !== "") {
+        if (!simpleEmailRegex.test(normalizedEmail)) {
+            throw Error("Invalid email format.");
+        }
+        user = await userModel.findOne({ username: normalizedUsername, email: normalizedEmail });
+        if (!user) throw Error("Username and email do not match any account.");
+    } else if (normalizedUsername !== "") {
+        user = await userModel.findOne({ username: normalizedUsername });
+        if (!user) throw Error("Username not found.");
+    } else if (normalizedEmail !== "") {
+        if (!simpleEmailRegex.test(normalizedEmail)) {
+            throw Error("Invalid email format.");
+        }
+        user = await userModel.findOne({ email: normalizedEmail });
+        if (!user) throw Error("Email not found.");
+    }
+
+    const isMatch = await compare(password, user.password);
+    if (!isMatch) throw Error("Incorrect password.");
 
     return user;
 }
@@ -84,8 +113,37 @@ async function createNewResident(userId: Types.ObjectId) {
 export async function signUp(profileData: SignUpRequest) {
     const {username, password, email, roles} = profileData;
 
-    const user = await userModel.findOne({username, email});
-    if (user) throw Error("User already exists! Try logging in.");
+    if (!username || username.trim() === "") {
+        throw Error("Username is required.");
+    }
+    if (!password || password.trim() === "") {
+        throw Error("Password is required.");
+    }
+    if (!email || email.trim() === "") {
+        throw Error("Email is required.");
+    }
+
+    const normalizedUsername = username.trim();
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Basic validation for email format
+    const simpleEmailRegex = /^\S+@\S+\.\S+$/;
+    if (!simpleEmailRegex.test(normalizedEmail)) {
+        throw Error("Invalid email format.");
+    }
+
+    // Ensure username and email are unique
+    const existingByUsername = await userModel.findOne({ username: normalizedUsername });
+    if (existingByUsername) {
+        throw Error("Username already exists. Choose another username.");
+    }
+    const existingByEmail = await userModel.findOne({ email: normalizedEmail });
+    if (existingByEmail) {
+        throw Error("Email already in use. Use a different email.");
+    }
+
+    profileData.username = normalizedUsername;
+    profileData.email = normalizedEmail;
 
     try {
         profileData.password = await hash(password, 10);
