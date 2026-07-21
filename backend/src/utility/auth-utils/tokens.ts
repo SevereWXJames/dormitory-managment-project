@@ -32,7 +32,9 @@ export const createRefreshToken = (id: null | Types.ObjectId, roles: Role[]) => 
         {expiresIn: "7d"}); //refresh Token
 }
 
-export const extractUserPayloadFromToken = (token : string)=> {
+export const extractUserPayloadFromToken = (token : string | undefined)=> {
+    if(!token) throw Error("Error, token undefined");
+
     const key = process.env.REFRESH_TOKEN_SECRET;
     if (!key) throw Error("Error creating jwt token");
 
