@@ -4,14 +4,14 @@ import {
     signUp
 } from "../services/usersServices.ts";
 import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
-import {extractRefreshTokenFromReq} from "../utility/auth-utils/request.ts";
+import {extractRefreshTokenFromRequest} from "../utility/auth-utils/request.ts";
 import {extractUserPayloadFromRefreshToken} from "../utility/auth-utils/tokens.ts";
 import {Types} from "mongoose";
 const authRouter = express.Router();
 
 authRouter.post("/refresh", async(req, res) => {
     try{
-        const refreshToken = extractRefreshTokenFromReq(req);
+        const refreshToken = extractRefreshTokenFromRequest(req);
         const {id, roles} = extractUserPayloadFromRefreshToken(refreshToken);
         const userId = id ? id as Types.ObjectId : null;
         await setAuthCookie(userId, roles, res);
@@ -80,10 +80,10 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
 });
 
 // Sign Out request
-authRouter.post("/logout", async (_req, res) => {
+authRouter.post("/logout", async (req, res) => {
     // clear cookies
     try{
-        await clearCookies(res);
+        await clearCookies(res, req);
         return res.json({
             message: "Logged out successfully!",
             type: "success",

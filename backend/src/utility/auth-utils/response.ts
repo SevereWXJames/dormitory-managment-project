@@ -5,8 +5,9 @@ import {
     extractUserPayloadFromRefreshToken,
     removeRefreshTokenFromTable
 } from "./tokens.ts";
-import type {CookieOptions, Response} from "express";
+import type {CookieOptions, Response, Request} from "express";
 import type {Role} from "../../database/types/user.service.types.ts";
+import {extractRefreshTokenFromRequest} from "./request.js";
 
 export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[], res: Response) => {
     try{
@@ -27,8 +28,8 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
     }
 }
 
-export const clearCookies = async (res: Response) => {
-    const refreshToken = extractRefreshTokenFromResponse(res);
+export const clearCookies = async (res: Response, req: Request) => {
+    const refreshToken = extractRefreshTokenFromRequest(req);
     if(!refreshToken) throw Error("Error extracting refresh token from response");
     try{
         const {id} = extractUserPayloadFromRefreshToken(refreshToken);
@@ -39,12 +40,6 @@ export const clearCookies = async (res: Response) => {
     }catch(error){
         throw Error("Error clearing cookies", {cause: (error as Error).message});
     }
-}
-
-export const extractRefreshTokenFromResponse = (res: Response) => {
-    const cookies = res.getHeaders()['set-cookie'] as unknown as string[];
-    const rawCookie = cookies.find((c) => c.startsWith('refresh='));
-    return rawCookie?.split(';')[0];
 }
 
 
