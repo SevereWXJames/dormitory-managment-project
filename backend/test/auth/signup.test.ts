@@ -53,13 +53,13 @@ describe('POST /signup', () => {
 
         });
 
-        it('should set the jwt cookie with the correct flags', async() => {
+        it('should set the access token with the correct flags', async() => {
             const res = await chaiWithHttp.request.execute(app)
                 .post('/signup')
                 .send(validSignupPayload);
 
             const cookies = res.headers['set-cookie'] as unknown as string[];
-            const jwtCookie = cookies.find((c) => c.startsWith('jwt='));
+            const jwtCookie = cookies.find((c) => c.startsWith('access='));
             expect(jwtCookie).to.exist;
             expect(jwtCookie).to.include('HttpOnly');
             expect(jwtCookie).to.include('Secure');

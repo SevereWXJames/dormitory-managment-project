@@ -3,8 +3,7 @@ import chaiHttp from "chai-http";
 import {after, afterEach, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
-import jwt from "jsonwebtoken";
-import {RefreshTokenModel} from "../../src/dataTypes/refreshTokens.js";
+import {RefreshTokenModel} from "../../src/dataTypes/refreshTokens.ts";
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
 
@@ -73,6 +72,7 @@ describe('POST /logout', () => {
                 const res = await chaiWithHttp.request.execute(app)
                     .post('/logout')
                     .send();
+                console.log(`res: ${JSON.stringify(res.body)}`);
                 expect(res.body.type).to.equal("success");
             } catch (error) {
                 throw Error(`Error with logging out! ${error}`);
