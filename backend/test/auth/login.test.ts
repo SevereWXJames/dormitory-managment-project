@@ -4,6 +4,8 @@ import {after, afterEach, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 import {UserModel} from "../../src/dataTypes/user.ts";
+import {RefreshTokenModel} from "../../src/dataTypes/refreshTokens.ts";
+import {extractUserPayloadFromRefreshToken} from "../../src/utility/auth-utils/tokens.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -52,8 +54,6 @@ describe('POST /login', () => {
         password: 'password123',
     };
 
-    const validRequest =
-
     describe('HTTP Response - Log In', () => {
         beforeEach('Create an account', async () => {
             try{
@@ -75,6 +75,45 @@ describe('POST /login', () => {
                 .send(validLoginPayload);
             console.log(`res: ${JSON.stringify(res.body)}`);
             expect(res).to.have.status(200);
+        });
+
+        it('should have both refresh and access token on successful login', async() => {
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/login')
+                .send(validLoginPayload);
+            expect(res).to.have.status(200);
+
+            const cookies = res.headers['set-cookie'] as unknown as string[];
+            console.log(`res-headers: ${JSON.stringify(res.headers)}`)
+            console.log(`cookies: ${cookies}`);
+            const rawAccessCookie = cookies.find((c) => c.startsWith('access='));
+            const rawRefreshCookie = cookies.find((c) => c.startsWith('refresh='));
+
+            const accessToken = rawAccessCookie?.split(';')[0];
+            const refreshToken  = rawRefreshCookie?.split(';')[0];
+
+            expect(refreshToken).to.exist;
+            expect(accessToken).to.exist;
+        });
+
+        it('should insert the refresh token on successful login', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/login')
+                .send(validLoginPayload);
+            expect(res).to.have.status(200);
+
+            const cookies = res.headers['set-cookie'] as unknown as string[];
+            console.log(`res-headers: ${JSON.stringify(res.headers)}`)
+            console.log(`cookies: ${cookies}`);
+            const rawCookie = cookies.find((c) => c.startsWith('refresh='));
+            const token  = rawCookie?.split(';')[0];
+            const refreshToken = (token as string).replace("refresh=", "");
+
+            const {id} = extractUserPayloadFromRefreshToken(refreshToken);
+            const userId = id as string;
+            const filter = {userId: userId, refreshToken: refreshToken}
+            const docs = await RefreshTokenModel.find(filter).exec();
+            expect(docs.length > 0).to.be.true;
         });
 
         it('should return 500 on invalid password', async () => {
@@ -109,13 +148,13 @@ describe('POST /login', () => {
             expect(res.headers['set-cookie']).to.exist;
         });
 
-        it('should set the jwt cookie with the correct flags', async () => {
+        it('should set the access cookie with the correct flags', async () => {
             const res = await chaiWithHttp.request.execute(app)
                 .post('/login')
                 .send(validLoginPayload);
 
             const cookies = res.headers['set-cookie'] as unknown as string[];
-            const jwtCookie = cookies.find((c) => c.startsWith('jwt='));
+            const jwtCookie = cookies.find((c) => c.startsWith('access='));
             expect(jwtCookie).to.exist;
             expect(jwtCookie).to.include('HttpOnly');
             expect(jwtCookie).to.include('Secure');

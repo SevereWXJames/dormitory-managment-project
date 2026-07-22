@@ -23,7 +23,6 @@ export const createAccessToken = (id: null | Types.ObjectId, roles: Role[]) => {
 
 export const createRefreshToken = async (id: null | Types.ObjectId, roles: Role[]) => {
     if (!id) throw Error("Error, invalid id!");
-
     const key = process.env.REFRESH_TOKEN_SECRET;
     if (!key) throw Error("Error creating jwt token");
     try{
@@ -32,7 +31,6 @@ export const createRefreshToken = async (id: null | Types.ObjectId, roles: Role[
             jwtPayload,
             key,
             {expiresIn: "7d"}); //refresh Token
-
         await updateRefreshTokenTable(id, refreshToken);
         return refreshToken;
     }catch(error){
@@ -61,12 +59,12 @@ export const updateRefreshTokenTable =  async (userId: null | Types.ObjectId, re
     }
 }
 
-export const extractUserPayloadFromToken = (token : string | undefined)=> {
+export const extractUserPayloadFromRefreshToken = (token : string | undefined)=> {
     if(!token) throw Error("Error, token undefined");
 
     const key = process.env.REFRESH_TOKEN_SECRET;
     if (!key) throw Error("Error creating jwt token");
-
+    console.log(`token: ${token}`)
     try{
         const payload = jwt.verify(token, key, {
             algorithms: ['HS256'], // pin the algorithm to avoid alg-confusion attacks
