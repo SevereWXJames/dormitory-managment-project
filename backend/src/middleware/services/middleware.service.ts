@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import pkg from "jsonwebtoken";
 import type {Role} from "../../database/types/user.service.types.ts";
 import type {JWTPayload} from "../../utility/auth-utils/tokens.ts";
-import {extractAccessTokenFromRes, extractRefreshTokenFromReq} from "../../utility/auth-utils/request.ts";
+import {extractAccessTokenFromRequest, extractRefreshTokenFromRequest} from "../../utility/auth-utils/request.ts";
 
 export const {TokenExpiredError} = pkg;
 
@@ -11,7 +11,7 @@ export async function verifyRequestHeader(req: Request) {
     //Verify jwt token
     // if(!req.headers) throw Error("Invalid request!");
     // const token = req.headers['cookie']?.split("access=")[1];
-    const token = extractAccessTokenFromRes(req);
+    const token = extractAccessTokenFromRequest(req);
     if (!token) throw Error("Invalid Token!");
 
     const key = process.env.ACCESS_TOKEN_SECRET;
@@ -41,7 +41,7 @@ export const validateRefreshToken = (req: Request) => {
     //TODO:
     // Verify the userId matches the userId in the payload
     // Verify the refresh token is in DB
-    const token = extractRefreshTokenFromReq(req);
+    const token = extractRefreshTokenFromRequest(req);
     if(!token) throw Error ("Error, undefined refresh token");
 
     const key = process.env.REFRESH_TOKEN_SECRET;
