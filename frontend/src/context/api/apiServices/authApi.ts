@@ -3,6 +3,12 @@ import { api } from "../api";
 import type {Role} from "@/dataTypes/user.ts";
 import {logIn} from "@/context/authenticationSlice.ts";
 
+export interface RefreshResponse {
+    message: string;
+    type: string;
+    data: AuthUser;
+}
+
 export interface SignUpResponse {
     message: string;
     data: AuthUser;
@@ -33,6 +39,23 @@ export interface AuthUser {
 
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
+        refresh: builder.mutation<RefreshResponse, void>({
+            query: () => ({
+                url: "/refresh",
+                method: "POST",
+            }),
+            invalidatesTags: ["CurrentUser"],
+            async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
+                try {
+                    const { data: responseBody } = await queryFulfilled;
+                    const user = responseBody.data;
+                    dispatch(logIn({ username: user.username, email: user.email, userId: user._id, roles: user.roles }));
+                } catch(err) {
+                    console.error('Refresh mutation failed:', err);
+                }
+            },
+        }),
+
         login: builder.mutation<AuthUser, LoginRequest>({
             query: (credentials) => ({
                 url: "/login",
@@ -43,7 +66,10 @@ export const authApi = api.injectEndpoints({
             async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
-                    dispatch(logIn({ username: data.username, email: data.email, userId: data._id, roles: data.roles }));
+                    dispatch(logIn({ username: data.username,
+                        email: data.email,
+                        userId: data._id,
+                        roles: data.roles}));
                 } catch {
                     // login failed — no dispatch needed, error surfaces via the mutation's own error state
                 }
@@ -74,4 +100,5 @@ export const authApi = api.injectEndpoints({
 export const {
     useLoginMutation,
     useSignUpMutation,
+    useRefreshMutation,
 } = authApi;
