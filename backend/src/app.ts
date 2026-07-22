@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import {json} from "body-parser";
 import cors from "cors";
 import IoTRouter from "./routes/IoT.ts";
@@ -23,6 +24,7 @@ app.use(cors({
 }));
 
 app.use(json());
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/residents", authenticateRequest, requireRole(Role.ADMIN), residentsRouter);

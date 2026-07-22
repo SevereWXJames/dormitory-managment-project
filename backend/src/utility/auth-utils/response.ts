@@ -42,8 +42,8 @@ export const clearCookies = async (res: Response) => {
 }
 
 export const extractRefreshTokenFromResponse = (res: Response) => {
-    const cookies = res.header('set-cookie') as unknown as string[];
-    const rawCookie = cookies.find((c) => c.startsWith('access='));
+    const cookies = res.getHeaders()['set-cookie'] as unknown as string[];
+    const rawCookie = cookies.find((c) => c.startsWith('refresh='));
     return rawCookie?.split(';')[0];
 }
 
