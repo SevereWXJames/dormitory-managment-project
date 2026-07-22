@@ -7,7 +7,7 @@ import {
 } from "./tokens.ts";
 import type {CookieOptions, Response, Request} from "express";
 import type {Role} from "../../database/types/user.service.types.ts";
-import {extractRefreshTokenFromRequest} from "./request.js";
+import {extractRefreshTokenFromRequest} from "./request.ts";
 
 export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[], res: Response) => {
     try{
@@ -16,7 +16,7 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
         console.log(`refresh token: ${refreshToken}`);
         const cookiePayload : CookieOptions = {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
-            secure: true,          // only sent over HTTPS (set false only for local http dev)
+            secure: process.env.NODE_ENV === "production",          // only sent over HTTPS (set false only for local http dev)
             sameSite: "strict",    // or "lax" — see note below on cross-site setups
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
             path: "/",
@@ -28,9 +28,9 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
     }
 }
 
-export const clearCookies = async (res: Response, req: Request) => {
+export const clearCookies = async (req: Request, res: Response) => {
     const refreshToken = extractRefreshTokenFromRequest(req);
-    if(!refreshToken) throw Error("Error extracting refresh token from response");
+    if(!refreshToken) throw Error("Error extracting refresh token from request");
     try{
         const {id} = extractUserPayloadFromRefreshToken(refreshToken);
         const userId = id ? new Types.ObjectId(id) : null;

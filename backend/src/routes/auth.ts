@@ -81,7 +81,7 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
 authRouter.post("/logout", async (req, res) => {
     // clear cookies
     try{
-        await clearCookies(res, req);
+        await clearCookies(req, res);
         return res.json({
             message: "Logged out successfully!",
             type: "success",

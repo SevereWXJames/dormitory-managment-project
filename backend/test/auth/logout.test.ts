@@ -7,6 +7,12 @@ import {RefreshTokenModel} from "../../src/dataTypes/refreshTokens.ts";
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
 
+/* NOTE: To run the tests in intelliJ and see them pass, follow these steps:
+* 1. Go to 'Run' -> 'Edit Configurations'. Ensure that test 'POST/logout' is selected.
+* 2. In 'environment variables' field, input 'NODE_ENV=test'
+* 3. Apply the changes
+* 4. Click OK */
+
 describe('POST /logout', () => {
     before(async () => {
         console.log('file loaded');
@@ -35,6 +41,7 @@ describe('POST /logout', () => {
     describe('HTTP Response - Log In', () => {
         let testRefreshToken : string | undefined;
         let testUserId: string | undefined;
+        let agent: ChaiHttp.Agent; // persists cookies across requests
 
         before('Create an account', async () => {
             try {
@@ -48,8 +55,9 @@ describe('POST /logout', () => {
 
         beforeEach('Log in', async () => {
             try {
-                const res = await chaiWithHttp.request.execute(app)
-                    .post('/login')
+                agent = chaiWithHttp.request.agent(app); // fresh agent per test, cookie jar attached to it
+
+                const res = await agent.post('/login')
                     .send(validLoginPayload);
 
                 const userId = res.body.data._id;
@@ -63,14 +71,18 @@ describe('POST /logout', () => {
             }
         });
 
+        afterEach( async () => {
+            agent.close(); //Clears agent's cookies between tests
+        })
+
         after(async () => {
+
             await clearTestDB();
         });
 
         it('logs out successfully', async () => {
             try {
-                const res = await chaiWithHttp.request.execute(app)
-                    .post('/logout')
+                const res = await agent.post('/logout')
                     .send();
                 console.log(`res: ${JSON.stringify(res.body)}`);
                 expect(res.body.type).to.equal("success");
@@ -81,7 +93,7 @@ describe('POST /logout', () => {
 
         it('clears access and refresh tokens upon successful logout', async () => {
             try {
-                const res = await chaiWithHttp.request.execute(app)
+                const res = await agent
                     .post('/logout')
                     .send();
                 const cookies = res.headers['set-cookie'] as unknown as string[];
@@ -101,7 +113,7 @@ describe('POST /logout', () => {
 
         it('deletes refresh and access token upon successful logout', async () => {
             try {
-                await chaiWithHttp.request.execute(app)
+                await agent
                     .post('/logout')
                     .send();
                 const id = testUserId ? testUserId : null;
