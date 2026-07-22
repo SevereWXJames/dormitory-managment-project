@@ -1,4 +1,4 @@
-import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import './App.css'
 import {HomePage} from './pages/common/HomePage';
 import {LoginPage} from './pages/common/LoginPage';
@@ -42,7 +42,6 @@ function App() {
     return (
         <>
             <CssBaseline/>
-            <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
@@ -130,7 +129,6 @@ function App() {
                         </ProtectedRoute>
                     }/>
                 </Routes>
-            </BrowserRouter>
         </>
 
     );
