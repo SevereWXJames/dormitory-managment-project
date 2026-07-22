@@ -211,7 +211,7 @@ async function createSlotsForService(service: Service) {
 }
 
 async function insertSlotIfNotExisting(slot: ReservationSlotTemplate) {
-    await ReservationSlotModel.updateOne({startTime: slot.startTime}, {
+    await ReservationSlotModel.updateOne({serviceId: slot.serviceId, startTime: slot.startTime}, {
             $setOnInsert: {
                 serviceId: slot.serviceId,
                 serviceName: slot.serviceName,
