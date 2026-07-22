@@ -6,7 +6,7 @@ import {
 import mongoose, {Types} from "mongoose";
 import {BOOKING_COST} from "../utility/pricesForBookings.ts";
 import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
-import {type Service, ServiceModel} from "../dataTypes/service.ts";
+import {type Service} from "../dataTypes/service.ts";
 import {getAllServices} from "./serviceServices.ts";
 
 export async function getReservationsBookedByUserId(userId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
