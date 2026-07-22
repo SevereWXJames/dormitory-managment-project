@@ -2,7 +2,7 @@ import {Types} from "mongoose";
 import {
     createAccessToken,
     createRefreshToken,
-    extractUserPayloadFromToken,
+    extractUserPayloadFromRefreshToken,
     removeRefreshTokenFromTable
 } from "./tokens.ts";
 import type {CookieOptions, Response} from "express";
@@ -11,7 +11,8 @@ import type {Role} from "../../database/types/user.service.types.ts";
 export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[], res: Response) => {
     try{
         const accessToken = createAccessToken(userId, roles);
-        const refreshToken = createRefreshToken(userId, roles);
+        const refreshToken = await createRefreshToken(userId, roles);
+        console.log(`refresh token: ${refreshToken}`);
         const cookiePayload : CookieOptions = {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: true,          // only sent over HTTPS (set false only for local http dev)
@@ -30,7 +31,7 @@ export const clearCookies = async (res: Response) => {
     const refreshToken = extractRefreshTokenFromResponse(res);
     if(!refreshToken) throw Error("Error extracting refresh token from response");
     try{
-        const {id} = extractUserPayloadFromToken(refreshToken);
+        const {id} = extractUserPayloadFromRefreshToken(refreshToken);
         const userId = id ? new Types.ObjectId(id) : null;
         await removeRefreshTokenFromTable(userId, refreshToken);
         res.clearCookie("access");
