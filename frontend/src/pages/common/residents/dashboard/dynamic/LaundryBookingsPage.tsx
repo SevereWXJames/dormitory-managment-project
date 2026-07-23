@@ -10,15 +10,6 @@ import {
 import {MachineList} from "@/components/residents/facilitiesBooking/MachineList.tsx";
 import {Link} from "react-router-dom";
 import {BookingsTable} from "@/components/residents/facilitiesBooking/BookingsTable.tsx";
-//import {Toaster} from "@/components/ui/sonner.tsx";
-
-export type Bookings = {
-    date: Date,
-    start_time: string,
-    end_time: string,
-    machine_id: string,
-    event_title: string,
-}
 
 export function LaundryBookingsPage() {
     const dispatch = useDispatch();
@@ -30,7 +21,6 @@ export function LaundryBookingsPage() {
 
     return (
         <CommonFrame commonFrameType={"RESIDENT"}>
-            {/*<Toaster />*/}
             <div className="bento-grid grid grid-cols-1 md:grid-cols-[min-content_1fr] gap-4 p-4">
                 {isLoading && <p>Loading bookings...</p>}
                 {error && <p style={{color: "red"}}>{error}</p>}
@@ -60,7 +50,6 @@ export function LaundryBookingsPage() {
                             <CardTitle>Upcoming bookings</CardTitle>
                             <CardContent>
                                 <BookingsTable caption={"Upcoming bookings"}/>
-                                {/*<BookingsTable rows={bookings} caption={"Upcoming bookings"}/>*/}
                             </CardContent>
                         </Card>
                     </div>

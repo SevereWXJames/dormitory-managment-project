@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminMaintenanceData } from "@/pages/common/buildingManager/pageHooks/useAdminMaintenanceData.tsx";
 import { useUpdateMaintenanceRequestStatusMutation } from "@/context/api/apiServices/maintenanceRequestApi.ts";
+import {toast} from "sonner";
 
 type StatusFilter = "All" | { id: string; text: string };
 
@@ -63,7 +64,9 @@ export function AdminMaintenancePage() {
             await updateMaintenanceRequestStatus({ requestId, statusId: String(targetStatus._id) }).unwrap();
             setStatusOverrides((previous) => ({ ...previous, [requestId]: String(targetStatus._id) }));
             setFeedback(`Status updated to ${targetStatus.text}.`);
+            toast.success(`Status updated to ${targetStatus.text}.`);
         } catch {
+            toast.success(`Error, failed to update request status`);
             setFeedback("Could not update the request status. Please try again.");
         }
     };
