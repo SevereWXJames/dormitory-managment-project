@@ -1,6 +1,7 @@
 import {type IoTStatus, IoTStatusModel} from "../../dataTypes/IoT/IoTStatus.ts";
 import {type IoTEvent, IoTEventModel} from "../../dataTypes/IoT/IoTEvent.ts";
 import mongoose from "mongoose";
+import {sendMQTTMessage} from "./mqttServices.ts";
 
 export async function getStatusForServiceId(serviceId: mongoose.Types.ObjectId): Promise<IoTStatus> {
     const status = await IoTStatusModel.findOne({facilityID: serviceId}).lean().exec();
@@ -34,4 +35,10 @@ export async function getEventsForLastNDays(nDays: number) {
         console.log(`error: ${error}`);
         throw Error("Error getting events", {cause: error} );
     }
+}
+
+const RESERVATION_TOPIC = "SmartAPT/app/reservations";
+
+export async function sendReservationUpdateIoT(obj: object) {
+    await sendMQTTMessage(obj, RESERVATION_TOPIC);
 }
