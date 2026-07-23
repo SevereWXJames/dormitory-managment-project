@@ -1,5 +1,6 @@
 import express, {type CookieOptions, type Request, type Response} from "express";
 import {
+    getExistingUserFromId, getUserByQuery,
     logIn,
     signUp
 } from "../services/usersServices.ts";
@@ -13,10 +14,18 @@ authRouter.post("/refresh", async(req, res) => {
     try{
         const refreshToken = extractRefreshTokenFromRequest(req);
         const {id, roles} = extractUserPayloadFromRefreshToken(refreshToken);
-        const userId = id ? id as Types.ObjectId : null;
+        const userId = id as Types.ObjectId;
+        const filter = {_id: id};
+        const user = await getUserByQuery(filter);
         await setAuthCookie(userId, roles, res);
         res.status(200).json({
             message: "Refresh token successfully!",
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: user.roles,
+            },
             type: "success"
         });
     }catch(error){
