@@ -1,4 +1,4 @@
-import {useGetSlotsByServiceNameQuery,} from "@/context/api/apiServices/reservationSlotsApi.ts";
+import {useGetSlotsByServiceIdQuery,} from "@/context/api/apiServices/reservationSlotsApi.ts";
 import {useState} from "react";
 import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {useReservationApi} from "@/components/residents/facilitiesBooking/hooks/useReservationApi.tsx";
@@ -37,7 +37,7 @@ export function useMachineDialog(machine: Machine){
         }
     }
 
-    const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceNameQuery(machine.name);
+    const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceIdQuery(machine.id);
     const slots = slotsData?.map(slot => ({...slot, startTimeString: getTime(slot.startTime)}));
     return {
         slots,
