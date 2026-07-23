@@ -17,6 +17,7 @@ authRouter.post("/refresh", async(req, res) => {
         const userId = id as Types.ObjectId;
         const filter = {_id: id};
         const user = await getUserByQuery(filter);
+        console.log(`user: ${JSON.stringify(user, null, 2)}`)
         await setAuthCookie(userId, roles, res);
         res.status(200).json({
             message: "Refresh token successfully!",
