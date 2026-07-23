@@ -11,7 +11,6 @@ import {HelpPage} from "./pages/common/residents/dashboard/static/HelpPage.tsx";
 import {AdminDashboardPage} from "./pages/common/buildingManager/AdminDashboardPage.tsx";
 import {AdminFacilitiesPage} from "./pages/common/buildingManager/AdminFacilitiesPage.tsx";
 import {AdminMaintenancePage} from "./pages/common/buildingManager/AdminMaintenancePage.tsx";
-import {AdminNoticesPage} from "./pages/common/buildingManager/AdminNoticesPage.tsx";
 import {AdminResidentsPage} from "./pages/common/buildingManager/AdminResidentsPage.tsx";
 import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPage.tsx";
 import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
@@ -95,11 +94,7 @@ function App() {
                             <AdminMaintenancePage/>
                         </ProtectedRoute>
                     }/>
-                    <Route path="/admin/notices" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminNoticesPage/>
-                        </ProtectedRoute>
-                    }/>
+                    {/* Notices page removed from admin UI */}
                     <Route path="/admin/residents" element={
                         <ProtectedRoute allowedRoles={[Role.ADMIN]}>
                             <AdminResidentsPage/>
