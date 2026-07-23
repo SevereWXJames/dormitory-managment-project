@@ -11,7 +11,7 @@ export function AdminMaintenancePage() {
     const [activeFilter, setActiveFilter] = useState<StatusFilter>("All");
     const [selectedRequest, setSelectedRequest] = useState<(typeof requests)[number] | null>(null);
     const [statusOverrides, setStatusOverrides] = useState<Record<string, string>>({});
-    const [feedback, setFeedback] = useState<string | null>(null);
+    // const [feedback, setFeedback] = useState<string | null>(null);
     const [updateMaintenanceRequestStatus] = useUpdateMaintenanceRequestStatusMutation();
 
     const orderedStatuses = useMemo(() => {
@@ -49,13 +49,17 @@ export function AdminMaintenancePage() {
         const currentStatusId = statusOverrides[requestId] ?? request.status;
         const currentIndex = getStatusIndex(String(currentStatusId));
         if (currentIndex === -1) {
-            setFeedback("This request currently has no status mapping available.");
+            toast("This request currently has no status mapping available.");
             return;
         }
 
         const targetIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
         if (targetIndex < 0 || targetIndex >= orderedStatuses.length) {
-            setFeedback(direction === "next" ? "This request is already at the final status." : "This request is already at the initial status.");
+            if(direction === "next"){
+                toast("This request is already at the final status.");
+            }else{
+                toast("This request is already at the initial status.");
+            }
             return;
         }
 
@@ -63,11 +67,9 @@ export function AdminMaintenancePage() {
         try {
             await updateMaintenanceRequestStatus({ requestId, statusId: String(targetStatus._id) }).unwrap();
             setStatusOverrides((previous) => ({ ...previous, [requestId]: String(targetStatus._id) }));
-            setFeedback(`Status updated to ${targetStatus.text}.`);
             toast.success(`Status updated to ${targetStatus.text}.`);
         } catch {
-            toast.success(`Error, failed to update request status`);
-            setFeedback("Could not update the request status. Please try again.");
+            toast.error(`Error, failed to update request status. Please try again.`);
         }
     };
 
@@ -81,7 +83,7 @@ export function AdminMaintenancePage() {
                     </div>
                 </div>
 
-                {feedback && <div className="info-banner">{feedback}</div>}
+                {/*{feedback && <div className="info-banner">{feedback}</div>}*/}
                 {loading && <p>Loading maintenance requests...</p>}
                 {error && <p className="form-error">{error}</p>}
 
