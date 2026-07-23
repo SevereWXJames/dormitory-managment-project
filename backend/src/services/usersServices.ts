@@ -54,7 +54,7 @@ export async function getExistingUserFromId(_id: mongoose.Types.ObjectId): Promi
 }
 
 export async function getUserByQuery(filter : Object){
-    const doc = await UserModel.findOne(filter).exec();
+    const doc = await UserModel.findOne(filter).lean().exec();
     if(!doc) throw Error("Error, user not found");
     return { ...doc, _id: doc._id.toString() } as unknown as User;
 }
