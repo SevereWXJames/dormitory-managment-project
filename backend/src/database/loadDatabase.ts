@@ -54,6 +54,11 @@ export default async function loadSampleData(): Promise<void> {
 			load("IoTStatuses", IoTStatusModel, IoTStatusJSON.IoTStatuses)]);
 
 		await handleSetPassword();
+		// If sample data is being loaded, sample data already contains admin users.
+		// Skip automatic creation of a default admin when LOAD_SAMPLE_DATA is enabled.
+		if (!process.env.LOAD_SAMPLE_DATA) {
+			await ensureAdminExists();
+		}
 	} catch (error) {
 		throw Error(`Error loading the database! ${error}`);
 	}
@@ -64,5 +69,17 @@ async function handleSetPassword() {
 	if (examplePassword !== undefined) {
 		const hashedPassword = await hash(examplePassword, 10);
 		await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
+	}
+}
+
+export async function ensureAdminExists(): Promise<void> {
+	try {
+		const admin = await UserModel.findOne({ roles: { $in: ["ADMIN"] } }).lean().exec();
+		if (!admin) {
+			// No ADMIN user found. Automatic default admin creation removed.
+			console.warn("No ADMIN user found. Create an admin account or enable LOAD_SAMPLE_DATA.");
+		}
+	} catch (error) {
+		throw Error(`Error ensuring admin exists: ${error}`);
 	}
 }

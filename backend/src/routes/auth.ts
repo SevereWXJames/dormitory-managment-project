@@ -4,12 +4,28 @@ import {
     signUp
 } from "../services/usersServices.ts";
 import {createJWTToken} from "../utility/auth-utils/tokens.ts";
+import { verifyRequestHeader, verifyRoles } from "../middleware/services/middlerware.service.ts";
+import { Role } from "../database/types/user.service.types.ts";
 
 const authRouter = express.Router();
 authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles };
+        // Prevent unauthenticated users from creating ADMIN accounts.
+        if (Array.isArray(roles) && roles.includes(Role.ADMIN)) {
+            try {
+                await verifyRequestHeader(req as any);
+                await verifyRoles(req as any, [Role.ADMIN]);
+            } catch (authErr) {
+                return res.status(500).json({
+                    type: "error",
+                    message: "Authorization failed.",
+                    error: (authErr as Error).message,
+                });
+            }
+        }
+
         const user = await signUp(profileData);
         const token = createJWTToken(user._id, user.roles);
         res.cookie("jwt", token, {
