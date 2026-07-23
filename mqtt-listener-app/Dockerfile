@@ -4,4 +4,4 @@ COPY package.json ./
 RUN npm install
 COPY ./data ./data
 COPY mqtt-test-app.js .
-CMD ["node", "mqtt-test-app.js", "-f"]
+CMD ["node", "mqtt-listener-app.js", "-f"]
