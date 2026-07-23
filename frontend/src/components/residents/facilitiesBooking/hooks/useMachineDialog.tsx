@@ -16,9 +16,9 @@ export function useMachineDialog(machine: Machine){
     const [selectedSlot, setSelectedSlot] = useState<ReservationSlot | null>(null);
     const [open, setOpen] = useState(false);
     const slotId = selectedSlot?._id ?? null;
-    const serviceName = selectedSlot?.serviceName ?? null;
+    const serviceId = machine.id;
     const serviceUUID = machine.uuid;
-    const {confirmReservation, isReserveError, isReserveLoading, reserveError} = useReservationApi({slotId, serviceName});
+    const {confirmReservation, isReserveError, isReserveLoading, reserveError} = useReservationApi({slotId, serviceId});
     const [pendingToast, setPendingToast] = useState<(() => void) | null>(null);
     const {getTime} = useGetHumanReadableTime();
 

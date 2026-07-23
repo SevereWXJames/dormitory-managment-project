@@ -4,7 +4,7 @@ import { api } from "../api.ts";
 import type { Booking } from "@/types/residents/types.tsx";
 
 type BookingArgs = {
-    serviceName: string | null;
+    serviceId: string | null;
     userId: string | null;
     slotId: string | null;
 };
@@ -17,19 +17,19 @@ export const reservationsApi = api.injectEndpoints({
         }),
 
         cancelBooking: builder.mutation<void, BookingArgs>({
-            query: ({serviceName, userId, slotId}) => ({
+            query: ({userId, slotId, serviceId}) => ({
                 url: `/reservations/cancel-booking-by-service-name/`,
                 method: "PUT",
-                body: {userId, slotId, serviceName}
+                body: {userId, slotId, serviceId}
             }),
             invalidatesTags: ["Booking", "ReservationSlots", "Credits"],
         }),
 
         makeBooking: builder.mutation<void, BookingArgs>({
-            query: ({serviceName, userId, slotId}) => ({
+            query: ({userId, slotId, serviceId}) => ({
                 url: `/reservations/book-slot-by-service-name/`,
                 method: "PUT",
-                body: {userId, slotId, serviceName}}),
+                body: {userId, slotId, serviceId}}),
             invalidatesTags: ["Booking", "ReservationSlots", "Credits"],
         }),
     }),
