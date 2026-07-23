@@ -107,7 +107,7 @@ describe('POST /logout', () => {
                 expect(refreshToken?.length).lessThanOrEqual(0);
 
             }catch (error){
-                throw Error(`Error with loggin out! ${error}`);
+                throw Error(`Error with logging out! ${error}`);
             }
         })
 
@@ -119,9 +119,9 @@ describe('POST /logout', () => {
                 const id = testUserId ? testUserId : null;
                 const token = testRefreshToken ? testRefreshToken : null;
                 const filter = {userId: id, refreshToken: token}
-
-                const docs = await RefreshTokenModel.find(filter).exec();
-                expect(docs.length <= 0).to.be.true;
+                console.log(`filter: ${JSON.stringify(filter)}`);
+                const docs = await RefreshTokenModel.findOne(filter).exec();
+                expect(docs).to.be.null;
             }catch(error){
                 throw Error(`Error with logging out! ${error}`);
             }

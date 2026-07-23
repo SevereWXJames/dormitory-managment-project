@@ -29,14 +29,22 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
 }
 
 export const clearCookies = async (req: Request, res: Response) => {
+    const clearOptions: CookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+    };
+    res.clearCookie("access", clearOptions);
+    res.clearCookie("refresh", clearOptions);
+
     const refreshToken = extractRefreshTokenFromRequest(req);
     if(!refreshToken) throw Error("Error extracting refresh token from request");
+
     try{
         const {id} = extractUserPayloadFromRefreshToken(refreshToken);
         const userId = id ? new Types.ObjectId(id) : null;
         await removeRefreshTokenFromTable(userId, refreshToken);
-        res.clearCookie("access");
-        res.clearCookie("refresh");
     }catch(error){
         throw Error("Error clearing cookies", {cause: (error as Error).message});
     }
