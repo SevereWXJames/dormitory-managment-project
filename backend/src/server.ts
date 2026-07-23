@@ -14,8 +14,8 @@ await connectMongo().then(() => {
         await loadSampleData();
         console.log("Loaded sample data!");
     }
-}).then(() => {
-    MQTTConnection.setUpMQTT();
+}).then(async () => {
+   await MQTTConnection.setUpMQTT();
 }).catch((err) => {
     console.log("Connection failed: " + err.message)
 });

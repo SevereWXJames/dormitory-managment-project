@@ -10,16 +10,14 @@ class MQTTConnection {
 
     private static client: MqttClient | undefined = undefined;
 
-    public static setUpMQTT() {
+    public static async setUpMQTT() {
         console.log("uri", process.env.MQTT_URI);
-        const client = mqtt.connect(process.env.MQTT_URI as string);
+        const client = await mqtt.connectAsync(process.env.MQTT_URI as string);
+        console.log("MQTT broker connected");
 
-        client.on("connect", () => {
-            console.log("MQTT broker connected");
-            facilityTopics.forEach((topic) => {
-                client.subscribe(constructTopicString(topic));
-            });
-        });
+        await Promise.all(facilityTopics.map(async (topic) => {
+            await client.subscribeAsync(constructTopicString(topic));
+        }));
 
         client.on("message", (topic, message) => {
             const messageAsString =  new TextDecoder().decode(message);
