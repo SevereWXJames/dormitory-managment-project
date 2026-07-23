@@ -7,8 +7,8 @@ type useRowDropDownProps = {
 }
 export function useRowDropDown(props : useRowDropDownProps){
     const slotId = props.bookingInfo._id ?? null;
-    const serviceName = props.bookingInfo.serviceName ?? null;
-    const {cancelReservation} = useCancelReservationApi({slotId, serviceName});
+    const serviceId = props.bookingInfo.serviceId ?? null;
+    const {cancelReservation} = useCancelReservationApi({slotId, serviceId});
 
     const onCancel = async () => {
         try {
