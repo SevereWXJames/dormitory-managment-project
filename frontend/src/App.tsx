@@ -21,7 +21,8 @@ import {AdminSignUpPage} from "@/pages/common/buildingManager/AdminSignUpPage.ts
 import {UnauthorizedPage} from "@/pages/UnauthorizedPage.tsx";
 import {ProtectedRoute} from "@/components/common/Auth/ProtectedRoute.tsx";
 import {Role} from "@/dataTypes/user.ts";
-import {Toaster} from "@/components/ui/sonner.tsx";
+// import {Toaster} from "@/components/ui/sonner.tsx";
+import {Toaster} from 'react-hot-toast';
 import {useEffect} from "react";
 import {useRefreshMutation} from "@/context/api/apiServices/authApi.ts";
 
@@ -31,98 +32,100 @@ import {useRefreshMutation} from "@/context/api/apiServices/authApi.ts";
  * @returns JSX for the App component.
  */
 function App() {
-    const [refresh, {isLoading, isUninitialized}]= useRefreshMutation(); // calls /refresh upon mounting
+    const [refresh, {isLoading, isUninitialized}] = useRefreshMutation(); // calls /refresh upon mounting
 
     useEffect(() => {
-        refresh();}, [refresh]);
+        refresh();
+    }, [refresh]);
 
     if (isLoading || isUninitialized) return <p>Loading...</p>;
     return (
         <>
             <CssBaseline/>
-                <Routes>
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
+            <Toaster position="top-right"/>
+            <Routes>
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/unauthorized" element={<UnauthorizedPage/>}/>
 
-                    {/* Resident-only: */}
-                    <Route path="/resident-signup" element={<ResidentSignUpPage/>}/>
-                    <Route path="/dashboard" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <Toaster/>
-                            <DashboardPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/facilities" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <LaundryBookingsPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/maintenance" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <MaintenanceRequestsPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/help" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <HelpPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/credits" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <CreditsPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/settings" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <SettingsPage/>
-                        </ProtectedRoute>
-                    }/>
+                {/* Resident-only: */}
+                <Route path="/resident-signup" element={<ResidentSignUpPage/>}/>
+                <Route path="/dashboard" element={
+                    <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                        {/*<Toaster/>*/}
+                        <DashboardPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/facilities" element={
+                    <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                        <LaundryBookingsPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/maintenance" element={
+                    <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                        <MaintenanceRequestsPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/help" element={
+                    <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                        <HelpPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/credits" element={
+                    <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                        <CreditsPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/settings" element={
+                    <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
+                        <SettingsPage/>
+                    </ProtectedRoute>
+                }/>
 
-                    {/* Building manager routes */}
-                    <Route path="/admin-signup" element={<AdminSignUpPage/>}/>
-                    <Route path="/admin" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminDashboardPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/dashboard" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminDashboardPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/facilities" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminFacilitiesPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/maintenance" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminMaintenancePage/>
-                        </ProtectedRoute>
-                    }/>
-                    {/* Notices page removed from admin UI */}
-                    <Route path="/admin/residents" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminResidentsPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/access-codes" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminAccessCodesPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/settings" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminSettingsPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/help" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                            <AdminHelpPage/>
-                        </ProtectedRoute>
-                    }/>
-                </Routes>
+                {/* Building manager routes */}
+                <Route path="/admin-signup" element={<AdminSignUpPage/>}/>
+                <Route path="/admin" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminDashboardPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/admin/dashboard" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminDashboardPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/admin/facilities" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminFacilitiesPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/admin/maintenance" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminMaintenancePage/>
+                    </ProtectedRoute>
+                }/>
+                {/* Notices page removed from admin UI */}
+                <Route path="/admin/residents" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminResidentsPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/admin/access-codes" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminAccessCodesPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/admin/settings" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminSettingsPage/>
+                    </ProtectedRoute>
+                }/>
+                <Route path="/admin/help" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <AdminHelpPage/>
+                    </ProtectedRoute>
+                }/>
+            </Routes>
         </>
 
     );
