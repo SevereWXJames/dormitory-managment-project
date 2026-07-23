@@ -10,6 +10,9 @@ export function useLoginForm() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loginError, setLoginError] = useState<string | null>(null);
+    const [usernameError, setUsernameError] = useState<string | null>(null);
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     const [login, {isLoading}] = useLoginMutation();
     const navigate = useNavigate();
@@ -22,14 +25,112 @@ export function useLoginForm() {
         event.preventDefault();
     };
 
-    const handleLogIn = async () => {
+    const clearFieldErrors = () => {
         setLoginError(null);
-        if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
-            setLoginError("Username or email is required.");
+        setUsernameError(null);
+        setEmailError(null);
+        setPasswordError(null);
+    };
+
+    const getErrorMessage = (error: unknown): string => {
+        if (typeof error === "string") {
+            return error;
+        }
+
+        if (error && typeof error === "object") {
+            const maybeError = error as {
+                message?: unknown;
+                error?: unknown;
+                data?: unknown;
+            };
+
+            if (typeof maybeError.message === "string") {
+                return maybeError.message;
+            }
+
+            if (typeof maybeError.error === "string") {
+                return maybeError.error;
+            }
+
+            if (maybeError.data && typeof maybeError.data === "object") {
+                const data = maybeError.data as { message?: unknown; error?: unknown };
+                if (typeof data.message === "string") {
+                    return data.message;
+                }
+                if (typeof data.error === "string") {
+                    return data.error;
+                }
+            }
+        }
+
+        return "Login failed.";
+    };
+
+    const setFieldErrorMessages = (message: string) => {
+        const normalized = message.toLowerCase();
+        if (normalized.includes("username") && normalized.includes("email") && normalized.includes("required")) {
+            setLoginError(message);
+            setUsernameError(message);
+            setEmailError(message);
+            return;
+        }
+
+        if (normalized.includes("username") && normalized.includes("required")) {
+            setUsernameError(message);
+            return;
+        }
+
+        if (normalized.includes("email") && normalized.includes("required")) {
+            setEmailError(message);
+            return;
+        }
+
+        if (normalized.includes("username") && normalized.includes("email") && normalized.includes("do not match")) {
+            setUsernameError(message);
+            setEmailError(message);
+            return;
+        }
+
+        if (normalized.includes("invalid email")) {
+            setEmailError(message);
+            return;
+        }
+
+        if (normalized.includes("incorrect password")) {
+            setPasswordError(message);
+            return;
+        }
+
+        setLoginError(message);
+    };
+
+    const handleLogIn = async () => {
+        clearFieldErrors();
+        if (!username || username.trim() === "") {
+            const message = "Username is required.";
+            setLoginError(message);
+            setUsernameError(message);
+            return;
+        }
+
+        if (!email || email.trim() === "") {
+            const message = "Email is required.";
+            setLoginError(message);
+            setEmailError(message);
+            return;
+        }
+
+        const simpleEmailRegex = /^\S+@\S+\.\S+$/;
+        if (!simpleEmailRegex.test(email.trim())) {
+            const message = "Invalid email format.";
+            setLoginError(message);
+            setEmailError(message);
             return;
         }
         if (!password) {
-            setLoginError("Password is required.");
+            const message = "Password is required.";
+            setLoginError(message);
+            setPasswordError(message);
             return;
         }
 
@@ -45,11 +146,8 @@ export function useLoginForm() {
                 "/admin/dashboard" : "/dashboard";
             navigate(targetPath);
         } catch (error) {
-            setLoginError(
-                error && typeof error === "object" && "message" in error
-                    ? String((error as { message: unknown }).message)
-                    : "Login failed."
-            );
+            const message = getErrorMessage(error);
+            setFieldErrorMessages(message);
         }
     };
 
@@ -62,6 +160,9 @@ export function useLoginForm() {
         handleMouseDownPassword,
         handleMouseUpPassword,
         loginError,
+        usernameError,
+        emailError,
+        passwordError,
         isLoading,
         handleLogIn,
     };

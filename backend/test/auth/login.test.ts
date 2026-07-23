@@ -48,6 +48,11 @@ describe('POST /login', () => {
         password: 'password123',
     };
 
+    const missingEmailPayload = {
+        username: 'alice123',
+        password: 'password123',
+    };
+
     const validLoginPayload = {
         username: 'alice123',
         email: 'alice@tmp.com',
@@ -140,6 +145,13 @@ describe('POST /login', () => {
             expect(res).to.have.status(500);
         });
 
+        it('should reject login when email is missing', async () => {
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/login')
+                .send(missingEmailPayload);
+            expect(res).to.have.status(400);
+            expect(res.body.message).to.equal('Username and email are required.');
+        });
 
         it('should set a jwt cookie on a successful login', async () => {
             const res = await chaiWithHttp.request.execute(app)

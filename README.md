@@ -17,11 +17,11 @@ residents and building managers. The goal is to let residents book shared
 facilities, submit maintenance requests, view building notices, and manage
 facility status data in one place.
 
-## Milestone 3 Branch
+## Milestone 4 Branch
 
-- Branch: `Milestone3` (or the submitted branch link for this milestone)
-- This README documents the Milestone 3 submission state and Docker deployment.
-- The Milestone 2 section below remains for comparison with prior-stage functionality.
+- Branch: `Milestone4` (or the submitted branch link for this milestone)
+- This README documents the Milestone 4 submission state and Docker deployment.
+- The Milestone 2 and Milestone 3 sections below remain for comparison with prior-stage functionality.
 
 ## Docker Instructions
 
@@ -155,6 +155,26 @@ The following parts are visible in the frontend but should not be treated as ful
 5. Verify that notice visibility, request status updates, and resident/admin navigation work as expected in the running app.
 
 6. To confirm that role authorization and authentication are working as intended, you can try copying one of the page URIs specific to the admin interface. Then log out and or log back in as a resident and copy and paste the uri link in the address bar.
+
+## Milestone 4 Functionality
+
+This milestone focuses on polishing the existing resident experience and tightening authentication reliability. Compared with the Milestone 3 state, the work prioritizes correctness and product clarity rather than introducing a large number of new feature areas.
+
+### Scope changes
+
+- No major new product domain was added in this milestone; the effort was concentrated on refining features already present in the Milestone 3 branch.
+- The resident-facing experience was simplified by removing notice-related and other static UI elements that were not backed by a fully implemented workflow.
+
+### New functionality and improvements
+
+- Resident view cleanup: the resident dashboard and navigation now avoid surfacing notices and other static/demo components that were not fully implemented, making the UI more aligned with the current backend capabilities.
+- Stronger authentication validation: signup now rejects invalid email formats, and login requires the provided username and email to belong to the same account before access is granted.
+- Clearer auth feedback: backend authentication responses now return specific validation messages so the frontend can show more precise login/signup error feedback.
+
+### Verification notes
+
+- The updated auth behavior was verified through live backend requests for invalid signup and mismatched login attempts.
+- The frontend build was also verified successfully after the form and error-handling updates.
 
 ## Standard Features (Design Alignment)
 

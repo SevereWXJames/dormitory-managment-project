@@ -98,7 +98,7 @@ export const authApi = api.injectEndpoints({
                 try {
                     const { data: responseBody } = await queryFulfilled;
                     const user = responseBody.data;
-                    dispatch(logIn({ username: user.username, email: user.email, userId: user._id, roles: user.roles }));
+                    dispatch(logIn({ name: user.name, username: user.username, email: user.email, phoneNumber: user.phoneNumber, userId: user._id, roles: user.roles }));
                 } catch(err) {
                     console.error('Signup mutation failed:', err);
                     // signup failed — no dispatch needed, error surfaces via the mutation's own error state
