@@ -12,16 +12,18 @@ authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles };
-        // Prevent unauthenticated users from creating ADMIN accounts.
+        // Prevent unauthenticated or unauthorized users from creating ADMIN accounts.
         if (Array.isArray(roles) && roles.includes(Role.ADMIN)) {
             try {
-                await verifyRequestHeader(req as any);
-                await verifyRoles(req as any, [Role.ADMIN]);
+                await verifyRequestHeader(req);
+                await verifyRoles(req, [Role.ADMIN]);
             } catch (authErr) {
-                return res.status(500).json({
+                const message = authErr instanceof Error ? authErr.message : String(authErr);
+                const statusCode = /Insufficient permissions|Unauthorized request/.test(message) ? 403 : 401;
+                return res.status(statusCode).json({
                     type: "error",
                     message: "Authorization failed.",
-                    error: (authErr as Error).message,
+                    error: message,
                 });
             }
         }

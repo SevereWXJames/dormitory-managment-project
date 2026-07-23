@@ -4,23 +4,22 @@ import {setUpMQTT} from "./utility/mqttSetup.ts";
 import loadSampleData, { ensureAdminExists } from "./database/loadDatabase.ts";
 
 const port: number = 3000;
+const shouldLoadSampleData = process.env.LOAD_SAMPLE_DATA === "true" || process.env.LOAD_SAMPLE_DATA === "1";
 
 await connectMongo().then(() => {
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
     })
 }).then(async () => {
-    if (process.env.LOAD_SAMPLE_DATA) {
+    if (shouldLoadSampleData) {
         await loadSampleData();
         console.log("Loaded sample data!");
+    } else {
+        await ensureAdminExists();
+        console.log("Ensured fallback admin exists.");
     }
 }).then(() => {
     setUpMQTT();
 }).catch((err) => {
     console.log("Connection failed: " + err.message)
-});
-
-// Ensure at least one admin exists on startup regardless of sample-data flag
-await ensureAdminExists().catch((err) => {
-    console.error("Error ensuring initial admin exists:", err);
 });

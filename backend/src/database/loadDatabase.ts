@@ -55,8 +55,8 @@ export default async function loadSampleData(): Promise<void> {
 
 		await handleSetPassword();
 		// If sample data is being loaded, sample data already contains admin users.
-		// Skip automatic creation of a default admin when LOAD_SAMPLE_DATA is enabled.
-		if (!process.env.LOAD_SAMPLE_DATA) {
+		// Otherwise create a fallback admin so startup always has at least one admin.
+		if (process.env.LOAD_SAMPLE_DATA !== "true" && process.env.LOAD_SAMPLE_DATA !== "1") {
 			await ensureAdminExists();
 		}
 	} catch (error) {
@@ -64,20 +64,32 @@ export default async function loadSampleData(): Promise<void> {
 	}
 }
 
+function getDefaultPassword(): string {
+	return process.env.INITIAL_ADMIN_PASSWORD ?? process.env.SAMPLE_PASSWORD ?? "admin";
+}
+
 async function handleSetPassword() {
-	const examplePassword = process.env.SAMPLE_PASSWORD;
-	if (examplePassword !== undefined) {
-		const hashedPassword = await hash(examplePassword, 10);
-		await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
-	}
+	const defaultPassword = getDefaultPassword();
+	const hashedPassword = await hash(defaultPassword, 10);
+	await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
 }
 
 export async function ensureAdminExists(): Promise<void> {
 	try {
 		const admin = await UserModel.findOne({ roles: { $in: ["ADMIN"] } }).lean().exec();
 		if (!admin) {
-			// No ADMIN user found. Automatic default admin creation removed.
-			console.warn("No ADMIN user found. Create an admin account or enable LOAD_SAMPLE_DATA.");
+			const defaultEmail = process.env.INITIAL_ADMIN_EMAIL ?? "admin@smartapt.local";
+			const defaultPassword = getDefaultPassword();
+			const hashed = await hash(defaultPassword, 10);
+			await UserModel.create({
+				name: "Administrator",
+				username: "admin",
+				email: defaultEmail,
+				phoneNumber: "0000000000",
+				roles: ["ADMIN"],
+				password: hashed,
+			});
+			console.log("Default admin created:", defaultEmail);
 		}
 	} catch (error) {
 		throw Error(`Error ensuring admin exists: ${error}`);
