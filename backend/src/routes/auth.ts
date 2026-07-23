@@ -72,9 +72,11 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
             message: "Logged in successfully!",
             data: {
                 _id: user._id,
+                name: user.name,
                 username: user.username,
                 email: user.email,
-                roles: user.roles,
+                phoneNumber: user.phoneNumber,
+                roles: user.roles
             },
             type: "success"
         });

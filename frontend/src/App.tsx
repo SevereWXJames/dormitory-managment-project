@@ -5,7 +5,6 @@ import {LoginPage} from './pages/common/LoginPage';
 import {DashboardPage} from './pages/common/residents/dashboard/DashboardPage';
 import {LaundryBookingsPage} from "./pages/common/residents/dashboard/dynamic/LaundryBookingsPage.tsx";
 import {MaintenanceRequestsPage} from "./pages/common/residents/dashboard/dynamic/MaintenanceRequestsPage.tsx";
-import {NoticesPage} from "./pages/common/residents/dashboard/dynamic/NoticesPage.tsx";
 import {CreditsPage} from "./pages/common/residents/dashboard/dynamic/CreditsPage.tsx";
 import {SettingsPage} from "./pages/common/residents/dashboard/static/SettingsPage.tsx";
 import {HelpPage} from "./pages/common/residents/dashboard/static/HelpPage.tsx";
@@ -68,11 +67,6 @@ function App() {
                     <Route path="/help" element={
                         <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
                             <HelpPage/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/notices" element={
-                        <ProtectedRoute allowedRoles={[Role.RESIDENT]}>
-                            <NoticesPage/>
                         </ProtectedRoute>
                     }/>
                     <Route path="/credits" element={

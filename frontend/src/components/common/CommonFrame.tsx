@@ -38,7 +38,6 @@ export function CommonFrame(props: CommonFrameProps) {
                 <NavBarButton id="dashboard-nav-bar-button" label="Dashboard" to="/dashboard"/>
                 <NavBarButton id="facilities-nav-bar-button" label="Facilities" to="/facilities"/>
                 <NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="/maintenance"/>
-                <NavBarButton id="notices-nav-bar-button" label="Notices" to="/notices"/>
                 <NavBarButton id="credits-nav-bar-button" label="Credits" to="/credits"/>
                 <Divider/>
                 <NavBarButton id="settings-nav-bar-button" label="Settings" to="/settings"/>
