@@ -6,16 +6,20 @@ import {authApi} from "@/context/api/apiServices/authApi.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
+    name: string,
 	email: string,
     username: string,
+    phoneNumber: string,
     userId: string,
     userRole: Role[],
 };
 
 const initialState: AuthenticationSliceState = {
 	authenticationState: "UNAUTHENTICATED",
+    name: "",
 	email: "",
     username: "",
+    phoneNumber: "",
     userId: "",
     userRole: []
 };
@@ -39,18 +43,19 @@ export const authenticationSlice = createSlice({
 	initialState,
 	reducers: {
 		logIn: (state, action) => {
-            const { username, email, userId, roles } = action.payload;
+            const { name, username, email, phoneNumber, userId, roles } = action.payload;
             console.log(`action payload: ${JSON.stringify(action.payload)}`);
+            state.name = name;
             state.username = username;
             state.email = email;
+            state.phoneNumber = phoneNumber;
             state.userId = userId ?? "";
             state.userRole = roles ?? [];
 
             const roleList: string[] = Array.isArray(roles) ? roles : [];
             if (roleList.includes("Admin") || roleList.includes("Staff")) {
                 state.authenticationState = "BUILDING_MANAGER";
-            }
-            else {
+            } else {
                 state.authenticationState = "RESIDENT";
             }
 		},
@@ -79,12 +84,20 @@ export const authenticationSlice = createSlice({
 
 export const { logIn, logOut } = authenticationSlice.actions;
 
+export const getName = (state: RootState) => {
+    return state.authentication.name;
+}
+
 export const getEmail = (state: RootState) => {
     return state.authentication.email;
 }
 
 export const getUsername = (state: RootState) => {
     return state.authentication.username;
+}
+
+export const getPhoneNumber = (state: RootState) => {
+    return state.authentication.phoneNumber;
 }
 
 export const getUserId = (state: RootState) => {
