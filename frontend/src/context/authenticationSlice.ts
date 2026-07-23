@@ -59,7 +59,8 @@ export const authenticationSlice = createSlice({
 		}
 	},
     /*
-    * These extra reducers are required to resolve race conditions between
+    * These extra reducers are required to resolve race conditions between redirection
+    *  and dispatching user info to the store
     * */
     extraReducers: (builder) => {
         builder
