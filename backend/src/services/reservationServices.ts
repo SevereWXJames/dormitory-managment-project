@@ -92,7 +92,8 @@ export async function bookReservationSlot(serviceId: mongoose.Types.ObjectId | m
         type: "facilityBooked",
         data: {
             date: res.startTime,
-            durationSeconds: res.durationSeconds
+            durationSeconds: res.durationSeconds,
+            userId: userId
         }
     };
     await sendReservationUpdateIoT(obj);
@@ -122,7 +123,8 @@ export async function bookReservationSlotByName(serviceName: string | string[], 
         type: "facilityBooked",
         data: {
             date: res.startTime,
-            durationSeconds: res.durationSeconds
+            durationSeconds: res.durationSeconds,
+            userId: userId
         }
     };
     await sendReservationUpdateIoT(obj);
