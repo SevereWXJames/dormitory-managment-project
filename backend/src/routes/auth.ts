@@ -59,14 +59,14 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
         const user = await logIn(username, email, password);
         await setAuthCookie(user._id, user.roles, res);
         res.status(200).json({
-            success: true,
             message: "Logged in successfully!",
             data: {
                 _id: user._id,
                 username: user.username,
                 email: user.email,
                 roles: user.roles,
-            }
+            },
+            type: "success"
         });
     }catch(error){
         res.status(500).json({
