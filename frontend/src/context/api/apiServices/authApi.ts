@@ -78,6 +78,15 @@ export const authApi = api.injectEndpoints({
             },
         }),
 
+        logout: builder.mutation<AuthResponse, void>({
+            query: (credentials) => ({
+                url: "/logout",
+                method: "POST",
+                body: credentials,
+            }),
+            invalidatesTags: ["CurrentUser"],
+        }),
+
         signUp: builder.mutation<AuthResponse, SignUpRequest>({
             query: (credentials) => ({
                 url: "/signup",
@@ -103,4 +112,5 @@ export const {
     useLoginMutation,
     useSignUpMutation,
     useRefreshMutation,
+    useLogoutMutation,
 } = authApi;

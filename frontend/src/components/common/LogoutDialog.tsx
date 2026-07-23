@@ -5,6 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {useDispatch} from "react-redux";
 import {logOut} from "../../context/authenticationSlice.ts";
 import {useNavigate} from "react-router-dom";
+import {useLogoutMutation} from "@/context/api/apiServices/authApi.ts";
 
 export type LogoutDialogProps = {
     open: boolean,
@@ -13,9 +14,11 @@ export type LogoutDialogProps = {
 export function LogoutDialog({open, onClose} : LogoutDialogProps) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [logout] = useLogoutMutation();
     //const state = useSelector(getAuthenticationState);
 
-    const onSubmit = ()=>{
+    const onSubmit = async ()=>{
+        await logout().unwrap();
         dispatch(logOut());
         onClose();
         navigate("/login");  // redirect here
