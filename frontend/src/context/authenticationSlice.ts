@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { AuthenticationState } from '../types/residents/types.ts';
 import type {RootState} from "./store/store.ts";
 import type {Role} from "@/dataTypes/user.ts";
+import {authApi} from "@/context/api/apiServices/authApi.ts";
 
 type AuthenticationSliceState = {
 	authenticationState: AuthenticationState,
@@ -22,6 +23,16 @@ const initialState: AuthenticationSliceState = {
     userId: "",
     userRole: []
 };
+
+// Shared logic for any successful auth response containing a user object
+function setUserFromAuthResponse(state: AuthenticationSliceState,
+                                 user: { username: string; email: string; _id: string; roles: string[] }
+) {
+    state.username = user.username;
+    state.email = user.email;
+    state.userId = user._id;
+    state.userRole = user.roles as Role[];
+}
 
 /**
  * Redux slice for the authentication state.
@@ -52,7 +63,23 @@ export const authenticationSlice = createSlice({
 		logOut: (state) => {
 			state.authenticationState = "UNAUTHENTICATED";
 		}
-	}
+	},
+    /*
+    * These extra reducers are required to resolve race conditions between
+    * */
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(authApi.endpoints.refresh.matchFulfilled, (state, action) => {
+                setUserFromAuthResponse(state, action.payload.data);
+            })
+            .addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
+                setUserFromAuthResponse(state, action.payload.data);
+            })
+            .addMatcher(authApi.endpoints.signUp.matchFulfilled, (state, action) => {
+                setUserFromAuthResponse(state, action.payload.data);
+            })
+            .addMatcher(authApi.endpoints.refresh.matchRejected, () => initialState);
+    },
 });
 
 export const { logIn, logOut } = authenticationSlice.actions;

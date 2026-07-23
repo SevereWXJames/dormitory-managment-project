@@ -9,12 +9,6 @@ export interface RefreshResponse {
     data: AuthUser;
 }
 
-export interface SignUpResponse {
-    message: string;
-    data: AuthUser;
-    type: string;
-}
-
 export interface SignUpRequest {
     name: string | null,
     username: string | null;
@@ -22,6 +16,12 @@ export interface SignUpRequest {
     password: string | null;
     phoneNumber: string | null,
     roles: Role[],
+}
+
+export interface AuthResponse {
+    message: string;
+    data: AuthUser;
+    type: string;
 }
 
 export interface LoginRequest {
@@ -56,7 +56,7 @@ export const authApi = api.injectEndpoints({
             },
         }),
 
-        login: builder.mutation<AuthUser, LoginRequest>({
+        login: builder.mutation<AuthResponse, LoginRequest>({
             query: (credentials) => ({
                 url: "/login",
                 method: "POST",
@@ -65,18 +65,20 @@ export const authApi = api.injectEndpoints({
             invalidatesTags: ["CurrentUser"],
             async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(logIn({ username: data.username,
-                        email: data.email,
-                        userId: data._id,
-                        roles: data.roles}));
-                } catch {
+                    const { data : responseBody } = await queryFulfilled;
+                    const user = responseBody.data;
+                    dispatch(logIn({ username: user.username,
+                        email: user.email,
+                        userId: user._id,
+                        roles: user.roles}));
+                } catch (error) {
                     // login failed — no dispatch needed, error surfaces via the mutation's own error state
+                    console.error('Login mutation failed:', error);
                 }
             },
         }),
 
-        signUp: builder.mutation<SignUpResponse, SignUpRequest>({
+        signUp: builder.mutation<AuthResponse, SignUpRequest>({
             query: (credentials) => ({
                 url: "/signup",
                 method: "POST",
