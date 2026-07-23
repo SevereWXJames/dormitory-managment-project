@@ -32,13 +32,12 @@ import {useRefreshMutation} from "@/context/api/apiServices/authApi.ts";
  * @returns JSX for the App component.
  */
 function App() {
-    const [refresh, {isLoading, isError }]= useRefreshMutation(); // calls /refresh upon mounting
+    const [refresh, {isLoading}]= useRefreshMutation(); // calls /refresh upon mounting
 
     useEffect(() => {
         refresh();}, [refresh]);
 
     if (isLoading) return <p>Loading...</p>;
-    if (isError) return <Navigate to="/login" />;
     return (
         <>
             <CssBaseline/>
