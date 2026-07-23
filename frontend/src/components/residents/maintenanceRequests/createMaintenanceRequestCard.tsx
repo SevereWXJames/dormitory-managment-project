@@ -1,4 +1,4 @@
-import {Button, Card, CardContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select} from "@mui/material";
+import {Button, Card, CardContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Snackbar} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {addMaintenanceRequest} from "../../../context/residents/maintenanceRequestsSlice";
 import issues from "../../../assets/residents/placeholderData/maintenanceIssues.json";
@@ -24,7 +24,15 @@ export function CreateMaintenanceRequestCard() {
 		issue, setIssue,
 		location, setLocation,
 		description, setDescription,
-		handleCreateMaintenanceRequest
+		handleCreateMaintenanceRequest,
+        priorityError,
+		issueTypeError,
+		issueError,
+		formError,
+		successSnackbar,
+        handleCloseSuccessSnackbar,
+        failureSnackbar,
+        handleCloseFailureSnackbar
     } = useCreateMaintenanceRequestCard();
 
     const issueTypeMenuItems = issues.map((i) => <MenuItem value={i.category_id}>{i.category_name}</MenuItem>);
@@ -60,6 +68,7 @@ export function CreateMaintenanceRequestCard() {
                         id={`${priorityID}-input`}
                         label="Priority"
                         value={priority}
+                        error={priorityError}
                         onChange={(e) => setPriority((e.target as HTMLInputElement).value)}
                     >
                         <MenuItem value={"HIGH"}>High</MenuItem>
@@ -73,6 +82,7 @@ export function CreateMaintenanceRequestCard() {
                         id={`${issueTypeID}-input`}
                         label="Issue type"
                         value={issueType}
+                        error={issueTypeError}
                         onChange={(e) =>
                         {setIssueType((e.target as HTMLInputElement).value);
                             setIssue("")}}>
@@ -88,6 +98,7 @@ export function CreateMaintenanceRequestCard() {
                         id={`${issueID}-input`}
                         label="Issue"
                         value={issue}
+                        error={issueError}
                         onChange={(e) => setIssue((e.target as HTMLInputElement).value)}
                     >
                         {issueMenuItems}
@@ -112,10 +123,27 @@ export function CreateMaintenanceRequestCard() {
                     />
                 </FormControl>
                 <FormControl>
-                    <Button id="open-nav-bar-button" sx={{width: 'fit-content'}} variant="contained"
-                            onClick={createMaintenanceRequest}>Create maintenance request</Button>
+                    <Button
+                        id="open-nav-bar-button"
+                        sx={{width: 'fit-content'}}
+                        variant="contained"
+                        disabled={formError}
+                        onClick={createMaintenanceRequest}
+                    >Create maintenance request</Button>
                 </FormControl>
             </CardContent>
+            <Snackbar 
+                open={successSnackbar}
+                onClose={handleCloseSuccessSnackbar}
+                autoHideDuration={5000}
+                message="Created maintenance request successfully."
+            />
+            <Snackbar 
+                open={failureSnackbar}
+                onClose={handleCloseFailureSnackbar}
+                autoHideDuration={5000}
+                message="Error while creating maintenance request. Please try again."
+            />
         </Card>
     );
 }

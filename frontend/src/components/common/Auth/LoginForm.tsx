@@ -18,7 +18,6 @@ export function LoginForm() {
 
     const {
         username, setUsername,
-        email, setEmail,
         setPassword,
         showPassword,
         handleClickShowPassword,
@@ -39,16 +38,6 @@ export function LoginForm() {
                     label="Username"
                     value={username}
                     onInput={(e) => setUsername((e.target as HTMLInputElement).value)}
-                />
-            </FormControl>
-            <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
-                <InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
-                <OutlinedInput
-                    id={`${emailFieldID}-input`}
-                    type='text'
-                    label="E-mail"
-                    value={email}
-                    onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
                 />
             </FormControl>
             <FormControl sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
