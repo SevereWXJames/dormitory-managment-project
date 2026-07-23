@@ -73,7 +73,11 @@ function App() {
                     }/>
 
                     {/* Building manager routes */}
-                    <Route path="/admin-signup" element={<AdminSignUpPage/>}/>
+                    <Route path="/admin-signup" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                            <AdminSignUpPage/>
+                        </ProtectedRoute>
+                    }/>
                     <Route path="/admin" element={
                         <ProtectedRoute allowedRoles={[Role.ADMIN]}>
                             <AdminDashboardPage/>
