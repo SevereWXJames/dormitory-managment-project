@@ -4,7 +4,7 @@ import {getUserId} from "@/context/authenticationSlice.ts";
 
 type useCancelReservationApiProps = {
     slotId: string | null,
-    serviceName: string | null,
+    serviceId: string | null,
 }
 
 export function useCancelReservationApi(props: useCancelReservationApiProps) {
@@ -13,7 +13,7 @@ export function useCancelReservationApi(props: useCancelReservationApiProps) {
 
     const cancelReservation = async () => {
         await cancelBooking({
-            serviceName: props.serviceName,
+            serviceId: props.serviceId,
             slotId: props.slotId,
             userId: userId,
         }).unwrap();

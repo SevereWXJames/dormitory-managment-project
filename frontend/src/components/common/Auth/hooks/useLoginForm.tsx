@@ -135,13 +135,12 @@ export function useLoginForm() {
         }
 
         try {
-            const data = await login({
+            const { data } = await login({
                 username: username || undefined,
                 email: email || undefined,
                 password,
             }).unwrap();
 
-            console.log(`data roles: ${data.roles}`);
             const targetPath = (data.roles ?? []).some((role) =>
                 role === Role.ADMIN || role == "Staff") ?
                 "/admin/dashboard" : "/dashboard";

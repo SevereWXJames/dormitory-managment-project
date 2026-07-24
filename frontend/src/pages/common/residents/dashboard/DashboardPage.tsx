@@ -23,7 +23,7 @@ export function DashboardPage() {
                             <Card className="p-4 m-4" style={{gridArea: "finance-summary"}}>
                                 <CardTitle>Finance Summary</CardTitle>
                                 <CardContent className="flex flex-col">
-                                    <strong>Laundry Credit Balance: {formattedBalance} credits</strong>
+                                    <strong>Laundry Credit Balance: {formattedBalance}</strong>
                                 </CardContent>
                             </Card>
                             <Card className="p-4 m-4" style={{gridArea: "bookings"}}>

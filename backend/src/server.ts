@@ -1,7 +1,13 @@
 import {connectMongo} from "./database/database.ts";
 import app from "./app.ts";
 import {setUpMQTT} from "./utility/mqttSetup.ts";
+<<<<<<< HEAD
 import loadSampleData, { ensureAdminExists } from "./database/loadDatabase.ts";
+=======
+import loadSampleData from "./database/loadDatabase.ts";
+import setUpScheduledTasks from "./utility/scheduledTasksSetup.ts";
+import {handleSlotUpdates} from "./services/reservationServices.ts";
+>>>>>>> origin/Milestone4
 
 const port: number = 3000;
 const shouldLoadSampleData = process.env.LOAD_SAMPLE_DATA === "true" || process.env.LOAD_SAMPLE_DATA === "1";
@@ -20,6 +26,8 @@ await connectMongo().then(() => {
     }
 }).then(() => {
     setUpMQTT();
+    setUpScheduledTasks();
+    handleSlotUpdates();
 }).catch((err) => {
     console.log("Connection failed: " + err.message)
 });
