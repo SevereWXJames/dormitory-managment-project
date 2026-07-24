@@ -11,7 +11,6 @@ export function AdminMaintenancePage() {
     const [activeFilter, setActiveFilter] = useState<StatusFilter>("All");
     const [selectedRequest, setSelectedRequest] = useState<(typeof requests)[number] | null>(null);
     const [statusOverrides, setStatusOverrides] = useState<Record<string, string>>({});
-    // const [feedback, setFeedback] = useState<string | null>(null);
     const [updateMaintenanceRequestStatus] = useUpdateMaintenanceRequestStatusMutation();
 
     const orderedStatuses = useMemo(() => {
@@ -49,16 +48,16 @@ export function AdminMaintenancePage() {
         const currentStatusId = statusOverrides[requestId] ?? request.status;
         const currentIndex = getStatusIndex(String(currentStatusId));
         if (currentIndex === -1) {
-            toast("This request currently has no status mapping available.");
+            toast.error("This request currently has no status mapping available.");
             return;
         }
 
         const targetIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
         if (targetIndex < 0 || targetIndex >= orderedStatuses.length) {
             if(direction === "next"){
-                toast("This request is already at the final status.");
+                toast.error("This request is already at the final status.");
             }else{
-                toast("This request is already at the initial status.");
+                toast.error("This request is already at the initial status.");
             }
             return;
         }
@@ -82,8 +81,6 @@ export function AdminMaintenancePage() {
                         <p>Review current work orders and track their status.</p>
                     </div>
                 </div>
-
-                {/*{feedback && <div className="info-banner">{feedback}</div>}*/}
                 {loading && <p>Loading maintenance requests...</p>}
                 {error && <p className="form-error">{error}</p>}
 
