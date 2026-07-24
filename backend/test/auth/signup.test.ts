@@ -98,6 +98,38 @@ describe('POST /signup', () => {
             expect(data?.roles.length > 0);
             expect(data?.roles[0] == "RESIDENT");
         });
+
+        it('should return a helpful error for an invalid email format', async () => {
+            const invalidEmailPayload = {
+                ...validSignupPayload,
+                email: 'not-an-email',
+            };
+
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/signup')
+                .send(invalidEmailPayload);
+
+            expect(res).to.have.status(400);
+            expect(res.body.message).to.match(/valid email/i);
+        });
+
+        it('should allow the same username when the email is different', async () => {
+            await chaiWithHttp.request.execute(app)
+                .post('/signup')
+                .send(validSignupPayload);
+
+            const duplicateUsernamePayload = {
+                ...validSignupPayload,
+                email: 'alice2@tmp.com',
+            };
+
+            const res = await chaiWithHttp.request.execute(app)
+                .post('/signup')
+                .send(duplicateUsernamePayload);
+
+            expect(res).to.have.status(200);
+            expect(res.body.data.email).to.equal('alice2@tmp.com');
+        });
     })
 
     describe('DB Tests - SignUp', () => {

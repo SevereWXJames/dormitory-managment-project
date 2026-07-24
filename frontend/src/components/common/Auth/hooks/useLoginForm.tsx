@@ -91,7 +91,7 @@ export function useLoginForm() {
             return;
         }
 
-        if (normalized.includes("invalid email")) {
+        if (normalized.includes("invalid email") || normalized.includes("valid email")) {
             setEmailError(message);
             return;
         }
@@ -122,7 +122,7 @@ export function useLoginForm() {
 
         const simpleEmailRegex = /^\S+@\S+\.\S+$/;
         if (!simpleEmailRegex.test(email.trim())) {
-            const message = "Invalid email format.";
+            const message = "Please enter a valid email address like name@example.com.";
             setLoginError(message);
             setEmailError(message);
             return;
