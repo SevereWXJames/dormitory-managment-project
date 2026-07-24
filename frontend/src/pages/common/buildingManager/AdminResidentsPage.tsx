@@ -18,7 +18,7 @@ export function AdminResidentsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedResident, setSelectedResident] = useState<ResidentEntry | null>(null);
     const [residentForm, setResidentForm] = useState({ userId: "", roomId: "", note: "" });
-    const [feedback, setFeedback] = useState<string | null>(null);
+    // const [feedback, setFeedback] = useState<string | null>(null);
 
     useEffect(() => {
         if (!loading && !isError && localResidents.length === 0) {
@@ -102,7 +102,7 @@ export function AdminResidentsPage() {
                     </div>
                 </div>
 
-                {feedback && <div className="info-banner">{feedback}</div>}
+                {/*{feedback && <div className="info-banner">{feedback}</div>}*/}
                 {loading && <p>Loading residents...</p>}
                 {isError && <p className="form-error">{error}</p>}
 
