@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import {json} from "body-parser";
 import cors from "cors";
 import IoTRouter from "./routes/IoT.ts";
@@ -11,7 +12,7 @@ import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import authRouter from "./routes/auth.ts";
-import {authenticateRequest, requireRole} from "./middleware/auth.middleware.ts";
+import {authenticateRequest, checkRefreshToken, requireRole} from "./middleware/auth.middleware.ts";
 import {Role} from "./database/types/user.service.types.ts";
 import dotenv from "dotenv";
 
@@ -23,6 +24,7 @@ app.use(cors({
 }));
 
 app.use(json());
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/residents", authenticateRequest, requireRole(Role.ADMIN), residentsRouter);
@@ -36,6 +38,7 @@ app.use("/services",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN),
 app.use("/credits", authenticateRequest, requireRole(Role.RESIDENT), creditRouter);
 app.use("/IoT", authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), IoTRouter);
 app.use("/user",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), userRouter);
+app.use("/refresh", checkRefreshToken, authRouter);
 app.use("/", authRouter);
 
 export default app;

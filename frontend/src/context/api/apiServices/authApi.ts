@@ -3,10 +3,10 @@ import { api } from "../api";
 import type {Role} from "@/dataTypes/user.ts";
 import {logIn} from "@/context/authenticationSlice.ts";
 
-export interface SignUpResponse {
+export interface RefreshResponse {
     message: string;
-    data: AuthUser;
     type: string;
+    data: AuthUser;
 }
 
 export interface SignUpRequest {
@@ -18,6 +18,12 @@ export interface SignUpRequest {
     roles: Role[],
 }
 
+export interface AuthResponse {
+    message: string;
+    data: AuthUser;
+    type: string;
+}
+
 export interface LoginRequest {
     username?: string;
     email?: string;
@@ -26,16 +32,31 @@ export interface LoginRequest {
 
 export interface AuthUser {
     _id: string;
-    name: string;
     username: string;
     email: string;
-    phoneNumber: string;
     roles: string[];
 }
 
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        login: builder.mutation<AuthUser, LoginRequest>({
+        refresh: builder.mutation<RefreshResponse, void>({
+            query: () => ({
+                url: "/refresh",
+                method: "POST",
+            }),
+            invalidatesTags: ["CurrentUser"],
+            async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
+                try {
+                    const { data: responseBody } = await queryFulfilled;
+                    const user = responseBody.data;
+                    dispatch(logIn({ username: user.username, email: user.email, userId: user._id, roles: user.roles }));
+                } catch(err) {
+                    console.error('Refresh mutation failed:', err);
+                }
+            },
+        }),
+
+        login: builder.mutation<AuthResponse, LoginRequest>({
             query: (credentials) => ({
                 url: "/login",
                 method: "POST",
@@ -44,15 +65,29 @@ export const authApi = api.injectEndpoints({
             invalidatesTags: ["CurrentUser"],
             async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
                 try {
-                    const { data } = await queryFulfilled;
-                    dispatch(logIn({ name: data.name, username: data.username, email: data.email, phoneNumber: data.phoneNumber, userId: data._id, roles: data.roles }));
-                } catch {
+                    const { data : responseBody } = await queryFulfilled;
+                    const user = responseBody.data;
+                    dispatch(logIn({ username: user.username,
+                        email: user.email,
+                        userId: user._id,
+                        roles: user.roles}));
+                } catch (error) {
                     // login failed — no dispatch needed, error surfaces via the mutation's own error state
+                    console.error('Login mutation failed:', error);
                 }
             },
         }),
 
-        signUp: builder.mutation<SignUpResponse, SignUpRequest>({
+        logout: builder.mutation<AuthResponse, void>({
+            query: (credentials) => ({
+                url: "/logout",
+                method: "POST",
+                body: credentials,
+            }),
+            invalidatesTags: ["CurrentUser"],
+        }),
+
+        signUp: builder.mutation<AuthResponse, SignUpRequest>({
             query: (credentials) => ({
                 url: "/signup",
                 method: "POST",
@@ -76,4 +111,6 @@ export const authApi = api.injectEndpoints({
 export const {
     useLoginMutation,
     useSignUpMutation,
+    useRefreshMutation,
+    useLogoutMutation,
 } = authApi;

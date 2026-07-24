@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import './App.css'
 import {HomePage} from './pages/common/HomePage';
 import {LoginPage} from './pages/common/LoginPage';
@@ -23,6 +23,8 @@ import {UnauthorizedPage} from "@/pages/UnauthorizedPage.tsx";
 import {ProtectedRoute} from "@/components/common/Auth/ProtectedRoute.tsx";
 import {Role} from "@/dataTypes/user.ts";
 import {Toaster} from "@/components/ui/sonner.tsx";
+import {useEffect} from "react";
+import {useRefreshMutation} from "@/context/api/apiServices/authApi.ts";
 
 /**
  * App React component, containing routes to other pages.
@@ -30,10 +32,15 @@ import {Toaster} from "@/components/ui/sonner.tsx";
  * @returns JSX for the App component.
  */
 function App() {
+    const [refresh, {isLoading, isUninitialized}]= useRefreshMutation(); // calls /refresh upon mounting
+
+    useEffect(() => {
+        refresh();}, [refresh]);
+
+    if (isLoading || isUninitialized) return <p>Loading...</p>;
     return (
         <>
             <CssBaseline/>
-            <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
@@ -121,7 +128,6 @@ function App() {
                         </ProtectedRoute>
                     }/>
                 </Routes>
-            </BrowserRouter>
         </>
 
     );
