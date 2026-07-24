@@ -1,6 +1,8 @@
 import {connectMongo} from "./database/database.ts";
 import app from "./app.ts";
 import loadSampleData from "./database/loadDatabase.ts";
+import setUpScheduledTasks from "./utility/scheduledTasksSetup.ts";
+import {handleSlotUpdates} from "./services/reservationServices.ts";
 import MQTTConnection from "./utility/mqtt.ts";
 
 const port: number = 3000;
@@ -15,7 +17,10 @@ await connectMongo().then(() => {
         console.log("Loaded sample data!");
     }
 }).then(async () => {
-   await MQTTConnection.setUpMQTT();
+    await MQTTConnection.setUpMQTT();
+}).then(() => {
+    setUpScheduledTasks();
+    handleSlotUpdates();
 }).catch((err) => {
     console.log("Connection failed: " + err.message)
 });

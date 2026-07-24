@@ -6,7 +6,6 @@ import requestTypeJSON from "../../test_data/maintenanceRequestType.json" with {
 import requestStatusJSON from "../../test_data/maintenanceRequestStatus.json" with {type: "json"};
 import requestPriorityJSON from "../../test_data/maintenanceRequestPriority.json" with {type: "json"};
 import noticeJSON from "../../test_data/notices.json" with {type: "json"};
-import reservationJSON from "../../test_data/reservationSlots.json" with {type: "json"};
 import roomJSON from "../../test_data/rooms.json" with {type: "json"};
 import residentJSON from "../../test_data/residents.json" with {type: "json"};
 import serviceJSON from "../../test_data/services.json" with {type: "json"};
@@ -19,7 +18,6 @@ import {
 	MaintenanceRequestTypeModel
 } from "../dataTypes/maintenanceRequest.ts";
 import {NoticeModel} from "../dataTypes/notice.ts";
-import {ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
 import {RoomModel} from "../dataTypes/room.ts";
 import {ResidentModel, UserModel} from "../dataTypes/user.ts";
 import {ServiceModel} from "../dataTypes/service.ts";
@@ -46,7 +44,6 @@ export default async function loadSampleData(): Promise<void> {
 			load("MaintenanceRequestStatuses", MaintenanceRequestStatusModel, requestStatusJSON.maintenanceRequestStatuses),
 			load("MaintenanceRequestPriorities", MaintenanceRequestPriorityModel, requestPriorityJSON.maintenanceRequestPriorities),
 			load("Notices", NoticeModel, noticeJSON.notices),
-			load("ReservationSlots", ReservationSlotModel, reservationJSON.reservationSlots),
 			load("Rooms", RoomModel, roomJSON.rooms),
 			load("Residents", ResidentModel, residentJSON.residents),
 			load("Services", ServiceModel, serviceJSON.services),

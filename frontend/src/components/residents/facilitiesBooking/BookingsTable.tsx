@@ -9,7 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table.tsx"
 import {RowDropDown} from "@/components/residents/facilitiesBooking/RowDropDown.tsx";
-import {useGetHumanReadableTime} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
+import {useGetHumanReadableDuration, useGetHumanReadableTime} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
 import {useGetUserBookingsApi} from "@/components/residents/facilitiesBooking/hooks/useGetUserBookingsApi.tsx";
 
 type TableProps = {
@@ -20,8 +20,10 @@ type TableProps = {
 export function BookingsTable(props: TableProps) {
     const {bookings} = useGetUserBookingsApi();
     const {getTime} = useGetHumanReadableTime();
+    const {getDuration} = useGetHumanReadableDuration();
     const rows = bookings.map((row) =>
         ({...row, timeString: getTime(row.startTime)}));
+
     return (
         <Table>
             <TableCaption>{props.caption}</TableCaption>
@@ -40,7 +42,7 @@ export function BookingsTable(props: TableProps) {
                         <TableCell className="font-medium">{row._id}</TableCell>
                         <TableCell className="font-medium">{row.serviceName}</TableCell>
                         <TableCell className="text-right">{row.timeString}</TableCell>
-                        <TableCell className="text-right">{row.durationSeconds}</TableCell>
+                        <TableCell className="text-right">{getDuration(row.durationSeconds)}</TableCell>
                         <TableCell className="text-right">{<RowDropDown bookingInfo={row}/>}</TableCell>
                     </TableRow>
                 ))}

@@ -1,6 +1,6 @@
 export function useGetHumanReadableTime(){
-    const getTime = (timestamp: number) => {
-        const date = new Date(timestamp * 1000);
+    const getTime = (inputDate: Date) => {
+        const date = new Date(inputDate);
         const datevalues = {
             year: date.getFullYear(),
             month: date.getMonth()+1,
@@ -20,3 +20,16 @@ export function useGetHumanReadableTime(){
     }
     return{getTime}
 }
+
+export function useGetHumanReadableDuration() {
+    const getDuration = (seconds: number | undefined) => {
+        if (seconds == undefined) {
+            return "";
+        } else if (seconds % 3600 == 0) {
+            return `${seconds/3600}h`;
+        }
+
+        return `${seconds/3600}h {seconds%3600}m`;
+    };
+    return {getDuration};
+};

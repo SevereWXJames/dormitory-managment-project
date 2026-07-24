@@ -7,7 +7,15 @@ export interface ReservationSlot {
     serviceName: string;
     booked: boolean;
     bookedBy: mongoose.Types.ObjectId | null;
-    startTime: number;
+    startTime: Date;
+    durationSeconds: number;
+}
+
+export interface ReservationSlotTemplate {
+    serviceId: mongoose.Types.ObjectId;
+    serviceName: string;
+    booked: boolean;
+    startTime: Date;
     durationSeconds: number;
 }
 
@@ -15,5 +23,5 @@ const reservationSlotSchema = new Schema({
     serviceId: mongoose.Types.ObjectId,
     booked: Boolean,
     serviceName: String,
-    bookedBy: mongoose.Types.ObjectId, startTime: Number, durationSeconds: Number});
+    bookedBy: mongoose.Types.ObjectId, startTime: Date, durationSeconds: Number});
 export const ReservationSlotModel = mongoose.model("ReservationSlots"  as CollectionName, reservationSlotSchema, "ReservationSlots"  as CollectionName);

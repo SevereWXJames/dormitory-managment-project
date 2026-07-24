@@ -4,7 +4,7 @@ import {getUserId} from "@/context/authenticationSlice.ts";
 
 type useReservationApiProps = {
     slotId: string | null,
-    serviceName: string | null,
+    serviceId: string | null,
 }
 
 export function useReservationApi(props: useReservationApiProps) {
@@ -18,7 +18,7 @@ export function useReservationApi(props: useReservationApiProps) {
 
     const confirmReservation = async () => {
         await makeBooking({
-            serviceName: props.serviceName,
+            serviceId: props.serviceId,
             slotId: props.slotId,
             userId: userId,
         }).unwrap();

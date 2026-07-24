@@ -1,25 +1,49 @@
-import express, {type Request, type Response} from "express";
+import express, {type CookieOptions, type Request, type Response} from "express";
 import {
+    getExistingUserFromId, getUserByQuery,
     logIn,
     signUp
 } from "../services/usersServices.ts";
-import {createJWTToken} from "../utility/auth-utils/tokens.ts";
-
+import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
+import {extractRefreshTokenFromRequest} from "../utility/auth-utils/request.ts";
+import {extractUserPayloadFromRefreshToken} from "../utility/auth-utils/tokens.ts";
+import {Types} from "mongoose";
 const authRouter = express.Router();
+
+authRouter.post("/refresh", async(req, res) => {
+    try{
+        const refreshToken = extractRefreshTokenFromRequest(req);
+        const {id, roles} = extractUserPayloadFromRefreshToken(refreshToken);
+        const userId = id as Types.ObjectId;
+        const filter = {_id: id};
+        const user = await getUserByQuery(filter);
+        console.log(`user: ${JSON.stringify(user, null, 2)}`)
+        await setAuthCookie(userId, roles, res);
+        res.status(200).json({
+            message: "Refresh token successfully!",
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: user.roles,
+            },
+            type: "success"
+        });
+    }catch(error){
+        res.status(500).json({
+            type: "error",
+            message: "Error refreshing token",
+            error: error instanceof Error ? error.message : String(error),
+        });
+    }
+});
+
 authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles };
         const user = await signUp(profileData);
-        const token = createJWTToken(user._id, user.roles);
-        res.cookie("jwt", token, {
-            httpOnly: true,       // JS cannot read this cookie — protects against XSS
-            secure: true,          // only sent over HTTPS (set false only for local http dev)
-            sameSite: "strict",    // or "lax" — see note below on cross-site setups
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
-            path: "/",
-        });
-
+        await setAuthCookie(user._id, user.roles, res);
         res.status(200).json({
             message: "Signed up successfully!",
             data: {
@@ -43,16 +67,8 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
     let {username, email, password} = req.body;
     try {
         const user = await logIn(username, email, password);
-        const token = createJWTToken(user._id, user.roles);
-        res.cookie("jwt", token, {
-            httpOnly: true,       // JS cannot read this cookie — protects against XSS
-            secure: true,          // only sent over HTTPS (set false only for local http dev)
-            sameSite: "strict",    // or "lax" — see note below on cross-site setups
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
-            path: "/",
-        });
+        await setAuthCookie(user._id, user.roles, res);
         res.status(200).json({
-            success: true,
             message: "Logged in successfully!",
             data: {
                 _id: user._id,
@@ -61,7 +77,8 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
                 email: user.email,
                 phoneNumber: user.phoneNumber,
                 roles: user.roles
-            }
+            },
+            type: "success"
         });
     }catch(error){
         res.status(500).json({
@@ -73,13 +90,22 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
 });
 
 // Sign Out request
-authRouter.post("/logout", (_req, res) => {
+authRouter.post("/logout", async (req, res) => {
     // clear cookies
-    res.clearCookie("jwt");
-    return res.json({
-        message: "Logged out successfully!",
-        type: "success",
-    });
+    try{
+        await clearCookies(req, res);
+        return res.json({
+            message: "Logged out successfully!",
+            type: "success",
+        });
+    }catch(error){
+        res.status(500).json({
+            type: "error",
+            message: "Error logging out.",
+            error: error instanceof Error ? error.message : String(error),
+        })
+    }
+
 });
 
 export default authRouter;
