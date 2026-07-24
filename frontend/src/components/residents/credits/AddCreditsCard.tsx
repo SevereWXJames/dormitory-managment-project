@@ -1,4 +1,4 @@
-import {Button, Card, CardContent, FormControl, InputLabel, OutlinedInput} from "@mui/material";
+import {Button, Card, CardContent, FormControl, InputLabel, OutlinedInput, Snackbar, TextField} from "@mui/material";
 import {DateField} from '@mui/x-date-pickers/DateField';
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,7 +24,16 @@ export function AddCreditsCard() {
         handleAmountInput,
         setExpirationDate, setName,
         setSecurityCode,
-        handleAddCredits
+        handleAddCredits,
+        cardNumberError,
+        expirationDateError,
+        securityCodeError,
+        amountError,
+        formError,
+        successSnackbar,
+        handleCloseSuccessSnackbar,
+        failureSnackbar,
+        handleCloseFailureSnackbar
     } = useAddCreditsCard();
 
     /**
@@ -40,11 +49,15 @@ export function AddCreditsCard() {
         <Card id="add-credits-card" className="card flex flex-col">
             <CardContent id="add-credits-card-content">
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
-                    <InputLabel htmlFor={`${cardNumberID}-input`}>Card number</InputLabel>
-                    <OutlinedInput
+                    <TextField
                         id={`${cardNumberID}-input`}
-                        type='number'
+                        variant="outlined"
+                        type='text'
+                        inputMode="numeric"
                         label="Card number"
+                        error={cardNumberError}
+                        slotProps={{ htmlInput: { maxLength: 16 } }}
+                        helperText={cardNumberError ? "Invalid card number" : ""}
                         onInput={(e) => setCardNumber((e.target as HTMLInputElement).value)}
                     />
                 </FormControl>
@@ -54,6 +67,7 @@ export function AddCreditsCard() {
                             id={`${expirationDateID}-input`}
                             label="Expiration date"
                             format="MM/YY"
+                            error={expirationDateError}
                             onChange={(value) => {
                                 const date = value?.toISOString();
                                 setExpirationDate((date == null) ? "" : date);
@@ -62,11 +76,15 @@ export function AddCreditsCard() {
                     </LocalizationProvider>
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
-                    <InputLabel htmlFor={`${securityCodeID}-input`}>Security code</InputLabel>
-                    <OutlinedInput
+                    <TextField
                         id={`${securityCodeID}-input`}
-                        type='number'
+                        variant="outlined"
+                        type='text'
+                        inputMode="numeric"
                         label="Security code"
+                        error={securityCodeError}
+                        slotProps={{ htmlInput: { maxLength: 4 } }}
+                        helperText={securityCodeError ? "Invalid security code" : ""}
                         onInput={(e) => setSecurityCode((e.target as HTMLInputElement).value)}
                     />
                 </FormControl>
@@ -86,12 +104,29 @@ export function AddCreditsCard() {
                         type='number'
                         label="Amount"
                         inputProps={{min: 0}}
+                        error={amountError}
                         onInput={handleAmountInput}
                     />
                 </FormControl>
                 <FormControl>
-                    <Button id="open-nav-bar-button" variant="contained" onClick={handleAddCredits}>Pay</Button>
+                    <Button
+                        id="open-nav-bar-button"
+                        variant="contained"
+                        disabled={formError}
+                        onClick={handleAddCredits}>Pay</Button>
                 </FormControl>
+                <Snackbar 
+                    open={successSnackbar}
+                    onClose={handleCloseSuccessSnackbar}
+                    autoHideDuration={5000}
+                    message="Added credit successfully."
+                />
+                <Snackbar 
+                    open={failureSnackbar}
+                    onClose={handleCloseFailureSnackbar}
+                    autoHideDuration={5000}
+                    message="Error while adding credit. Please try again."
+                />
             </CardContent>
         </Card>
     );
