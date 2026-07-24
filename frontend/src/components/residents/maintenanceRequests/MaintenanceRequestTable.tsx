@@ -21,11 +21,11 @@ export function MaintenanceRequestTable(props: TableProps) {
                 <TableHeader className="sticky top-0 bg-background z-10">
                     <TableRow>
                         {/* <TableHead className="text-right">Unit #</TableHead> */}
-                        <TableHead className="text-right">Status</TableHead>
-                        <TableHead className="text-right">Priority</TableHead>
-                        <TableHead className="text-right">Issue</TableHead>
-                        <TableHead className="text-right">Location</TableHead>
-                        <TableHead className="text-right">Description</TableHead>
+                        <TableHead className="text-left">Status</TableHead>
+                        <TableHead className="text-left">Priority</TableHead>
+                        <TableHead className="text-left">Issue</TableHead>
+                        <TableHead className="text-left">Location</TableHead>
+                        <TableHead className="text-left">Description</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -33,10 +33,10 @@ export function MaintenanceRequestTable(props: TableProps) {
                         <TableRow key={index}>
                             {/* <TableCell className="font-medium">{row.unit}</TableCell> */}
                             <TableCell className="font-medium">{row.status}</TableCell>
-                            <TableCell className="text-right">{row.priority}</TableCell>
-                            <TableCell className="text-right">{row.issue}</TableCell>
-                            <TableCell className="text-right">{row.location}</TableCell>
-                            <TableCell className="text-right max-w-[200px] truncate" title={row.description}>
+                            <TableCell className="text-left">{row.priority}</TableCell>
+                            <TableCell className="text-left">{row.issue}</TableCell>
+                            <TableCell className="text-left">{row.location}</TableCell>
+                            <TableCell className="text-left max-w-[200px] truncate" title={row.description}>
                                 {row.description}
                             </TableCell>
                         </TableRow>
