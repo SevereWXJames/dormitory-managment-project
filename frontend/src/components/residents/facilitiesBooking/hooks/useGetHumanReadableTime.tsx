@@ -1,6 +1,6 @@
 export function useGetHumanReadableTime(){
-    const getTime = (timestamp: number) => {
-        const date = new Date(timestamp * 1000);
+    const getTime = (inputDate: Date) => {
+        const date = new Date(inputDate);
         const datevalues = {
             year: date.getFullYear(),
             month: date.getMonth()+1,
