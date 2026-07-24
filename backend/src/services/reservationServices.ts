@@ -1,7 +1,13 @@
-import {type ReservationSlot, ReservationSlotModel} from "../dataTypes/reservationSlot.ts";
+import {
+    type ReservationSlot,
+    ReservationSlotModel,
+    type ReservationSlotTemplate
+} from "../dataTypes/reservationSlot.ts";
 import mongoose, {Types} from "mongoose";
 import {BOOKING_COST} from "../utility/pricesForBookings.ts";
 import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
+import {type Service} from "../dataTypes/service.ts";
+import {getAllServices} from "./serviceServices.ts";
 
 export async function getReservationsBookedByUserId(userId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
     const cursor = ReservationSlotModel.find({bookedBy: userId}).lean();
@@ -168,7 +174,82 @@ export async function getAllReservedSlots(serviceId: mongoose.Types.ObjectId){
     // Given a service id, get all booked slots for that service.
     try{
         return await ReservationSlotModel.find({serviceId: serviceId, booked: true}).lean().exec();
-    }catch(error){
+    } catch (error) {
         throw Error(`Error finding reserved slots for service ${serviceId}`, {cause: error});
     }
+}
+
+export async function handleSlotUpdates() {
+    try {
+        await deleteOldSlots();
+        await createNewSlots();
+    } catch (error) {
+        if (error instanceof Error) {
+            console.log("Error: " + error.toString());
+        } else {
+            console.log("Unknown error occurred!")
+        }
+    }
+}
+
+async function deleteOldSlots() {
+    const currDayStart = new Date();
+    currDayStart.setHours(0, 0, 0, 0);
+    await ReservationSlotModel.deleteMany({startTime: {$lt: currDayStart}});
+}
+
+async function createNewSlots() {
+    const allServices = await getAllServices();
+    const promises = allServices.map(createSlotsForService);
+    await Promise.all(promises);
+}
+
+async function createSlotsForService(service: Service) {
+    const slotsToCreate = createSlotObjects(service);
+    const promises = slotsToCreate.map(insertSlotIfNotExisting);
+    await Promise.all(promises);
+}
+
+async function insertSlotIfNotExisting(slot: ReservationSlotTemplate) {
+    await ReservationSlotModel.updateOne({serviceId: slot.serviceId, startTime: slot.startTime}, {
+            $setOnInsert: {
+                serviceId: slot.serviceId,
+                serviceName: slot.serviceName,
+                booked: slot.booked,
+                startTime: slot.startTime,
+                durationSeconds: slot.durationSeconds
+            }
+        },
+        {upsert: true});
+}
+
+const DEFAULT_DAYS_AHEAD = 7;
+
+function createSlotObjects(service: Service) {
+    let slotObjects: ReservationSlotTemplate[] = [];
+
+    let daysAhead = Number(process.env.SLOT_RESET_DAYS_AHEAD);
+    if (isNaN(daysAhead)) daysAhead = DEFAULT_DAYS_AHEAD;
+    const numberOfSlotsToCreatePerDay = Math.floor(((service.reservationEndHour - service.reservationStartHour) * 3600) / service.reservationDurationSeconds);
+    console.assert(numberOfSlotsToCreatePerDay >= 0);
+
+    for (let day = 0; day < daysAhead; day++) {
+        for (let slot = 0; slot < numberOfSlotsToCreatePerDay; slot++) {
+            const date = new Date();
+            date.setDate(date.getDate() + day);
+            const totalOffset = slot * service.reservationDurationSeconds + (service.reservationStartHour * 3600);
+            const hours = Math.floor(totalOffset / 3600);
+            const minutes = Math.floor((totalOffset % 3600) / 60);
+            const seconds = totalOffset % 60;
+            date.setHours(hours, minutes, seconds, 0);
+            slotObjects.push({
+                serviceId: new mongoose.Types.ObjectId(service._id),
+                serviceName: service.name,
+                booked: false,
+                startTime: date,
+                durationSeconds: service.reservationDurationSeconds
+            });
+        }
+    }
+    return slotObjects;
 }
