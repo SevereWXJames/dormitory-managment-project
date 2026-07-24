@@ -6,6 +6,7 @@ import {Role} from "@/dataTypes/user.ts";
 
 export function useLoginForm() {
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loginError, setLoginError] = useState<string | null>(null);
@@ -23,7 +24,7 @@ export function useLoginForm() {
 
     const handleLogIn = async () => {
         setLoginError(null);
-        if ((!username || username.trim() === "")) {
+        if ((!username || username.trim() === "") && (!email || email.trim() === "")) {
             setLoginError("Username or email is required.");
             return;
         }
@@ -35,7 +36,7 @@ export function useLoginForm() {
         try {
             const data = await login({
                 username: username || undefined,
-                email: undefined,
+                email: email || undefined,
                 password,
             }).unwrap();
 
@@ -55,6 +56,7 @@ export function useLoginForm() {
 
     return {
         username, setUsername,
+        email, setEmail,
         password, setPassword,
         showPassword,
         handleClickShowPassword,
