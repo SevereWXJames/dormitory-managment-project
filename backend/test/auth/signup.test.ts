@@ -5,12 +5,13 @@ import {assert} from "chai";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 import {ResidentModel} from "../../src/dataTypes/user.ts";
-import {Users} from "../../src/database/models/users.model.ts";
+import {UserModel} from "../../src/dataTypes/user.ts";
 import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
 
 
 const chaiWithHttp = chai.use(chaiHttp);
 const { expect } = chai;
+const Users = UserModel;
 
 describe('POST /signup', () => {
     before(async () => {
@@ -52,13 +53,13 @@ describe('POST /signup', () => {
 
         });
 
-        it('should set the jwt cookie with the correct flags', async() => {
+        it('should set the access token with the correct flags', async() => {
             const res = await chaiWithHttp.request.execute(app)
                 .post('/signup')
                 .send(validSignupPayload);
 
             const cookies = res.headers['set-cookie'] as unknown as string[];
-            const jwtCookie = cookies.find((c) => c.startsWith('jwt='));
+            const jwtCookie = cookies.find((c) => c.startsWith('access='));
             expect(jwtCookie).to.exist;
             expect(jwtCookie).to.include('HttpOnly');
             expect(jwtCookie).to.include('Secure');

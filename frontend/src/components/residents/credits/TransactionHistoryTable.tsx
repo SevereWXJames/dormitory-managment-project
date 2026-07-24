@@ -38,7 +38,7 @@ export function TransactionHistoryTable(props: TableProps) {
                             <TableCell className="font-medium">{row._id}</TableCell>
                             <TableCell className="font-medium">{row.userId}</TableCell>
                             <TableCell className="font-medium">{row.description}</TableCell>
-                            <TableCell className="font-medium">{row.transaction}</TableCell>
+                            <TableCell className="font-medium">{`$${(row.transaction / 100).toFixed(2)}`}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

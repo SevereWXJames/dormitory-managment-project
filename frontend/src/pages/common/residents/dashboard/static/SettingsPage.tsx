@@ -5,7 +5,8 @@ import {getEmail, getName, getPhoneNumber, getUsername} from "../../../../../con
 
 
 export type FieldProps = {
-    input: string
+    input: string,
+    label: string
 }
 export type ProfileFieldProps = {
     name: string;
@@ -14,11 +15,11 @@ export type ProfileFieldProps = {
     phone: string;
 }
 
-export function ProfileField({input}: FieldProps) {
+export function ProfileField({input, label}: FieldProps) {
     return (
         <TextField
             id="outlined-read-only-input"
-            label="Read Only"
+            label={label}
             defaultValue={input}
             sx={{'& .MuiInputBase-input': {color: 'black'}}}
             slotProps={{
@@ -32,10 +33,10 @@ export function ProfileField({input}: FieldProps) {
 export function ProfileFields({name, username, email, phone}: ProfileFieldProps) {
     return (
         <div className="flex flex-col p-4 m-4 gap-4 max-w-96">
-            <ProfileField input={name}/>
-            <ProfileField input={username}/>
-            <ProfileField input={email}/>
-            <ProfileField input={phone}/>
+            <ProfileField input={name} label="Name"/>
+            <ProfileField input={username} label="Username"/>
+            <ProfileField input={email} label="Email"/>
+            <ProfileField input={phone} label="Phone"/>
         </div>
     )
 }
