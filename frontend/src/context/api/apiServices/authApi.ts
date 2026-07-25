@@ -32,8 +32,10 @@ export interface LoginRequest {
 
 export interface AuthUser {
     _id: string;
+    name?: string;
     username: string;
     email: string;
+    phoneNumber?: string;
     roles: string[];
 }
 
