@@ -168,8 +168,12 @@ This milestone focuses on polishing the existing resident experience and tighten
 ### New functionality and improvements
 
 - Resident view cleanup: the resident dashboard and navigation now avoid surfacing notices and other static/demo components that were not fully implemented, making the UI more aligned with the current backend capabilities.
+- Admin login page refactor: the admin-facing authentication experience was cleaned up and reorganized so the login/sign-up flow is more consistent with the rest of the app and easier to navigate.
 - Stronger authentication validation: signup now rejects invalid email formats, and login requires the provided username and email to belong to the same account before access is granted.
-- Clearer auth feedback: backend authentication responses now return specific validation messages so the frontend can show more precise login/signup error feedback.
+- Account identity enforcement: user registration now enforces a unique email address per account rather than relying on username uniqueness alone, which improves account creation reliability and prevents duplicate accounts from being created with the same email.
+- Clearer auth feedback: backend authentication responses now return specific validation messages so the frontend can show more precise login/signup error feedback, including helpful guidance for malformed email addresses.
+- Middleware-based auth refactor: role-based authorization checks were moved into the middleware layer so the auth routes follow the existing middleware pattern more cleanly, with protected admin signup handling routed through the established auth middleware flow.
+- Frontend auth form improvements: the login and signup forms were updated to surface backend validation errors directly in the UI and to present consistent, user-friendly messages for invalid email input.
 
 ### Verification notes
 
