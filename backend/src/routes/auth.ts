@@ -56,7 +56,8 @@ authRouter.post("/signup", async (req, res) => {
         });
     }catch(error){
         const message = error instanceof Error ? error.message : String(error);
-        const statusCode = /required|valid email|invalid email|not match|not found|incorrect password|already exists|already in use|failed to create account|unable to update/i.test(message) ? 400 : 500;
+
+        const statusCode = /required|invalid email|not match|not found|incorrect password|already exists|failed to create account|unable to update/i.test(message) ? 400 : 500;
         res.status(statusCode).json({
             type: "error",
             message,
@@ -84,7 +85,7 @@ authRouter.post("/login", async (req: Request, res: Response)=> {
         });
     }catch(error){
         const message = error instanceof Error ? error.message : String(error);
-        const statusCode = /required|valid email|invalid email|not match|not found|incorrect password/i.test(message) ? 400 : 500;
+        const statusCode = /required|invalid email|not match|not found|incorrect password/i.test(message) ? 400 : 500;
         res.status(statusCode).json({
             type: "error",
             message,
