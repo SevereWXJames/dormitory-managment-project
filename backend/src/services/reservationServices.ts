@@ -41,6 +41,24 @@ export async function getReservationsSlotsByServiceId(serviceId: mongoose.Types.
     return Promise.resolve(results);
 }
 
+export async function getFutureReservationsSlotsByServiceId(serviceId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
+    const currDate = new Date();
+    const cursor = ReservationSlotModel.find({serviceId: serviceId}).lean();
+    const results: ReservationSlot[] = [];
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as ReservationSlot);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+    return results.filter((reservationSlot) => {
+        return reservationSlot.startTime.getTime() > currDate.getTime();
+    });
+}
+
 export async function getReservationsSlotsByServiceName(serviceName: string): Promise<ReservationSlot[]> {
     const cursor = ReservationSlotModel.find({serviceName: serviceName}).lean();
     const results: ReservationSlot[] = [];

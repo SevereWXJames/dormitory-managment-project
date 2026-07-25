@@ -1,9 +1,9 @@
 import express, {type Request, type Response} from "express";
 import {
     bookReservationSlot, bookReservationSlotByName, cancelReservationSlot, cancelReservationSlotByName,
-    getAllFreeSlots, getAllReservedSlots,
+    getAllFreeSlots, getAllReservedSlots, getFutureReservationsSlotsByServiceId,
     getReservationsBookedByUserId,
-    getReservationsSlotsByServiceId, getReservationsSlotsByServiceName
+    getReservationsSlotsByServiceName
 } from "../services/reservationServices.ts";
 import mongoose from "mongoose";
 
@@ -33,7 +33,7 @@ reservationRouter.get("/get-slots-by-service/:serviceId", async (req: Request, r
     }
 
     try {
-        const reservationSlots = await getReservationsSlotsByServiceId(new mongoose.Types.ObjectId(req.params.serviceId as string));
+        const reservationSlots = await getFutureReservationsSlotsByServiceId(new mongoose.Types.ObjectId(req.params.serviceId as string));
         return res.status(200).json({success: true, data: reservationSlots});
     }
     catch (error) {
