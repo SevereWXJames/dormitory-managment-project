@@ -30,6 +30,7 @@
     "mongodb": "7.3.0",
     "mongoose": "^9.7.3",
     "mqtt": "^5.15.1",
+    "node-cron": "^4.6.0",
     "typescript": "^6.0.3"
   },
   "devDependencies": {

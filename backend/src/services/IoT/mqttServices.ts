@@ -1,4 +1,5 @@
 import {handleIncomingIoTData} from "./IoTDeviceServices.ts";
+import MQTTConnection from "../../utility/mqtt.ts";
 
 export async function handleMQTTMessage(topic: string, message: string) {
     const topicParts = topic.split("/");
@@ -17,4 +18,13 @@ export async function handleMQTTMessage(topic: string, message: string) {
 
 export function handleMQTTError(error: Error) {
     console.error(error);
+}
+
+export async function sendMQTTMessage(obj: object, topic: string) {
+    const client = MQTTConnection.getClient();
+    if (!client.connected) {
+        return;
+    }
+
+    await client.publishAsync(topic, JSON.stringify(obj), {qos: 1});
 }

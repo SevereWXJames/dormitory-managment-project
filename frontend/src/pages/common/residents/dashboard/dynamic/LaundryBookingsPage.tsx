@@ -38,7 +38,7 @@ export function LaundryBookingsPage() {
                         <Card className="p-3 flex flex-col gap-1 text-left" style={{gridArea: "credits"}}>
                             <div className="flex items-center gap-2">
                                 <strong>Credit Balance (credits):</strong>
-                                <p className="m-0">{balance}</p>
+                                <p className="m-0">{`$${(balance/100).toFixed(2)}`}</p>
                             </div>
                             <Link to={"/credits"}
                                   className="font-semibold underline hover:opacity-70 transition-opacity">
