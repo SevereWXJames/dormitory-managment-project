@@ -1,6 +1,5 @@
 import {connectMongo} from "./database/database.ts";
 import app from "./app.ts";
-import {setUpMQTT} from "./utility/mqttSetup.ts";
 import loadSampleData, { ensureAdminExists } from "./database/loadDatabase.ts";
 import setUpScheduledTasks from "./utility/scheduledTasksSetup.ts";
 import {handleSlotUpdates} from "./services/reservationServices.ts";
