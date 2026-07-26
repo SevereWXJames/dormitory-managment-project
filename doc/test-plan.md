@@ -40,7 +40,7 @@ cp frontend/.env.example frontend/.env
 - **Resident sign-in and dashboard**
   - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
   - Execution: Sign in with a resident account and confirm that the resident dashboard loads.
-  - Validation: The dashboard should show resident-relevant sections such as bookings, notices, maintenance, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
+  - Validation: The dashboard should show resident-relevant sections such as bookings, maintenance requests, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
 
 - **Resident facility booking**
   - Setup: Sign in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input any 16 digits in the card number field, any date in the expiration date field, at least three digits in the scurity code field, and $5.00 in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
@@ -141,14 +141,9 @@ Expected result:
     - Execution: Open the maintenance page, choose an existing request, and change its status (for example to "Contractor Requested" or "Resolved").
     - Validation: The status update is reflected in the UI and persists after refreshing the page.
 
-- **Admin notices / announcements management**
-    - Setup: Sign in as an admin and open the notices page.
-    - Execution: Create a new notice, edit an existing notice, remove a notice, and verify the unread/read state for residents.
-    - Validation: Each action updates the list correctly and the changes are visible to the resident view after refresh.
-
-- **Admin residents / facility management**
+- **Admin  facility management**
     - Setup: Sign in as an admin and open the relevant admin management page.
-    - Execution: Review resident/facility data and perform one add/edit/remove action if available.
+    - Execution: Review facility data and perform one add/edit/remove action if available.
     - Validation: The admin page updates correctly and the resulting data is shown in the UI without errors.
 
 - **All pages:**
@@ -186,7 +181,7 @@ Expected result:
             - Use a valid admin account created through the admin sign-up flow, or a seeded admin account available in the local environment.
             - Enter the correct username, email, and password for that admin account.
             - Press the “Log in” button.
-        3) Validation: The user should be navigated to the admin dashboard page and should be able to access admin-only screens such as the maintenance or notices pages.
+        3) Validation: The user should be navigated to the admin dashboard page and should be able to access admin-only screens such as the maintenance request page.
 - **Settings**
   - Test case 1: Viewing user information as a Resident:
     1) Setup: Follow the instructions to log in as a Resident as detailed in Test case 2 for the Login page.
