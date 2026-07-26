@@ -51,15 +51,42 @@ export default async function loadSampleData(): Promise<void> {
 			load("IoTStatuses", IoTStatusModel, IoTStatusJSON.IoTStatuses)]);
 
 		await handleSetPassword();
+		// Always ensure there is at least one admin after data load.
+		// Sample data may not contain an admin account, so create a fallback if needed.
+		await ensureAdminExists();
 	} catch (error) {
 		throw Error(`Error loading the database! ${error}`);
 	}
 }
 
+function getDefaultPassword(): string {
+	return process.env.INITIAL_ADMIN_PASSWORD ?? process.env.SAMPLE_PASSWORD ?? "admin";
+}
+
 async function handleSetPassword() {
-	const examplePassword = process.env.SAMPLE_PASSWORD;
-	if (examplePassword !== undefined) {
-		const hashedPassword = await hash(examplePassword, 10);
-		await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
+	const defaultPassword = getDefaultPassword();
+	const hashedPassword = await hash(defaultPassword, 10);
+	await UserModel.updateMany({password: {$exists: false}}, {$set: {password: hashedPassword}});
+}
+
+export async function ensureAdminExists(): Promise<void> {
+	try {
+		const admin = await UserModel.findOne({ roles: { $in: ["ADMIN"] } }).lean().exec();
+		if (!admin) {
+			const defaultEmail = process.env.INITIAL_ADMIN_EMAIL ?? "admin@smartapt.local";
+			const defaultPassword = getDefaultPassword();
+			const hashed = await hash(defaultPassword, 10);
+			await UserModel.create({
+				name: "Administrator",
+				username: "admin",
+				email: defaultEmail,
+				phoneNumber: "0000000000",
+				roles: ["ADMIN"],
+				password: hashed,
+			});
+			console.log("Default admin created:", defaultEmail);
+		}
+	} catch (error) {
+		throw Error(`Error ensuring admin exists: ${error}`);
 	}
 }

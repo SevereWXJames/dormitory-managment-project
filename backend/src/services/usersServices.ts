@@ -132,7 +132,6 @@ export async function signUp(profileData: SignUpRequest) {
     const existingByEmail = await userModel.findOne({ email: normalizedEmail });
     if (existingByEmail) {
         throw Error("An account with this email already exists. Please use a different email address.");
-
     }
 
     profileData.username = normalizedUsername;

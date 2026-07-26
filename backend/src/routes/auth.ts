@@ -1,13 +1,16 @@
-import express, {type CookieOptions, type Request, type Response} from "express";
+import express, {type Request, type Response} from "express";
+import {Types} from "mongoose";
 import {
-    getExistingUserFromId, getUserByQuery,
+    getUserByQuery,
     logIn,
     signUp
 } from "../services/usersServices.ts";
-import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
-import {extractRefreshTokenFromRequest} from "../utility/auth-utils/request.ts";
 import {extractUserPayloadFromRefreshToken} from "../utility/auth-utils/tokens.ts";
-import {Types} from "mongoose";
+import {extractRefreshTokenFromRequest} from "../utility/auth-utils/request.ts";
+import {clearCookies, setAuthCookie} from "../utility/auth-utils/response.ts";
+import {authenticateRequest, requireRole} from "../middleware/auth.middleware.ts";
+import {Role} from "../database/types/user.service.types.ts";
+
 const authRouter = express.Router();
 
 authRouter.post("/refresh", async(req, res) => {
@@ -42,6 +45,7 @@ authRouter.post("/signup", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber, roles } = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles };
+
         const user = await signUp(profileData);
         await setAuthCookie(user._id, user.roles, res);
         res.status(200).json({
@@ -56,7 +60,34 @@ authRouter.post("/signup", async (req, res) => {
         });
     }catch(error){
         const message = error instanceof Error ? error.message : String(error);
+        const statusCode = /required|invalid email|not match|not found|incorrect password|already exists|failed to create account|unable to update/i.test(message) ? 400 : 500;
+        res.status(statusCode).json({
+            type: "error",
+            message,
+            error: message,
+        });
+    }
+});
 
+authRouter.post("/signup/admin", authenticateRequest, requireRole(Role.ADMIN), async (req, res) => {
+    try{
+        const { name, username, email, password, phoneNumber, roles } = req.body;
+        const profileData = {name, username, email, password, phoneNumber, roles };
+
+        const user = await signUp(profileData);
+        await setAuthCookie(user._id, user.roles, res);
+        res.status(200).json({
+            message: "Signed up successfully!",
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                roles: user.roles,
+            },
+            type: "success",
+        });
+    }catch(error){
+        const message = error instanceof Error ? error.message : String(error);
         const statusCode = /required|invalid email|not match|not found|incorrect password|already exists|failed to create account|unable to update/i.test(message) ? 400 : 500;
         res.status(statusCode).json({
             type: "error",

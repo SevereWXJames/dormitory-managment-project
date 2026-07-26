@@ -1,6 +1,6 @@
 import type {NextFunction,Response, Request} from "express";
 import {validateRefreshToken, verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
-import type {Role} from "../database/types/user.service.types.ts";
+import {Role} from "../database/types/user.service.types.ts";
 import {TokenExpiredError} from "./services/middleware.service.ts";
 
 //Auth Middleware
@@ -38,10 +38,12 @@ export const checkRole = async (requiredRoles: Role[], req: Request, res: Respon
         await verifyRoles(req, requiredRoles);
         next();
     }catch(error){
-        return res.status(500).json({
+        const message = error instanceof Error ? error.message : String(error);
+        const statusCode = /Insufficient permissions|Unauthorized request/.test(message) ? 403 : 401;
+        return res.status(statusCode).json({
             message: "Authorization failed.",
             type: "error",
-            error: (error as Error).message,
+            error: message,
         });
     }
 }
@@ -52,3 +54,4 @@ export const requireRole = (... requiredRoles: Role[]) => {
         return await checkRole(requiredRoles, req, res, next);
     }
 }
+

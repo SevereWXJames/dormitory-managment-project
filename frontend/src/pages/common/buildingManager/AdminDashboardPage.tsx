@@ -51,6 +51,7 @@ export function AdminDashboardPage() {
                     <div className="page-actions">
                         <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
                         <button type="button" className="secondary-button" onClick={handleReviewResidents}>Review residents</button>
+                        <button type="button" className="primary-button" onClick={() => navigate('/admin-signup')}>Create admin account</button>
                     </div>
                 </div>
 

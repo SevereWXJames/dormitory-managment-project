@@ -23,22 +23,6 @@
       "email": "test3@test.com",
       "phoneNumber": "6045550003",
       "roles": ["RESIDENT"]
-    },
-    {
-      "_id": "507f191e810c19729de860ed",
-      "name": "Test Building Manager Name 1",
-      "username": "admin1",
-      "email": "admin1@test.com",
-      "phoneNumber": "6045550004",
-      "roles": ["ADMIN"]
-    },
-    {
-      "_id": "507f191e810c19729de860ee",
-      "name": "Test Staff Name 1",
-      "username": "staff1",
-      "email": "staff1@test.com",
-      "phoneNumber": "6045550005",
-      "roles": ["ADMIN"]
     }
   ]
 }

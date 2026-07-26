@@ -21,9 +21,6 @@ export function LoginPage() {
                         <Link to="/resident-signup">
                             Create a new resident account
                         </Link>
-                        <Link to="/admin-signup">
-                            Create a new admin account
-                        </Link>
                     </Card>
                 </main>
             </CommonFrame>
