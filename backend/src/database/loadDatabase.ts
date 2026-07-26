@@ -51,11 +51,9 @@ export default async function loadSampleData(): Promise<void> {
 			load("IoTStatuses", IoTStatusModel, IoTStatusJSON.IoTStatuses)]);
 
 		await handleSetPassword();
-		// If sample data is being loaded, sample data already contains admin users.
-		// Otherwise create a fallback admin so startup always has at least one admin.
-		if (process.env.LOAD_SAMPLE_DATA !== "true" && process.env.LOAD_SAMPLE_DATA !== "1") {
-			await ensureAdminExists();
-		}
+		// Always ensure there is at least one admin after data load.
+		// Sample data may not contain an admin account, so create a fallback if needed.
+		await ensureAdminExists();
 	} catch (error) {
 		throw Error(`Error loading the database! ${error}`);
 	}
