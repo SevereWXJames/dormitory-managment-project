@@ -43,8 +43,8 @@ creditRouter.put("/add-credits/:userId", async (req: Request, res: Response) => 
     try {
         const {amount} = req.body;
         const {userId} = req.params;
-        if (amount === undefined) {
-            return res.status(400).json({success: false, message: "No amount passed."});
+        if (amount === undefined || amount <= 0) {
+            return res.status(400).json({success: false, message: "Invalid input."});
         }
         await addCredits(new mongoose.Types.ObjectId(userId as string), amount);
         return res.status(200).json({success: true});
