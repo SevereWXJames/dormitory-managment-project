@@ -38,7 +38,10 @@ export function useMachineDialog(machine: Machine){
     }
 
     const {data: slotsData, isLoading, isError, error} = useGetSlotsByServiceIdQuery(machine.id);
-    const slots = slotsData?.map(slot => ({...slot, startTimeString: getTime(slot.startTime)}));
+    const slotsUnsorted = slotsData?.map(slot => ({...slot, startTimeString: getTime(slot.startTime)}));
+    const slots = slotsUnsorted?.sort((a, b) => {
+        return (new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+    });
     return {
         slots,
         isLoading,

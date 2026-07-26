@@ -175,6 +175,7 @@ This milestone focuses on polishing the existing resident experience and tighten
 - Middleware-based auth refactor: role-based authorization checks were moved into the middleware layer so the auth routes follow the existing middleware pattern more cleanly, with protected admin signup handling routed through the established auth middleware flow.
 - Frontend auth form improvements: the login and signup forms were updated to surface backend validation errors directly in the UI and to present consistent, user-friendly messages for invalid email input.
 
+
 ### Verification notes
 
 - The updated auth behavior was verified through live backend requests for invalid signup and mismatched login attempts.

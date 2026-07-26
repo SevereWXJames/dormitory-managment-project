@@ -26,3 +26,5 @@ mosquitto/data
 *.njsproj
 *.sln
 *.sw?
+
+mosquitto/data/mosquitto.db

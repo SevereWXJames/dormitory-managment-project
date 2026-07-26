@@ -6,7 +6,8 @@ import {
 import mongoose, {Types} from "mongoose";
 import {BOOKING_COST} from "../utility/pricesForBookings.ts";
 import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
-import {type Service} from "../dataTypes/service.ts";
+import {type Service, ServiceModel} from "../dataTypes/service.ts";
+import {sendReservationUpdateIoT} from "./IoT/IoTDataServices.ts";
 import {getAllServices} from "./serviceServices.ts";
 
 export async function getReservationsBookedByUserId(userId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
@@ -39,6 +40,24 @@ export async function getReservationsSlotsByServiceId(serviceId: mongoose.Types.
         }
     }
     return Promise.resolve(results);
+}
+
+export async function getFutureReservationsSlotsByServiceId(serviceId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
+    const currDate = new Date();
+    const cursor = ReservationSlotModel.find({serviceId: serviceId}).lean();
+    const results: ReservationSlot[] = [];
+    for await (const result of cursor) {
+        try {
+            if (result != null) {
+                results.push(result as ReservationSlot);
+            }
+        } catch (e) {
+            // "Pass"
+        }
+    }
+    return results.filter((reservationSlot) => {
+        return reservationSlot.startTime.getTime() > currDate.getTime();
+    });
 }
 
 export async function getReservationsSlotsByServiceName(serviceName: string): Promise<ReservationSlot[]> {
@@ -82,14 +101,26 @@ export async function bookReservationSlot(serviceId: mongoose.Types.ObjectId | m
 
     const filter = {serviceId: serviceId, _id: id, booked: false};
     const update = {$set: {booked: true, bookedBy: userId}};
-    const options = { new: true } as const;
-
+    const options = { returnDocument: 'after' } as const;
     const res = await ReservationSlotModel
         .findOneAndUpdate(filter, update, options).lean().exec();
     if(!res){
         throw Error("Error, slot already booked!");
     }
     await payBooking(userId);
+
+    const service = await ServiceModel.findById(serviceId, null, null).lean().exec() as Service;
+    const obj = {
+        UUID: service.IoTUUID,
+        type: "facilityBooked",
+        data: {
+            date: res.startTime,
+            durationSeconds: res.durationSeconds,
+            userId: userId
+        }
+    };
+    await sendReservationUpdateIoT(obj);
+
     return res;
 }
 
@@ -108,6 +139,19 @@ export async function bookReservationSlotByName(serviceName: string | string[], 
         throw Error("Error, slot already booked!");
     }
     await payBooking(userId);
+
+    const service = await ServiceModel.findOne({name: serviceName}, null, null).lean().exec() as Service;
+    const obj = {
+        UUID: service.IoTUUID,
+        type: "facilityBooked",
+        data: {
+            date: res.startTime,
+            durationSeconds: res.durationSeconds,
+            userId: userId
+        }
+    };
+    await sendReservationUpdateIoT(obj);
+
     return res;
 }
 

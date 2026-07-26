@@ -4,6 +4,7 @@ import {setUpMQTT} from "./utility/mqttSetup.ts";
 import loadSampleData, { ensureAdminExists } from "./database/loadDatabase.ts";
 import setUpScheduledTasks from "./utility/scheduledTasksSetup.ts";
 import {handleSlotUpdates} from "./services/reservationServices.ts";
+import MQTTConnection from "./utility/mqtt.ts";
 
 
 const port: number = 3000;
@@ -21,8 +22,9 @@ await connectMongo().then(() => {
         await ensureAdminExists();
         console.log("Ensured fallback admin exists.");
     }
+}).then(async () => {
+    await MQTTConnection.setUpMQTT();
 }).then(() => {
-    setUpMQTT();
     setUpScheduledTasks();
     handleSlotUpdates();
 }).catch((err) => {

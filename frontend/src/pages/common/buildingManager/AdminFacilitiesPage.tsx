@@ -1,42 +1,153 @@
+import { useGetServicesQuery } from "@/context/api/apiServices/servicesApi";
+import { useGetSlotsByServiceIdQuery, useGetFreeSlotsByServiceIdQuery, useGetReservedSlotsByServiceIdQuery } from "@/context/api/apiServices/reservationSlotsApi";
 import { CommonFrame } from "../../../components/common/CommonFrame";
+import { useState } from "react";
 
-interface FacilityItem {
-    facility_id: string;
-    name: string;
-    type: string;
-    is_available: boolean;
-    next_slot: string;
+function ServiceStatsItem({ serviceId, serviceName, isSelected, onSelect }: { serviceId: string; serviceName: string; isSelected: boolean; onSelect: () => void }) {
+    const { data: allSlots = [] } = useGetSlotsByServiceIdQuery(serviceId);
+    const { data: reservedSlots = [] } = useGetReservedSlotsByServiceIdQuery(serviceId);
+
+    const totalSlots = allSlots.length;
+    const reservedCount = reservedSlots.length;
+
+    return (
+        <button
+            onClick={onSelect}
+            style={{
+                padding: "0.75rem",
+                border: isSelected ? "2px solid #2563eb" : "1px solid #d9d9d9",
+                borderRadius: 6,
+                background: isSelected ? "#eff6ff" : "#fff",
+                cursor: "pointer",
+                textAlign: "left",
+                fontSize: "0.9rem",
+                fontWeight: isSelected ? 600 : 400,
+            }}
+        >
+            <div>{serviceName}</div>
+            <div style={{ fontSize: "0.8rem", color: "#666", marginTop: "0.25rem" }}>
+                {reservedCount}/{totalSlots} booked
+            </div>
+        </button>
+    );
 }
 
-const facilities: FacilityItem[] = [
-    { facility_id: "fac-001", name: "Gym", type: "Fitness", is_available: true, next_slot: "Today 6:00 PM" },
-    { facility_id: "fac-002", name: "Study Lounge", type: "Study", is_available: true, next_slot: "Today 8:00 PM" },
-    { facility_id: "fac-003", name: "Rooftop Patio", type: "Leisure", is_available: false, next_slot: "Closed for maintenance" },
-];
+function SelectedServiceDetails({ serviceId, serviceName, description }: { serviceId: string; serviceName: string; description?: string }) {
+    const { data: allSlots = [] } = useGetSlotsByServiceIdQuery(serviceId);
+    const { data: freeSlots = [] } = useGetFreeSlotsByServiceIdQuery(serviceId);
+    const { data: reservedSlots = [] } = useGetReservedSlotsByServiceIdQuery(serviceId);
+
+    const totalSlots = allSlots.length;
+    const reservedCount = reservedSlots.length;
+    const availableCount = freeSlots.length;
+    const utilization = totalSlots > 0 ? Math.round((reservedCount / totalSlots) * 100) : 0;
+
+    return (
+        <div>
+            <div style={{ marginBottom: "1rem" }}>
+                <strong>{serviceName}</strong>
+                <p style={{ margin: "0.5rem 0 0 0", fontSize: "0.9rem", color: "#666" }}>
+                    {description || "No description"}
+                </p>
+            </div>
+
+            <div style={{ display: "grid", gap: "0.75rem" }}>
+                <div style={{ padding: "0.75rem", background: "#f0fdf4", borderRadius: 6 }}>
+                    <div style={{ fontSize: "0.875rem", color: "#656e59" }}>Total Slots</div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>
+                        {totalSlots}
+                    </div>
+                </div>
+                <div style={{ padding: "0.75rem", background: "#fef3c7", borderRadius: 6 }}>
+                    <div style={{ fontSize: "0.875rem", color: "#7a4e0f" }}>Available</div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>
+                        {availableCount}
+                    </div>
+                </div>
+                <div style={{ padding: "0.75rem", background: "#fee2e2", borderRadius: 6 }}>
+                    <div style={{ fontSize: "0.875rem", color: "#7a1d1d" }}>Booked</div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>
+                        {reservedCount}
+                    </div>
+                </div>
+                <div style={{ padding: "0.75rem", background: "#f3f4f6", borderRadius: 6 }}>
+                    <div style={{ fontSize: "0.875rem", color: "#374151" }}>Utilization</div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>
+                        {utilization}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// function SummaryStats({ services }: { services: { _id: string; name: string; description?: string }[] }) {
+//     // Don't call hooks here to maintain stability - just show service count
+//     return (
+//         <section style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
+//             <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem", background: "#f8f9fb" }}>
+//                 <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>Total services</div>
+//                 <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>{services.length}</div>
+//             </div>
+//             <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem", background: "#f8f9fb" }}>
+//                 <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>Manage slots</div>
+//                 <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>→</div>
+//             </div>
+//             <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem", background: "#f8f9fb" }}>
+//                 <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>Select a service</div>
+//                 <div style={{ fontSize: "0.875rem", fontWeight: 400, marginTop: "0.25rem" }}>View slot details</div>
+//             </div>
+//         </section>
+//     );
+// }
 
 export function AdminFacilitiesPage() {
-    return (
-        <>
-            <CommonFrame commonFrameType="BUILDING_MANAGER">
-                <div className="adminFacilitiesPage">
-                    <h1>Facility Management</h1>
-                    <p>Monitor facility availability and upcoming usage windows.</p>
+    const { data: services = [], isLoading: servicesLoading } = useGetServicesQuery();
+    const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
-                    <section>
-                        <h2>Facilities overview</h2>
-                        <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-                            {facilities.map((facility) => (
-                                <div key={facility.facility_id} style={{ border: "1px solid #ccc", borderRadius: 8, padding: "1rem" }}>
-                                    <div style={{ fontWeight: 600 }}>{facility.name}</div>
-                                    <div style={{ color: "#555", marginTop: "0.25rem" }}>{facility.type}</div>
-                                    <div style={{ marginTop: "0.5rem" }}>Status: {facility.is_available ? "Available" : "Unavailable"}</div>
-                                    <div style={{ marginTop: "0.25rem" }}>Next slot: {facility.next_slot}</div>
-                                </div>
+    const selectedService = selectedServiceId ? services.find((s) => s._id === selectedServiceId) : null;
+
+    return (
+        <CommonFrame commonFrameType="BUILDING_MANAGER">
+            <div className="adminFacilitiesPage" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                <div>
+                    <h1>Reservation Slot Management</h1>
+                    <p>Monitor and manage resident reservation slots for all services.</p>
+                </div>
+
+                {/* {services.length > 0 && <SummaryStats services={services} />} */}
+
+                <section style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+                    <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem" }}>
+                        <h2>Services</h2>
+                        {servicesLoading && <p>Loading services...</p>}
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                            {services.map((service) => (
+                                <ServiceStatsItem
+                                    key={service._id}
+                                    serviceId={service._id}
+                                    serviceName={service.name}
+                                    isSelected={selectedServiceId === service._id}
+                                    onSelect={() => setSelectedServiceId(service._id)}
+                                />
                             ))}
                         </div>
-                    </section>
-                </div>
-            </CommonFrame>
-        </>
+                    </div>
+
+                    <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem" }}>
+                        <h2>Slot Details</h2>
+                        {selectedService ? (
+                            <SelectedServiceDetails
+                                serviceId={selectedService._id}
+                                serviceName={selectedService.name}
+                                description={selectedService.description}
+                            />
+                        ) : (
+                            <p style={{ color: "#666" }}>Select a service to view slot details</p>
+                        )}
+                    </div>
+                </section>
+            </div>
+        </CommonFrame>
     );
 }

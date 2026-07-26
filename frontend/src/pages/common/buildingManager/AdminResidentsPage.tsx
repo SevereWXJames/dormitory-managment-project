@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminResidentsData } from "@/pages/common/buildingManager/pageHooks/useAdminResidentsData.tsx";
+import {toast} from "sonner";
 
 interface ResidentEntry {
     _id: string;
@@ -17,7 +18,6 @@ export function AdminResidentsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedResident, setSelectedResident] = useState<ResidentEntry | null>(null);
     const [residentForm, setResidentForm] = useState({ userId: "", roomId: "", note: "" });
-    const [feedback, setFeedback] = useState<string | null>(null);
 
     useEffect(() => {
         if (!loading && !isError && localResidents.length === 0) {
@@ -47,7 +47,8 @@ export function AdminResidentsPage() {
         const newId = `new-${Date.now()}`;
         setSelectedResident({ _id: newId, userId: "", roomId: "", note: "" });
         setResidentForm({ userId: "", roomId: "", note: "" });
-        setFeedback("Onboarding flow opened for a new resident assignment.");
+        toast.success("Onboarding flow opened for a new resident assignment.");
+        //setFeedback("Onboarding flow opened for a new resident assignment.");
     };
 
     const openMaintenance = () => {
@@ -74,12 +75,13 @@ export function AdminResidentsPage() {
                 },
                 ...previous,
             ]);
-            setFeedback("New resident added in the current session.");
+            toast.success("New resident added in the current session.");
+            //setFeedback("New resident added in the current session.");
         } else {
             setLocalResidents((previous) => previous.map((resident) => (
                 resident._id === selectedResident._id ? { ...resident, userId: residentForm.userId, roomId: residentForm.roomId, note: residentForm.note } : resident
             )));
-            setFeedback("Resident details updated in the current session.");
+            toast.success("Resident details updated in the current session.");
         }
 
         setSelectedResident(null);
@@ -99,7 +101,6 @@ export function AdminResidentsPage() {
                     </div>
                 </div>
 
-                {feedback && <div className="info-banner">{feedback}</div>}
                 {loading && <p>Loading residents...</p>}
                 {isError && <p className="form-error">{error}</p>}
 
