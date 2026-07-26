@@ -17,9 +17,13 @@ const SignUpFormErrors: Record<UserInputFormKey, string> = {
 };
 
 const requiredInputs : UserInputFormKey[] = ["name", "username", "password", "email"];
+const emailRegex = /^\S+@\S+\.\S+$/;
 
 const validateInput = (key: UserInputFormKey, input: string | null) => {
     if (!input || input.trim().length <= 0 || input == "") return SignUpFormErrors[key];
+    if (key === "email" && !emailRegex.test(input.trim())) {
+        return "Please enter a valid email address like name@example.com.";
+    }
     return null;
 }
 

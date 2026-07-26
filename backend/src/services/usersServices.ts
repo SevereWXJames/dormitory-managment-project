@@ -76,7 +76,7 @@ export async function logIn(username: string, email: string, password: string) {
 
     const simpleEmailRegex = /^\S+@\S+\.\S+$/;
     if (!simpleEmailRegex.test(normalizedEmail)) {
-        throw Error("Invalid email format.");
+        throw Error("Please enter a valid email address like name@example.com.");
     }
 
     const user = await userModel.findOne({ username: normalizedUsername, email: normalizedEmail });
@@ -125,17 +125,14 @@ export async function signUp(profileData: SignUpRequest) {
     // Basic validation for email format
     const simpleEmailRegex = /^\S+@\S+\.\S+$/;
     if (!simpleEmailRegex.test(normalizedEmail)) {
-        throw Error("Invalid email format.");
+        throw Error("Please enter a valid email address like name@example.com.");
     }
 
-    // Ensure username and email are unique
-    const existingByUsername = await userModel.findOne({ username: normalizedUsername });
-    if (existingByUsername) {
-        throw Error("Username already exists. Choose another username.");
-    }
+    // Ensure the email is unique for the account
     const existingByEmail = await userModel.findOne({ email: normalizedEmail });
     if (existingByEmail) {
-        throw Error("Email already in use. Use a different email.");
+        throw Error("An account with this email already exists. Please use a different email address.");
+
     }
 
     profileData.username = normalizedUsername;
