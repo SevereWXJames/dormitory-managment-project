@@ -1,13 +1,13 @@
-# Milestone 3 Test Plan (Updated from Milestone 2 Test Plan)
+# Milestone 4 Test Plan (Updated from Milestone 3 Test Plan)
 
 ## Purpose
 
-This test plan supports the Milestone 3 submission for SmartAPT. It describes how to verify Docker deployment, frontend
+This test plan supports the Milestone 4 submission for SmartAPT. It describes how to verify Docker deployment, frontend
 availability, backend startup, and the current state of application functionality.
 
-Compared with the Milestone 2 branch, the current branch adds more data-backed resident flows for bookings, maintenance, notices, and credits, while still leaving some notification and payment UI elements as partial or demo-only functionality.
+Compared with the Milestone 3 branch, the current branch updates tests for data-backed pages, removes tests associated to removed features, and adds information on the state of test automation.
 
-The items marked as "(M3 branch)" are new validation steps added for the M3 branch and should be prioritized when validating the admin-page changes.
+The items marked as "(M4 branch)" are new validation steps added for the M3 branch and should be prioritized when validating the admin-page changes.
 
 ## Setup
 
@@ -23,17 +23,12 @@ cp frontend/.env.example frontend/.env
 
 ## Manual Tests
 
-### M3 admin and documentation checks
+### M4 admin and documentation checks
 
 - **Admin sign-up and login flow**
   - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
   - Execution: Create an admin account using the admin sign-up route at /admin-signup, or use an existing admin account from the seeded sample data if available.
   - Validation: After a successful login, the user should land on the admin dashboard and be able to access admin-only pages. A resident account should not be able to access the same admin routes.
-
-- **Unread / read notice behavior**
-  - Setup: Sign in as a resident and open the notices page.
-  - Execution: Open a notice that is marked unread and confirm that it can be marked as read.
-  - Validation: The notice state updates correctly and remains reflected in the resident view after refresh.
 
 - **Admin maintenance request triage**
   - Setup: Sign in as an admin and ensure at least one maintenance request exists.
@@ -48,35 +43,28 @@ cp frontend/.env.example frontend/.env
   - Validation: The dashboard should show resident-relevant sections such as bookings, notices, maintenance, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
 
 - **Resident facility booking**
-  - Setup: Sign in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input 5 credits in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
+  - Setup: Sign in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input any 16 digits in the card number field, any date in the expiration date field, at least three digits in the scurity code field, and $5.00 in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
   - Execution: Open a machine, choose a time slot, and submit a booking.
   - Validation: The booking should appear in the resident booking list or related view. If it fails, verify whether the issue is a real backend problem or a known placeholder flow.
 
 - **Resident maintenance submission**
   - Setup: Sign in as a resident and open the maintenance page.
   - Execution: Submit a maintenance request with a category, description, and priority.
-  - Validation: The request should be accepted by the app and appear in the resident/manager workflow. The UI should not be treated as fully complete if the request is only locally displayed.
-
-- **Resident notices and read-state**
-  - Setup: Sign in as a resident and open the notices page.
-  - Execution: Open a notice and confirm that it appears in the resident notice list.
-  - Validation: The notice content should be visible and the resident view should update after refresh. Full notification delivery and automatic unread/alert behavior remain partial and should not be treated as a complete feature.
+  - Validation: The request should be accepted by the app and appear in the resident/manager workflow. The new maintenance request is shown both in the UI and in the MongoDB database (which can be verified by connecting MongoDB compass to mongodb://localhost:27107/ and navigating to the MaintenanceRequests collection).
 
 - **Credits / balance**
   - Setup: Sign in as a resident and open the credits page.
   - Execution: Review the balance and transaction history, then attempt a credit top-up using the mock form.
-  - Validation: The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout.
+  - Validation: The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout. The "Add Credits" form validates the card number (the input must have 16 digits), expiration date (the input must be a valid MM/YY date) and security code (the input must have between 3 and 4 digits) fields.
 
 - **Settings / profile**
   - Setup: Sign in as a resident and open the settings page.
-  - Execution: Review the account/profile information and notification-related controls.
-  - Validation: Information should display correctly, but notification switches should be treated as UI-only until persistence is implemented.
+  - Execution: Review the account/profile information.
+  - Validation: The name, email, username and phone number of the logged-in user are present and these fields are read-only.
 
 ### Non-admin features that are still not fully testable
 
 The following frontend elements are visible in the current branch but should not be treated as complete, production-ready features:
-- Notification center and push notifications: the UI exposes notification-related concepts, but there is no real inbox, delivery mechanism, or persisted notification state.
-- Notification preference toggles: visual switches are present, but changing them does not currently persist or affect real notification behavior.
 - Payment checkout: the credits form exists, but it is still a mock/demo flow and should not be tested as a live payment integration.
 - Static dashboard/help/demo content: some cards and helper copy are present for orientation but are not backed by full product logic.
 
@@ -205,9 +193,9 @@ Expected result:
     2) Execution: Navigate to the "Settings" page using the "menu" button in the upper left hand corner.
     3) Validation: The username and email that the user has inputted should be one of the following displayed. (Name and phone number are hardcoded with default values: "Lem Lemmings" and "12345678")
 - **Personal information form:**
-    - (Not implemented as of M2)
+    - As of M4, the form is implemented as read-only fields. See the corresponding tests in "Settings / Profile" above.
 - **Payment information form:**
-    - (Removed from specification)
+    - As of M4, the form is implemented in the front-end with field validation. See the corresponding tests in "Credits / Balance" above.
 - **Shared facilities page, resident view:**
     - Test case 1: UI elements
         1) Setup: None
@@ -221,7 +209,7 @@ Expected result:
             - Log in as a valid resident.
             - Navigate to the "Credits" page
             - Follow the instructions detailed in the test plans for "Credits page" and ensure the balance has at least
-              1 dollar worth of credits. (For M3, 1 credit costs $0.01, and booking a slot costs 5 credits)
+              1 dollar worth of credits. (For M4, 1 credit costs $0.01, and booking a slot costs 5 credits)
             - Navigate to the “Facilities” page.
             - Select a machine that you wish to book. 
             - A modal window should open with a list of times.
@@ -246,7 +234,7 @@ Expected result:
            - The event should be removed from the "Recent Bookings" table.
            - The slot should now be available to book once clicking on the same machine option again.
            - The balance should be refunded with 5 credits.
-    - Test case 5: Viewing the status of machines.
+    - Test case 4: Viewing the status of machines.
         1) Setup: Log in as a valid resident, then navigate to the “Facilities” page.
         2) Execution:
             - Below "Check machine status", click on the button called "Cancel booking".
@@ -264,8 +252,7 @@ Expected result:
         1) Setup: None.
         2) Execution: Log in as a valid resident, then navigate to the “Credits” page.
         3) Validation: In the Add Credits form, there are the following editable fields: “Card Number” (numerical),
-           “Expiration Date” (date in MM/YY format), “Security code” (numerical), “Cardholder name” (text), “Amount” (
-           numerical); and a “Pay” button that attempts to make a payment.
+           “Expiration Date” (date in MM/YY format), “Security code” (numerical), “Cardholder name” (text), “Amount” (numerical); and a “Pay” button that attempts to make a payment.
     - Test case 3: Accepted payment
         1) Setup: Log in as a valid resident, then navigate to the “Credits” page.
         2) Execution: Press “Pay”, fill in all mandatory fields with valid values, choose a valid card as the payment
@@ -273,7 +260,7 @@ Expected result:
         3) Validation: If the payment is accepted, then a new entry in the Payment History section appears with the
            provided card number, the current date and the provided amount.
     - Test case 4: Rejected payment
-        - (Payment verification not implemented as of M2)
+        - (Payment verification not implemented as of M4)
 - **Maintenance requests page, resident view:**
     - Test case 1: UI elements
         1) Setup: None
@@ -290,9 +277,9 @@ Expected result:
            “confirm” in the maintenance request creation form creates a new entry in the maintenance requests list with
            a “new” status.
     - Test case 3: Maintenance request edition form
-        - (Not implemented as part of M2)
+        - (Not implemented as part of M4)
     - Test case 4: “Remove” button
-        - (Not implemented as part of M2)
+        - (Not implemented as part of M4)
 - **Maintenance requests page, building manager view:**
     - Test case 1: UI elements
         1) Setup: None
@@ -302,50 +289,10 @@ Expected result:
            shown in the resident view, with the addition of the apartment number for each entry. All functions in all
            forms are identical in the building manager view, except: In the maintenance request edit form, there is an
            additional dropdown menu “status” that changes the status of the request being edited.
-- **Notices page, resident view:**
-    - Test case 1: UI elements
-        1) Setup: None
-        2) Execution: Log in as a valid resident, then navigate to the “Notices” page.
-        3) Validation: In the resident view, there is a list of all notices the user can view. Notices not yet opened by
-           the user are under the “Unread Messages” section.
-- **Notices page, building manager view:**
-    - Test case 1: UI elements
-        1) Setup: None
-        2) Execution: Log in as a valid building manager, then navigate to the “Notices” page.
-        3) Validation: In the building manager view, there is a list of all notices, with a checkbox for each item to
-           select it, a “Create Notice” button, and “Edit” and “Remove” buttons for each notice.
-    - Test case 2: Notice creation form
-        1) Setup: Log in as a valid building manager, then navigate to the “Notices” page.
-        2) Execution: Press the “Create Notice” button.
-        3) Validation: Pressing the “create” button opens the notice creation form with the fields “title” (text input)
-           and “body” (multi-line text input), and “confirm” and “cancel” buttons. Pressing “confirm” publishes the
-           notice so that it is visible for all residents.
-    - Test case 3: Notice edition form
-        1) Setup: Log in as a valid building manager, then navigate to the “Notices” page. Ensure there is at least one
-           notice present.
-        2) Execution: Press the “Edit” button in one of the present notices.
-        3) Validation: Pressing the “edit” button opens a form identical to the notice creation form, with the fields
-           filled in with existing values for that notice. Pressing “confirm” in this form edits the information
-           associated to that notice and enables the “not read” indications for all residents.
-    - Test case 4: “Remove” button
-        1) Setup: Log in as a valid building manager, then navigate to the “Notices” page. Ensure there is at least one
-           notice present.
-        2) Execution: Press the “Remove” button in one of the present notices.
-        3) Validation: The “remove” button erases the notice.
-- **Residents page, administrator view:**
-    - Test case 1: Access to the Residents page
-        1) Setup: None
-        2) Execution: Log in as a resident, try navigating to the “Residents” page. Log out and try the same procedure
-           logging in as a building manager.
-        3) Validation: It is only possible to view the Residents page when logged in as a building manager.
-    - Test case 2: UI elements:
-        1) Setup: None
-        2) Execution: Log in as a building manager and navigate to the “Residents” page.
-        3) Validation: A list of apartments and their residents is shown.
 
 ## Manual Back-End Tests
 
-### M3 admin backend checks (M3 branch)
+### M4 admin backend checks (M4 branch)
 
 - **Admin-only route access**
     - Setup: Create one resident account and one admin account.
@@ -356,11 +303,6 @@ Expected result:
     - Setup: Create or load a maintenance request record.
     - Execution: Send an admin update request changing the request status to a valid value.
     - Validation: The record is updated in MongoDB and the new status is returned by the API.
-
-- **Notice CRUD flow**
-    - Setup: Start the backend with MongoDB running.
-    - Execution: Create, update, and delete a notice via the backend routes.
-    - Validation: The notice is created, edited, and removed correctly in the database.
 
 - **All forms and lists:**
     - Test Plan 1: Adding a record to the database:
@@ -444,7 +386,7 @@ Expected result:
         2) Execution:  Remove entry A. Then add entry B.
         3) Validation:  Assert that A is not in the database, and B is.
 
-   - **Admin Role-Based Management Logic:**
+- **Admin Role-Based Management Logic:**
    - Test Plan 1: Maintenance Request Status Consistency
      - Description: When an Admin modifies the status of a maintenance ticket, the backend must enforce that the record state only mutates into predefined legal values ("New", "Contractor Requested", "Resolved").
      1) Setup: Create a maintenance ticket record initialized to status "New".
@@ -458,7 +400,7 @@ Expected result:
 
 ## Manual IoT Tests
 
-### M3 Manual IoT Tests
+### M4 Manual IoT Tests
 
 **Background**
 
@@ -520,19 +462,9 @@ This will read from the `data.json` file and execute the test app as if it is ma
 
 ## Bugs
 
-Bugs that have been found before the M2 submission date have been recorded as github issues.
+Bugs that have been found before the M4 submission date have been recorded as github issues.
 Please view them for instructions on how to reproduce them.
 
 ## Automated Tests
 
-Recommended M3 validation commands:
-
-```bash
-cd frontend
-npm run build
-```
-
-```bash
-cd backend
-npm test
-```
+Automated tests have not yet been updated to the Milestone 4 features. They should not currently be used for testing.
