@@ -207,10 +207,8 @@ Detailed test instructions are available in `doc/test-plan.md`.
 
 XSS Security Assessment - conduct an XSS scan of your application and report the results, prioritizing and addressing any vulnerabilities.
 
-During WS4, the UBC Maple Bacon team will introduce us to some basic web vulnerability tests. For M4 you will test your application for XSS (cross-site scripting), i.e., can you inject random JavaScript into your various input pages via a form post (e.g., your search box).  You will list your various input points (any text input fields), the tests you attempted, the results, and any mitigation efforts or changes you made.  This is not expected to take more than an afternoon (or two) of instrumenting (i.e., setting up your environment), running some tests, documenting, and then addressing them. You can document this in your README under M4's section or in a PDF document that you link from your M4 section
-
-- List of Input Boxes:
-  - Login:
+### List of Tests For Each Page:
+- #### Login:
     - Test 1: No-SQL injection:
       - Setup:
         - Create an account through the sign-up link
@@ -221,7 +219,7 @@ During WS4, the UBC Maple Bacon team will introduce us to some basic web vulnera
         - In the password field, input: “${ne: null}”
       - Expected Result:
         - The login request should be rejected and the client unable to gain access to the dashboard.
-  - Sign Up as Resident:
+- #### Sign Up as Resident:
     - Test 1: Script Injection:
       - Setup:
         - Navigate to the sign-up link.
@@ -232,34 +230,35 @@ During WS4, the UBC Maple Bacon team will introduce us to some basic web vulnera
       - Expected Result:
         - The user will successfully sign up.
         - No alert dialog message with “1” should appear.
-    - Maintenance Request Page
-      - Test 1: Script Injection:
-        - Setup:
-          - Create an account or login using the instructions in the previous test above.
-          - Navigate to the Maintenance Requests page.
-          - Fill out the fields using the drop-down options.
-          - Input “<script>alert("5")</script>” in any text input field
-        - Execution:
-          - Submit the information in the form
-        - Expected Result:
-          - The request will successfully be submitted.
-          - No alert dialog message with “5” should appear.
-    - Credits Amount Page
-      - Test 1: Script Injection:
-        - Setup:
-          - Create an account or login using the instructions in the previous test above.
-          - Navigate to Credits page.
-          - Input a number in the “amount” field.
-          - Input “<script>alert("6")</script>” in any text input field
-        - Execution:
-          - Submit the information in the form
-        - Expected Result:
-          - The balance will be successfully updated by whatever amount the client chose.
-          - No alert dialog message with “6” should appear.
-- Alerts (To be resolved):
-  CSP Header not set.
-  8-medium risks identified by ZAP.
-  7-low risks identified by ZAP.
+- #### Maintenance Request Page
+  - Test 1: Script Injection:
+    - Setup:
+      - Create an account or login using the instructions in the previous test above.
+      - Navigate to the Maintenance Requests page.
+      - Fill out the fields using the drop-down options.
+      - Input “<script>alert("5")</script>” in any text input field
+    - Execution:
+      - Submit the information in the form
+    - Expected Result:
+      - The request will successfully be submitted.
+      - No alert dialog message with “5” should appear.
+- #### Credits Amount Page
+  - Test 1: Script Injection:
+    - Setup:
+      - Create an account or login using the instructions in the previous test above.
+      - Navigate to Credits page.
+      - Input a number in the “amount” field.
+      - Input “<script>alert("6")</script>” in any text input field
+    - Execution:
+      - Submit the information in the form
+    - Expected Result:
+      - The balance will be successfully updated by whatever amount the client chose.
+      - No alert dialog message with “6” should appear.
+      
+#### Alerts (To be resolved):
+- CSP Header not set.
+- 8-medium risks identified by ZAP.
+- 7-low risks identified by ZAP.
 
 
 ### What the TA should verify
