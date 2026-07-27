@@ -31,9 +31,9 @@ export function AdminDashboardPage() {
         return initialDashboardData;
     }, [loading, error, managerData, maintenanceRequests]);
 
-    const handleReviewResidents = () => {
-        navigate("/admin/residents");
-    };
+    // const handleReviewResidents = () => {
+    //     navigate("/admin/residents");
+    // };
 
     const handleOpenMaintenance = () => {
         setActiveModal(null);
@@ -50,7 +50,7 @@ export function AdminDashboardPage() {
                     </div>
                     <div className="page-actions">
                         <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
-                        <button type="button" className="secondary-button" onClick={handleReviewResidents}>Review residents</button>
+                        {/* <button type="button" className="secondary-button" onClick={handleReviewResidents}>Review residents</button> */}
                         <button type="button" className="primary-button" onClick={() => navigate('/admin-signup')}>Create admin account</button>
                     </div>
                 </div>
