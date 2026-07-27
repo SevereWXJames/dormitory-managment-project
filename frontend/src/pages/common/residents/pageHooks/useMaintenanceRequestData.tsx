@@ -4,7 +4,11 @@ import {useGetMaintenanceRequestByUserQuery} from "@/context/api/apiServices/mai
 
 export function useMaintenanceRequestData() {
     const userId = useSelector(getUserId);
-    const {data, isLoading, isError, error} = useGetMaintenanceRequestByUserQuery(userId!, { skip: !userId });
+    const {data, isLoading, isError, error} = useGetMaintenanceRequestByUserQuery(userId!, {
+        skip: !userId,
+        refetchOnFocus: true,
+        refetchOnReconnect: true,
+    });
     return {
         isLoading: isLoading,
         isError: isError || !userId,
