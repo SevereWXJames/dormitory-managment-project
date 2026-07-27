@@ -21,6 +21,19 @@ cp frontend/.env.example frontend/.env
 
 4. Place the actual `.env` file from Canvas into `frontend/.env` if needed.
 
+## Login instructions
+
+Wherever the tests require logging in, the following login information can be used:
+
+- For a resident: 
+    - Username: test1
+    - Email: test1@test.com
+- For a building manager/administrator: 
+    - Username: admin
+    - Email: admin@smartapt.local
+
+The password to be used for either account is the value of the SAMPLE_PASSWORD environment variable, as set in the .env file.
+
 ## Manual Tests
 
 ### M4 admin and documentation checks
