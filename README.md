@@ -56,11 +56,11 @@ docker compose down
 
 ### Admin access and testing
 
-The current M3 branch includes protected admin routes for the building-manager experience. To test the admin experience:
+The current M4 branch includes protected admin routes for the building-manager experience with stricter admin provisioning.
 
 1. Open the app at http://localhost:5173 and navigate to the login page.
-2. Create an admin account through the admin sign-up flow at /admin-signup, or use an existing admin account from the seeded sample data if your local environment includes it.
-3. After login, the app should route an admin user to the admin dashboard at /admin/dashboard.
+2. Admin accounts can only be created by an existing admin or through the auth backend; there is no public admin sign-up flow.
+3. After successful admin authentication, the app routes the admin user to the dashboard at /admin/dashboard.
 4. If you want to confirm access control, sign in as a resident user and verify that admin-only routes are blocked.
 
 > The current admin experience is role-based. The app should not rely on the email containing the word "admin" to grant access.
@@ -113,7 +113,7 @@ This milestone documents the near-submittable Milestone 3 branch state. It build
 
 | Feature Name & Scope | Feature Type | Status in M3 | Description |
 | :--- | :--- | :--- | :--- |
-| **Admin Management Console** | Non-Trivial | **Partially implemented** | Protected admin routes and manager-facing pages are present for dashboard, facilities, maintenance, notices, residents, access codes, settings, and help. Some screens are still UI-focused and should be treated as M3 work-in-progress. |
+| **Admin Management Console** | Non-Trivial | **Partially implemented** | Protected admin routes and manager-facing pages are present for dashboard, facilities, maintenance, notices, settings, and help. Access codes and resident-management pages have been removed from the admin interface, and admin accounts are provisioned through authenticated admin/auth flows. |
 | **Resident Role Dashboard** | Standard | **Implemented** | Resident-facing pages for bookings, maintenance requests, notices, credits, settings, and help are available. |
 | **Role-Based Authentication / Authorization** | Standard | **Implemented** | Login, admin signup, protected routes, and role validation are wired through JWT-based auth middleware. |
 | **Facility & Booking Management** | Standard | **Partially implemented** | Resident booking flows and admin facility views exist, but some interaction details and management workflows are still being refined. |
@@ -147,14 +147,14 @@ The following parts are visible in the frontend but should not be treated as ful
 5. After signing up for the first time or after logging back in, verify the resident dashboard pages for bookings, maintenance, notices, credits, and account settings. Keep in mind that notification-related widgets and any static help/demo content are not yet full features.
 
 #### Admin:
-1. Create a new account by clicking on the sign-up link for admins located below the login-form.
-2. Similarly, enter appropriate values in the fields and click on the sing-up button. Ensure that the email and the username are different than the one you used to sign-in as a Resident.
-3. After signing up as an admin and verify the admin dashboard, facilities, maintenance, notices, residents, access codes, and settings pages.
-4. After creating an adnin account, you can continue to log back in as an admin using the login form.
+1. Use an existing admin account from seeded sample data or create an admin account through the auth backend; public admin signup is not available.
+2. Log in through the normal login page and verify that the admin is routed to /admin/dashboard after authentication.
+3. Verify the admin dashboard, facilities, maintenance, notices, and settings pages. The admin interface no longer exposes access codes or resident-management pages.
+4. After logging in as an admin, confirm that admin-only navigation and status update workflows function correctly.
 
 5. Verify that notice visibility, request status updates, and resident/admin navigation work as expected in the running app.
 
-6. To confirm that role authorization and authentication are working as intended, you can try copying one of the page URIs specific to the admin interface. Then log out and or log back in as a resident and copy and paste the uri link in the address bar.
+6. To confirm that role authorization and authentication are working as intended, you can try copying one of the page URIs specific to the admin interface. Then log out and log back in as a resident and paste the URI into the address bar.
 
 ## Milestone 4 Functionality
 
@@ -166,19 +166,22 @@ This milestone focuses on polishing the existing resident experience and tighten
 - The resident-facing experience was simplified by removing static UI elements that were not backed by a fully implemented workflow.
 - Notices are being removed as we do not plan to implement them due to them adding little to the end user experience and due to lack of time.
 - Rooms and residents are being removed as they serve no purpose in the current state of the application.
+- The admin interface no longer exposes resident pages or the create-resident function; those features were deleted from the admin UI.
+- The admin facilities page has been updated and remains part of the admin dashboard experience.
 
 ### New functionality and improvements
 
 - Resident view cleanup: the resident dashboard and navigation now avoid surfacing notices and other static/demo components that were not fully implemented, making the UI more aligned with the current backend capabilities.
-- Admin login page refactor: the admin-facing authentication experience was cleaned up and reorganized so the login/sign-up flow is more consistent with the rest of the app and easier to navigate.
+- Admin login flow relocate: admin authentication now routes admins directly into the admin dashboard rather than using a separate admin login page.
+- Admin account creation control: admin accounts can only be created by an existing admin or through the auth backend, with no public admin signup flow.
 - Stronger authentication validation: signup now rejects invalid email formats, and login requires the provided username and email to belong to the same account before access is granted.
 - Account identity enforcement: user registration now enforces a unique email address per account rather than relying on username uniqueness alone, which improves account creation reliability and prevents duplicate accounts from being created with the same email.
 - Clearer auth feedback: backend authentication responses now return specific validation messages so the frontend can show more precise login/signup error feedback, including helpful guidance for malformed email addresses.
-- Middleware-based auth refactor: role-based authorization checks were moved into the middleware layer so the auth routes follow the existing middleware pattern more cleanly, with protected admin signup handling routed through the established auth middleware flow.
+- Middleware-based auth refactor: role-based authorization checks were moved into the middleware layer so the auth routes follow the existing middleware pattern more cleanly.
 - Frontend auth form improvements: the login and signup forms were updated to surface backend validation errors directly in the UI and to present consistent, user-friendly messages for invalid email input.
-- Admin account creation refactor: admin account creation has been moved to the admin only pages, to prevent unauthorized users creating admin accounts.
-- IoT reservation messages: an IoT Response messages has been added when a service is booked.
-- Reservation slot autogeneration: reservations slots are autogenerated a set number of days ahead at a set time every day.
+- Admin account creation refactor: admin account creation has been moved to admin-only pages and protected auth flows to prevent unauthorized admin onboarding.
+- IoT reservation messages: an IoT Response message has been added when a service is booked.
+- Reservation slot autogeneration: reservation slots are autogenerated a set number of days ahead at a set time every day.
 - Reservation slot removal: old reservation slots are cleaned up at the same time.
 - Reservation slot sorting: reservation slots are now filtered based on being in the past, and are ordered by time and date in the UI.
 - Authentication refresh tokens: refresh tokens have been added to the authentication token system.
