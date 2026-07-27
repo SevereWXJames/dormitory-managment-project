@@ -256,6 +256,11 @@ During WS4, the UBC Maple Bacon team will introduce us to some basic web vulnera
         - Expected Result:
           - The balance will be successfully updated by whatever amount the client chose.
           - No alert dialog message with “6” should appear.
+- Alerts (To be resolved):
+  CSP Header not set.
+  8-medium risks identified by ZAP.
+  7-low risks identified by ZAP.
+
 
 ### What the TA should verify
 
