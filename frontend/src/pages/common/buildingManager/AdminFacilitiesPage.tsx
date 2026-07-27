@@ -1,14 +1,13 @@
 import { useGetServicesQuery } from "@/context/api/apiServices/servicesApi";
-import { useGetSlotsByServiceIdQuery, useGetFreeSlotsByServiceIdQuery, useGetReservedSlotsByServiceIdQuery } from "@/context/api/apiServices/reservationSlotsApi";
+import { useGetSlotsByServiceIdQuery } from "@/context/api/apiServices/reservationSlotsApi";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useState } from "react";
 
 function ServiceStatsItem({ serviceId, serviceName, isSelected, onSelect }: { serviceId: string; serviceName: string; isSelected: boolean; onSelect: () => void }) {
     const { data: allSlots = [] } = useGetSlotsByServiceIdQuery(serviceId);
-    const { data: reservedSlots = [] } = useGetReservedSlotsByServiceIdQuery(serviceId);
 
     const totalSlots = allSlots.length;
-    const reservedCount = reservedSlots.length;
+    const reservedCount = allSlots.filter((slot) => slot.booked).length;
 
     return (
         <button
@@ -34,12 +33,10 @@ function ServiceStatsItem({ serviceId, serviceName, isSelected, onSelect }: { se
 
 function SelectedServiceDetails({ serviceId, serviceName, description }: { serviceId: string; serviceName: string; description?: string }) {
     const { data: allSlots = [] } = useGetSlotsByServiceIdQuery(serviceId);
-    const { data: freeSlots = [] } = useGetFreeSlotsByServiceIdQuery(serviceId);
-    const { data: reservedSlots = [] } = useGetReservedSlotsByServiceIdQuery(serviceId);
 
     const totalSlots = allSlots.length;
-    const reservedCount = reservedSlots.length;
-    const availableCount = freeSlots.length;
+    const reservedCount = allSlots.filter((slot) => slot.booked).length;
+    const availableCount = allSlots.filter((slot) => !slot.booked).length;
     const utilization = totalSlots > 0 ? Math.round((reservedCount / totalSlots) * 100) : 0;
 
     return (
@@ -111,7 +108,7 @@ export function AdminFacilitiesPage() {
         <CommonFrame commonFrameType="BUILDING_MANAGER">
             <div className="adminFacilitiesPage" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
                 <div>
-                    <h1>Reservation Slot Management</h1>
+                    <h1>Facilities Slot Management</h1>
                     <p>Monitor and manage resident reservation slots for all services.</p>
                 </div>
 

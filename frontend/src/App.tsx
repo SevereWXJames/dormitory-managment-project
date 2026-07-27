@@ -11,10 +11,8 @@ import {HelpPage} from "./pages/common/residents/dashboard/static/HelpPage.tsx";
 import {AdminDashboardPage} from "./pages/common/buildingManager/AdminDashboardPage.tsx";
 import {AdminFacilitiesPage} from "./pages/common/buildingManager/AdminFacilitiesPage.tsx";
 import {AdminMaintenancePage} from "./pages/common/buildingManager/AdminMaintenancePage.tsx";
-import {AdminResidentsPage} from "./pages/common/buildingManager/AdminResidentsPage.tsx";
 import {AdminSettingsPage} from "./pages/common/buildingManager/AdminSettingsPage.tsx";
 import {AdminHelpPage} from "./pages/common/buildingManager/AdminHelpPage.tsx";
-import {AdminAccessCodesPage} from "./pages/common/buildingManager/AdminAccessCodesPage.tsx";
 import CssBaseline from "@mui/material/CssBaseline";
 import {ResidentSignUpPage} from "@/pages/common/residents/ResidentSignUpPage.tsx";
 import {AdminSignUpPage} from "@/pages/common/buildingManager/AdminSignUpPage.tsx";
@@ -100,17 +98,6 @@ function App() {
                 <Route path="/admin/maintenance" element={
                     <ProtectedRoute allowedRoles={[Role.ADMIN]}>
                         <AdminMaintenancePage/>
-                    </ProtectedRoute>
-                }/>
-                {/* Notices page removed from admin UI */}
-                <Route path="/admin/residents" element={
-                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                        <AdminResidentsPage/>
-                    </ProtectedRoute>
-                }/>
-                <Route path="/admin/access-codes" element={
-                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                        <AdminAccessCodesPage/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/admin/settings" element={

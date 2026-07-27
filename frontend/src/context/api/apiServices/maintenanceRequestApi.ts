@@ -6,18 +6,31 @@ import {
 } from "@/dataTypes/maintenanceRequest.ts";
 import type {MaintenanceRequestState} from "@/types/residents/types.ts";
 
+function parseRequestStatus(status: string | undefined): MaintenanceRequestState["status"] {
+    const normalizedStatus = status?.trim().toLowerCase() ?? "";
+
+    if (["completed", "done", "resolved"].includes(normalizedStatus)) {
+        return "RESOLVED";
+    }
+
+    if (["inprogress", "in progress", "investigating", "working", "pending", "scheduled"].includes(normalizedStatus)) {
+        return "SCHEDULED";
+    }
+
+    return "NEW";
+}
+
 //Helper to convert api response into appropriate type
 function parseRequest(request: MaintenanceRequest): MaintenanceRequestState {
     const requestType = request.priority?.toUpperCase() === "HIGH" || request.priority?.toUpperCase() === "MEDIUM" || request.priority?.toUpperCase() === "LOW"
         ? request.priority.toUpperCase() as "HIGH" | "MEDIUM" | "LOW"
         : "LOW";
-    const requestStatus = request.status?.toLowerCase() === "completed" ? "RESOLVED" : request.status?.toLowerCase() === "inprogress" ? "SCHEDULED" : "NEW";
 
     return ({
         id: request._id,
         unit: request.location ?? "N/A",
         priority: requestType,
-        status: requestStatus,
+        status: parseRequestStatus(request.status),
         issue: request.title,
         location: request.location ?? "N/A",
         description: request.description

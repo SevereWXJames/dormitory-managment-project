@@ -44,20 +44,7 @@ export async function getReservationsSlotsByServiceId(serviceId: mongoose.Types.
 
 export async function getFutureReservationsSlotsByServiceId(serviceId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
     const currDate = new Date();
-    const cursor = ReservationSlotModel.find({serviceId: serviceId}).lean();
-    const results: ReservationSlot[] = [];
-    for await (const result of cursor) {
-        try {
-            if (result != null) {
-                results.push(result as ReservationSlot);
-            }
-        } catch (e) {
-            // "Pass"
-        }
-    }
-    return results.filter((reservationSlot) => {
-        return reservationSlot.startTime.getTime() > currDate.getTime();
-    });
+    return await ReservationSlotModel.find({serviceId: serviceId, startTime: { $gt: currDate }}).lean().exec();
 }
 
 export async function getReservationsSlotsByServiceName(serviceName: string): Promise<ReservationSlot[]> {
@@ -206,18 +193,20 @@ export async function getAllSlots(serviceId: mongoose.Types.ObjectId){
 
 export async function getAllFreeSlots(serviceId: mongoose.Types.ObjectId){
     //TODO:
-    // Given a service id, get all free slots for that service.
+    // Given a service id, get all future free slots for that service.
     try{
-        return await ReservationSlotModel.find({serviceId: serviceId, booked: false}).lean().exec();
+        const currDate = new Date();
+        return await ReservationSlotModel.find({serviceId: serviceId, booked: false, startTime: { $gt: currDate }}).lean().exec();
     }catch(error){
         throw Error(`Error finding free slots for service ${serviceId}`, {cause: error});
     }
 }
 export async function getAllReservedSlots(serviceId: mongoose.Types.ObjectId){
     //TODO:
-    // Given a service id, get all booked slots for that service.
+    // Given a service id, get all future booked slots for that service.
     try{
-        return await ReservationSlotModel.find({serviceId: serviceId, booked: true}).lean().exec();
+        const currDate = new Date();
+        return await ReservationSlotModel.find({serviceId: serviceId, booked: true, startTime: { $gt: currDate }}).lean().exec();
     } catch (error) {
         throw Error(`Error finding reserved slots for service ${serviceId}`, {cause: error});
     }
