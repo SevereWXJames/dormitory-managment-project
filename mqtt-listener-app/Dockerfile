@@ -3,5 +3,5 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install
 COPY ./data ./data
-COPY mqtt-test-app.js .
+COPY mqtt-listener-app.js .
 CMD ["node", "mqtt-listener-app.js", "-f"]

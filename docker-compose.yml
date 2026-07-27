@@ -11,6 +11,8 @@ services:
       - backend
     profiles:
       - production
+    environment:
+      - TZ=America/Vancouver
 
   backend:
     build:
@@ -23,6 +25,7 @@ services:
       - .env
     environment:
       - BACKEND_PORT=3000
+      - TZ=America/Vancouver
     profiles:
       - production
 
