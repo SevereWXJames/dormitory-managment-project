@@ -431,41 +431,41 @@ This will read from the `data.json` file and execute the test app as if it is ma
     1. Confirm the app is running.
     2. Open the facilities page as a resident user.
     3. Navigate to "Washing Machine 1" and modal by clicking on it.
-    4. Confirm that the status value "In use" is **false**.
+    4. Confirm that the status value is set to "Available"
     5. Copy the contents of `mqtt-test-app/data/testData/test1data.json` into `mqtt-test-app/data/data.json`.
     6. Run the MQTT test app using the instructions above.
     7. Close and then reopen the "Washing Machine 1" modal. 
-    8. Confirm that the status value "In use" is **true**.
+    8. Confirm that the status value is set to "In use"
 
   - Test that machines can be set to no longer be in use. (Test 2)
     1. Confirm the app is running.
     2. Open the facilities page as a resident user.
     3. Navigate to "Washing Machine 1" and modal by clicking on it.
-    4. Confirm that the status value "In use" is **true**.
+    4. Confirm that the status value is set to "In use"
     5. Copy the contents of `mqtt-test-app/data/testData/test2data.json` into `mqtt-test-app/data/data.json`.
     6. Run the MQTT test app using the instructions above.
     7. Close and then reopen the "Washing Machine 1" modal.
-    8. Confirm that the status value "In use" is **false**.
+    8. Confirm that the status value is set to "Available"
 
   - Test that machines can be set to be out of service. (Test 3)
     1. Confirm the app is running.
     2. Open the facilities page as a resident user.
     3. Navigate to "Washing Machine 1" and modal by clicking on it.
-    4. Confirm that the status value "Out of service" is **false**.
+    4. Confirm that the status value is "Available"
     5. Copy the contents of `mqtt-test-app/data/testData/test3data.json` into `mqtt-test-app/data/data.json`.
     6. Run the MQTT test app using the instructions above.
     7. Close and then reopen the "Washing Machine 1" modal.
-    8. Confirm that the status value "Out of service" is **true**.
+    8. Confirm that the status value is set to "Out of service"
 
   - Test that machines can be set to be no longer out of service. (Test 4)
     1. Confirm the app is running.
     2. Open the facilities page as a resident user.
     3. Navigate to "Washing Machine 1" and modal by clicking on it.
-    4. Confirm that the status value "Out of service" is **true**.
+    4. Confirm that the status value is set to "Out of service"
     5. Copy the contents of `mqtt-test-app/data/testData/test4data.json` into `mqtt-test-app/data/data.json`.
     6. Run the MQTT test app using the instructions above.
     7. Close and then reopen the "Washing Machine 1" modal.
-    8. Confirm that the status value "Out of service" is **false**.
+    8. Confirm that the status value is set to "Available"
 
 
 ## Bugs
