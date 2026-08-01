@@ -15,14 +15,28 @@ import authRouter from "./routes/auth.ts";
 import {authenticateRequest, checkRefreshToken, requireRole} from "./middleware/auth.middleware.ts";
 import {Role} from "./database/types/user.service.types.ts";
 import dotenv from "dotenv";
+import helmet from "helmet";
+
 
 dotenv.config();
+
 const app = express();
+app.use(helmet({
+    contentSecurityPolicy:{
+        directives:{
+            "script-src":["'self'"],
+            "default-src":["'self'"],
+            "img-src":["'self'"],
+            "frame-ancestors":["'none'"]
+        }
+    },
+    xContentTypeOptions: true
+}));
+
 app.use(cors({
     origin: process.env.FRONT_END_URL ?? "http://localhost:5173",
     credentials: true, // required for cookies to be sent/received cross-origin
 }));
-
 app.use(json());
 app.use(cookieParser());
 app.use(express.json());
