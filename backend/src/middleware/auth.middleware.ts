@@ -6,9 +6,12 @@ import {TokenExpiredError} from "./services/middleware.service.ts";
 //Auth Middleware
 export const checkRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await validateRefreshToken(req);
+        validateRefreshToken(req);
         next();
     }catch(error){
+        if(error instanceof TokenExpiredError)
+            return res.status(401).json({message: "Token expired"});
+
         return res.status(500).json({
             message: "Invalid refresh token",
             type: "error",

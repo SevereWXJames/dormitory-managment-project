@@ -5,12 +5,10 @@ import type {Role} from "../../database/types/user.service.types.ts";
 import type {JWTPayload} from "../../utility/auth-utils/tokens.ts";
 import {extractAccessTokenFromRequest, extractRefreshTokenFromRequest} from "../../utility/auth-utils/request.ts";
 
-export const {TokenExpiredError} = pkg;
+export const {TokenExpiredError, JsonWebTokenError} = pkg;
+
 
 export async function verifyRequestHeader(req: Request) {
-    //Verify jwt token
-    // if(!req.headers) throw Error("Invalid request!");
-    // const token = req.headers['cookie']?.split("access=")[1];
     const token = extractAccessTokenFromRequest(req);
     if (!token) throw Error("Invalid Token!");
 
@@ -38,9 +36,6 @@ export async function verifyRoles(req: Request, allowedRoles: Role[]){
 }
 
 export const validateRefreshToken = (req: Request) => {
-    //TODO:
-    // Verify the userId matches the userId in the payload
-    // Verify the refresh token is in DB
     const token = extractRefreshTokenFromRequest(req);
     if(!token) throw Error ("Error, undefined refresh token");
 
@@ -53,7 +48,15 @@ export const validateRefreshToken = (req: Request) => {
             algorithms: ['HS256'], // pin the algorithm to avoid alg-confusion attacks
         });
     } catch (error) {
-        throw Error(`Error verifying request! ${error}`,
-            {cause: (error as Error).message});
+        if (error instanceof TokenExpiredError) {
+            throw new TokenExpiredError(error.message, error.expiredAt);
+        }
+        if (error instanceof JsonWebTokenError) {
+            throw new JsonWebTokenError(error.message);
+        }
+        // fallback for anything unexpected
+        throw new Error(`Error verifying refresh token: ${(error as Error).message}`, {
+            cause: (error as Error).message,
+        });
     }
 }
