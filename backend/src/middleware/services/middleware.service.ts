@@ -7,7 +7,6 @@ import {extractAccessTokenFromRequest, extractRefreshTokenFromRequest} from "../
 
 export const {TokenExpiredError, JsonWebTokenError} = pkg;
 
-
 export async function verifyRequestHeader(req: Request) {
     const token = extractAccessTokenFromRequest(req);
     if (!token) throw Error("Invalid Token!");

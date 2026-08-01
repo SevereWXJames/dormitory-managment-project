@@ -13,7 +13,6 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
     try{
         const accessToken = createAccessToken(userId, roles);
         const refreshToken = await createRefreshToken(userId, roles);
-        console.log(`refresh token: ${refreshToken}`);
         const cookiePayload : CookieOptions = {
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: process.env.NODE_ENV === "production",          // only sent over HTTPS (set false only for local http dev)
