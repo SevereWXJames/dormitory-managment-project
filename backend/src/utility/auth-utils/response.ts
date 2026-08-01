@@ -9,6 +9,8 @@ import type {CookieOptions, Response, Request} from "express";
 import type {Role} from "../../database/types/user.service.types.ts";
 import {extractRefreshTokenFromRequest} from "./request.ts";
 
+const MAX_AGE= 7 * 24 * 60 * 60 * 1000; // 7 days, matches JWT expiry
+
 export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[], res: Response) => {
     try{
         const accessToken = createAccessToken(userId, roles);
@@ -17,7 +19,7 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
             httpOnly: true,       // JS cannot read this cookie — protects against XSS
             secure: process.env.NODE_ENV === "production",          // only sent over HTTPS (set false only for local http dev)
             sameSite: "strict",    // or "lax" — see note below on cross-site setups
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry
+            maxAge: MAX_AGE,
             path: "/",
         };
         res.cookie("access", accessToken, cookiePayload);
