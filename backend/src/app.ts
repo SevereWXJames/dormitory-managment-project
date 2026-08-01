@@ -27,7 +27,8 @@ app.use(helmet({
             "script-src":["'self'"],
             "default-src":["'self'"],
             "img-src":["'self'"],
-            "frame-ancestors":["'none'"]
+            "frame-ancestors":["'none'"],
+            "form-action": ["'self'"]
         }
     },
     xContentTypeOptions: true
