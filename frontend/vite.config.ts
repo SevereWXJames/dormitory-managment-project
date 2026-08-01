@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import path from "path"
 import csp from "vite-plugin-csp-guard"
-//import { definePolicy, self, none, unsafeInline} from "csp-toolkit"
+import { definePolicy, self, unsafeInline} from "csp-toolkit"
 import tailwindcss from "@tailwindcss/vite"
 import react from '@vitejs/plugin-react'
 
@@ -14,14 +14,14 @@ export default defineConfig({
                 run: true,  // Run the plugin in dev mode
                 outlierSupport: ["tailwind", "scss"],
             },
-            // policy: definePolicy({
-            //     defaultSrc: [self],
-            //     imgSrc: [self],
-            //     scriptSrc: [self],
-            //     frameAncestors: [none],
-            //     formAction: [self],
-            //     styleSrcElem: [unsafeInline] //In production, this should not be here
-            // }),
+            policy: definePolicy({
+                defaultSrc: [self],
+                connectSrc: [self, "http://localhost:3000"],
+                imgSrc: [self],
+                scriptSrc: [self],
+                formAction: [self],
+                styleSrcElem: [unsafeInline] //In production, this should not be here
+            }),
         }),
         tailwindcss()],
     resolve: {
@@ -29,9 +29,11 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
-    // server:{
-    //     headers:{
-    //         "X-Content-Type-Options": "nosniff",
-    //     }
-    // }
+    server:{
+        headers:{
+            "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": "frame-ancestors 'none'",
+            "X-Frame-Options": "DENY"
+        }
+    }
 })
