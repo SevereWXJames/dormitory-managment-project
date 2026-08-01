@@ -8,6 +8,7 @@ export function useAuthHook(){
         refresh();
     }, [refresh]);
 
+
     return {
         isLoading,
         isUninitialized

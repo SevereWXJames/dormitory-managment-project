@@ -20,8 +20,6 @@ import {UnauthorizedPage} from "@/pages/UnauthorizedPage.tsx";
 import {ProtectedRoute} from "@/components/common/Auth/ProtectedRoute.tsx";
 import {Role} from "@/dataTypes/user.ts";
 import {Toaster} from "@/components/ui/sonner.tsx";
-import {useEffect} from "react";
-import {useRefreshMutation} from "@/context/api/apiServices/authApi.ts";
 import {useAuthHook} from "@/hooks/useAuthHook.tsx";
 
 /**
@@ -30,12 +28,6 @@ import {useAuthHook} from "@/hooks/useAuthHook.tsx";
  * @returns JSX for the App component.
  */
 function App() {
-    // const [refresh, {isLoading, isUninitialized}] = useRefreshMutation(); // calls /refresh upon mounting
-    //
-    // useEffect(() => {
-    //     refresh();
-    // }, [refresh]);
-
     const {isLoading, isUninitialized} = useAuthHook();
     if (isLoading || isUninitialized) return <p>Loading...</p>;
     return (
