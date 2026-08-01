@@ -1,35 +1,37 @@
 import { defineConfig } from 'vite'
 import path from "path"
+import csp from "vite-plugin-csp-guard"
+//import { definePolicy, self, none, unsafeInline} from "csp-toolkit"
 import tailwindcss from "@tailwindcss/vite"
 import react from '@vitejs/plugin-react'
-import { cspProxyPlugin } from 'vite-plugin-content-security-policy';
-
-export const ENVIRONMENTS = ['production', 'staging', 'development'];
-export type Environment = typeof ENVIRONMENTS[number];
 
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
-        cspProxyPlugin<Environment>({
-            rules: {
-                "script-src": "'self'",
-                "default-src": "'self'",
-                "img-src": "'self'",
-                "frame-ancestors": "'none'",
-                "form-action": "'self'"
-            },
-            reportType: 'strict',
-        }),
         react(),
+        csp({
+            dev: {
+                run: true,  // Run the plugin in dev mode
+                outlierSupport: ["tailwind", "scss"],
+            },
+            // policy: definePolicy({
+            //     defaultSrc: [self],
+            //     imgSrc: [self],
+            //     scriptSrc: [self],
+            //     frameAncestors: [none],
+            //     formAction: [self],
+            //     styleSrcElem: [unsafeInline] //In production, this should not be here
+            // }),
+        }),
         tailwindcss()],
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
         },
     },
-    server:{
-        headers:{
-            "X-Content-Type-Options": "nosniff",
-        }
-    }
+    // server:{
+    //     headers:{
+    //         "X-Content-Type-Options": "nosniff",
+    //     }
+    // }
 })
