@@ -9,8 +9,8 @@ export type JWTPayload = {
     roles: Role[];
 }
 
-// const ACCESS_EXPIRATION = "10m";
-const ACCESS_EXPIRATION = "10s"; //for testing
+const ACCESS_EXPIRATION = "10m";
+// const ACCESS_EXPIRATION = "10s"; //for testing
 const REFRESH_EXPIRATION = "7d";
 
 export const createAccessToken = (id: null | Types.ObjectId, roles: Role[]) => {
