@@ -40,7 +40,7 @@ export function CommonFrame(props: CommonFrameProps) {
                 <NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="/maintenance"/>
                 <NavBarButton id="credits-nav-bar-button" label="Credits" to="/credits"/>
                 <Divider/>
-                <NavBarButton id="settings-nav-bar-button" label="Settings" to="/settings"/>
+                <NavBarButton id="settings-nav-bar-button" label="Profile" to="/settings"/>
                 <NavBarButton id="help-nav-bar-button" label="Help" to="/help"/>
                 <NavBarButton id="logout-nav-bar-button" label="Logout" to="#"
                               onClick={() => {
@@ -55,7 +55,7 @@ export function CommonFrame(props: CommonFrameProps) {
                 <NavBarButton id="facilities-nav-bar-button" label="Facilities" to="/admin/facilities"/>
                 <NavBarButton id="maintenance-nav-bar-button" label="Maintenance" to="/admin/maintenance"/>
                 <Divider/>
-                <NavBarButton id="settings-nav-bar-button" label="Settings" to="/admin/settings"/>
+                <NavBarButton id="settings-nav-bar-button" label="Profile" to="/admin/settings"/>
                 <NavBarButton id="help-nav-bar-button" label="Help" to="/admin/help"/>
                 <NavBarButton id="logout-nav-bar-button" label="Logout" to="#"
                               onClick={() => {
@@ -65,10 +65,10 @@ export function CommonFrame(props: CommonFrameProps) {
             </>;
             break;
         default:
-            buttons = <>
-                <NavBarButton id="settings-nav-bar-button" label="Settings" to="#"/>
-                <NavBarButton id="help-nav-bar-button" label="Help" to="#"/>
-            </>;
+            // buttons = <>
+            //     <NavBarButton id="settings-nav-bar-button" label="Settings" to="#"/>
+            //     <NavBarButton id="help-nav-bar-button" label="Help" to="#"/>
+            // </>;
     }
 
     return (

@@ -15,9 +15,9 @@ export function useAddCreditsCard() {
 
     // States
     const [cardNumber, setCardNumber] = useState("");
-    const [_expirationDate, setExpirationDate] = useState("");
-    const [_securityCode, setSecurityCode] = useState("");
-    const [_name, setName] = useState("");
+    const [expirationDate, setExpirationDate] = useState("");
+    const [securityCode, setSecurityCode] = useState("");
+    const [name, setName] = useState("");
     const [amount, setAmount] = useState("");
     const [successSnackbar, setSuccessSnackbar] = useState(false); // Visibility state of the “Added credits successfully" snackbar
     const [failureSnackbar, setFailureSnackbar] = useState(false); // Visibility of the "Error while adding credits" snackbar
@@ -28,8 +28,8 @@ export function useAddCreditsCard() {
 
     // Errors
     const cardNumberError = useMemo(() => cardNumber.length !== 16 && cardNumber.length > 0 && !isNaN(Number(cardNumber)), [cardNumber]);
-    const expirationDateError = useMemo(() => _expirationDate.length < 4 && _expirationDate.length > 0, [_expirationDate]);
-    const securityCodeError = useMemo(() => _securityCode.length < 3 && _securityCode.length > 0, [_securityCode]);
+    const expirationDateError = useMemo(() => expirationDate.length < 4 && expirationDate.length > 0, [expirationDate]);
+    const securityCodeError = useMemo(() => securityCode.length < 3 && securityCode.length > 0, [securityCode]);
     const amountError = useMemo(() => amount.length == 0, [amount]);
     const formError = useMemo(() => cardNumberError || expirationDateError || securityCodeError || amountError, [cardNumberError, expirationDateError, securityCodeError, amountError]);
 
@@ -42,6 +42,13 @@ export function useAddCreditsCard() {
                 await putAddCredits({userId: userId, creditsCents: amountCents} as AddCreditsRequestType).unwrap();
                 dispatch(addCredits({amount: amountCents}));
                 dispatch(addTransactionHistoryEntry({cardNumber, amount: amountCents}));
+
+                setCardNumber("");
+                setExpirationDate("");
+                setSecurityCode("");
+                setName("");
+                setAmount("");
+                
                 setSuccessSnackbar(true);
                 setFailureSnackbar(false);
             } catch (e) {
@@ -69,9 +76,9 @@ export function useAddCreditsCard() {
 
     return {
         cardNumber, setCardNumber,
-        _expirationDate, setExpirationDate,
-        _securityCode, setSecurityCode,
-        _name, setName,
+        expirationDate, setExpirationDate,
+        securityCode, setSecurityCode,
+        name, setName,
         amount, setAmount,
         handleAddCredits,
         handleAmountInput,

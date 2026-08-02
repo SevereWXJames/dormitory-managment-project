@@ -42,6 +42,12 @@ export function useCreateMaintenanceRequestCard() {
 				location: location,
 			} as MaintenanceRequest);
 
+			setPriority("");
+			setIssueType("");
+			setIssue("");
+			setLocation("");
+			setDescription("");
+
 			setSuccessSnackbar(true);
 			setFailureSnackbar(false);
 

@@ -106,12 +106,12 @@ export function useLoginForm() {
 
     const handleLogIn = async () => {
         clearFieldErrors();
-        if (!username || username.trim() === "") {
-            const message = "Username is required.";
-            setLoginError(message);
-            setUsernameError(message);
-            return;
-        }
+        // if (!username || username.trim() === "") {
+        //     const message = "Username is required.";
+        //     setLoginError(message);
+        //     setUsernameError(message);
+        //     return;
+        // }
 
         if (!email || email.trim() === "") {
             const message = "Email is required.";
@@ -136,7 +136,6 @@ export function useLoginForm() {
 
         try {
             const { data } = await login({
-                username: username || undefined,
                 email: email || undefined,
                 password,
             }).unwrap();

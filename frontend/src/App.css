@@ -46,6 +46,10 @@
 
 /* LOG IN PAGE */
 
+.password-field-edge-button {
+    font-size: medium;   
+}
+
 /* COMMON STYLE FOR CARDS IN RESIDENT CREDITS, NOTICES AND MAINTENANCE REQUEST PAGES */
 
 .credits-page, .notices-page, .maintenance-requests-page {

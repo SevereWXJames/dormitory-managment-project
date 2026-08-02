@@ -8,7 +8,6 @@ import {type FormErrors, type UserInputForm, validateForm} from "@/components/co
 export function useSignUpForm(role: Role) {
     const [form, setForm] = useState<UserInputForm>({
         name: "",
-        username: "",
         password: "",
         phoneNumber: "",
         email: "",
