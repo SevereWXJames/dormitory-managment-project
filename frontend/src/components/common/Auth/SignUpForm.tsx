@@ -4,7 +4,6 @@ import type {UserInputForm} from "@/components/common/Auth/utils/signup.utils.ts
 import {PasswordField} from "@/components/common/Auth/PasswordField.tsx";
 import type {Role} from "@/dataTypes/user.ts";
 
-
 /**
  * React component for the login form, including e-mail and password fields,
  * and a “Log in” button.
@@ -20,16 +19,15 @@ type SignUpFormProps = {
 }
 
 export function SignUpForm({role}: SignUpFormProps) {
-    const signUpFields: { key: keyof UserInputForm; label: string; type?: string }[] = [
+    const signUpFields: { key: keyof UserInputForm; label: string; type?: string, inputProps?: any}[] = [
         {key: "name", label: "Name", type: "text"},
-        {key: "username", label: "Username", type: "text"},
         {key: "email", label: "Email", type: "text"},
-        {key: "phoneNumber", label: "Phone Number", type: "number"},
+        {key: "phoneNumber", label: "Phone Number", type: "number", inputProps: {maxLength: 10}},
     ];
     const {form, errors, isLoading, isError, handleChange, handleSubmit, submitError} = useSignUpForm(role);
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
                  style={{width: 'fit-content', margin: '0 auto'}}>
-        {signUpFields.map(({key, label, type}) => (
+        {signUpFields.map(({key, label, type, inputProps}) => (
             <FormControl key={key} sx={{m: 1, width: '100%', maxWidth: '30ch'}} error={!!errors[key]}>
                 <InputLabel htmlFor={`${key}-input`}>{label}</InputLabel>
                 <OutlinedInput
@@ -38,6 +36,7 @@ export function SignUpForm({role}: SignUpFormProps) {
                     label={label}
                     value={form[key]}
                     onChange={handleChange(key)}
+                    inputProps={inputProps ?? {}}
                 />
                 {errors[key] && <span className="red text-red-500">{`Error: ${errors[key]}`}</span>}
             </FormControl>

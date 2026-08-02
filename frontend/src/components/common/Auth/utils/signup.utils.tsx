@@ -24,6 +24,11 @@ const validateInput = (key: UserInputFormKey, input: string | null) => {
     if (key === "email" && !emailRegex.test(input.trim())) {
         return "Please enter a valid email address like name@example.com.";
     }
+    if (key === "phoneNumber" && (Number.parseInt(input) < 1000000000 || Number.parseInt(input) > 9999999999)) {
+        // This check should be enough for North American Numbering Plan
+        // telephone numbers.
+        return "Please enter a valid Canadian phone number.";
+    }
     return null;
 }
 

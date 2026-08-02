@@ -20,11 +20,13 @@ export function AddCreditsCard() {
     const amountID = "amount";
 
     const {
-        setCardNumber,
-        handleAmountInput,
-        setExpirationDate, setName,
-        setSecurityCode,
+        cardNumber, setCardNumber,
+        expirationDate, setExpirationDate,
+        securityCode, setSecurityCode,
+        name, setName,
+        amount,
         handleAddCredits,
+        handleAmountInput,
         cardNumberError,
         expirationDateError,
         securityCodeError,
@@ -59,6 +61,7 @@ export function AddCreditsCard() {
                         slotProps={{ htmlInput: { maxLength: 16 } }}
                         helperText={cardNumberError ? "Invalid card number" : ""}
                         onInput={(e) => setCardNumber((e.target as HTMLInputElement).value)}
+                        value={cardNumber}
                     />
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}} variant="filled">
@@ -86,6 +89,7 @@ export function AddCreditsCard() {
                         slotProps={{ htmlInput: { maxLength: 4 } }}
                         helperText={securityCodeError ? "Invalid security code" : ""}
                         onInput={(e) => setSecurityCode((e.target as HTMLInputElement).value)}
+                        value={securityCode}
                     />
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
@@ -95,6 +99,7 @@ export function AddCreditsCard() {
                         type='text'
                         label="Cardholder name"
                         onInput={(e) => setName((e.target as HTMLInputElement).value)}
+                        value={name}
                     />
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
@@ -106,6 +111,7 @@ export function AddCreditsCard() {
                         inputProps={{min: 0}}
                         error={amountError}
                         onInput={handleAmountInput}
+                        value={amount}
                     />
                 </FormControl>
                 <FormControl>

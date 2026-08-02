@@ -110,6 +110,7 @@ export function CreateMaintenanceRequestCard() {
                         id={`${locationID}-input`}
                         type='text'
                         label="Location"
+                        value={location}
                         onInput={(e) => setLocation((e.target as HTMLInputElement).value)}
                     />
                 </FormControl>
@@ -119,6 +120,7 @@ export function CreateMaintenanceRequestCard() {
                         id={`${descriptionID}-input`}
                         type='text'
                         label="Description"
+                        value={description}
                         onInput={(e) => setDescription((e.target as HTMLInputElement).value)}
                     />
                 </FormControl>
