@@ -190,6 +190,15 @@ This milestone focuses on polishing the existing resident experience and tighten
 
 ### Verification notes
 
+### Admin Dashboard UI updates
+
+- **Left-aligned metric cards:** Metric and priority cards on the admin dashboard are left-aligned for easier scanning and improved readability.
+- **Consistent status colors:** Status visuals now follow a consistent color scheme — light red for urgent items, yellow for pending/open items, and green for resolved/completed items.
+- **Stronger emphasis & badges:** Important actionable items (pending/urgent) have stronger visual emphasis using colored card backgrounds, icons, and status badges.
+- **Files updated:** See frontend changes in [frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx](frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx#L1) and styling updates in [frontend/src/App.css](frontend/src/App.css#L1).
+- **How to view:** Start the frontend and open the admin dashboard at `/admin/dashboard` (e.g., http://localhost:5173/admin/dashboard) to review the updated UI.
+
+
 - The updated auth behavior was verified through live backend requests for invalid signup and mismatched login attempts.
 - The frontend build was also verified successfully after the form and error-handling updates.
 
