@@ -3,17 +3,20 @@
     {
       "userId": "507f191e810c19729de860ea",
       "description": "test",
-      "transaction": 100
+      "transaction": 100,
+      "date": "2026-08-03T00:00:00.000Z"
     },
     {
       "userId": "507f191e810c19729de860eb",
       "description": "test",
-      "transaction": 200
+      "transaction": 200,
+      "date": "2026-08-03T00:00:00.000Z"
     },
     {
       "userId": "507f191e810c19729de860ec",
       "description": "test",
-      "transaction": 300
+      "transaction": 300,
+      "date": "2026-08-03T00:00:00.000Z"
     }
   ]
 }

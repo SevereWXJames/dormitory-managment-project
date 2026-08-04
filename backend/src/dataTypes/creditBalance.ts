@@ -29,7 +29,8 @@ export interface Transaction {
     userId: mongoose.Types.ObjectId;
     description: string;
     transaction: number;
+    date: Date;
 }
 
-const transactionSchema = new Schema({userId: mongoose.Types.ObjectId, description: String, transaction: Number});
+const transactionSchema = new Schema({userId: mongoose.Types.ObjectId, description: String, transaction: Number, date: Date});
 export const TransactionModel = mongoose.model("Transactions"  as CollectionName, transactionSchema, "Transactions"  as CollectionName);

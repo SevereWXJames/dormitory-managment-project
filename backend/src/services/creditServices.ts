@@ -45,7 +45,7 @@ export async function addCredits(userId: mongoose.Types.ObjectId, creditsCents: 
         const newBalance = result.balanceCents + creditsCents;
         return Promise.all([
             CreditBalanceModel.updateOne({userId: userId}, {$set: {balanceCents: newBalance}}),
-            TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents})
+            TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents, date: Date.now()})
         ]).then((result) => {
             Promise.resolve();
         }).catch((error) => {
