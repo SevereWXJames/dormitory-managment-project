@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminMaintenanceData } from "@/pages/common/buildingManager/pageHooks/useAdminMaintenanceData.tsx";
 import { useUpdateMaintenanceRequestStatusMutation } from "@/context/api/apiServices/maintenanceRequestApi.ts";
+import { mapBackendStatusToSimplifiedStatus, simplifiedStatusGroups } from "@/utils/maintenanceStatus.ts";
 import {toast} from "sonner";
 
 type StatusFilter = "All" | { id: string; text: string };
@@ -25,14 +26,14 @@ export function AdminMaintenancePage() {
         return requests.filter((request) => {
             const overrideStatusId = statusOverrides[String(request._id)];
             const activeStatusId = overrideStatusId ?? request.status;
-            return String(activeStatusId) === String(filterId);
+            return mapBackendStatusToSimplifiedStatus(activeStatusId) === simplifiedStatusGroups.find((status) => status.id === filterId)?.text;
         });
     }, [activeFilter, requests, statusOverrides]);
 
     const getDisplayStatus = (request: (typeof requests)[number]) => {
         const overrideStatusId = statusOverrides[String(request._id)];
         const activeStatusId = overrideStatusId ?? request.status;
-        return requestsStatus.find((status) => status._id === activeStatusId)?.text ?? "Unknown";
+        return mapBackendStatusToSimplifiedStatus(activeStatusId);
     };
 
     const getStatusIndex = (statusId: string | undefined) => {
@@ -96,16 +97,16 @@ export function AdminMaintenancePage() {
                                 >
                                     All
                                 </button>
-                                {orderedStatuses.map((status) => (
+                                {simplifiedStatusGroups.map((status) => (
                                     <button
-                                        key={status._id}
+                                        key={status.id}
                                         type="button"
                                         className={
-                                            activeFilter !== "All" && (activeFilter as any).id === status._id
+                                            activeFilter !== "All" && (activeFilter as any).id === status.id
                                                 ? "pill-button active"
                                                 : "pill-button"
                                         }
-                                        onClick={() => setActiveFilter({ id: String(status._id), text: status.text })}
+                                        onClick={() => setActiveFilter({ id: status.id, text: status.text })}
                                     >
                                         {status.text}
                                     </button>
