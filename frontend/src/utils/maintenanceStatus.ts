@@ -30,6 +30,8 @@ export function mapBackendStatusIdToSimplifiedStatusId(statusId?: string): strin
     return "new";
 }
 
+export const simplifiedStatusOrder = ["new", "inProgress", "completed"] as const;
+
 export const simplifiedStatusGroups = [
     { id: "new", text: "New" },
     { id: "inProgress", text: "In Progress" },

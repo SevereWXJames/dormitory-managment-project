@@ -2,7 +2,12 @@ import { useMemo, useState } from "react";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminMaintenanceData } from "@/pages/common/buildingManager/pageHooks/useAdminMaintenanceData.tsx";
 import { useUpdateMaintenanceRequestStatusMutation } from "@/context/api/apiServices/maintenanceRequestApi.ts";
-import { mapBackendStatusToSimplifiedStatus, simplifiedStatusGroups } from "@/utils/maintenanceStatus.ts";
+import {
+    mapBackendStatusIdToSimplifiedStatusId,
+    mapBackendStatusToSimplifiedStatus,
+    simplifiedStatusGroups,
+    simplifiedStatusOrder,
+} from "@/utils/maintenanceStatus.ts";
 import {toast} from "sonner";
 
 type StatusFilter = "All" | { id: string; text: string };
@@ -14,10 +19,6 @@ export function AdminMaintenancePage() {
     const [statusOverrides, setStatusOverrides] = useState<Record<string, string>>({});
     const [updateMaintenanceRequestStatus] = useUpdateMaintenanceRequestStatusMutation();
 
-    const orderedStatuses = useMemo(() => {
-        return [...requestsStatus].sort((left, right) => Number(left.order ?? 0) - Number(right.order ?? 0));
-    }, [requestsStatus]);
-
     const filteredRequests = useMemo(() => {
         if (activeFilter === "All") {
             return requests;
@@ -26,7 +27,7 @@ export function AdminMaintenancePage() {
         return requests.filter((request) => {
             const overrideStatusId = statusOverrides[String(request._id)];
             const activeStatusId = overrideStatusId ?? request.status;
-            return mapBackendStatusToSimplifiedStatus(activeStatusId) === simplifiedStatusGroups.find((status) => status.id === filterId)?.text;
+            return mapBackendStatusIdToSimplifiedStatusId(activeStatusId) === filterId;
         });
     }, [activeFilter, requests, statusOverrides]);
 
@@ -37,7 +38,8 @@ export function AdminMaintenancePage() {
     };
 
     const getStatusIndex = (statusId: string | undefined) => {
-        return orderedStatuses.findIndex((status) => status._id === statusId);
+        const simplifiedId = mapBackendStatusIdToSimplifiedStatusId(statusId);
+        return simplifiedStatusOrder.findIndex((id) => id === simplifiedId);
     };
 
     const updateStatus = async (requestId: string, direction: "next" | "previous") => {
@@ -54,20 +56,21 @@ export function AdminMaintenancePage() {
         }
 
         const targetIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
-        if (targetIndex < 0 || targetIndex >= orderedStatuses.length) {
+        if (targetIndex < 0 || targetIndex >= simplifiedStatusOrder.length) {
             if(direction === "next"){
                 toast.error("This request is already at the final status.");
-            }else{
+            } else {
                 toast.error("This request is already at the initial status.");
             }
             return;
         }
 
-        const targetStatus = orderedStatuses[targetIndex];
+        const targetStatusId = simplifiedStatusOrder[targetIndex];
         try {
-            await updateMaintenanceRequestStatus({ requestId, statusId: String(targetStatus._id) }).unwrap();
-            setStatusOverrides((previous) => ({ ...previous, [requestId]: String(targetStatus._id) }));
-            toast.success(`Status updated to ${targetStatus.text}.`);
+            await updateMaintenanceRequestStatus({ requestId, statusId: String(targetStatusId) }).unwrap();
+            setStatusOverrides((previous) => ({ ...previous, [requestId]: targetStatusId }));
+            const targetDisplay = simplifiedStatusGroups[targetIndex]?.text ?? "Updated";
+            toast.success(`Status updated to ${targetDisplay}.`);
         } catch {
             toast.error(`Error, failed to update request status. Please try again.`);
         }
