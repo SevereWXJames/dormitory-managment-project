@@ -1,4 +1,4 @@
-import {Button, Card, CardContent, FormControl, InputLabel, OutlinedInput, Snackbar, TextField} from "@mui/material";
+import {Button, Card, CardContent, FormControl, InputAdornment, InputLabel, OutlinedInput, Snackbar, TextField} from "@mui/material";
 import {DateField} from '@mui/x-date-pickers/DateField';
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
@@ -35,7 +35,8 @@ export function AddCreditsCard() {
         successSnackbar,
         handleCloseSuccessSnackbar,
         failureSnackbar,
-        handleCloseFailureSnackbar
+        handleCloseFailureSnackbar,
+        errorMessage
     } = useAddCreditsCard();
 
     /**
@@ -112,6 +113,7 @@ export function AddCreditsCard() {
                         error={amountError}
                         onInput={handleAmountInput}
                         value={amount}
+                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
                 </FormControl>
                 <FormControl>
@@ -121,6 +123,8 @@ export function AddCreditsCard() {
                         disabled={formError}
                         onClick={handleAddCredits}>Pay</Button>
                 </FormControl>
+                {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
+                
                 <Snackbar 
                     open={successSnackbar}
                     onClose={handleCloseSuccessSnackbar}
