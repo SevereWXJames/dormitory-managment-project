@@ -43,7 +43,7 @@ export function SignUpForm({role}: SignUpFormProps) {
         ))}
         <PasswordField onChange={handleChange("password")} isError={errors["password"]}/>
         {isLoading && <p>Loading ... </p>}
-        {(submitError || isError) && <p className="red text-red-500">{submitError ?? "Error signing up"}</p>}
+        {(submitError || isError) && <p className="red text-red-500" style={{width: '100%'}}>{submitError ?? "Error signing up"}</p>}
         <FormControl>
             <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Sign Up</Button>
         </FormControl>

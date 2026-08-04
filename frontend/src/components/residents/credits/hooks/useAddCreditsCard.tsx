@@ -21,6 +21,7 @@ export function useAddCreditsCard() {
     const [amount, setAmount] = useState("");
     const [successSnackbar, setSuccessSnackbar] = useState(false); // Visibility state of the “Added credits successfully" snackbar
     const [failureSnackbar, setFailureSnackbar] = useState(false); // Visibility of the "Error while adding credits" snackbar
+    const [errorMessage, setErrorMessage] = useState("");
 
     // Redux
     const userId = useSelector(getUserId);
@@ -31,10 +32,31 @@ export function useAddCreditsCard() {
     const expirationDateError = useMemo(() => expirationDate.length < 4 && expirationDate.length > 0, [expirationDate]);
     const securityCodeError = useMemo(() => securityCode.length < 3 && securityCode.length > 0, [securityCode]);
     const amountError = useMemo(() => amount.length == 0, [amount]);
-    const formError = useMemo(() => cardNumberError || expirationDateError || securityCodeError || amountError, [cardNumberError, expirationDateError, securityCodeError, amountError]);
-
+    
+    const emptyCardNumberError = useMemo(() => cardNumber.length == 0, [cardNumber]);
+    const emptyExpirationDateError = useMemo(() => expirationDate.length == 0, [expirationDate]);
+    const emptySecurityCodeError = useMemo(() => securityCode.length == 0, [securityCode]);
+    const emptyAmountError = useMemo(() => amount.length == 0, [amount]);
+    
+    const errors = [cardNumberError, expirationDateError, securityCodeError, amountError, emptyCardNumberError,
+        emptyExpirationDateError, emptySecurityCodeError, emptyAmountError];
+    const errorMessages = ["Invalid card number.", "Invalid expiration date.", "Invalid security code.",
+        "Invalid amount.", "Please input a card number.", "Please input an expiration date.",
+        "Please input a security code.", "Please input an amount."];
+    
+    // errors.some((e) => e) returns true if there is any element in the errors away that is true.
+    const formError = useMemo(() => errors.some((e) => e), [errors]);
+    
     const handleAddCredits = async () => {
         const parsedAmount = parseFloat(amount);
+        setErrorMessage("");
+
+        if (formError) {
+            const errorIndex = errors.findIndex((e) => e);
+            setErrorMessage(errorMessages[errorIndex]);
+            return;
+        }
+        
         if (!Number.isNaN(parsedAmount)) {
             const amountCents = Math.round(parsedAmount * 100);
 
@@ -44,7 +66,7 @@ export function useAddCreditsCard() {
                 dispatch(addTransactionHistoryEntry({cardNumber, amount: amountCents}));
 
                 setCardNumber("");
-                setExpirationDate("");
+                // setExpirationDate("");
                 setSecurityCode("");
                 setName("");
                 setAmount("");
@@ -90,6 +112,7 @@ export function useAddCreditsCard() {
         successSnackbar,
         handleCloseSuccessSnackbar,
         failureSnackbar,
-        handleCloseFailureSnackbar
+        handleCloseFailureSnackbar,
+        errorMessage
     }
 }

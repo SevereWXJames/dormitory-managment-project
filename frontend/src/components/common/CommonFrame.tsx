@@ -81,7 +81,7 @@ export function CommonFrame(props: CommonFrameProps) {
                             <MenuIcon/>
                         </IconButton>
                     )}
-                    <Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{height: 48}}/></Link>
+                    <Link to="/"><img id="header-logo" className="header-logo" src={logo} style={{height: 36, padding: "2px 4px"}}/></Link>
                     <div id="header-user-type-message"
                          className="header-user-type flex-1 text-left sm:text-right text-xs sm:text-lg">{headerUserTypeMessage}</div>
                     {avatar}
