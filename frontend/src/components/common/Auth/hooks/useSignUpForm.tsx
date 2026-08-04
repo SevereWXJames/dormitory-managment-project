@@ -56,10 +56,15 @@ export function useSignUpForm(role: Role) {
         }
     };
 
+    const handleCancel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        history.back();
+    }
+
     return {
         form, setForm,
         errors, setErrors,
         handleChange, handleSubmit,
+        handleCancel,
         isLoading, isError, error,
         submitError,
     };

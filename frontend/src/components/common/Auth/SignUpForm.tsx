@@ -24,7 +24,7 @@ export function SignUpForm({role}: SignUpFormProps) {
         {key: "email", label: "Email", type: "text"},
         {key: "phoneNumber", label: "Phone Number", type: "text", inputProps: {maxLength: 10}},
     ];
-    const {form, errors, isLoading, isError, handleChange, handleSubmit, submitError} = useSignUpForm(role);
+    const {form, errors, isLoading, isError, handleChange, handleSubmit, handleCancel, submitError} = useSignUpForm(role);
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
                  style={{width: 'fit-content', margin: '0 auto'}}>
         {signUpFields.map(({key, label, type, inputProps}) => (
@@ -44,8 +44,13 @@ export function SignUpForm({role}: SignUpFormProps) {
         <PasswordField onChange={handleChange("password")} isError={errors["password"]}/>
         {isLoading && <p>Loading ... </p>}
         {(submitError || isError) && <p className="red text-red-500" style={{width: '100%'}}>{submitError ?? "Error signing up"}</p>}
-        <FormControl>
-            <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Sign Up</Button>
-        </FormControl>
+        <div style={{display: "flex", gap: "1rem"}}>
+            <FormControl>
+                <Button id="cancel-button" variant="outlined" onClick={handleCancel}>Cancel</Button>
+            </FormControl>
+            <FormControl>
+                <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Sign Up</Button>
+            </FormControl>
+        </div>
     </div>);
 }
