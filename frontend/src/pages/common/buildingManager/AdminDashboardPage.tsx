@@ -125,7 +125,7 @@ export function AdminDashboardPage() {
                             </div>
                             <p>There are {dashboardData.pending_maintenance_count} maintenance items waiting for review.</p>
                             <div className="list-stack">
-                                {(maintenanceRequests ?? []).slice(0, 3).map((request) => (
+                                {(maintenanceRequests ?? []).map((request) => (
                                     <div key={request._id} className="list-item">
                                         <div>
                                             <strong>{request.title || "Maintenance item"}</strong>
