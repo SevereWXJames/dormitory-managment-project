@@ -22,7 +22,7 @@ export function SignUpForm({role}: SignUpFormProps) {
     const signUpFields: { key: keyof UserInputForm; label: string; type?: string, inputProps?: any}[] = [
         {key: "name", label: "Name", type: "text"},
         {key: "email", label: "Email", type: "text"},
-        {key: "phoneNumber", label: "Phone Number", type: "number", inputProps: {maxLength: 10}},
+        {key: "phoneNumber", label: "Phone Number", type: "text", inputProps: {maxLength: 10}},
     ];
     const {form, errors, isLoading, isError, handleChange, handleSubmit, submitError} = useSignUpForm(role);
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
