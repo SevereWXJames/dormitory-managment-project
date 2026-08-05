@@ -9,6 +9,8 @@ import {CreditBalanceTable} from "../../src/database/tableOperations/CreditBalan
 import {BOOKING_COST} from "../../src/utility/pricesForBookings.ts";
 import {CreditBalanceModel} from "../../src/dataTypes/creditBalance.ts";
 import {ReservationSlotModel} from "../../src/dataTypes/reservationSlot.ts";
+import {handleSlotUpdates} from "../../src/services/reservationServices.ts";
+import MQTTConnection from "../../src/utility/mqtt.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -19,6 +21,8 @@ describe('FACILITY BOOKING SERVICES', () => {
         console.log('file loaded');
         await connectTestDB();
         await loadSampleData();
+        await MQTTConnection.setUpMQTT();
+        await handleSlotUpdates();
         console.log("Loaded sample data");
     });
 
@@ -72,7 +76,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Get status of IoT service by Id', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const res = await chaiWithHttp.request.execute(app)
                 .get(`/IoT/get-status-by-id/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -146,7 +150,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Get slots by service Id', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const res = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -156,7 +160,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Book a slot by service Id - failure, not enough credits', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -179,7 +183,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Book a slot by service Id - success enough credits', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const balanceTable = new CreditBalanceTable();
             const userId = new Types.ObjectId(testUserId);
             const update = await balanceTable.incrementBalance(userId, BOOKING_COST);
@@ -201,6 +205,7 @@ describe('FACILITY BOOKING SERVICES', () => {
             console.log(`res: ${JSON.stringify(res.body, null, 2)}`);
 
             const booking = res.body.data;
+            console.log(JSON.stringify(testUserId));
             expect(res).to.have.status(200);
             expect(booking.booked).to.be.true;
             expect(booking.bookedBy).to.be.equal(testUserId);
@@ -251,7 +256,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Cancel booking by service Id - successful response', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -287,7 +292,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Cancel booking by service Id - successful refund', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -318,7 +323,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Cancel booking by service Id - failure response', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
@@ -340,7 +345,7 @@ describe('FACILITY BOOKING SERVICES', () => {
         });
 
         it('Cancel booking by service Id - failure, same balance', async () => {
-            const serviceId = "service0";
+            const serviceId = "6a52f45de9f73aca080caf85";
             const slotsRes = await chaiWithHttp.request.execute(app)
                 .get(`/reservations/get-slots-by-service/${serviceId}`)
                 .set('Cookie', `${testJwt}`)
