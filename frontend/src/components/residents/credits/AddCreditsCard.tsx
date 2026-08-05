@@ -72,6 +72,7 @@ export function AddCreditsCard() {
                             label="Expiration date"
                             format="MM/YY"
                             error={expirationDateError}
+                            helperText={expirationDateError ? "Invalid expiration date" : ""}
                             onChange={(value) => {
                                 const date = value?.toISOString();
                                 setExpirationDate((date == null) ? "" : date);

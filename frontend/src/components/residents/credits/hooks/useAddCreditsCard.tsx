@@ -29,9 +29,9 @@ export function useAddCreditsCard() {
 
     // Errors
     const cardNumberError = useMemo(() => cardNumber.length !== 16 && cardNumber.length > 0 && !isNaN(Number(cardNumber)), [cardNumber]);
-    const expirationDateError = useMemo(() => expirationDate.length < 4 && expirationDate.length > 0, [expirationDate]);
+    const expirationDateError = useMemo(() => (expirationDate.length < 4 && expirationDate.length > 0) || new Date(expirationDate) < new Date(), [expirationDate]);
     const securityCodeError = useMemo(() => securityCode.length < 3 && securityCode.length > 0, [securityCode]);
-    const amountError = useMemo(() => amount.length == 0, [amount]);
+    const amountError = useMemo(() => false, [amount]); // No longer needed
     
     const emptyCardNumberError = useMemo(() => cardNumber.length == 0, [cardNumber]);
     const emptyExpirationDateError = useMemo(() => expirationDate.length == 0, [expirationDate]);
@@ -70,6 +70,9 @@ export function useAddCreditsCard() {
                 setSecurityCode("");
                 setName("");
                 setAmount("");
+
+                // Clear expiration date
+                (document.getElementById("expiration-date-input") as HTMLInputElement).value = "";
                 
                 setSuccessSnackbar(true);
                 setFailureSnackbar(false);

@@ -7,7 +7,7 @@
       "type": "plumbing",
       "status": "new",
       "priority": "prio2",
-      "location": null
+      "location": ""
     },
     {
       "createdBy": "507f191e810c19729de860ea",
@@ -34,7 +34,7 @@
       "type": "hvac",
       "status": "inProgress",
       "priority": "prio0",
-      "location": null
+      "location": ""
     }
   ]
 }
