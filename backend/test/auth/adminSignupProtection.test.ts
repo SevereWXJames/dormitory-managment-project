@@ -43,8 +43,8 @@ describe("ADMIN signup authorization", () => {
 
         const admins = await UserModel.find({ roles: { $in: ["ADMIN"] } }).lean().exec();
         expect(admins).to.have.length(1);
-        expect(admins[0].username).to.equal("admin");
-        expect(admins[0].email).to.equal("admin@smartapt.local");
+        expect(admins[0]?.username).to.equal("admin");
+        expect(admins[0]?.email).to.equal("admin@smartapt.local");
     });
 
     it("does not create a fallback admin when sample data is enabled", async () => {
