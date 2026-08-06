@@ -48,6 +48,7 @@ export const reservationSlotsApi = api.injectEndpoints({
 });
 
 export const {useGetBookingsQuery,
+    useGetAllReservationsQuery,
 useGetSlotsByServiceIdQuery,
 useGetFreeSlotsByServiceIdQuery,
 useGetReservedSlotsByServiceIdQuery} = reservationSlotsApi;
