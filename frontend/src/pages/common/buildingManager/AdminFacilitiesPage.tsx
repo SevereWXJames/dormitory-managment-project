@@ -124,11 +124,10 @@ export function AdminFacilitiesPage() {
                             <p style={{ color: "#666" }}>Select a service to view slot details</p>
                         )}
                     </div>
-
-                    <div>
-                        <ReservationsTable/>
-                    </div>
                 </section>
+                <div>
+                    <ReservationsTable/>
+                </div>
             </div>
         </CommonFrame>
     );
