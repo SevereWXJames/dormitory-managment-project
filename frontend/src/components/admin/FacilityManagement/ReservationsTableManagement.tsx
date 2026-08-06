@@ -2,7 +2,7 @@ import {ReservationsTable} from "@/components/admin/FacilityManagement/Reservati
 import {ReservationsTableButtons} from "@/components/admin/FacilityManagement/ReservationsTableButtons.tsx";
 import {useReservationsManagement} from "@/components/admin/FacilityManagement/hooks/useReservationsManagement.tsx";
 
-export function ReservationsManagement() {
+export function ReservationsTableManagement() {
     const {sortSelection, setSortSelection} = useReservationsManagement();
     return (
         <div>

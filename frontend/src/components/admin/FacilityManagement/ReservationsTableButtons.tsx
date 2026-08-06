@@ -10,7 +10,7 @@ export function ReservationsTableButtons(props: ReservationsTableButtonsProps) {
 
     return (<div>
         {sortOptions.map(sortOption =>
-            <TableButton
+            <TableButton key={sortOption}
                 setSelectedSort={() => {
                     props.setSortSelection(sortOption)
                 }}

@@ -2,7 +2,7 @@ import { useGetServicesQuery } from "@/context/api/apiServices/servicesApi";
 import { useGetSlotsByServiceIdQuery } from "@/context/api/apiServices/reservationSlotsApi";
 import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useState } from "react";
-import {ReservationsTable} from "@/components/admin/FacilityManagement/ReservationsTable.tsx";
+import {ReservationsTableManagement} from "@/components/admin/FacilityManagement/ReservationsTableManagement.tsx";
 
 function ServiceStatsItem({ serviceId, serviceName, isSelected, onSelect }: { serviceId: string; serviceName: string; isSelected: boolean; onSelect: () => void }) {
     const { data: allSlots = [] } = useGetSlotsByServiceIdQuery(serviceId);
@@ -127,7 +127,7 @@ export function AdminFacilitiesPage() {
                 </section>
                 <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem" }}>
                     <h2>Reservations</h2>
-                        <ReservationsTable/>
+                        <ReservationsTableManagement/>
                 </div>
             </div>
         </CommonFrame>
