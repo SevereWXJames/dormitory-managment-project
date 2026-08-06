@@ -17,6 +17,7 @@ describe('POST /signup', () => {
     before(async () => {
         console.log('file loaded');
         await connectTestDB();
+        await clearTestDB();
     });
 
     after(async () => {
