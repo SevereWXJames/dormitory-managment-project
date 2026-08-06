@@ -9,20 +9,28 @@ import {
     TableRow,
 } from "@/components/ui/table.tsx"
 import {RowDropDown} from "@/components/residents/facilitiesBooking/RowDropDown.tsx";
-import {useGetHumanReadableDuration, useGetHumanReadableTime} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
-import {useGetUserBookingsApi} from "@/components/residents/facilitiesBooking/hooks/useGetUserBookingsApi.tsx";
+import {useGetHumanReadableDuration} from "@/components/residents/facilitiesBooking/hooks/useGetHumanReadableTime.tsx";
+
+type TableRow = {
+
+    timeString: string,
+    _id: string,
+    eventName: string,
+    serviceId: string,
+    serviceName: string | null,
+    booked: boolean,
+    bookedBy: string | null,
+    startTime: Date,
+    durationSeconds?: number,
+}
 
 type TableProps = {
-    // rows: Booking[],
     caption: string,
+    rows : TableRow[],
 }
 
 export function BookingsTable(props: TableProps) {
-    const {bookings} = useGetUserBookingsApi();
-    const {getTime} = useGetHumanReadableTime();
     const {getDuration} = useGetHumanReadableDuration();
-    const rows = bookings.map((row) =>
-        ({...row, timeString: getTime(row.startTime)}));
 
     return (
         <Table>
@@ -36,7 +44,7 @@ export function BookingsTable(props: TableProps) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {rows.map((row) => (
+                {props.rows.map((row) => (
                     <TableRow key={row._id}>
                         <TableCell className="font-medium">{row.serviceName}</TableCell>
                         <TableCell className="text-right">{row.timeString}</TableCell>

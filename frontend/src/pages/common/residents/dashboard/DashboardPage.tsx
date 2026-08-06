@@ -5,7 +5,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import {CommonFrame} from "@/components/common/CommonFrame.tsx";
-import {BookingsTable} from "@/components/residents/facilitiesBooking/BookingsTable.tsx";
+import {UserBookingsTable} from "@/components/residents/facilitiesBooking/UserBookingsTable.tsx";
 
 export function DashboardPage() {
     const {loading, isError, error, creditBalance} = useUserDashboardData();
@@ -28,7 +28,7 @@ export function DashboardPage() {
                             </Card>
                             <Card className="p-4 m-4" style={{gridArea: "bookings"}}>
                                 <CardTitle>Reminders for upcoming bookings:</CardTitle>
-                                <BookingsTable caption={"Upcoming bookings"}/>
+                                <UserBookingsTable caption={"Upcoming bookings"}/>
                             </Card>
                         </>
                     )}
