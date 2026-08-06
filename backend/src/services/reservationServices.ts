@@ -10,6 +10,14 @@ import {type Service, ServiceModel} from "../dataTypes/service.ts";
 import {sendReservationUpdateIoT} from "./IoT/IoTDataServices.ts";
 import {getAllServices} from "./serviceServices.ts";
 
+
+export async function getReservations(){
+    try{
+        return await ReservationSlotModel.find({booked: true}).lean() as ReservationSlot[];
+    }catch(error){
+        throw Error("Error fetching reservations!", {cause: error});
+    }
+}
 export async function getReservationsBookedByUserId(userId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
     const cursor = ReservationSlotModel.find({bookedBy: userId}).lean();
     const results: ReservationSlot[] = [];
