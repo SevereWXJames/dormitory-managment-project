@@ -33,6 +33,12 @@ function constructTopicString(topic) {
     return baseTopicString + topic;
 }
 
+function handleFacilityBooked(uuid, data) {
+    const startDate = new Date(data.date);
+    const dateString = startDate.toString();
+    console.log(`IoT facility with UUID ${uuid} booked by user with ID ${data.userId} for ${data.durationSeconds} seconds starting at ${dateString}.`)
+}
+
 async function main() {
     const client = connect(mosquittoURI);
 
@@ -48,8 +54,19 @@ async function main() {
     });
 
     client.on("message", (topic, message) => {
+        console.log(`Received message on topic: ${topic}.`);
         const messageAsString =  new TextDecoder().decode(message);
-        console.log(`Received message: ${messageAsString} on topic: ${topic}`);
+        try {
+            const messageObj = JSON.parse(messageAsString);
+            switch (messageObj.type) {
+                case ("facilityBooked"): {
+                    handleFacilityBooked(messageObj.UUID, messageObj.data);
+                    break;
+                }
+            }
+        } catch (e) {
+            console.log("Message malformed!");
+        }
     });
 }
 
