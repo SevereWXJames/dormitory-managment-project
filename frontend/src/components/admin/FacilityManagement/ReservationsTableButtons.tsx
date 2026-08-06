@@ -8,12 +8,10 @@ type ReservationsTableButtonsProps = {
 export function ReservationsTableButtons(props: ReservationsTableButtonsProps) {
     const sortOptions = ["upcoming", "service"];
 
-    return (<div>
+    return (<div className="mr-auto">
         {sortOptions.map(sortOption =>
             <TableButton key={sortOption}
-                setSelectedSort={() => {
-                    props.setSortSelection(sortOption)
-                }}
+                setSelectedSort={props.setSortSelection}
                 buttonName={sortOption}/>)}
     </div>)
 }

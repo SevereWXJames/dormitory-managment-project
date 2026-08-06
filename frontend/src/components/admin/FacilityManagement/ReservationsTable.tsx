@@ -5,7 +5,7 @@ import type {Booking} from "@/types/residents/types.ts";
 
 
 const sortByUpcomingTime = (a: Booking, b: Booking)=> {
-    return a.startTime.getTime() - b.startTime.getTime();
+    return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
 }
 
 const sortByService = (a: Booking, b: Booking)=> {
