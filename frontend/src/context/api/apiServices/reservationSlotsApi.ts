@@ -10,6 +10,7 @@ function toBooking(slot: ReservationSlot): Booking {
         serviceName: slot.serviceName ?? null,
         booked: slot.booked,
         bookedBy: slot.bookedBy,
+        bookedByName: slot.bookedByName ?? null,
         startTime: slot.startTime,
         durationSeconds: slot.durationSeconds,
     };
