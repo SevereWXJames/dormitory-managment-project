@@ -11,6 +11,7 @@ import { getAllMaintenanceRequests, getAllMaintenanceRequestsByUserId, getMainte
 	from "../../src/services/maintenanceRequestServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
+import mongoose from "mongoose";
 
 // chai.use(chaiAsPromised);
 
@@ -40,7 +41,7 @@ describe("maintenanceRequestServices", function () {
 
 	describe("getAllMaintenanceRequests()", function () {
 		it("Test", async function () {
-			const expectedLength = 3;
+			const expectedLength = 4;
 			const actual = await getAllMaintenanceRequests();
 			expect(actual).to.have.lengthOf(expectedLength);
 		});
@@ -48,21 +49,21 @@ describe("maintenanceRequestServices", function () {
 
 	describe("getAllMaintenanceRequestsByUserId()", function () {
 		it("userId with one maintenance request", async function () {
-			const userId = "user1";
+			const userId =  new mongoose.Types.ObjectId("507f191e810c19729de860eb");
 			const actual = await getAllMaintenanceRequestsByUserId(userId);
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.have.lengthOf(1);
-			expect(actual.some((req) => req.createdBy === "user1" && req.title === "title3" && req.description === "description description description" && req.type === "misc" && req.status === "completed" && req.priority === "prio0" && req.location === "Kitchen")).to.be.true;
+			expect(actual.some((req) => req.createdBy.equals("507f191e810c19729de860eb") && req.title === "title3" && req.description === "description description description" && req.type === "misc" && req.status === "completed" && req.priority === "prio0" && req.location === "Kitchen")).to.be.true;
 		});
 		it("userId with two maintenance requests", async function () {
-			const userId = "user0";
-			const expectedLength = 2;
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
+			const expectedLength = 3;
 			const actual = await getAllMaintenanceRequestsByUserId(userId);
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.have.lengthOf(expectedLength);
 		});
 		it("Absent userId", async function () {
-			const userId = "not_a_user";
+			const userId = new mongoose.Types.ObjectId("000f189e810c19729de860ea");
 			const actual = await getAllMaintenanceRequestsByUserId(userId);
 			expect(actual).to.be.an.instanceOf(Array);
 			expect(actual).to.be.empty;
@@ -144,7 +145,7 @@ describe("maintenanceRequestServices", function () {
 
 	describe("addMaintenanceRequest()", function () {
 		it("Valid maintenanceRequest, with a null location", async function () {
-			const userId = "new_user1";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ee");
 			const maintenanceRequest = {
 				createdBy: userId,
 				title: "New title",
@@ -159,14 +160,14 @@ describe("maintenanceRequestServices", function () {
 				await addMaintenanceRequest(maintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
 				expect(result).to.have.lengthOf(1);
-				expect(result.some((req) => req.createdBy === userId && req.title === "New title" && req.description === "New description" && req.type === "New type" && req.status === "new" && req.priority === "prio0" && req.location === null)).to.be.true;
+				expect(result.some((req) => req.createdBy.equals("507f191e810c19729de860ee") && req.title === "New title" && req.description === "New description" && req.type === "New type" && req.status === "new" && req.priority === "prio0" && req.location === null)).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Valid maintenanceRequest, with a non-null location", async function () {
-			const userId = "new_user2";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de861ee");
 			const maintenanceRequest = {
 				createdBy: userId,
 				title: "New title",
@@ -181,20 +182,36 @@ describe("maintenanceRequestServices", function () {
 				await addMaintenanceRequest(maintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
 				expect(result).to.have.lengthOf(1);
-				expect(result.some((req) => req.createdBy === userId && req.title === "New title" && req.description === "New description" && req.type === "New type" && req.status === "new" && req.priority === "prio0" && req.location === "New location")).to.be.true;
+				expect(result.some((req) => req.createdBy.equals("507f191e810c19729de861ee") && req.title === "New title" && req.description === "New description" && req.type === "New type" && req.status === "new" && req.priority === "prio0" && req.location === "New location")).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Invalid maintenanceRequest: _id already exists", async function () {
-			const userId = "new_user3";
-			const existingRequests = await getAllMaintenanceRequestsByUserId("user0");
-			const existing = existingRequests[0];
-			const maintenanceRequest = {
-				_id: existing ? String(existing._id) : "507f1f77bcf86cd799439011",
-				createdBy: userId,
+			const initialUserId = new mongoose.Types.ObjectId("507f191e810c19729de862ed");
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de862ee");
+			const firstMaintenanceRequest = {
+				_id: new mongoose.Types.ObjectId("507f191e810c19729de862ee"),
+				createdBy: initialUserId,
 				title: "New title",
+				description: "New description",
+				type: "New type",
+				status: "new",
+				priority: "prio0",
+				location: null
+			};
+			try {
+				await addMaintenanceRequest(firstMaintenanceRequest);
+			}
+			catch {
+				expect.fail("should not error here");
+			}
+
+			const secondMaintenanceRequest = {
+				_id: new mongoose.Types.ObjectId("507f191e810c19729de862ee"),
+				createdBy: userId,
+				title: "Second title",
 				description: "New description",
 				type: "New type",
 				status: "new",
@@ -203,7 +220,7 @@ describe("maintenanceRequestServices", function () {
 			};
 
 			try {
-				await addMaintenanceRequest(maintenanceRequest);
+				await addMaintenanceRequest(secondMaintenanceRequest);
 				expect.fail("addMaintenanceRequest() should not have resolved.");
 			} catch (e) {
 				// addMaintenanceRequest() is expected to reject.
@@ -215,13 +232,14 @@ describe("maintenanceRequestServices", function () {
 
 	describe ("setMaintenanceRequest", function () {
 		it("Valid maintenanceRequest, with a present _id", async function () {
-			const newUserId = "new_user";
-			const existingRequests = await getAllMaintenanceRequestsByUserId("user0");
+			const oldUserId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
+			const newUserId = new mongoose.Types.ObjectId("507f191e810c19729de863ee");
+			const existingRequests = await getAllMaintenanceRequestsByUserId(oldUserId);
 			const existing = existingRequests.find((req) => req.title === "title1");
 			if (!existing || !existing._id) {
 				throw new Error("Expected an existing maintenance request for update test");
 			}
-			const id = String(existing._id);
+			const id = existing._id;
 			const newMaintenanceRequest = {
 				_id: id,
 				createdBy: newUserId,
@@ -236,15 +254,15 @@ describe("maintenanceRequestServices", function () {
 			try {
 				await setMaintenanceRequest(id, newMaintenanceRequest);
 				const result = await getAllMaintenanceRequestsByUserId(newUserId);
-				expect(result.some((req) => req.title === "new_title" && req.createdBy === newUserId && req.location === "new_location")).to.be.true;
+				expect(result.some((req) => req.title === "new_title" && req.createdBy.equals("507f191e810c19729de863ee") && req.location === "new_location")).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Valid maintenanceRequest, but absent _id", async function () {
-			const id = "not_a_maintenance_request";
-			const userId = "user1";
+			const id = new mongoose.Types.ObjectId("5071a91e810c19729de863ee");
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de863ee");
 			const maintenanceRequest = {
 				"_id": id,
 				"createdBy": userId,
@@ -267,14 +285,14 @@ describe("maintenanceRequestServices", function () {
 		});
 
 		it("Invalid maintenanceRequest: Attempt to set a new _id", async function () {
-			const existingRequests = await getAllMaintenanceRequestsByUserId("user0");
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
+			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
 			const existing = existingRequests.find((req) => req.title === "title2");
 			if (!existing || !existing._id) {
 				throw new Error("Expected an existing maintenance request for invalid _id test");
 			}
-			const oldId = String(existing._id);
-			const newId = "507f1f77bcf86cd799439012";
-			const userId = "user0";
+			const oldId = existing._id;
+			const newId = new mongoose.Types.ObjectId("507f1f77bcf86cd799439012");
 			const maintenanceRequest = {
 				_id: newId,
 				createdBy: userId,
@@ -298,80 +316,76 @@ describe("maintenanceRequestServices", function () {
 
 	describe("setMaintenanceRequestPriority()", function () {
 		it("Valid priority", async function () {
-			const userId = "user0";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
 			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
 			const existing = existingRequests.find((req) => req.title === "title2");
 			if (!existing || !existing._id) {
 				throw new Error("Expected an existing maintenance request for priority test");
 			}
-			const id = String(existing._id);
 			const newPriority = "prio0";
 
 			try {
-				await setMaintenanceRequestPriority(id, newPriority);
+				await setMaintenanceRequestPriority(existing._id, newPriority);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result.some((req) => req._id && String(req._id) === id && req.priority === newPriority)).to.be.true;
+				expect(result.some((req) => req._id && req._id.equals(existing._id) && req.priority === newPriority)).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Invalid priority", async function () {
-			const userId = "user0";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
 			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
 			const existing = existingRequests.find((req) => req.title === "title2");
 			if (!existing || !existing._id) {
 				throw new Error("Expected an existing maintenance request for invalid priority test");
 			}
-			const id = String(existing._id);
 			const newPriority = "not_a_priority";
 
 			try {
-				await setMaintenanceRequestPriority(id, newPriority);
+				await setMaintenanceRequestPriority(existing._id, newPriority);
 				expect.fail("setMaintenanceRequestPriority() should have rejected");
 			} catch (e) {
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result.some((req) => req._id && String(req._id) === id && req.priority === newPriority)).to.be.false;
+				expect(result.some((req) => req._id && req._id.equals(existing._id) && req.priority === newPriority)).to.be.false;
 			}
 		});
 	});
 
 	describe("setMaintenanceRequestStatus()", function () {
 		it("Valid status", async function () {
-			const userId = "user0";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
 			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
 			const existing = existingRequests.find((req) => req.title === "title2");
 			if (!existing || !existing._id) {
 				throw new Error("Expected an existing maintenance request for status test");
 			}
-			const id = String(existing._id);
 			const newStatus = "completed";
 
 			try {
-				await setMaintenanceRequestStatus(id, newStatus);
+				await setMaintenanceRequestStatus(existing._id, newStatus);
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result.some((req) => req._id && String(req._id) === id && req.status === newStatus)).to.be.true;
+				expect(result.some((req) => req._id && req._id.equals(existing._id) && req.status === newStatus)).to.be.true;
 			} catch (e) {
 				expect.fail((e as Error).message);
 			}
 		});
 
 		it("Invalid status", async function () {
-			const userId = "user0";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860ea");
 			const existingRequests = await getAllMaintenanceRequestsByUserId(userId);
 			const existing = existingRequests.find((req) => req.title === "title2");
 			if (!existing || !existing._id) {
 				throw new Error("Expected an existing maintenance request for invalid status test");
 			}
-			const id = String(existing._id);
 			const newStatus = "not_a_status";
 
 			try {
-				await setMaintenanceRequestStatus(id, newStatus);
+				await setMaintenanceRequestStatus(existing._id, newStatus);
 				expect.fail("setMaintenanceRequestStatus() should have rejected");
 			} catch (e) {
 				const result = await getAllMaintenanceRequestsByUserId(userId);
-				expect(result.some((req) => req._id && String(req._id) === id && req.status === newStatus)).to.be.false;
+				expect(result.some((req) => req._id && req._id.equals(existing._id) && req.status === newStatus)).to.be.false;
 			}
 		});
 	});

@@ -4,6 +4,7 @@ import { getAllRooms, getRoomById, getRoomByUserId, getAllResidents, getResident
 	from "../../src/services/roomServices.ts";
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
+import mongoose from "mongoose";
 
 chai.use(chaiAsPromised);
 
@@ -30,7 +31,7 @@ describe("roomServices", function () {
 		it("Existing id", async function () {
 			const allRooms = await getAllRooms();
 			const target = allRooms.find((room) => room.roomName === "test-unit-1");
-			const actual = target ? await getRoomById(String(target._id)) : undefined;
+			const actual = target ? await getRoomById(target._id) : undefined;
 			expect(actual).to.not.be.undefined;
 			expect(actual).to.deep.include({
 				roomName: "test-unit-1",
@@ -38,7 +39,7 @@ describe("roomServices", function () {
 			});
 		});
 		it("Absent id", async function () {
-			const id = "507f1f77bcf86cd799439099";
+			const id = new mongoose.Types.ObjectId("507f1f77bcf86cd799439099");
 			const actual = await getRoomById(id);
 			expect(actual).to.be.undefined;
 		});
@@ -46,7 +47,7 @@ describe("roomServices", function () {
 
 	describe("getRoomByUserId()", function () {
 		it("Existing userId", async function () {
-			const userId = "user1";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860eb");
 			const actual = await getRoomByUserId(userId);
 			expect(actual).to.not.be.undefined;
 			expect(actual).to.deep.include({
@@ -55,7 +56,7 @@ describe("roomServices", function () {
 			});
 		});
 		it("Absent userId", async function () {
-			const userId = "not_a_user";
+			const userId = new mongoose.Types.ObjectId("000f191e810c19729de860ea");
 			const actual = await getRoomByUserId(userId);
 			expect(actual).to.be.undefined;
 		});
@@ -67,22 +68,29 @@ describe("roomServices", function () {
 			const actual = await getAllResidents();
 			expect(actual).to.be.instanceOf(Array);
 			expect(actual).to.have.lengthOf(expectedLength);
-			expect(actual.some((resident) => resident.userId === "user0" && resident.roomId === "507f1f77bcf86cd799439011")).to.be.true;
+			expect(actual.some((resident) => resident.userId.equals("507f191e810c19729de860eb") && resident.roomId?.equals("507f1f77bcf86cd799439011"))).to.be.true;
 		});
 	});
 
 	describe("getResidentByUserId()", function () {
 		it("Existing userId", async function () {
-			const userId = "user1";
+			const userId = new mongoose.Types.ObjectId("507f191e810c19729de860eb");
 			const actual = await getResidentByUserId(userId);
+			let clean = actual as any;
+			clean.userId = clean.userId.toString();
+			clean.roomId = clean.roomId.toString();
+			console.log(JSON.stringify(actual));
 			expect(actual).to.not.be.undefined;
-			expect(actual).to.include({
-				userId: "user1",
+			expect(actual).to.have.property("userId");
+			expect(actual).to.have.property("roomId");
+			const expectedResident = {
+				userId: "507f191e810c19729de860eb",
 				roomId: "507f1f77bcf86cd799439011"
-			});
+			}
+			expect(actual).to.deep.include(expectedResident);
 		});
 		it("Absent userId", async function () {
-			const userId = "not_a_user";
+			const userId = new mongoose.Types.ObjectId("000f191e810c19729de860eb");
 			const actual = await getResidentByUserId(userId);
 			expect(actual).to.be.undefined;
 		});

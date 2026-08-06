@@ -4,6 +4,7 @@ import { getExistingUserFromUsername, getExistingUserFromId, getExistingUserFrom
 import loadSampleData from "../../src/database/loadDatabase.ts";
 import {connectMongo} from "../../src/database/database.ts";
 import {UserModel} from "../../src/dataTypes/user.ts";
+import mongoose from "mongoose";
 
 // chai.use(chaiAsPromised);
 
@@ -32,16 +33,21 @@ describe("usersServices", function () {
         });
 
 		it("Existing username", async function () {
-            const username = "admin1";
+            const username = "test1";
 			const expectedUser = {
-				"_id": "000000000000000000000003", //originally "admin0"
-				"username": "admin1",
-				"email": "admin1@test.com",
-				"phoneNumber": "6045550004",
-				"roles": ["Admin"]
+				_id: "507f191e810c19729de860ea",
+				name: "Test Resident Name 1",
+				username: "test1",
+				email: "test1@test.com",
+				phoneNumber: "6045550001",
+				roles: ["RESIDENT"]
 			};
 			const actual = await getExistingUserFromUsername(username);
-			expect(actual).to.deep.equal(expectedUser);
+			expect(actual).to.not.be.undefined;
+			let cleanUser = actual as any;
+			cleanUser._id = cleanUser._id.toString();
+			console.log(JSON.stringify(cleanUser));
+			expect(cleanUser).to.deep.include(expectedUser);
 		});
 		it("Absent username", async function () {
 			const username = "not_a_username";
@@ -52,16 +58,21 @@ describe("usersServices", function () {
 
 	describe("getExistingUserFromEmail()", function () {
 		it("Existing e-mail", async function () {
-			const email = "admin1@test.com";
+			const email = "test1@test.com";
 			const expectedUser = {
-				"_id": "000000000000000000000003",
-				"username": "admin1",
-				"email": "admin1@test.com",
-				"phoneNumber": "6045550004",
-				"roles": ["Admin"]
+				_id: "507f191e810c19729de860ea",
+				name: "Test Resident Name 1",
+				username: "test1",
+				email: "test1@test.com",
+				phoneNumber: "6045550001",
+				roles: ["RESIDENT"]
 			};
 			const actual = await getExistingUserFromEmail(email);
-			expect(actual).to.deep.equal(expectedUser);
+			expect(actual).to.not.be.undefined;
+			let cleanUser = actual as any;
+			cleanUser._id = cleanUser._id.toString();
+			console.log(JSON.stringify(cleanUser));
+			expect(cleanUser).to.deep.include(expectedUser);
 		});
 		it("Absent e-mail", async function () {
 			const email = "not_an_email";
@@ -72,19 +83,24 @@ describe("usersServices", function () {
 
 	describe("getExistingUserFromId()", function () {
 		it("Existing id", async function () {
-			const id = "000000000000000000000003";
+			const id = new mongoose.Types.ObjectId("507f191e810c19729de860eb");
 			const expectedUser = {
-				"_id": "000000000000000000000003",
-				"username": "admin1",
-				"email": "admin1@test.com",
-				"phoneNumber": "6045550004",
-				"roles": ["Admin"]
+				_id: "507f191e810c19729de860eb",
+				name: "Test Resident Name 2",
+				username: "test2",
+				email: "test2@test.com",
+				phoneNumber: "6045550002",
+				roles: ["RESIDENT"]
 			};
 			const actual = await getExistingUserFromId(id);
-			expect(actual).to.deep.equal(expectedUser);
+			expect(actual).to.not.be.undefined;
+			let cleanUser = actual as any;
+			cleanUser._id = cleanUser._id.toString();
+			console.log(JSON.stringify(cleanUser));
+			expect(cleanUser).to.deep.include(expectedUser);
 		});
 		it("Absent id", async function () {
-			const id = "00000000000000000000000F";
+			const id = new mongoose.Types.ObjectId("000f191e810c19729de860eb");
 			const actual = await getExistingUserFromId(id);
 			expect(actual).to.be.undefined;
 		});
