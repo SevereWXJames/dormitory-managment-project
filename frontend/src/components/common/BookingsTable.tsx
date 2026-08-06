@@ -41,8 +41,8 @@ export function BookingsTable({displayIds = true, ... props}: TableProps) {
             <TableHeader>
                 <TableRow>
                     {displayIds && <TableHead className="w-[100px]">Booking ID</TableHead>}
-                    {props.displayNames && <TableHead>Booked By</TableHead>}
-                    <TableHead>Machine Name</TableHead>
+                    {props.displayNames && <TableHead className="text-left">Booked By</TableHead>}
+                    <TableHead className="text-left">Machine Name</TableHead>
                     <TableHead className="text-right">Start Time</TableHead>
                     <TableHead className="text-right">Duration (sec)</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
