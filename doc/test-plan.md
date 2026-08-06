@@ -474,5 +474,26 @@ Bugs that have been found before the M4 submission date have been recorded as gi
 Please view them for instructions on how to reproduce them.
 
 ## Automated Tests
+Recommended M3 validation commands:
 
-Automated tests have not yet been updated to the Milestone 4 features. They should not currently be used for testing.
+```bash
+cd frontend
+npm run build
+```
+```bash
+docker compose up -d mosquitto
+docker compose up -d mongo
+cd backend
+npm run services-tests
+```
+
+## Additional Automated Tests
+
+For running the auth and facility booking tests you must use IntelliJ.
+
+Instructions::
+1. Copy the `.env` in to the `backend` folder.
+2. Make sure any references to `mongo` or `mosquitto` are changed to `localhost` in the URIs.
+3. In the root folder, run `docker compose up -d mosquitto` to start the Mosquitto MQTT broker.
+4. Open IntelliJ and navigate to the `test` folder.
+5. Use the "run" tool to run the tests in the `auth` and `facilityBooking` folders.
