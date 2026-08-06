@@ -23,6 +23,12 @@ export const reservationSlotsApi = api.injectEndpoints({
             providesTags: ["ReservationSlots", "Booking"],
         }),
 
+        getAllReservations: builder.query<Booking[], void>({
+            query: () => ({ url: `/reservations/get-reservations`}),
+            transformResponse: (reservations: ReservationSlot[]) => reservations.map(toBooking),
+            providesTags: ["ReservationSlots", "Booking"],
+        }),
+
         getSlotsByServiceId: builder.query<ReservationSlot[], string>({
             query: (serviceId) => ({ url: `/reservations/get-slots-by-service/${encodeURIComponent(serviceId)}`}),
             providesTags: ["ReservationSlots"],
