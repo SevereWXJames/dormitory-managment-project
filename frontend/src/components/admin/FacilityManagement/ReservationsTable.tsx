@@ -13,6 +13,6 @@ export function ReservationsTable(){
     if(isError) return <p>Error: {error}</p>;
 
     return(
-        <BookingsTable caption={"Reservations"} rows={rows} displayNames={true}/>
+        <BookingsTable caption={"Reservations"} rows={rows} displayIds={false} displayNames={true}/>
     );
 }
