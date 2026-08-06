@@ -126,7 +126,8 @@ export function AdminFacilitiesPage() {
                     </div>
                 </section>
                 <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem" }}>
-                    <ReservationsTable/>
+                    <h2>Reservations</h2>
+                        <ReservationsTable/>
                 </div>
             </div>
         </CommonFrame>
