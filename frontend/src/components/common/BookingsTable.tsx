@@ -41,8 +41,8 @@ export function BookingsTable({displayIds = true, ... props}: TableProps) {
             <TableHeader>
                 <TableRow>
                     {displayIds && <TableHead className="w-[100px]">Booking ID</TableHead>}
-                    {props.displayNames && <TableHead className="text-left">Booked By</TableHead>}
-                    <TableHead className="text-left">Machine Name</TableHead>
+                    {props.displayNames && <TableHead className="w-[100px]">Booked By</TableHead>}
+                    <TableHead className="text-right">Machine Name</TableHead>
                     <TableHead className="text-right">Start Time</TableHead>
                     <TableHead className="text-right">Duration (sec)</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -52,12 +52,11 @@ export function BookingsTable({displayIds = true, ... props}: TableProps) {
                 {props.rows.map((row) => (
                     <TableRow key={row._id}>
                         {displayIds && <TableCell className="font-medium">{row._id}</TableCell>}
-                        {props.displayNames && <TableCell>{row.bookedByName}</TableCell>}
-                        <TableCell className="font-medium">{row.serviceName}</TableCell>
+                        {props.displayNames && <TableCell className="font-medium">{row.bookedByName}</TableCell>}
+                        <TableCell className="text-right">{row.serviceName}</TableCell>
                         <TableCell className="text-right">{row.timeString}</TableCell>
                         <TableCell className="text-right">{getDuration(row.durationSeconds)}</TableCell>
                         <TableCell className="text-right">{<RowDropDown bookingInfo={row}/>}</TableCell>
-
                     </TableRow>
                 ))}
             </TableBody>
