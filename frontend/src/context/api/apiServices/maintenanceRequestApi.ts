@@ -5,19 +5,10 @@ import {
     MaintenanceRequestType
 } from "@/dataTypes/maintenanceRequest.ts";
 import type {MaintenanceRequestState} from "@/types/residents/types.ts";
+import { mapBackendStatusToSimplifiedStatus } from "@/utils/maintenanceStatus.ts";
 
 function parseRequestStatus(status: string | undefined): MaintenanceRequestState["status"] {
-    const normalizedStatus = status?.trim().toLowerCase() ?? "";
-
-    if (["completed", "done", "resolved"].includes(normalizedStatus)) {
-        return "RESOLVED";
-    }
-
-    if (["inprogress", "in progress", "investigating", "working", "pending", "scheduled"].includes(normalizedStatus)) {
-        return "SCHEDULED";
-    }
-
-    return "NEW";
+    return mapBackendStatusToSimplifiedStatus(status);
 }
 
 //Helper to convert api response into appropriate type

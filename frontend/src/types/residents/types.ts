@@ -1,6 +1,6 @@
 export type CommonFrameType = "UNAUTHENTICATED" | "LOGIN" | "RESIDENT" | "BUILDING_MANAGER";
 export type AuthenticationState = "UNAUTHENTICATED" | "RESIDENT" | "BUILDING_MANAGER";
-export type MaintenanceRequestStatus = "NEW" | "SCHEDULED" | "RESOLVED";
+export type MaintenanceRequestStatus = "New" | "In Progress" | "Completed";
 export type MaintenanceRequestPriority = "HIGH" | "MEDIUM" | "LOW";
 
 export type Booking = {
