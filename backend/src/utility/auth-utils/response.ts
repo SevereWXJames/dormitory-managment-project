@@ -25,7 +25,7 @@ export const setAuthCookie = async (userId: null | Types.ObjectId, roles: Role[]
         res.cookie("access", accessToken, cookiePayload);
         res.cookie("refresh", refreshToken, cookiePayload);
     }catch(error){
-        throw Error(`Error setting cookie: ${error}`, {cause: (error as Error).message});
+        throw Error(`Error setting cookie`, {cause: (error as Error).message});
     }
 }
 
