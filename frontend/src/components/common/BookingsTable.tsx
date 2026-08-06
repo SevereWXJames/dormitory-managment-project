@@ -28,7 +28,7 @@ type TableRow = {
 type TableProps = {
     caption: string,
     rows : TableRow[],
-    displayNames : boolean;
+    displayNames? : boolean;
 }
 
 export function BookingsTable(props: TableProps) {
