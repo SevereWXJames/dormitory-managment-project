@@ -9,6 +9,10 @@ export type JWTPayload = {
     roles: Role[];
 }
 
+const ACCESS_EXPIRATION = "10m";
+// const ACCESS_EXPIRATION = "10s"; //for testing
+const REFRESH_EXPIRATION = "7d";
+
 export const createAccessToken = (id: null | Types.ObjectId, roles: Role[]) => {
     if (!id) throw Error("Error, invalid id!");
     const key = process.env.ACCESS_TOKEN_SECRET;
@@ -18,7 +22,7 @@ export const createAccessToken = (id: null | Types.ObjectId, roles: Role[]) => {
     return jwt.sign(
         jwtPayload,
         key,
-        {expiresIn: "10m"}); //access token
+        {expiresIn: ACCESS_EXPIRATION}); //access token
 }
 
 export const createRefreshToken = async (id: null | Types.ObjectId, roles: Role[]) => {
@@ -30,7 +34,7 @@ export const createRefreshToken = async (id: null | Types.ObjectId, roles: Role[
         const refreshToken =  jwt.sign(
             jwtPayload,
             key,
-            {expiresIn: "7d"}); //refresh Token
+            {expiresIn: REFRESH_EXPIRATION}); //refresh Token
         await updateRefreshTokenTable(id, refreshToken);
         return refreshToken;
     }catch(error){

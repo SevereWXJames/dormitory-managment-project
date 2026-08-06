@@ -37,19 +37,36 @@ export async function getTransactionHistoryByUserId(userId: mongoose.Types.Objec
 }
 
 export async function addCredits(userId: mongoose.Types.ObjectId, creditsCents: number): Promise<void> {
-    return CreditBalanceModel.findOne({userId: userId}).lean().then(async (result) => {
-        if (result == null) {
-            return Promise.reject(new Error("userId not found."));
-        }
-        
-        const newBalance = result.balanceCents + creditsCents;
-        return Promise.all([
-            CreditBalanceModel.updateOne({userId: userId}, {$set: {balanceCents: newBalance}}),
-            TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents, date: Date.now()})
-        ]).then((result) => {
-            Promise.resolve();
-        }).catch((error) => {
-            Promise.reject(error as Error);
-        });
-    });
+    const result = await CreditBalanceModel.findOne({userId: userId}).lean();
+    if(result == null){
+        throw Error("userId not found");
+    }
+    const newBalance = result.balanceCents + creditsCents;
+    await Promise.all([
+        CreditBalanceModel.updateOne({userId: userId}, {$set: {balanceCents: newBalance}}),
+        TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents, date: Date.now()})
+    ]);
+
+    // const result = await CreditBalanceModel.findOne({userId: userId}).lean();
+    // if (result == null) {
+    //     throw Error("userId not found");
+    // }
+    //
+    // const newBalance = result.balanceCents + creditsCents;
+    // const transactionSession = await mongoose.startSession();
+    // try {
+    //     await transactionSession.withTransaction(async () => {
+    //         await CreditBalanceModel.updateOne({userId: userId}, {$set: {balanceCents: newBalance}}, {session: transactionSession});
+    //         await TransactionModel.insertOne({
+    //             userId: userId,
+    //             description: "Added credits",
+    //             transaction: creditsCents
+    //         }, {session: transactionSession});
+    //     });
+    // } catch (error){
+    //     console.log(`error: ${error}`);
+    //     throw Error("Error, failed to add credits", {cause: (error as Error).message});
+    // }finally{
+    //     await transactionSession.endSession();
+    // }
 }
