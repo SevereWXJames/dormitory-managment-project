@@ -16,9 +16,11 @@ import {authenticateRequest, checkRefreshToken, requireRole} from "./middleware/
 import {Role} from "./database/types/user.service.types.ts";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url';
 
-
-dotenv.config();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: resolve(__dirname, '../.env') });
 
 const app = express();
 app.use(helmet({
