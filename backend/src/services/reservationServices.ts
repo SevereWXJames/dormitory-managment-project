@@ -44,7 +44,7 @@ export async function getReservationsSlotsByServiceId(serviceId: mongoose.Types.
 
 export async function getFutureReservationsSlotsByServiceId(serviceId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
     const currDate = new Date();
-    return await ReservationSlotModel.find({serviceId: serviceId, startTime: { $gt: currDate }}).lean().exec();
+    return await ReservationSlotModel.find({serviceId: serviceId, startTime: { $gt: currDate }}).lean().exec() as ReservationSlot[];
 }
 
 export async function getReservationsSlotsByServiceName(serviceName: string): Promise<ReservationSlot[]> {

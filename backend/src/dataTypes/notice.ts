@@ -10,6 +10,8 @@ export interface Notice {
     createAt: number;
 }
 
-const noticeSchema = new Schema({createdBy: mongoose.Types.ObjectId, viewableBy: [mongoose.Types.ObjectId],
+const noticeSchema = new Schema({createdBy: mongoose.Types.ObjectId, viewableBy: [{
+        type: mongoose.Types.ObjectId
+    }],
     title: String, text: String, createAt: Number});
 export const NoticeModel = mongoose.model("Notices"  as CollectionName, noticeSchema, "Notices"  as CollectionName);
