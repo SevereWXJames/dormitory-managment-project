@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card"
 import {MachineList} from "@/components/residents/facilitiesBooking/MachineList.tsx";
 import {Link} from "react-router-dom";
-import {BookingsTable} from "@/components/residents/facilitiesBooking/BookingsTable.tsx";
+import {UserBookingsTable} from "@/components/residents/facilitiesBooking/UserBookingsTable.tsx";
 
 export function LaundryBookingsPage() {
     const dispatch = useDispatch();
@@ -49,7 +49,7 @@ export function LaundryBookingsPage() {
                         <Card style={{gridArea: "bookings"}}>
                             <CardTitle>Upcoming bookings</CardTitle>
                             <CardContent>
-                                <BookingsTable caption={"Upcoming bookings"}/>
+                                <UserBookingsTable caption={"Upcoming bookings"}/>
                             </CardContent>
                         </Card>
                     </div>
