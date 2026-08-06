@@ -14,6 +14,5 @@ export function ReservationsTable(){
 
     return(
         <BookingsTable caption={"Reservations"} rows={rows}/>
-    )
-
+    );
 }

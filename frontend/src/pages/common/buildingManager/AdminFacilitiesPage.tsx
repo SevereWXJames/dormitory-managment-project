@@ -125,7 +125,7 @@ export function AdminFacilitiesPage() {
                         )}
                     </div>
                 </section>
-                <div>
+                <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem" }}>
                     <ReservationsTable/>
                 </div>
             </div>
