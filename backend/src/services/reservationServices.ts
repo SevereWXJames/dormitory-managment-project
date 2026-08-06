@@ -11,7 +11,6 @@ import {sendReservationUpdateIoT} from "./IoT/IoTDataServices.ts";
 import {getAllServices} from "./serviceServices.ts";
 import {UserModel} from "../dataTypes/user.ts";
 import type {User} from "../dataTypes/user.ts";
-import reservation from "../routes/reservation.js";
 
 function getMatchingUserById(userId: string, users : User[]){
     return users.find(user => (user._id.toString() == userId));

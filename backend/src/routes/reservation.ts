@@ -6,7 +6,7 @@ import {
     getReservationsSlotsByServiceName
 } from "../services/reservationServices.ts";
 import mongoose from "mongoose";
-import type {ReservationSlot} from "../dataTypes/reservationSlot.js";
+import type {ReservationSlot} from "../dataTypes/reservationSlot.ts";
 
 const reservationRouter = express.Router();
 
