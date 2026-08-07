@@ -11,6 +11,7 @@ export type Booking = {
     booked: boolean;
     bookedBy: string | null;
     startTime: Date;
+    bookedByName?: string | null;
     durationSeconds?: number;
 }
 

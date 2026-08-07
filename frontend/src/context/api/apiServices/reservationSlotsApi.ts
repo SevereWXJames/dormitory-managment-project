@@ -10,6 +10,7 @@ function toBooking(slot: ReservationSlot): Booking {
         serviceName: slot.serviceName ?? null,
         booked: slot.booked,
         bookedBy: slot.bookedBy,
+        bookedByName: slot.bookedByName ?? null,
         startTime: slot.startTime,
         durationSeconds: slot.durationSeconds,
     };
@@ -19,6 +20,12 @@ export const reservationSlotsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getBookings: builder.query<Booking[], string>({
             query: (userId) => ({ url: `/reservations/get-booked-by-user/${encodeURIComponent(userId)}`}),
+            transformResponse: (reservations: ReservationSlot[]) => reservations.map(toBooking),
+            providesTags: ["ReservationSlots", "Booking"],
+        }),
+
+        getAllReservations: builder.query<Booking[], void>({
+            query: () => ({ url: `/reservations/get-reservations`}),
             transformResponse: (reservations: ReservationSlot[]) => reservations.map(toBooking),
             providesTags: ["ReservationSlots", "Booking"],
         }),
@@ -42,6 +49,7 @@ export const reservationSlotsApi = api.injectEndpoints({
 });
 
 export const {useGetBookingsQuery,
+    useGetAllReservationsQuery,
 useGetSlotsByServiceIdQuery,
 useGetFreeSlotsByServiceIdQuery,
 useGetReservedSlotsByServiceIdQuery} = reservationSlotsApi;

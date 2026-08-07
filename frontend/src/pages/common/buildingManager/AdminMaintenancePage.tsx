@@ -13,7 +13,7 @@ import {toast} from "sonner";
 type StatusFilter = "All" | { id: string; text: string };
 
 export function AdminMaintenancePage() {
-    const { loading, error, requests, requestsStatus, requestsTypes } = useAdminMaintenanceData();
+    const { loading, error, requests, requestsTypes } = useAdminMaintenanceData();
     const [activeFilter, setActiveFilter] = useState<StatusFilter>("All");
     const [selectedRequest, setSelectedRequest] = useState<(typeof requests)[number] | null>(null);
     const [statusOverrides, setStatusOverrides] = useState<Record<string, string>>({});

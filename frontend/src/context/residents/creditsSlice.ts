@@ -11,7 +11,8 @@ type CreditsSliceState = {
 		_id: string,
 		userId: string,
 		description: string,
-		transaction: number
+		transaction: number,
+        date: Date
 	}[];
 };
 
@@ -46,8 +47,9 @@ export const creditsSlice = createSlice({
         addTransactionHistoryEntry: (state, parameters) => {
 			const id = state.transactionHistory.length + 1;
 			const amount = parameters.payload.amount;
+            const date = new Date();
 
-			state.transactionHistory.push({_id: `trans${id}`, userId: '', description: '', transaction: amount});
+			state.transactionHistory.push({_id: `trans${id}`, userId: '', description: '', transaction: amount, date: date});
 		}
 	}
 });

@@ -3,6 +3,7 @@ export class ReservationSlot {
     public serviceId: string;
     public booked: boolean;
     public bookedBy: string | null;
+    public bookedByName?: string | null;
     public startTime: Date;
     public startTimeString?: string | null;
     public serviceName?: string | null;

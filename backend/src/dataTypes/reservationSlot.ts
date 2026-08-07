@@ -8,6 +8,7 @@ export interface ReservationSlot {
     booked: boolean;
     bookedBy: mongoose.Types.ObjectId | null;
     startTime: Date;
+    bookedByName?: string | undefined;
     durationSeconds: number;
 }
 

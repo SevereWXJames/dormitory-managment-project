@@ -45,7 +45,7 @@ export function useSignUpForm(role: Role) {
                 //         ? err.message
                 //         : "Unable to sign up. Please try again.";
 
-                var errorMessage = "Unable to sign up. Please try again.";
+                let errorMessage = "Unable to sign up. Please try again.";
 
                 if ((err as Error).message != null) {
                     errorMessage = (err as Error).message;
@@ -56,7 +56,7 @@ export function useSignUpForm(role: Role) {
         }
     };
 
-    const handleCancel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleCancel = async () => {
         history.back();
     }
 

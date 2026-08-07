@@ -14,10 +14,8 @@ import {useLoginForm} from "@/components/common/Auth/hooks/useLoginForm.tsx";
 export function LoginForm() {
     const emailFieldID = "email-field";
     const passwordFieldID = "password-field";
-    const usernameFieldID = "username-field";
 
     const {
-        username, setUsername,
         email, setEmail,
         password, setPassword,
         showPassword,
@@ -25,7 +23,6 @@ export function LoginForm() {
         handleMouseDownPassword,
         handleMouseUpPassword,
         loginError,
-        usernameError,
         emailError,
         passwordError,
         handleLogIn,
@@ -34,17 +31,6 @@ export function LoginForm() {
     return (
         <div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
              style={{width: 'fit-content', margin: '0 auto'}}>
-            {/* <FormControl error={Boolean(usernameError)} sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
-                <InputLabel htmlFor={`${usernameFieldID}-input`}>Username</InputLabel>
-                <OutlinedInput
-                    id={`${usernameFieldID}-input`}
-                    type='text'
-                    label="Username"
-                    value={username}
-                    onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
-                />
-                {usernameError && <FormHelperText>{usernameError}</FormHelperText>}
-            </FormControl> */}
             <FormControl error={Boolean(emailError)} sx={{m: 1, width: '100%', maxWidth: '30ch'}}>
                 <InputLabel htmlFor={`${emailFieldID}-input`}>E-mail</InputLabel>
                 <OutlinedInput

@@ -9,7 +9,31 @@ import {CreditBalanceModel} from "../dataTypes/creditBalance.ts";
 import {type Service, ServiceModel} from "../dataTypes/service.ts";
 import {sendReservationUpdateIoT} from "./IoT/IoTDataServices.ts";
 import {getAllServices} from "./serviceServices.ts";
+import {UserModel} from "../dataTypes/user.ts";
+import type {User} from "../dataTypes/user.ts";
 
+function getMatchingUserById(userId: string, users : User[]){
+    return users.find(user => (user._id.toString() == userId));
+}
+
+function getMatchingUserNameById(userId: string, users: User[]){
+    return getMatchingUserById(userId, users)?.name;
+}
+
+export async function getReservations(){
+    try{
+        const reservations : ReservationSlot[] = await ReservationSlotModel.find({booked: true}).lean() as ReservationSlot[];
+        const users : User[] = await UserModel.find({}) as User[];
+        const results : ReservationSlot[] = reservations
+            .filter(reservation => reservation.bookedBy)
+            .map(reservation =>
+        {return {...reservation, bookedByName: getMatchingUserNameById(reservation.bookedBy!.toString(), users)}});
+        return results;
+
+    }catch(error){
+        throw Error("Error fetching reservations!", {cause: error});
+    }
+}
 export async function getReservationsBookedByUserId(userId: mongoose.Types.ObjectId): Promise<ReservationSlot[]> {
     const cursor = ReservationSlotModel.find({bookedBy: userId}).lean();
     const results: ReservationSlot[] = [];

@@ -1,16 +1,26 @@
 import express, {type Request, type Response} from "express";
 import {
     bookReservationSlot, bookReservationSlotByName, cancelReservationSlot, cancelReservationSlotByName,
-    getAllFreeSlots, getAllReservedSlots, getFutureReservationsSlotsByServiceId,
+    getAllFreeSlots, getAllReservedSlots, getFutureReservationsSlotsByServiceId, getReservations,
     getReservationsBookedByUserId,
     getReservationsSlotsByServiceName
 } from "../services/reservationServices.ts";
 import mongoose from "mongoose";
+import type {ReservationSlot} from "../dataTypes/reservationSlot.ts";
 
 const reservationRouter = express.Router();
 
-reservationRouter.get("/", async (req: Request, res: Response)=> {
+reservationRouter.get("/", async (_req: Request, res: Response)=> {
     return res.status(501).json({});
+});
+
+reservationRouter.get("/get-reservations", async (_req: Request, res: Response)=> {
+    try{
+        const reservationSlots : ReservationSlot[] = await getReservations();
+        return res.status(200).json({success: true, data: reservationSlots});
+    }catch(error){
+        return res.status(500).json({success: false, message: "Internal server error."});
+    }
 });
 
 reservationRouter.get("/get-booked-by-user/:userId", async (req: Request, res: Response)=> {
