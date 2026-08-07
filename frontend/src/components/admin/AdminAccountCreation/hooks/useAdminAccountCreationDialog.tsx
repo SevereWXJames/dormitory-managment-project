@@ -1,19 +1,23 @@
 import {toast} from "sonner";
-import {useDialog} from "@/components/common/Dialog/hooks/useDialog.tsx";
+import {useContext} from "react";
+import {AdminAccountDialogCtx} from "@/components/admin/AdminAccountCreation/context/AdminAccountDialogCtx.tsx";
 
 export function useAdminAccountCreationDialog() {
-
-    const { closeModal, isOpen, openModal } = useDialog();
+    const ctx = useContext(AdminAccountDialogCtx);
+    if (!ctx) {
+        throw new Error('useDialog must be used within a DialogContextProvider');
+    }
 
     const onSuccessCallBack = () => {
-        closeModal();
+        ctx.closeModal();
         toast.success("Successfully created account!");
     }
 
     return {
-        isOpen,
-        closeModal,
-        openModal,
+        isOpen: ctx.isOpen,
+        closeModal: ctx.closeModal,
+        openModal: ctx.openModal,
+        onOpenChange: ctx.onOpenChange,
         onSuccessCallBack
     }
 

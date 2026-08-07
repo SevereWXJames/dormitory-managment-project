@@ -67,7 +67,9 @@ export function AdminDashboardPage() {
                     </div>
                     <div className="page-actions">
                         <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
-                        <button type="button" className="primary-button" onClick={() => openModal}>Create admin account</button>
+                        <button type="button" className="primary-button" onClick={() => {
+                            console.log("clicked");
+                            openModal()}} >Create admin account</button>
                         {/*<button type="button" className="primary-button" onClick={() => navigate('/admin-signup')}>Create admin account</button>*/}
                     </div>
                     <AdminAccountCreationDialog/>

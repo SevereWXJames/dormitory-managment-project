@@ -12,11 +12,12 @@ type CancelBookingDialogProps = {
     description: string;
     children?: React.ReactNode;
     displayDefaultButtons?: boolean
+    onOpenChange?: (open: boolean) => void;
 }
 
 export function DialogComponent({displayDefaultButtons = true, ...props}: CancelBookingDialogProps) {
     return (
-        <Dialog open={props.isOpen}>
+        <Dialog open={props.isOpen} onOpenChange={props.onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{props.title}</DialogTitle>

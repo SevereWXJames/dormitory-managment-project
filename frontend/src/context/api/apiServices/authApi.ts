@@ -106,6 +106,16 @@ export const authApi = api.injectEndpoints({
                 }
             },
         }),
+
+        createAdmin: builder.mutation<AuthResponse, SignUpRequest>({
+            query: (credentials) => ({
+                url: "/createAdmin",
+                method: "POST",
+                body: credentials,
+            }),
+            invalidatesTags: ["User"],
+        }),
+
     }),
 });
 
@@ -114,4 +124,5 @@ export const {
     useSignUpMutation,
     useRefreshMutation,
     useLogoutMutation,
+    useCreateAdminMutation,
 } = authApi;
