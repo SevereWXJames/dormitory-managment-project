@@ -9,7 +9,7 @@ import loadSampleData from "../../src/database/loadDatabase.ts";
 import {after, before} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import {Types} from "mongoose";
-import {assert, Should} from "chai";
+import {assert} from "chai";
 
 chai.use(chaiAsPromised);
 
