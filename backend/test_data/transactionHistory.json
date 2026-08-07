@@ -2,18 +2,21 @@
   "transactions": [
     {
       "userId": "507f191e810c19729de860ea",
-      "description": "test",
-      "transaction": 100
+      "description": "Added credits",
+      "transaction": 100,
+      "date": "2026-08-03T10:30:00.000Z"
     },
     {
       "userId": "507f191e810c19729de860eb",
-      "description": "test",
-      "transaction": 200
+      "description": "Added credits",
+      "transaction": 200,
+      "date": "2026-08-03T10:30:00.000Z"
     },
     {
       "userId": "507f191e810c19729de860ec",
-      "description": "test",
-      "transaction": 300
+      "description": "Added credits",
+      "transaction": 300,
+      "date": "2026-08-03T10:30:00.000Z"
     }
   ]
 }

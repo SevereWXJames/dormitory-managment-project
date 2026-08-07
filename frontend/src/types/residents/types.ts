@@ -29,4 +29,5 @@ export type Transaction = {
     userId: string
     description: string
     transaction: number
+    date: Date
 }

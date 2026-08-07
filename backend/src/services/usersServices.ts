@@ -60,13 +60,9 @@ export async function getUserByQuery(filter : Object){
 }
 
 //Looks for account, verifies information, returns user.
-export async function logIn(username: string, email: string, password: string) {
-    const normalizedUsername = username ? username.trim() : "";
+export async function logIn(email: string, password: string) {
     const normalizedEmail = email ? email.trim().toLowerCase() : "";
 
-    if (normalizedUsername === "") {
-        throw Error("Username is required.");
-    }
     if (normalizedEmail === "") {
         throw Error("Email is required.");
     }
@@ -79,8 +75,8 @@ export async function logIn(username: string, email: string, password: string) {
         throw Error("Please enter a valid email address like name@example.com.");
     }
 
-    const user = await userModel.findOne({ username: normalizedUsername, email: normalizedEmail });
-    if (!user) throw Error("Username and email do not match any account.");
+    const user = await userModel.findOne({ email: normalizedEmail });
+    if (!user) throw Error("Email does not match any account.");
 
     const isMatch = await compare(password, user.password);
     if (!isMatch) throw Error("Incorrect password.");
@@ -107,10 +103,10 @@ async function createNewResident(userId: Types.ObjectId) {
 
 //Creates a new user account and returns the newly created user.
 export async function signUp(profileData: SignUpRequest) {
-    const {username, password, email, roles} = profileData;
+    var {username, password, email, roles} = profileData;
 
     if (!username || username.trim() === "") {
-        throw Error("Username is required.");
+        username = email;
     }
     if (!password || password.trim() === "") {
         throw Error("Password is required.");

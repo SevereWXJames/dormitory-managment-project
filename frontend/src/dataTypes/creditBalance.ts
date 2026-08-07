@@ -15,11 +15,13 @@ export class Transaction {
     public userId: string;
     public description: string;
     public transaction: number;
+    public date: Date;
 
-    constructor({_id, userId, description, transaction}: {_id: string, userId: string, description: string, transaction: number}) {
+    constructor({_id, userId, description, transaction, date}: {_id: string, userId: string, description: string, transaction: number, date: Date}) {
         this._id = _id;
         this.userId = userId;
         this.description = description;
         this.transaction = transaction;
+        this.date = date;
     }
 }
