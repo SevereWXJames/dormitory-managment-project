@@ -1,10 +1,9 @@
-import {createContext, type ReactNode} from "react";
+import {createContext} from "react";
 
 
 type DialogCtxValue = {
     isOpen: boolean;
-    content: ReactNode | null;
-    openModal: (content: ReactNode | null) => void;
+    openModal: () => void;
     closeModal: () => void;
 };
 

@@ -1,11 +1,9 @@
-import {useState} from "react";
 import {toast} from "sonner";
+import {useDialog} from "@/components/common/Dialog/hooks/useDialog.tsx";
 
 export function useAdminAccountCreationDialog() {
-    const [isOpen, setIsOpen] = useState(false);
-    const closeModal = () => {
-        setIsOpen(false);
-    }
+
+    const { closeModal, isOpen, openModal } = useDialog();
 
     const onSuccessCallBack = () => {
         closeModal();
@@ -14,8 +12,8 @@ export function useAdminAccountCreationDialog() {
 
     return {
         isOpen,
-        setIsOpen,
         closeModal,
+        openModal,
         onSuccessCallBack
     }
 

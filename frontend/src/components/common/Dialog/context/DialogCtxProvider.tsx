@@ -9,20 +9,17 @@ type DialogCtxProviderProps =
 
 export function DialogCtxProvider( {children} : DialogCtxProviderProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [content, setContent] = useState<ReactNode | null>(null);
 
-    const openModal = useCallback((content : ReactNode = null) => {
-        setContent(content);
+    const openModal = useCallback(() => {
         setIsOpen(true);
     }, []);
 
     const closeModal = useCallback(() => {
         setIsOpen(false);
-        setContent(null);
     }, []);
 
     return (
-        <DialogCtx.Provider value={{ isOpen, content, openModal, closeModal }}>
+        <DialogCtx.Provider value={{ isOpen, openModal, closeModal }}>
             {children}
         </DialogCtx.Provider>
     );

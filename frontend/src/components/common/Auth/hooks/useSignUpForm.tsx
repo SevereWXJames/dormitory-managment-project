@@ -50,10 +50,6 @@ export function useSignUpForm(props: useSignUpFormProps) {
         }
     };
 
-    // const handleCancel = async () => {
-    //     history.back();
-    // }
-
     return {
         form, setForm,
         errors, setErrors,

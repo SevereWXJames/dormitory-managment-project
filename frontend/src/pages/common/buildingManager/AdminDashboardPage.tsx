@@ -4,6 +4,10 @@ import { CommonFrame } from "../../../components/common/CommonFrame";
 import { useAdminData } from "@/pages/common/buildingManager/pageHooks/useAdminData.tsx";
 import {AdminAccountCreationDialog} from "@/components/admin/AdminAccountCreation/AdminAccountCreationDialog.tsx";
 
+import {
+    useAdminAccountCreationDialog
+} from "@/components/admin/AdminAccountCreation/hooks/useAdminAccountCreationDialog.tsx";
+
 interface DashboardData {
     name: string;
     pending_maintenance_count: number;
@@ -31,6 +35,7 @@ export function AdminDashboardPage() {
     const { loading, error, managerData, maintenanceRequests } = useAdminData();
     const navigate = useNavigate();
     const [activeModal, setActiveModal] = useState<"queue" | null>(null);
+    const { openModal } = useAdminAccountCreationDialog();
 
     const dashboardData: DashboardData = useMemo(() => {
         if (!loading && !error && managerData && maintenanceRequests) {
@@ -62,7 +67,8 @@ export function AdminDashboardPage() {
                     </div>
                     <div className="page-actions">
                         <button type="button" className="secondary-button" onClick={() => setActiveModal("queue")}>Review queue</button>
-                        <button type="button" className="primary-button" onClick={() => navigate('/admin-signup')}>Create admin account</button>
+                        <button type="button" className="primary-button" onClick={() => openModal}>Create admin account</button>
+                        {/*<button type="button" className="primary-button" onClick={() => navigate('/admin-signup')}>Create admin account</button>*/}
                     </div>
                     <AdminAccountCreationDialog/>
                 </div>
