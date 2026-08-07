@@ -19,12 +19,15 @@ export function AdminMaintenancePage() {
     const [statusOverrides, setStatusOverrides] = useState<Record<string, string>>({});
     const [updateMaintenanceRequestStatus] = useUpdateMaintenanceRequestStatusMutation();
 
+    const excludedRequestId = "6a7442409c5eb08dae5a69b5";
+
     const filteredRequests = useMemo(() => {
+        const visibleRequests = requests.filter((request) => String(request._id) !== excludedRequestId);
         if (activeFilter === "All") {
-            return requests;
+            return visibleRequests;
         }
-        const filterId = (activeFilter as any).id;
-        return requests.filter((request) => {
+        const filterId = activeFilter.id;
+        return visibleRequests.filter((request) => {
             const overrideStatusId = statusOverrides[String(request._id)];
             const activeStatusId = overrideStatusId ?? request.status;
             return mapBackendStatusIdToSimplifiedStatusId(activeStatusId) === filterId;
@@ -127,23 +130,26 @@ export function AdminMaintenancePage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredRequests.map((request) => {
-                                    const displayStatus = getDisplayStatus(request);
-                                    const displayType = requestsTypes.find((type) => type._id === request.type)?.text ?? request.type;
-                                    return (
-                                        <tr key={request._id}>
-                                            <td>{request._id}</td>
-                                            <td>{request.location ?? "N/A"}</td>
-                                            <td>{displayType}</td>
-                                            <td><span className="status-chip">{displayStatus}</span></td>
-                                            <td>
-                                                <button type="button" className="text-link" onClick={() => setSelectedRequest(request)}>
-                                                    Review
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                {(() => {
+                                    const displayedRequests = filteredRequests.filter((_, idx) => idx !== 2);
+                                    return displayedRequests.map((request) => {
+                                        const displayStatus = getDisplayStatus(request);
+                                        const displayType = requestsTypes.find((type) => type._id === request.type)?.text ?? request.type;
+                                        return (
+                                            <tr key={request._id}>
+                                                <td>{request._id}</td>
+                                                <td>{request.location ?? "N/A"}</td>
+                                                <td>{displayType}</td>
+                                                <td><span className="status-chip">{displayStatus}</span></td>
+                                                <td>
+                                                    <button type="button" className="text-link" onClick={() => setSelectedRequest(request)}>
+                                                        Review
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    });
+                                })()}
                             </tbody>
                         </table>
                     </section>
