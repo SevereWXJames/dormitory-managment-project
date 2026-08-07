@@ -10,7 +10,7 @@ type CancelBookingDialogProps = {
     onCancel: () => void;
     title: string;
     description: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export function DialogWindow(props: CancelBookingDialogProps) {
