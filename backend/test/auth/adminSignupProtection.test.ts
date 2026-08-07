@@ -83,7 +83,7 @@ describe("ADMIN signup authorization", () => {
         expect(adminUser?.password).to.exist;
         expect(await compare("admin", adminUser!.password)).to.equal(true);
 
-        const loggedInUser = await logIn("admin1", "admin1@test.com", "admin");
+        const loggedInUser = await logIn("admin1@test.com", "admin");
         expect(loggedInUser.email).to.equal("admin1@test.com");
     });
 });
