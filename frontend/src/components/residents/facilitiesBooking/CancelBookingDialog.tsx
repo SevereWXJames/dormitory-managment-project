@@ -1,4 +1,4 @@
-import {DialogWindow} from "@/components/common/DialogWindow.tsx";
+import {DialogComponent} from "@/components/common/Dialog/DialogComponent.tsx";
 
 type CancelBookingDialogProps = {
     isOpen: boolean;
@@ -10,10 +10,10 @@ export function CancelBookingDialog(props: CancelBookingDialogProps) {
     const title = "Cancel booking?";
     const description = " Warning: This action cannot be undone.";
     return (
-        <DialogWindow isOpen={props.isOpen}
-                      onConfirm={props.onConfirm}
-                      onCancel={props.onCancel}
-                      title={title}
-                      description={description}/>
+        <DialogComponent isOpen={props.isOpen}
+                onConfirm={props.onConfirm}
+                onCancel={props.onCancel}
+                title={title}
+                description={description}/>
     );
 }

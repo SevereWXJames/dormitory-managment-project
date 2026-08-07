@@ -1,4 +1,4 @@
-import {Button} from "@/components/ui/button";
+import {Button} from "@/components/ui/button.tsx";
 import {
     Dialog, DialogClose,
     DialogFooter, DialogContent, DialogHeader, DialogTitle, DialogDescription
@@ -14,7 +14,7 @@ type CancelBookingDialogProps = {
     displayDefaultButtons?: boolean
 }
 
-export function DialogWindow({displayDefaultButtons = true, ...props}: CancelBookingDialogProps) {
+export function DialogComponent({displayDefaultButtons = true, ...props}: CancelBookingDialogProps) {
     return (
         <Dialog open={props.isOpen}>
             <DialogContent>
