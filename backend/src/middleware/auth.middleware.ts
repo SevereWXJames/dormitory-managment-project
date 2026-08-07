@@ -1,4 +1,4 @@
-import type {NextFunction,Response, Request} from "express";
+import type {NextFunction, Response, Request} from "express";
 import {validateRefreshToken, verifyRequestHeader, verifyRoles} from "./services/middleware.service.ts";
 import {Role} from "../database/types/user.service.types.ts";
 import {TokenExpiredError} from "./services/middleware.service.ts";
@@ -8,8 +8,8 @@ export const checkRefreshToken = async (req: Request, res: Response, next: NextF
     try {
         validateRefreshToken(req);
         next();
-    }catch(error){
-        if(error instanceof TokenExpiredError)
+    } catch (error) {
+        if (error instanceof TokenExpiredError)
             return res.status(401).json({message: "Token expired"});
 
         return res.status(500).json({
@@ -22,11 +22,11 @@ export const checkRefreshToken = async (req: Request, res: Response, next: NextF
 
 export const authenticateRequest = async (req: Request, res: Response, next: NextFunction) => {
     // get the token from the header
-    try{
+    try {
         await verifyRequestHeader(req);
         next();
-    }catch(error){
-        if(error instanceof TokenExpiredError)
+    } catch (error) {
+        if (error instanceof TokenExpiredError)
             return res.status(401).json({message: "Token expired"})
         return res.status(500).json({
             message: "Authentication failed",
@@ -36,11 +36,11 @@ export const authenticateRequest = async (req: Request, res: Response, next: Nex
     }
 }
 
-export const checkRole = async (requiredRoles: Role[], req: Request, res: Response, next: NextFunction ) => {
-    try{
+export const checkRole = async (requiredRoles: Role[], req: Request, res: Response, next: NextFunction) => {
+    try {
         await verifyRoles(req, requiredRoles);
         next();
-    }catch(error){
+    } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         const statusCode = /Insufficient permissions|Unauthorized request/.test(message) ? 403 : 401;
         return res.status(statusCode).json({
@@ -51,7 +51,19 @@ export const checkRole = async (requiredRoles: Role[], req: Request, res: Respon
     }
 }
 
-export const requireRole = (... requiredRoles: Role[]) => {
+export const validateSignUpRequest = async (req: Request, res: Response, next: NextFunction) => {
+    const {roles} = req.body;
+    if (roles.includes(Role.ADMIN)) {
+        return res.status(403).json({
+            message: "Invalid signup request",
+            type: "error",
+            error: "Invalid signup request",
+        });
+    };
+    next();
+}
+
+export const requireRole = (...requiredRoles: Role[]) => {
     // get the token from the header
     return async (req: Request, res: Response, next: NextFunction) => {
         return await checkRole(requiredRoles, req, res, next);

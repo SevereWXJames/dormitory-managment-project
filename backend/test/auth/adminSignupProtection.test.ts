@@ -33,8 +33,8 @@ describe("ADMIN signup authorization", () => {
                 roles: ["ADMIN"],
             });
 
-        expect(res).to.have.status(500);
-        expect(res.body.message).to.equal("Error unable to create account");
+        expect(res).to.have.status(403);
+        expect(res.body.message).to.equal("Invalid signup request");
     });
 
     it("rejects account creation requests without an authenticated admin session", async () => {
