@@ -33,8 +33,24 @@ describe("ADMIN signup authorization", () => {
                 roles: ["ADMIN"],
             });
 
-        expect(res).to.have.status(401);
-        expect(res.body.message).to.equal("Authorization failed.");
+        expect(res).to.have.status(500);
+        expect(res.body.message).to.equal("Error unable to create account");
+    });
+
+    it("rejects account creation requests without an authenticated admin session", async () => {
+        const res = await chaiWithHttp.request.execute(app)
+            .post("/admin/create-admin")
+            .send({
+                name: "Eve Admin",
+                username: "eveadmin",
+                email: "eveadmin@example.com",
+                password: "secret123",
+                phoneNumber: "5550000",
+                roles: ["ADMIN"],
+            });
+
+        expect(res).to.have.status(500);
+        expect(res.body.message).to.equal("Authentication failed");
     });
 
     it("creates a fallback admin on startup when no admin exists", async () => {

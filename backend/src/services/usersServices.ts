@@ -111,6 +111,10 @@ export async function signUp(profileData: SignUpRequest) {
         throw Error("Email is required.");
     }
 
+    if (roles.includes(Role.ADMIN)) {
+        throw Error("Error unable to create account");
+    }
+
     const normalizedUsername = username.trim();
     const normalizedEmail = email.trim().toLowerCase();
 
