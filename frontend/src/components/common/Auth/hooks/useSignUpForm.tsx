@@ -21,7 +21,6 @@ export function useSignUpForm(props: useSignUpFormProps) {
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [signUp, {isLoading, isError, error}] = useSignUpMutation();
-    // const navigate = useNavigate();
 
     const handleChange = (field: keyof UserInputForm) =>
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,14 +39,11 @@ export function useSignUpForm(props: useSignUpFormProps) {
             try {
                 await signUp(request).unwrap();
                 props.onSuccessCallback?.();
-                // const targetPath = (form.role === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
-                // navigate(targetPath);
             } catch (err) {
                 let errorMessage = "Unable to sign up. Please try again.";
                 if ((err as Error).message != null) {
                     errorMessage = (err as Error).message;
                 }
-
                 setSubmitError(errorMessage);
                 props.onFailureCallback?.(err);
             }
