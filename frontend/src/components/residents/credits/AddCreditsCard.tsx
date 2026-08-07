@@ -1,4 +1,4 @@
-import {Button, Card, CardContent, FormControl, InputLabel, OutlinedInput, Snackbar, TextField} from "@mui/material";
+import {Button, Card, CardContent, FormControl, InputAdornment, InputLabel, OutlinedInput, Snackbar, TextField} from "@mui/material";
 import {DateField} from '@mui/x-date-pickers/DateField';
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
@@ -20,11 +20,13 @@ export function AddCreditsCard() {
     const amountID = "amount";
 
     const {
-        setCardNumber,
-        handleAmountInput,
-        setExpirationDate, setName,
-        setSecurityCode,
+        cardNumber, setCardNumber,
+        expirationDate, setExpirationDate,
+        securityCode, setSecurityCode,
+        name, setName,
+        amount,
         handleAddCredits,
+        handleAmountInput,
         cardNumberError,
         expirationDateError,
         securityCodeError,
@@ -33,7 +35,8 @@ export function AddCreditsCard() {
         successSnackbar,
         handleCloseSuccessSnackbar,
         failureSnackbar,
-        handleCloseFailureSnackbar
+        handleCloseFailureSnackbar,
+        errorMessage
     } = useAddCreditsCard();
 
     /**
@@ -59,6 +62,7 @@ export function AddCreditsCard() {
                         slotProps={{ htmlInput: { maxLength: 16 } }}
                         helperText={cardNumberError ? "Invalid card number" : ""}
                         onInput={(e) => setCardNumber((e.target as HTMLInputElement).value)}
+                        value={cardNumber}
                     />
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}} variant="filled">
@@ -68,6 +72,7 @@ export function AddCreditsCard() {
                             label="Expiration date"
                             format="MM/YY"
                             error={expirationDateError}
+                            helperText={expirationDateError ? "Invalid expiration date" : ""}
                             onChange={(value) => {
                                 const date = value?.toISOString();
                                 setExpirationDate((date == null) ? "" : date);
@@ -86,6 +91,7 @@ export function AddCreditsCard() {
                         slotProps={{ htmlInput: { maxLength: 4 } }}
                         helperText={securityCodeError ? "Invalid security code" : ""}
                         onInput={(e) => setSecurityCode((e.target as HTMLInputElement).value)}
+                        value={securityCode}
                     />
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
@@ -95,6 +101,7 @@ export function AddCreditsCard() {
                         type='text'
                         label="Cardholder name"
                         onInput={(e) => setName((e.target as HTMLInputElement).value)}
+                        value={name}
                     />
                 </FormControl>
                 <FormControl sx={{m: 1, width: '100%', maxWidth: '25ch'}}>
@@ -106,6 +113,8 @@ export function AddCreditsCard() {
                         inputProps={{min: 0}}
                         error={amountError}
                         onInput={handleAmountInput}
+                        value={amount}
+                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
                 </FormControl>
                 <FormControl>
@@ -115,6 +124,8 @@ export function AddCreditsCard() {
                         disabled={formError}
                         onClick={handleAddCredits}>Pay</Button>
                 </FormControl>
+                {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
+                
                 <Snackbar 
                     open={successSnackbar}
                     onClose={handleCloseSuccessSnackbar}

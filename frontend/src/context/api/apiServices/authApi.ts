@@ -11,7 +11,6 @@ export interface RefreshResponse {
 
 export interface SignUpRequest {
     name: string | null,
-    username: string | null;
     email: string | null;
     password: string | null;
     phoneNumber: string | null,

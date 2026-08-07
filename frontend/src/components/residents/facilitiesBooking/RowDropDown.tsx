@@ -8,12 +8,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {useRowDropDown} from "@/components/residents/facilitiesBooking/hooks/useRowDropDown.tsx";
 import type {Booking} from "@/types/residents/types.ts";
+import {CancelBookingDialog} from "@/components/residents/facilitiesBooking/CancelBookingDialog.tsx";
 
 type RowDropDownProps = {
     bookingInfo : Booking;
 }
 export function RowDropDown(props : RowDropDownProps) {
-    const {onCancel} = useRowDropDown(props);
+    const {onCancel, confirmCancel, isConfirmOpen, cancelDialogClose} = useRowDropDown(props);
 
     return (
         <>
@@ -30,6 +31,7 @@ export function RowDropDown(props : RowDropDownProps) {
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
+            <CancelBookingDialog isOpen={isConfirmOpen} onConfirm={confirmCancel} onCancel={cancelDialogClose}/>
         </>
     )
 }

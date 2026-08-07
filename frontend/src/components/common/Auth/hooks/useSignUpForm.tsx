@@ -8,7 +8,6 @@ import {type FormErrors, type UserInputForm, validateForm} from "@/components/co
 export function useSignUpForm(role: Role) {
     const [form, setForm] = useState<UserInputForm>({
         name: "",
-        username: "",
         password: "",
         phoneNumber: "",
         email: "",
@@ -40,20 +39,32 @@ export function useSignUpForm(role: Role) {
                 const targetPath = (form.role === Role.ADMIN ? "/admin/dashboard" : "/dashboard");
                 navigate(targetPath);
             } catch (err) {
-                const message = err && typeof err === "object" && "data" in err && err.data && typeof err.data === "object" && "message" in err.data && typeof err.data.message === "string"
-                    ? err.data.message
-                    : err instanceof Error
-                        ? err.message
-                        : "Unable to sign up. Please try again.";
-                setSubmitError(message);
+                // const message = err && typeof err === "object" && "data" in err && err.data && typeof err.data === "object" && "message" in err.data && typeof err.data.message === "string"
+                //     ? err.data.message
+                //     : err instanceof Error
+                //         ? err.message
+                //         : "Unable to sign up. Please try again.";
+
+                var errorMessage = "Unable to sign up. Please try again.";
+
+                if ((err as Error).message != null) {
+                    errorMessage = (err as Error).message;
+                }
+
+                setSubmitError(errorMessage);
             }
         }
     };
+
+    const handleCancel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        history.back();
+    }
 
     return {
         form, setForm,
         errors, setErrors,
         handleChange, handleSubmit,
+        handleCancel,
         isLoading, isError, error,
         submitError,
     };

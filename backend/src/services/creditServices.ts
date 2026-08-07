@@ -44,7 +44,7 @@ export async function addCredits(userId: mongoose.Types.ObjectId, creditsCents: 
     const newBalance = result.balanceCents + creditsCents;
     await Promise.all([
         CreditBalanceModel.updateOne({userId: userId}, {$set: {balanceCents: newBalance}}),
-        TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents})
+        TransactionModel.insertOne({userId: userId, description: "Added credits", transaction: creditsCents, date: Date.now()})
     ]);
 
     // const result = await CreditBalanceModel.findOne({userId: userId}).lean();
@@ -69,6 +69,4 @@ export async function addCredits(userId: mongoose.Types.ObjectId, creditsCents: 
     // }finally{
     //     await transactionSession.endSession();
     // }
-
-
 }

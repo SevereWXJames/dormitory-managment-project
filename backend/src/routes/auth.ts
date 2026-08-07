@@ -98,9 +98,9 @@ authRouter.post("/signup/admin", authenticateRequest, requireRole(Role.ADMIN), a
 });
 
 authRouter.post("/login", async (req: Request, res: Response)=> {
-    let {username, email, password} = req.body;
+    let {email, password} = req.body;
     try {
-        const user = await logIn(username, email, password);
+        const user = await logIn(email, password);
         await setAuthCookie(user._id, user.roles, res);
         res.status(200).json({
             message: "Logged in successfully!",

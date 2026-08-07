@@ -29,10 +29,9 @@ type TableProps = {
     caption: string,
     rows : TableRow[],
     displayNames? : boolean;
-    displayIds?: boolean;
 }
 
-export function BookingsTable({displayIds = true, ... props}: TableProps) {
+export function BookingsTable(props: TableProps) {
     const {getDuration} = useGetHumanReadableDuration();
 
     return (
@@ -40,7 +39,7 @@ export function BookingsTable({displayIds = true, ... props}: TableProps) {
             <TableCaption>{props.caption}</TableCaption>
             <TableHeader>
                 <TableRow>
-                    {displayIds && <TableHead className="w-[100px]">Booking ID</TableHead>}
+                    <TableHead>Machine Name</TableHead>
                     {props.displayNames && <TableHead className="w-[100px]">Booked By</TableHead>}
                     <TableHead className="text-right">Machine Name</TableHead>
                     <TableHead className="text-right">Start Time</TableHead>
@@ -51,7 +50,7 @@ export function BookingsTable({displayIds = true, ... props}: TableProps) {
             <TableBody>
                 {props.rows.map((row) => (
                     <TableRow key={row._id}>
-                        {displayIds && <TableCell className="font-medium">{row._id}</TableCell>}
+                        <TableCell className="font-medium">{row.serviceName}</TableCell>
                         {props.displayNames && <TableCell className="font-medium">{row.bookedByName}</TableCell>}
                         <TableCell className="text-right">{row.serviceName}</TableCell>
                         <TableCell className="text-right">{row.timeString}</TableCell>
