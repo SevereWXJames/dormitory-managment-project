@@ -35,6 +35,6 @@ export function ReservationsTable(props : ReservationsTableProps){
 
 
     return(
-        <BookingsTable caption={"Reservations"} rows={rows} displayIds={false} displayNames={true}/>
+        <BookingsTable caption={"Reservations"} rows={rows} displayNames={true}/>
     );
 }
