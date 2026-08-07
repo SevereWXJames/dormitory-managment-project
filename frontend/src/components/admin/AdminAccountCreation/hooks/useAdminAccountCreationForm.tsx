@@ -38,10 +38,7 @@ export function useAdminAccountCreationForm(props: useAdminAccountCreationFormPr
                 await createAdmin(request).unwrap();
                 props.onSuccessCallback?.();
             } catch (err) {
-                let errorMessage = "Unable to create an account. Please try again.";
-                if ((err as Error).message != null) {
-                    errorMessage = (err as Error).message;
-                }
+                const errorMessage = "Unable to create an account. Please try again.";
                 setSubmitError(errorMessage);
                 props.onFailureCallback?.(err);
             }
