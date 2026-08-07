@@ -81,13 +81,15 @@ function App() {
                     </ProtectedRoute>
                 }/>
 
-                <DialogCtxProvider>
-                    <Route path="/admin/dashboard" element={
-                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+
+                <Route path="/admin/dashboard" element={
+                    <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                        <DialogCtxProvider>
                             <AdminDashboardPage/>
-                        </ProtectedRoute>
-                    }/>
-                </DialogCtxProvider>
+                        </DialogCtxProvider>
+                    </ProtectedRoute>
+                }/>
+
 
                 <Route path="/admin/facilities" element={
                     <ProtectedRoute allowedRoles={[Role.ADMIN]}>
