@@ -17,7 +17,7 @@ import type {Role} from "@/dataTypes/user.ts";
 type SignUpFormProps = {
     role: Role,
     onSuccessCallback?: () => void;
-    onFailureCallback?: (err: Error) => void;
+    onFailureCallback?: (err: Error | unknown) => void;
 }
 
 export function SignUpForm(props : SignUpFormProps) {
@@ -27,7 +27,7 @@ export function SignUpForm(props : SignUpFormProps) {
         {key: "phoneNumber", label: "Phone Number", type: "text", inputProps: {maxLength: 10}},
     ];
 
-    const {form, errors, isLoading, isError, handleChange, handleSubmit, handleCancel, submitError} = useSignUpForm({role: props.role});
+    const {form, errors, isLoading, isError, handleChange, handleSubmit, handleCancel, submitError} = useSignUpForm(props);
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
                  style={{width: 'fit-content', margin: '0 auto'}}>
         {signUpFields.map(({key, label, type, inputProps}) => (

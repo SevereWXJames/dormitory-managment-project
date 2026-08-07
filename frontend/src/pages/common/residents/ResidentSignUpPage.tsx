@@ -12,6 +12,7 @@ import {useNavigate} from "react-router-dom";
 export function ResidentSignUpPage() {
     const navigate = useNavigate();
     const onSuccessCallBack = () => {
+        console.log("navigate to user-dashboard!");
         const targetPath =  "/dashboard";
         navigate(targetPath);
     }
