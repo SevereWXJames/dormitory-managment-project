@@ -6,8 +6,8 @@ import {
 
 type CancelBookingDialogProps = {
     isOpen: boolean;
-    onConfirm: () => void;
-    onCancel: () => void;
+    onConfirm?: () => void;
+    onCancel?: () => void;
     title: string;
     description: string;
     children?: React.ReactNode;
@@ -27,10 +27,10 @@ export function DialogWindow({displayDefaultButtons = true, ...props}: CancelBoo
                 {props.children}
                 {displayDefaultButtons && <DialogFooter>
                     <DialogClose asChild>
-                        <Button variant="outline" onClick={props.onConfirm}>Confirm</Button>
+                        <Button variant="outline" onClick={props?.onConfirm}>Confirm</Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button variant="outline" onClick={props.onCancel}>Cancel</Button>
+                        <Button variant="outline" onClick={props?.onCancel}>Cancel</Button>
                     </DialogClose>
                 </DialogFooter>}
             </DialogContent>

@@ -8,18 +8,15 @@ import {SignUpForm} from "@/components/common/Auth/SignUpForm.tsx";
 export function AdminAccountCreationDialog() {
     const title = "Create an admin account";
     const description = "Fill out the fields required below.";
-    const {onConfirm, onCancel, isOpen} = useAdminAccountCreationDialog();
+    const {onSuccessCallBack, isOpen} = useAdminAccountCreationDialog();
 
     return (
             <DialogWindow isOpen={isOpen}
-                          onConfirm={onConfirm}
-                          onCancel={onCancel}
                           title={title}
                           description={description}
                           displayDefaultButtons={false}
                           children={<SignUpForm role={Role.ADMIN}
-                                                onSuccessCallback={onConfirm}
-                                                onFailureCallback={onCancel}/>}
+                                                onSuccessCallback={onSuccessCallBack}/>}
             />
 
     )

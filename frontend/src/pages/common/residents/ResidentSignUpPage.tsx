@@ -16,6 +16,9 @@ export function ResidentSignUpPage() {
         const targetPath =  "/dashboard";
         navigate(targetPath);
     }
+    const handleCancel = async () => {
+        history.back();
+    }
 
     return (
         <>
@@ -26,7 +29,9 @@ export function ResidentSignUpPage() {
                     <Card className="flex flex-col gap-4 p-4 m-4 w-fit mx-auto">
                         <CardTitle className="text-2xl">Sign Up</CardTitle>
                         <CardContent className="flex flex-col gap-4">
-                            <SignUpForm role={Role.RESIDENT} onSuccessCallback={onSuccessCallBack}/>
+                            <SignUpForm role={Role.RESIDENT}
+                                        onSuccessCallback={onSuccessCallBack}
+                                        onHandleCancel={handleCancel}/>
                         </CardContent>
                     </Card>
                 </main>

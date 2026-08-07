@@ -18,6 +18,7 @@ type SignUpFormProps = {
     role: Role,
     onSuccessCallback?: () => void;
     onFailureCallback?: (err: Error | unknown) => void;
+    onHandleCancel?: () => void;
 }
 
 export function SignUpForm(props : SignUpFormProps) {
@@ -27,7 +28,7 @@ export function SignUpForm(props : SignUpFormProps) {
         {key: "phoneNumber", label: "Phone Number", type: "text", inputProps: {maxLength: 10}},
     ];
 
-    const {form, errors, isLoading, isError, handleChange, handleSubmit, handleCancel, submitError} = useSignUpForm(props);
+    const {form, errors, isLoading, isError, handleChange, handleSubmit, submitError} = useSignUpForm(props);
     return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
                  style={{width: 'fit-content', margin: '0 auto'}}>
         {signUpFields.map(({key, label, type, inputProps}) => (
@@ -49,7 +50,7 @@ export function SignUpForm(props : SignUpFormProps) {
         {(submitError || isError) && <p className="red text-red-500" style={{width: '100%'}}>{submitError ?? "Error signing up"}</p>}
         <div style={{display: "flex", gap: "1rem"}}>
             <FormControl>
-                <Button id="cancel-button" variant="outlined" onClick={handleCancel}>Cancel</Button>
+                <Button id="cancel-button" variant="outlined" onClick={props?.onHandleCancel}>Cancel</Button>
             </FormControl>
             <FormControl>
                 <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Sign Up</Button>
