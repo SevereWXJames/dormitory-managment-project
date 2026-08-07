@@ -1,7 +1,7 @@
 import {CommonFrame} from "../../../../../components/common/CommonFrame.tsx";
 import {TextField} from "@mui/material";
 import {useSelector} from "react-redux";
-import {getEmail, getName, getPhoneNumber, getUsername} from "../../../../../context/authenticationSlice.ts";
+import {getEmail, getName, getPhoneNumber} from "../../../../../context/authenticationSlice.ts";
 
 export type FieldProps = {
     input: string,

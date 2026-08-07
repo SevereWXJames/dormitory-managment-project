@@ -21,7 +21,7 @@ export function AddCreditsCard() {
 
     const {
         cardNumber, setCardNumber,
-        expirationDate, setExpirationDate,
+        setExpirationDate,
         securityCode, setSecurityCode,
         name, setName,
         amount,
