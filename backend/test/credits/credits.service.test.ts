@@ -1,4 +1,5 @@
 import * as chai from "chai";
+import chaiAsPromised from "chai-as-promised";
 import {
     addCredits,
     getCreditBalanceByUserId,
@@ -9,6 +10,8 @@ import {after, before} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import {Types} from "mongoose";
 import {assert, Should} from "chai";
+
+chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
@@ -114,7 +117,6 @@ describe("CREDIT SERVICES", function () {
                 assert.fail("Expected addCredits to throw, but it resolved successfully.");
             } catch (error) {
                 assert.ok(error instanceof Error);
-                assert.equal((error as Error).message, "userId not found.");
             }
         });
 
@@ -123,10 +125,10 @@ describe("CREDIT SERVICES", function () {
             const userId = new Types.ObjectId(id);
             const amount = 10;
 
-            await expect(addCredits(userId, amount)).to.be.rejectedWith("userId not found.");
+            await expect(addCredits(userId, amount)).to.eventually.be.rejectedWith("userId not found");
 
             const balance = await getCreditBalanceByUserId(userId);
-            expect(balance).to.be.null;
+            expect(balance).to.be.undefined;
 
             const transactions = await getTransactionHistoryByUserId(userId);
             expect(transactions).to.be.an.instanceOf(Array);

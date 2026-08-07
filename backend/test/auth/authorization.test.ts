@@ -143,7 +143,7 @@ describe('AUTHORIZATION', () => {
                 .get(`/residents`)
                 .set('Cookie', `${testJwt}`)
                 .send();
-            expect(res).to.have.status(500);
+            expect(res).to.have.status(403);
             expect(res?.body.message).to.equal("Authorization failed.");
         });
     });

@@ -78,12 +78,12 @@ describe("ADMIN signup authorization", () => {
             delete process.env.LOAD_SAMPLE_DATA;
         }
 
-        const adminUser = await UserModel.findOne({ username: "admin1", email: "admin1@test.com" }).lean().exec();
+        const adminUser = await UserModel.findOne({ username: "admin", email: "admin@smartapt.local" }).lean().exec();
         expect(adminUser).to.not.equal(null);
         expect(adminUser?.password).to.exist;
         expect(await compare("admin", adminUser!.password)).to.equal(true);
 
-        const loggedInUser = await logIn("admin1", "admin1@test.com", "admin");
-        expect(loggedInUser.email).to.equal("admin1@test.com");
+        const loggedInUser = await logIn( "admin@smartapt.local", "admin");
+        expect(loggedInUser.email).to.equal("admin@smartapt.local");
     });
 });

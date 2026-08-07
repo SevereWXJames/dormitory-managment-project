@@ -1,7 +1,6 @@
 import * as chai from "chai";
 import chaiHttp from "chai-http";
 import { after, afterEach, before, describe, it } from "mocha";
-import {assert} from "chai";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
 import {ResidentModel} from "../../src/dataTypes/user.ts";
@@ -110,7 +109,6 @@ describe('POST /signup', () => {
             const res = await chaiWithHttp.request.execute(app)
                 .post('/signup')
                 .send(invalidEmailPayload);
-
             expect(res).to.have.status(400);
             expect(res.body.message).to.match(/valid email/i);
         });

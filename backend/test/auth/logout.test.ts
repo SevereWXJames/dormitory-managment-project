@@ -40,6 +40,7 @@ describe('POST /logout', () => {
 
     describe('HTTP Response - Log In', () => {
         let testRefreshToken : string | undefined;
+        let testAccessToken : string | undefined;
         let testUserId: string | undefined;
         let agent: ChaiHttp.Agent; // persists cookies across requests
 
@@ -62,9 +63,11 @@ describe('POST /logout', () => {
 
                 const userId = res.body.data._id;
                 const cookies = res.headers['set-cookie'] as unknown as string[];
-                const rawCookie = cookies.find((c) => c.startsWith('refresh='));
+                const rawRefreshCookie = cookies.find((c) => c.startsWith('refresh='));
+                testRefreshToken = rawRefreshCookie?.split(';')[0];
+                const rawAccessCookie = cookies.find((c) => c.startsWith('access='));
+                testAccessToken = rawAccessCookie?.split(';')[0];
 
-                testRefreshToken = rawCookie?.split(';')[0];
                 testUserId = userId;
             } catch (error) {
                 throw Error(`Error with logging in! ${error}`);
@@ -83,6 +86,7 @@ describe('POST /logout', () => {
         it('logs out successfully', async () => {
             try {
                 const res = await agent.post('/logout')
+                    .set('Cookie', `${testAccessToken}; ${testRefreshToken}`)
                     .send();
                 console.log(`res: ${JSON.stringify(res.body)}`);
                 expect(res.body.type).to.equal("success");
@@ -95,6 +99,7 @@ describe('POST /logout', () => {
             try {
                 const res = await agent
                     .post('/logout')
+                    .set('Cookie', `${testAccessToken}; ${testRefreshToken}`)
                     .send();
                 const cookies = res.headers['set-cookie'] as unknown as string[];
                 const rawAccessCookie = cookies.find((c) => c.startsWith('access='));
@@ -115,6 +120,7 @@ describe('POST /logout', () => {
             try {
                 await agent
                     .post('/logout')
+                    .set('Cookie', `${testAccessToken}; ${testRefreshToken}`)
                     .send();
                 const id = testUserId ? testUserId : null;
                 const token = testRefreshToken ? testRefreshToken : null;
