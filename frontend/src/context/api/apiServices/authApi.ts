@@ -109,7 +109,7 @@ export const authApi = api.injectEndpoints({
 
         createAdmin: builder.mutation<AuthResponse, SignUpRequest>({
             query: (credentials) => ({
-                url: "/create-admin",
+                url: "admin/create-admin",
                 method: "POST",
                 body: credentials,
             }),
