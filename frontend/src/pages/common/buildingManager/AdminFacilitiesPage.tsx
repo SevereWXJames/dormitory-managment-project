@@ -78,26 +78,6 @@ function SelectedServiceDetails({ serviceId, serviceName, description }: { servi
     );
 }
 
-// function SummaryStats({ services }: { services: { _id: string; name: string; description?: string }[] }) {
-//     // Don't call hooks here to maintain stability - just show service count
-//     return (
-//         <section style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
-//             <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem", background: "#f8f9fb" }}>
-//                 <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>Total services</div>
-//                 <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>{services.length}</div>
-//             </div>
-//             <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem", background: "#f8f9fb" }}>
-//                 <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>Manage slots</div>
-//                 <div style={{ fontSize: "1.5rem", fontWeight: 700, marginTop: "0.25rem" }}>→</div>
-//             </div>
-//             <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, padding: "1rem", background: "#f8f9fb" }}>
-//                 <div style={{ color: "#6b7280", fontSize: "0.875rem" }}>Select a service</div>
-//                 <div style={{ fontSize: "0.875rem", fontWeight: 400, marginTop: "0.25rem" }}>View slot details</div>
-//             </div>
-//         </section>
-//     );
-// }
-
 export function AdminFacilitiesPage() {
     const { data: services = [], isLoading: servicesLoading } = useGetServicesQuery();
     const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
