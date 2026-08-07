@@ -1,9 +1,5 @@
 import express from "express";
-import {signUp} from "../services/usersServices.js";
-import {setAuthCookie} from "../utility/auth-utils/response.js";
-import authRouter from "./auth.js";
-import {createAdmin} from "../services/adminServices.js";
-import {Role} from "../database/types/user.service.types.js";
+import {createAdmin} from "../services/adminServices.ts";
 
 const adminRouter = express.Router();
 
@@ -11,9 +7,7 @@ adminRouter.post("/create-admin", async (req, res) => {
     try{
         const { name, username, email, password, phoneNumber} = req.body;
         const profileData = {name, username, email, password, phoneNumber, roles:[]};
-
         const user = await createAdmin(profileData);
-        await setAuthCookie(user._id, user.roles, res);
         res.status(200).json({
             message: "Successfully created account!",
             data: {
