@@ -2,8 +2,7 @@ import {DialogComponent} from "@/components/common/Dialog/DialogComponent.tsx";
 import {
     useAdminAccountCreationDialog
 } from "@/components/admin/AdminAccountCreation/hooks/useAdminAccountCreationDialog.tsx";
-import {Role} from "@/dataTypes/user.ts";
-import {SignUpForm} from "@/components/common/Auth/SignUpForm.tsx";
+import {AdminAccountCreationForm} from "@/components/admin/AdminAccountCreation/AdminAccountCreationForm.tsx";
 
 export function AdminAccountCreationDialog() {
     const title = "Create an admin account";
@@ -16,7 +15,7 @@ export function AdminAccountCreationDialog() {
                          description={description}
                          displayDefaultButtons={false}
                          onOpenChange={onOpenChange}
-                         children={<SignUpForm role={Role.ADMIN}
+                         children={<AdminAccountCreationForm
                                                onSuccessCallback={onSuccessCallBack}
                                                onHandleCancel={closeModal}/>}
         />
