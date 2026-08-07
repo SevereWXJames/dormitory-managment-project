@@ -1,4 +1,4 @@
-import {CommonFrame} from "../../../components/common/CommonFrame.tsx";
+import {CommonFrame} from "@/components/common/CommonFrame.tsx";
 import {
     Card,
     CardContent,

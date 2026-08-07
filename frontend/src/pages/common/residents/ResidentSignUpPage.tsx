@@ -7,8 +7,15 @@ import {
 import {Link} from "react-router-dom";
 import {Role} from "@/dataTypes/user.ts";
 import {SignUpForm} from "@/components/common/Auth/SignUpForm.tsx";
+import {useNavigate} from "react-router-dom";
 
 export function ResidentSignUpPage() {
+    const navigate = useNavigate();
+    const onSuccessCallBack = () => {
+        const targetPath =  "/dashboard";
+        navigate(targetPath);
+    }
+
     return (
         <>
             <CommonFrame commonFrameType="UNAUTHENTICATED">
@@ -18,7 +25,7 @@ export function ResidentSignUpPage() {
                     <Card className="flex flex-col gap-4 p-4 m-4 w-fit mx-auto">
                         <CardTitle className="text-2xl">Sign Up</CardTitle>
                         <CardContent className="flex flex-col gap-4">
-                            <SignUpForm role={Role.RESIDENT}/>
+                            <SignUpForm role={Role.RESIDENT} onSuccessCallback={onSuccessCallBack}/>
                         </CardContent>
                     </Card>
                 </main>
