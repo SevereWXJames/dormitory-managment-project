@@ -1,16 +1,12 @@
-//import userJson from "../../test_data/users.json" with {type: "json"};
-import type {Request} from "express";
 import {UserTable} from "../database/tableOperations/User.table.ts";
 import {Role} from "../database/types/user.service.types.ts";
 import type {SignUpRequest} from "../database/types/user.service.types.ts";
 import {compare, hash} from "bcryptjs";
-import {type User, UserModel, ResidentModel} from "../dataTypes/user.ts";
-import pkg, {type Secret} from "jsonwebtoken";
+import {type User, UserModel} from "../dataTypes/user.ts";
 import mongoose, {Types} from "mongoose";
 import {ResidentTable} from "../database/tableOperations/Resident.table.ts";
 import {CreditBalanceTable} from "../database/tableOperations/CreditBalance.table.ts";
 
-const {verify} = pkg;
 const userTable: UserTable = new UserTable();
 const residentTable: ResidentTable = new ResidentTable();
 const creditBalanceTable: CreditBalanceTable = new CreditBalanceTable();
@@ -113,6 +109,10 @@ export async function signUp(profileData: SignUpRequest) {
     }
     if (!email || email.trim() === "") {
         throw Error("Email is required.");
+    }
+
+    if (roles.includes(Role.ADMIN)) {
+        throw Error("Error unable to create account");
     }
 
     const normalizedUsername = username.trim();

@@ -21,6 +21,7 @@ import {ProtectedRoute} from "@/components/common/Auth/ProtectedRoute.tsx";
 import {Role} from "@/dataTypes/user.ts";
 import {Toaster} from "@/components/ui/sonner.tsx";
 import {useAuthHook} from "@/hooks/useAuthHook.tsx";
+import {AdminAccountDialogCtxProvider} from "@/components/admin/AdminAccountCreation/context/AdminAccountDialogCtxProvider.tsx";
 
 /**
  * App React component, containing routes to other pages.
@@ -79,11 +80,17 @@ function App() {
                         <AdminDashboardPage/>
                     </ProtectedRoute>
                 }/>
+
+
                 <Route path="/admin/dashboard" element={
                     <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                        <AdminDashboardPage/>
+                        <AdminAccountDialogCtxProvider>
+                            <AdminDashboardPage/>
+                        </AdminAccountDialogCtxProvider>
                     </ProtectedRoute>
                 }/>
+
+
                 <Route path="/admin/facilities" element={
                     <ProtectedRoute allowedRoles={[Role.ADMIN]}>
                         <AdminFacilitiesPage/>

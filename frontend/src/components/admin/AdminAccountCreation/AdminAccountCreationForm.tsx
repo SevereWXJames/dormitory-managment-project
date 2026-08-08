@@ -1,8 +1,9 @@
 import {Button, FormControl, InputLabel, OutlinedInput} from "@mui/material";
-import {useSignUpForm} from "@/components/common/Auth/hooks/useSignUpForm.tsx";
 import type {UserInputForm} from "@/components/common/Auth/utils/signup.utils.tsx";
 import {PasswordField} from "@/components/common/Auth/PasswordField.tsx";
-import type {Role} from "@/dataTypes/user.ts";
+import {
+    useAdminAccountCreationForm
+} from "@/components/admin/AdminAccountCreation/hooks/useAdminAccountCreationForm.tsx";
 
 /**
  * React component for the login form, including e-mail and password fields,
@@ -14,22 +15,21 @@ import type {Role} from "@/dataTypes/user.ts";
  *
  * @returns JSX for the login form
  */
-type SignUpFormProps = {
-    role: Role,
+type AdminAccountCreationFormProps = {
     onSuccessCallback?: () => void;
     onFailureCallback?: (err: Error | unknown) => void;
     onHandleCancel?: () => void;
 }
 
-export function SignUpForm(props: SignUpFormProps) {
+export function AdminAccountCreationForm(props: AdminAccountCreationFormProps) {
     const signUpFields: { key: keyof UserInputForm; label: string; type?: string, inputProps?: any }[] = [
         {key: "name", label: "Name", type: "text"},
         {key: "email", label: "Email", type: "text"},
         {key: "phoneNumber", label: "Phone Number", type: "text", inputProps: {maxLength: 10}},
     ];
 
-    const {form, errors, isLoading, isError, handleChange, handleSubmit, submitError} = useSignUpForm(props);
-    return (<div className="login-form flex flex-col gap-4 m-2 items-center mx-auto"
+    const {form, errors, isLoading, isError, handleChange, submitError, handleSubmit} = useAdminAccountCreationForm(props);
+    return (<div className="admin-creation-form flex flex-col gap-4 m-2 items-center mx-auto"
                  style={{width: 'fit-content', margin: '0 auto'}}>
         {signUpFields.map(({key, label, type, inputProps}) => (
             <FormControl key={key} sx={{m: 1, width: '100%', maxWidth: '30ch'}} error={!!errors[key]}>
@@ -48,13 +48,13 @@ export function SignUpForm(props: SignUpFormProps) {
         <PasswordField onChange={handleChange("password")} isError={errors["password"]}/>
         {isLoading && <p>Loading ... </p>}
         {(submitError || isError) &&
-            <p className="red text-red-500" style={{width: '100%'}}>{submitError ?? "Error signing up"}</p>}
+            <p className="red text-red-500" style={{width: '100%'}}>{submitError ?? "Error creating account"}</p>}
         <div style={{display: "flex", gap: "1rem"}}>
             <FormControl>
                 <Button id="cancel-button" variant="outlined" onClick={props?.onHandleCancel}>Cancel</Button>
             </FormControl>
             <FormControl>
-                <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Sign Up</Button>
+                <Button id="open-nav-bar-button" variant="contained" onClick={handleSubmit}>Create Account</Button>
             </FormControl>
         </div>
     </div>);

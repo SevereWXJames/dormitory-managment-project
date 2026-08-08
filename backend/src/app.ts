@@ -12,10 +12,17 @@ import noticeRouter from "./routes/notices.ts";
 import reservationRouter from "./routes/reservation.ts";
 import residentsRouter from "./routes/residents.ts";
 import authRouter from "./routes/auth.ts";
-import {authenticateRequest, checkRefreshToken, requireRole} from "./middleware/auth.middleware.ts";
+import adminRouter from "./routes/admin.ts";
+import {
+    authenticateRequest,
+    checkRefreshToken,
+    requireRole,
+    validateSignUpRequest
+} from "./middleware/auth.middleware.ts";
 import {Role} from "./database/types/user.service.types.ts";
 import dotenv from "dotenv";
 import helmet from "helmet";
+
 
 dotenv.config({ path: '../.env' });
 
@@ -51,8 +58,9 @@ app.use("/services",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN),
 
 app.use("/credits", authenticateRequest, requireRole(Role.RESIDENT), creditRouter);
 app.use("/IoT", authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), IoTRouter);
+app.use("/admin", authenticateRequest, requireRole(Role.ADMIN), adminRouter);
 app.use("/user",authenticateRequest, requireRole(Role.RESIDENT, Role.ADMIN), userRouter);
 app.use("/refresh", checkRefreshToken, authRouter);
+app.use("/signup", validateSignUpRequest, authRouter);
 app.use("/", authRouter);
-
 export default app;

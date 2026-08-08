@@ -10,9 +10,6 @@ import type {ReservationSlot} from "@/dataTypes/reservationSlot.ts";
 import {MachineStatus} from "@/components/residents/facilitiesBooking/MachineStatus.tsx";
 import {DialogOpenProvider} from "@/components/residents/facilitiesBooking/context/DialogOpenContext.tsx";
 
-
-export type Slot = { duration: string, startTime: string, date: string }
-
 type MachineDialogProps = {
     machine: Machine;
 }
