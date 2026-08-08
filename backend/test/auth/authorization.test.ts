@@ -3,6 +3,7 @@ import chaiHttp from "chai-http";
 import {after, before, describe, it} from "mocha";
 import {clearTestDB, closeTestDB, connectTestDB} from "../setup/setup.ts";
 import app from "../../src/app.ts";
+import {ensureAdminExists} from "../../src/database/loadDatabase.ts";
 
 const chaiWithHttp = chai.use(chaiHttp);
 const {expect} = chai;
@@ -32,38 +33,18 @@ describe('AUTHORIZATION', () => {
         password: 'password123',
     };
 
-    const adminSignUpPayload = {
-        name: 'Gertrude Robinson',
-        username: 'grbookworm123',
-        email: 'grbookworm@tma.com',
-        password: 'plastic_explosives_798',
-        phoneNUmber: '456893234',
-        roles: ["ADMIN"],
-    };
-
     const adminLoginPayload = {
-        username: 'grbookworm123',
-        email: 'grbookworm@tma.com',
-        password: 'plastic_explosives_798',
+        email: 'admin@smartapt.local',
+        password: 'pass.word',
     };
 
     describe('HTTP Response - Valid Role', () => {
         let testJwt : string | undefined;
         let testUserId: string | undefined;
 
-        //This test is outdated, can no longer create an admin account using the /signup route
-        // This before statement will fail to run
-        before('Create an ADMIN account', async () => {
-            try{
-                console.log("I'm in before:");
-                const res = await chaiWithHttp.request.execute(app)
-                    .post('/signup')
-                    .send(adminSignUpPayload);
-                expect(res).to.have.status(200);
-            }catch(error){
-                throw Error(`Error with signup! ${error}`);
-            }
-        });
+        before(async() => {
+            await ensureAdminExists();
+        })
 
         beforeEach('Log in with an admin account', async () => {
             try{
@@ -150,5 +131,4 @@ describe('AUTHORIZATION', () => {
             expect(res?.body.message).to.equal("Authorization failed.");
         });
     });
-
 });
