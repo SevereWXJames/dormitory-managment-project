@@ -25,56 +25,64 @@ cp frontend/.env.example frontend/.env
 
 Wherever the tests require logging in, the following login information can be used:
 
-- For a resident: 
-    - Username: test1
+- For a resident:
     - Email: test1@test.com
-- For a building manager/administrator: 
-    - Username: admin
+- For a building manager/administrator:
     - Email: admin@smartapt.local
 
 The password to be used for either account is the value of the SAMPLE_PASSWORD environment variable, as set in the .env file.
 
 ## Manual Tests
 
-### M4 admin and documentation checks
+### Admin Authorization and Authentication
 
 - **Admin sign-up and login flow**
   - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
-  - Execution: Create an admin account using the admin sign-up route at /admin-signup, or use an existing admin account from the seeded sample data if available.
-  - Validation: After a successful login, the user should land on the admin dashboard and be able to access admin-only pages. A resident account should not be able to access the same admin routes.
+  - Execution: Log in as an admin using the existing admin account email "admin@smartapt.local" and password.
+  - Validation: After a successful login, the user should land on the admin dashboard and be able to access admin-only pages. Logging in as any other account (upon starting the server) should not be able to access the same admin routes.
 
 - **Admin maintenance request triage**
-  - Setup: Sign in as an admin and ensure at least one maintenance request exists.
+  - Setup: Log in as an admin and ensure at least one maintenance request exists.
   - Execution: Open the maintenance page and update the status of an existing request.
   - Validation: The updated status is displayed in the admin view and remains after refresh.
 
 ### Resident-side checks (non-admin)
 
-- **Resident sign-in and dashboard**
+- **Resident Login and dashboard**
   - Setup: Open the app at http://localhost:5173 and navigate to the login screen.
-  - Execution: Sign in with a resident account and confirm that the resident dashboard loads.
+  - Execution: Log in with a resident account and confirm that the resident dashboard loads.
   - Validation: The dashboard should show resident-relevant sections such as bookings, maintenance requests, and credits. If a section is blank or static, treat it as a current limitation rather than a confirmed feature.
 
-- **Resident facility booking**
-  - Setup: Sign in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input any 16 digits in the card number field, any date in the expiration date field, at least three digits in the scurity code field, and $5.00 in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
+- **Resident Sign-up**
+  - Setup: Open the app at http://localhost:5173 and navigate to the sign-up form by clicking on the link "Create a new resident account"
+  - Execution: Enter in values for required fields: Name, Email, Password. Ensure that the email you enter has some valid format like "name@example.com".
+  - Validation: Upon submitting the form, the user should be navigated to the Resident Dashboard.
+
+- **Resident facility booking - Making a booking**
+  - Setup: Log in as a resident and navigate to the facilities page. Click on the link below the Credit Balance. Input any 16 digits in the card number field, any future date in the expiration date field, at least three digits in the security code field, and $5.00 in the 'amount field' and ensure that in the balance you have $5.00. Then navigate back to the facilities page.
   - Execution: Open a machine, choose a time slot, and submit a booking.
-  - Validation: The booking should appear in the resident booking list or related view. If it fails, verify whether the issue is a real backend problem or a known placeholder flow.
+  - Validation: The booking should appear in "Reminders for upcoming bookings" table in the Facilities page or in the Dashboard. A toast should appear informing the success of the action. Upon reopening the modal for the same machine, the booked timeslot should be greyed out.
+
+- **Resident facility booking**
+- Setup: Log in as a resident and follow the instructions on how to make a booking.
+- Execution: Navigating to the "Reminders for upcoming bookings" table and click on "..." in the "actions" column. Click on the 'delete' pop up option. A modal window should open, asking you to confirm your decision. Click 'confirm'.
+- Validation: A toast should appear indicating the success of the action. The booking should disappear from the table in both the Facilities page and the Dashboard page. 
 
 - **Resident maintenance submission**
-  - Setup: Sign in as a resident and open the maintenance page.
+  - Setup: Log in as a resident and open the maintenance page.
   - Execution: Submit a maintenance request with a category, description, and priority.
   - Validation: The request should be accepted by the app and appear in the resident/manager workflow. The new maintenance request is shown both in the UI and in the MongoDB database (which can be verified by connecting MongoDB compass to mongodb://localhost:27107/ and navigating to the MaintenanceRequests collection).
 
 - **Credits / balance**
   - Setup: Sign in as a resident and open the credits page.
   - Execution: Review the balance and transaction history, then attempt a credit top-up using the mock form.
-  - Validation: The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout. The "Add Credits" form validates the card number (the input must have 16 digits), expiration date (the input must be a valid MM/YY date) and security code (the input must have between 3 and 4 digits) fields.
+  - Validation: A new row should be added to the "Transaction History" table, with the date and the amount of credits added. The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout. The "Add Credits" form validates the card number (the input must have 16 digits), expiration date (the input must be a valid MM/YY date) and security code (the input must have between 3 and 4 digits) fields.
   - Note that we did not implement live payment integration.
 
 - **Settings / profile**
   - Setup: Sign in as a resident and open the settings page.
   - Execution: Review the account/profile information.
-  - Validation: The name, email, username and phone number of the logged-in user are present and these fields are read-only.
+  - Validation: The email of the logged-in user is present and these fields are read-only.
 
 ### Deployment and smoke tests
 
@@ -173,12 +181,12 @@ Expected result:
     - Test case 1: UI Elements
         1) Setup: None
         2) Execution: Open the login page.
-        3) Validation: There are three text input fields present (Username, E-mail and Password) and one button input (
+        3) Validation: There are two text input fields present (E-mail and Password) and one button input (
            Log in)
     - Test case 2: Login function as a resident
         1) Setup: Open the login page.
         2) Execution:
-            - Enter a valid username, e-mail and password combination in their respective fields,
+            - Enter a valid e-mail and password combination in their respective fields,
             - Press the “Log in” button twice.
         3) Validation: The user should be navigated to the resident dashboard page.
     - Test case 3: Login function as an admin
@@ -188,79 +196,19 @@ Expected result:
             - Enter the correct username, email, and password for that admin account.
             - Press the “Log in” button.
         3) Validation: The user should be navigated to the admin dashboard page and should be able to access admin-only screens such as the maintenance request page.
-- **Settings**
-  - Test case 1: Viewing user information as a Resident:
-    1) Setup: Follow the instructions to log in as a Resident as detailed in Test case 2 for the Login page.
-    2) Execution: Navigate to the "Settings" page using the "menu" button in the upper left hand corner.
-    3) Validation: The username and email that the user has inputted should be one of the following displayed.
+
 - **Personal information form:**
     - As of M5, the form is implemented as read-only fields. This is intended. See the corresponding tests in "Settings / Profile" above.
 - **Payment information form:**
     - As of M5, the form is implemented in the front-end with field validation. See the corresponding tests in "Credits / Balance" above.
-- **Shared facilities page, resident view:**
-    - Test case 1: UI elements
-        1) Setup: None
-        2) Execution: Log in as a valid resident, then navigate to the “Facilities” page.
-        3) Validation:
-            - On th left, there is a list of named items corresponding to a laundry machine
-            - Clicking on one of the machine options opens a dialog window with a Calendar and a Form to book a time
-              slot.
-    - Test case 2: Make a booking through the input form for the first time.
-        1) Setup:
-            - Log in as a valid resident.
-            - Navigate to the "Credits" page
-            - Follow the instructions detailed in the test plans for "Credits page" and ensure the balance has at least
-              1 dollar worth of credits. (1 credit costs $0.01, and booking a slot costs 5 credits)
-            - Navigate to the “Facilities” page.
-            - Select a machine that you wish to book. 
-            - A modal window should open with a list of times.
-            - Select the time you can pick. 
-        2) Execution: Press the “Confirm” button.
-        3) Validation:
-            - A notification window should pop up, stating the success of the action. 
-            - Clicking on the same machine option again, the time slot selected should be disabled.
-            - The table under "Recent Bookings" should have a single row containing following information about the booking the user has inputted.
-            - The credit balance on the facilities booking page should have 5 credits deducted.
-            - Navigate to the "Dashboard" page. The table under "Recent Bookings" should have a single row containing following information about the
-              booking the user has inputted.
 
-    - Test case 3: Removing a booked slot.
-        1) Setup:
-            - Follow the instructions detailed in Test case 2.
-            - Ensure that you have made at least 1 booking confirmed by the "Recent Bookings" table.
-        2) Execution:
-           - In the table 'Upcoming bookings' on the far right on the row should be '...' button.
-           - Click on the button and click 'delete'
-        3) Validation:
-           - The event should be removed from the "Recent Bookings" table.
-           - The slot should now be available to book once clicking on the same machine option again.
-           - The balance should be refunded with 5 credits.
-    - Test case 4: Viewing the status of machines.
-        1) Setup: Log in as a valid resident, then navigate to the “Facilities” page.
-        2) Execution:
-            - Below "Check machine status", click on the button called "Cancel booking".
-            - Select a machine you wish to view the status of. 
-            - Click the Submit button below
-        3) Validation:
-            - A dialog window should pop up, stating that at the moment the machine is "available"
 - **Credits page, resident view:**
     - Test case 1: UI elements
         1) Setup: None.
         2) Execution: Log in as a valid resident, then navigate to the “Credits” page.
         3) Validation: The payment portal lists all previous payments made for building facilities, with their date and
            amount.
-    - Test case 2: Add Credits form
-        1) Setup: None.
-        2) Execution: Log in as a valid resident, then navigate to the “Credits” page.
-        3) Validation: In the Add Credits form, there are the following editable fields: “Card Number” (numerical),
-           “Expiration Date” (date in MM/YY format), “Security code” (numerical), “Cardholder name” (text), “Amount” (numerical); and a “Pay” button that attempts to make a payment.
-    - Test case 3: Accepted payment
-        1) Setup: Log in as a valid resident, then navigate to the “Credits” page.
-        2) Execution: Press “Pay”, fill in all mandatory fields with valid values, choose a valid card as the payment
-           method, then press “Pay”.
-        3) Validation: If the payment is accepted, then a new entry in the Payment History section appears with the
-           provided card number, the current date and the provided amount.
-    - Test case 4: Rejected payment
+    - Test case 2: Rejected payment
         - (Payment verification not implemented)
 - **Maintenance requests page, resident view:**
     - Test case 1: UI elements
