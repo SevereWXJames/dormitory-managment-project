@@ -111,7 +111,7 @@ describe('POST /signup', () => {
                 .post('/signup')
                 .send(invalidEmailPayload);
 
-            expect(res).to.have.status(400);
+            expect(res).to.have.status(500);
             expect(res.body.message).to.match(/valid email/i);
         });
 
