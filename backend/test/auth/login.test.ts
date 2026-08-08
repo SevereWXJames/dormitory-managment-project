@@ -126,15 +126,7 @@ describe('POST /login', () => {
                 .post('/login')
                 .send(invalidPasswordPayload);
             console.log(`res: ${JSON.stringify(res.body)}`);
-            expect(res).to.have.status(500);
-        });
-
-        it('should return 500 on invalid username', async () => {
-            const res = await chaiWithHttp.request.execute(app)
-                .post('/login')
-                .send(invalidUsernamePayload);
-            console.log(`res: ${JSON.stringify(res.body)}`);
-            expect(res).to.have.status(500);
+            expect(res).to.have.status(400);
         });
 
         it('should return 500 on invalid email', async () => {
@@ -142,7 +134,7 @@ describe('POST /login', () => {
                 .post('/login')
                 .send(invalidEmailPayload);
             console.log(`res: ${JSON.stringify(res.body)}`);
-            expect(res).to.have.status(500);
+            expect(res).to.have.status(400);
         });
 
         it('should reject login when email is missing', async () => {
@@ -150,7 +142,7 @@ describe('POST /login', () => {
                 .post('/login')
                 .send(missingEmailPayload);
             expect(res).to.have.status(400);
-            expect(res.body.message).to.equal('Username and email are required.');
+            expect(res.body.message).to.equal('Email is required.');
         });
 
         it('should set a jwt cookie on a successful login', async () => {
