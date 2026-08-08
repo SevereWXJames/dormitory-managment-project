@@ -17,11 +17,11 @@ residents and building managers. The goal is to let residents book shared
 facilities, submit maintenance requests, view building notices, and manage
 facility status data in one place.
 
-## Milestone 4 Branch
+## Milestone 5 Branch
 
-- Branch: `Milestone4` (or the submitted branch link for this milestone)
-- This README documents the Milestone 4 submission state and Docker deployment.
-- The Milestone 2 and Milestone 3 sections below remain for comparison with prior-stage functionality.
+- Branch: `Milestone5` (or the submitted branch link for this milestone)
+- This README documents the Milestone 5 submission state and Docker deployment.
+- The Milestone 4, 2 and Milestone 3 sections below remain for comparison with prior-stage functionality.
 
 ## Docker Instructions
 
@@ -56,14 +56,86 @@ docker compose down
 
 ### Admin access and testing
 
-The current M4 branch includes protected admin routes for the building-manager experience with stricter admin provisioning.
+The current M5 branch includes protected admin routes for the building-manager experience with stricter admin provisioning.
 
 1. Open the app at http://localhost:5173 and navigate to the login page.
 2. Admin accounts can only be created by an existing admin or through the auth backend; there is no public admin sign-up flow.
+   To log in as an admin/building manager, input the following into the login form:
+    - Email: admin@smartapt.local
+    - Password: pass.word
 3. After successful admin authentication, the app routes the admin user to the dashboard at /admin/dashboard.
-4. If you want to confirm access control, sign in as a resident user and verify that admin-only routes are blocked.
+4. On the upper right corner of the dashboard, you should see 2 buttons: "Review Queue", and "Create admin account". 
+   Clicking on the latter is the only way to access admin account creation. 
+5. If you want to confirm access control, sign in as a resident user and verify that admin-only routes are blocked.
 
-> The current admin experience is role-based. The app should not rely on the email containing the word "admin" to grant access.
+### Testing:
+
+To view the test plans and instructions on how to perform them, navigate to: `Milestone5/team07/doc`.
+There you should see all documentation relevant to testing of the project app and the mock IoT test app.
+
+# M5 Documentation:
+
+## Milestone 5 - Goals:
+
+- #### M0/M1 Goals:
+
+- ##### Goals met: 
+  - Submission, ranking, and handling of maintenance requests 
+  - Multiple authenticated views 
+  - Mock integration with IoT APIs - demonstrated by the facility booking system
+  - Laundry credits system 
+  
+- ##### Goals unmet: 
+    - Payment portal for rent and services (Marked as a stretch goal).
+    - Live Activity Data of space / facility usage and other stats. 
+    - Receiving notices from Building Managers/Admin.
+    - Managing Building Access. 
+    - Email / Notification system for Bookings and Notices (Marked as a stretch goal).
+    - Unit Management Page - Access Codes, Rooms, etc.
+    - Settings - Changing password, updating profile data, toggle notification channels.
+  
+- We were able to meet core goals which included mocking integration with IoT APIs and multiple authenticated views. 
+- However, other features like displaying live activity data, notice board were scrapped due to time. 
+
+    
+## Milestone 5 - Key Features:
+- Facility Booking + Reservation time slot autogeneration 
+- Role-Based UI/UX 
+- Maintenance Request Creation + Status Progression
+- Admin Account Creation
+
+## Milestone 5 - Non Trivial Elements:
+- Multiple authenticated views - Resident & Building Manager/Admin (FINISHED):
+  - Account creation, logging in as a Resident or a Building Manager/Admin has been implemented.
+  - API Routes are guarded by role-based authentication and authorization middleware, and jwt refresh and access tokens.
+  - Role-based authorization is also secured on the frontend with Page route guards.
+- Mock integration with IoT APIs (FINISHED):
+  - One of our members created a MQTT pipeline that established a working connection between server and mock IoT app.
+  - Timeslots for each machine are auto-generated and sent through MQTT to the server and displayed on the UI.
+  - When a resident makes a reservations, the notification is also sent to the listening test app through MQTT. 
+  - The test app can also update machine statuses by sending a message to the server which is then displayed on the UI.
+- Submission, ranking, and handling of maintenance requests and notices (PARTIAL FINISHED):
+  - Submission, ranking, and status progression of maintenance requests were implemented.
+  - We decided to drop notices since they added very little to the user experience and also due to time.
+
+## Final Release:
+
+#### Summary of M5 Highlights: 
+| Feature Name & Scope                          | Feature Type    | Status as of M5 | Description & Technical Implementation                                                                                                                                                        |
+|:----------------------------------------------|:----------------|:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Role-Based Authentication Gateway**         | Standard        | Implemented     | Supports form submission. Currently accepts valid email/password structures and routes user sessions to respective Resident/Manager dashboards. Passwords are encrypted on transit/storage.   |
+| **Shared Facilities Scheduling System**       | **Non-Trivial** | **Dropped**     | Core business logic layer checks for time-slot conflicts. Handles "Reserve" actions for available devices (e.g., Laundry Machines) and enforces state locks during active bookings.           |
+| **Notice / Announcement Management**          | Standard        | **Dropped**     | Building managers can create, edit, and publish multi-line notices. Enforces "Unread" tracking on the database level for residents until opened.                                              |
+| **Apartment Identity Verification**           | **Non-Trivial** | **Dropped**     | Implements the unique room validation mechanic. Apartment profiles are strictly leveraged as a backend verification gate rather than a public directory page to protect privacy.              |
+| **Admin-restricted Views and Functions**      | **Non-Trivial** | Implemented     | Protected admin routes and manager-facing pages are present for dashboard, facilities, and maintenance requests. Admin accounts are provisioned through authenticated admin/auth flows.       |
+| **Resident Role Dashboard**                   | Standard        | Implemented     | Resident-facing pages for bookings, maintenance requests, notices, credits, settings, and help are available.                                                                                 |
+| **Role-Based Authentication / Authorization** | Standard        | Implemented     | Login, admin signup, protected routes, and role validation are wired through JWT-based auth middleware and page route guards.                                                                 |
+| **Facility & Booking Management**             | Standard        | Implemented     | Resident booking flows and admin facility views exist, residents can book time slots, admins can see facility slot usage stats and view all reservations made by upcoming times / service id. |
+| **Maintenance Request Triage**                | Standard        | Implemented     | Residents can submit requests and managers can review/update request status.                                                                                                                  |
+| **Backend / Docker Stability**                | Standard        | Implemented     | Docker Compose runs MongoDB, backend, frontend, and MQTT infrastructure reliably for local development.                                                                                       |
+| **Live Activity Data of Facilities**          | Standard        | **Dropped**     | Residents can view live activity data of facilities on the Facilities Booking Page                                                                                                            |
+
+# M2, M3, M4 Documentation: 
 
 ## Milestone 2 Functionality
 
@@ -71,14 +143,15 @@ This milestone delivers the initial functional prototype (MVP) of SmartAPT, brid
 
 ### Feature Breakdown & Implementation Status
 
-| Feature Name & Scope | Feature Type | Status in M2 | Description & Technical Implementation |
-| :--- | :--- | :--- | :--- |
-| **Dockerized Stack Orchestration** | Standard | **Fully Functional** | Frontend (Vite/Nginx), Backend (Node.js/Express), and Database (MongoDB) are containerized and fully networked via Docker Compose. |
-| **Role-Based Authentication Gateway** | Standard | **Partially Functional** | Supports form submission. Currently accepts valid email/password structures and routes user sessions to respective Resident/Manager dashboards. Passwords are encrypted on transit/storage. |
+| Feature Name & Scope                    | Feature Type | Status in M2 | Description & Technical Implementation |
+|:----------------------------------------| :--- | :--- | :--- |
+| **Dockerized Stack Orchestration**      | Standard | **Fully Functional** | Frontend (Vite/Nginx), Backend (Node.js/Express), and Database (MongoDB) are containerized and fully networked via Docker Compose. |
+| **Role-Based Authentication Gateway**   | Standard | **Partially Functional** | Supports form submission. Currently accepts valid email/password structures and routes user sessions to respective Resident/Manager dashboards. Passwords are encrypted on transit/storage. |
 | **Shared Facilities Scheduling System** | **Non-Trivial** | **Prototype / Mocked UI** | Core business logic layer checks for time-slot conflicts. Handles "Reserve" actions for available devices (e.g., Laundry Machines) and enforces state locks during active bookings. |
-| **Maintenance Request Pipeline** | Standard | **Partially Functional** | Residents can populate forms with categories (Plumbing, HVAC, Electrical) and set "Emergency" priorities. Building Managers can view the aggregated list with unit numbers and mutate ticket statuses. |
-| **Broadcast Notice Board** | Standard | **Partially Functional** | Building managers can create, edit, and publish multi-line notices. Enforces "Unread" tracking on the database level for residents until opened. |
-| **Apartment Identity Verification** | **Non-Trivial** | **Backend Logic Active** | Implements the unique room validation mechanic. Apartment profiles are strictly leveraged as a backend verification gate rather than a public directory page to protect privacy. |
+| **Maintenance Request Pipeline**        | Standard | **Partially Functional** | Residents can populate forms with categories (Plumbing, HVAC, Electrical) and set "Emergency" priorities. Building Managers can view the aggregated list with unit numbers and mutate ticket statuses. |
+| **Broadcast Notice Board**              | Standard | **Partially Functional** | Building managers can create, edit, and publish multi-line notices. Enforces "Unread" tracking on the database level for residents until opened. |
+| **Apartment Identity Verification**     | **Non-Trivial** | **Backend Logic Active** | Implements the unique room validation mechanic. Apartment profiles are strictly leveraged as a backend verification gate rather than a public directory page to protect privacy. |
+
 
 ---
 
