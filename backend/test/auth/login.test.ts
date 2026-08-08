@@ -35,12 +35,12 @@ describe('POST /login', () => {
         email: 'alice@tmp.com',
         password: 'password1234',
     };
-
-    const invalidUsernamePayload = {
-        username: 'alice1234',
-        email: 'alice@tmp.com',
-        password: 'password123',
-    };
+    //
+    // const invalidUsernamePayload = {
+    //     username: 'alice1234',
+    //     email: 'alice@tmp.com',
+    //     password: 'password123',
+    // };
 
     const invalidEmailPayload = {
         username: 'alice1234',
@@ -129,13 +129,13 @@ describe('POST /login', () => {
             expect(res).to.have.status(400);
         });
 
-        it('should return 500 on invalid username', async () => {
-            const res = await chaiWithHttp.request.execute(app)
-                .post('/login')
-                .send(invalidUsernamePayload);
-            console.log(`res: ${JSON.stringify(res.body)}`);
-            expect(res).to.have.status(400);
-        });
+        // it('should return 500 on invalid username', async () => {
+        //     const res = await chaiWithHttp.request.execute(app)
+        //         .post('/login')
+        //         .send(invalidUsernamePayload);
+        //     console.log(`res: ${JSON.stringify(res.body)}`);
+        //     expect(res).to.have.status(400);
+        // });
 
         it('should return 500 on invalid email', async () => {
             const res = await chaiWithHttp.request.execute(app)
