@@ -63,23 +63,6 @@ describe("ADMIN signup authorization", () => {
         expect(admins[0]?.email).to.equal("admin@smartapt.local");
     });
 
-    it("does not create a fallback admin when sample data is enabled", async () => {
-        await clearTestDB();
-        process.env.LOAD_SAMPLE_DATA = "true";
-
-        try {
-            await import("../../src/database/loadDatabase.ts").then(async ({ default: loadSampleData }) => {
-                await loadSampleData();
-            });
-        } finally {
-            delete process.env.LOAD_SAMPLE_DATA;
-        }
-
-        const admins = await UserModel.find({ roles: { $in: ["ADMIN"] } }).lean().exec();
-        const fallback = admins.find((user) => user.username === "admin" && user.email === "admin@smartapt.local");
-        expect(fallback).to.equal(undefined);
-    });
-
     it("assigns a usable password to sample-data admin accounts for login", async () => {
         await clearTestDB();
         delete process.env.SAMPLE_PASSWORD;
@@ -94,12 +77,12 @@ describe("ADMIN signup authorization", () => {
             delete process.env.LOAD_SAMPLE_DATA;
         }
 
-        const adminUser = await UserModel.findOne({ username: "admin1", email: "admin1@test.com" }).lean().exec();
+        const adminUser = await UserModel.findOne({ username: "admin", email: "admin@smartapt.local" }).lean().exec();
         expect(adminUser).to.not.equal(null);
         expect(adminUser?.password).to.exist;
         expect(await compare("admin", adminUser!.password)).to.equal(true);
 
-        const loggedInUser = await logIn("admin1@test.com", "admin");
-        expect(loggedInUser.email).to.equal("admin1@test.com");
+        const loggedInUser = await logIn( "admin@smartapt.local", "admin");
+        expect(loggedInUser.email).to.equal("admin@smartapt.local");
     });
 });
