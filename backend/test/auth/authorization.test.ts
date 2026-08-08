@@ -51,11 +51,15 @@ describe('AUTHORIZATION', () => {
         let testJwt : string | undefined;
         let testUserId: string | undefined;
 
+        //This test is outdated, can no longer create an admin account using the /signup route
+        // This before statement will fail to run
         before('Create an ADMIN account', async () => {
             try{
-                await chaiWithHttp.request.execute(app)
+                console.log("I'm in before:");
+                const res = await chaiWithHttp.request.execute(app)
                     .post('/signup')
                     .send(adminSignUpPayload);
+                expect(res).to.have.status(200);
             }catch(error){
                 throw Error(`Error with signup! ${error}`);
             }
@@ -88,7 +92,6 @@ describe('AUTHORIZATION', () => {
                 .send();
             console.log(`res: ${JSON.stringify(res, null, 2)}`);
             expect(res).to.have.status(200);
-
         });
 
         it('rejects request with an invalid token and valid role', async () => {
