@@ -99,10 +99,28 @@ There you should see all documentation relevant to testing of the project app an
 
     
 ## Milestone 5 - Key Features:
-- Facility Booking + Reservation time slot autogeneration 
-- Role-Based UI/UX 
-- Maintenance Request Creation + Status Progression
-- Admin Account Creation
+- Facility Booking + Reservation time slot autogeneration  
+  ![Facility booking overview](screenshots/Screenshot%202026-08-07%20at%2010.25.27%E2%80%AFPM.png)
+  
+  ![Facility booking reservation slots](screenshots/Screenshot%202026-08-07%20at%2010.25.41%E2%80%AFPM.png)
+- Role-Based UI/UX  
+  ![Role-based UI/UX](screenshots/Screenshot%202026-08-07%20at%2010.23.29%E2%80%AFPM.png)
+- Maintenance Request Creation + Status Progression  
+  ![Maintenance request creation](screenshots/Screenshot%202026-08-07%20at%2010.26.54%E2%80%AFPM.png)
+  
+  ![Maintenance request list](screenshots/Screenshot%202026-08-07%20at%2010.28.09%E2%80%AFPM.png)
+  
+  ![Maintenance request details](screenshots/Screenshot%202026-08-07%20at%2010.28.25%E2%80%AFPM.png)
+  
+  ![Maintenance status update](screenshots/Screenshot%202026-08-07%20at%2010.40.42%E2%80%AFPM.png)
+  
+  ![Maintenance workflow](screenshots/Screenshot%202026-08-07%20at%2010.41.13%E2%80%AFPM.png)
+- Admin Account Creation  
+  ![Admin account creation step 1](screenshots/Screenshot%202026-08-07%20at%2010.29.13%E2%80%AFPM.png)
+  
+  ![Admin account creation step 2](screenshots/Screenshot%202026-08-07%20at%2010.29.55%E2%80%AFPM.png)
+  
+  ![Admin account creation confirmation](screenshots/Screenshot%202026-08-07%20at%2010.30.28%E2%80%AFPM.png)
 
 ## Milestone 5 - Non Trivial Elements:
 - Multiple authenticated views - Resident & Building Manager/Admin (FINISHED):
@@ -134,6 +152,20 @@ There you should see all documentation relevant to testing of the project app an
 | **Maintenance Request Triage**                | Standard        | Implemented     | Residents can submit requests and managers can review/update request status.                                                                                                                  |
 | **Backend / Docker Stability**                | Standard        | Implemented     | Docker Compose runs MongoDB, backend, frontend, and MQTT infrastructure reliably for local development.                                                                                       |
 | **Live Activity Data of Facilities**          | Standard        | **Dropped**     | Residents can view live activity data of facilities on the Facilities Booking Page                                                                                                            |
+
+### Admin Dashboard UI updates
+
+- **Left-aligned metric cards:** Metric and priority cards on the admin dashboard are left-aligned for easier scanning and improved readability.
+- **Consistent status colors:** Status visuals now follow a consistent color scheme — light red for urgent items, yellow for pending/open items, and green for resolved/completed items.
+- **Stronger emphasis & badges:** Important actionable items (pending/urgent) have stronger visual emphasis using colored card backgrounds, icons, and status badges.
+- **Unified maintenance status labels:** Admin and resident maintenance requests now use the same simplified status set across views: `New`, `In Progress`, and `Completed`.
+- **Admin status flow simplified:** Admin request controls now advance/rewind through only `New`, `In Progress`, and `Completed`, instead of the previous multiple intermediate states.
+- **Files updated:** See frontend changes in [frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx](frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx#L1), [frontend/src/pages/common/buildingManager/AdminMaintenancePage.tsx](frontend/src/pages/common/buildingManager/AdminMaintenancePage.tsx#L1), [frontend/src/context/api/apiServices/maintenanceRequestApi.ts](frontend/src/context/api/apiServices/maintenanceRequestApi.ts#L1), and [frontend/src/App.css](frontend/src/App.css#L1).
+- **How to view:** Start the frontend and open the admin dashboard at `/admin/dashboard` (e.g., http://localhost:5173/admin/dashboard) to review the updated UI.
+
+
+- The updated auth behavior was verified through live backend requests for invalid signup and mismatched login attempts.
+- The frontend build was also verified successfully after the form and error-handling updates.
 
 # M2, M3, M4 Documentation: 
 
@@ -259,23 +291,6 @@ This milestone focuses on polishing the existing resident experience and tighten
 - Reservation slot sorting: reservation slots are now filtered based on being in the past, and are ordered by time and date in the UI.
 - Authentication refresh tokens: refresh tokens have been added to the authentication token system.
 - Datatype refactor: backend datatypes have been streamlined to prevent type mismatch.
-
-
-### Verification notes
-
-### Admin Dashboard UI updates
-
-- **Left-aligned metric cards:** Metric and priority cards on the admin dashboard are left-aligned for easier scanning and improved readability.
-- **Consistent status colors:** Status visuals now follow a consistent color scheme — light red for urgent items, yellow for pending/open items, and green for resolved/completed items.
-- **Stronger emphasis & badges:** Important actionable items (pending/urgent) have stronger visual emphasis using colored card backgrounds, icons, and status badges.
-- **Unified maintenance status labels:** Admin and resident maintenance requests now use the same simplified status set across views: `New`, `In Progress`, and `Completed`.
-- **Admin status flow simplified:** Admin request controls now advance/rewind through only `New`, `In Progress`, and `Completed`, instead of the previous multiple intermediate states.
-- **Files updated:** See frontend changes in [frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx](frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx#L1), [frontend/src/pages/common/buildingManager/AdminMaintenancePage.tsx](frontend/src/pages/common/buildingManager/AdminMaintenancePage.tsx#L1), [frontend/src/context/api/apiServices/maintenanceRequestApi.ts](frontend/src/context/api/apiServices/maintenanceRequestApi.ts#L1), and [frontend/src/App.css](frontend/src/App.css#L1).
-- **How to view:** Start the frontend and open the admin dashboard at `/admin/dashboard` (e.g., http://localhost:5173/admin/dashboard) to review the updated UI.
-
-
-- The updated auth behavior was verified through live backend requests for invalid signup and mismatched login attempts.
-- The frontend build was also verified successfully after the form and error-handling updates.
 
 ## Standard Features (Design Alignment)
 
