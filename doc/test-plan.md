@@ -1,13 +1,13 @@
-# Milestone 4 Test Plan (Updated from Milestone 3 Test Plan)
+# Milestone 5 Test Plan (Updated from Milestone 4 Test Plan)
 
 ## Purpose
 
-This test plan supports the Milestone 4 submission for SmartAPT. It describes how to verify Docker deployment, frontend
+This test plan supports the Milestone 5 submission for SmartAPT. It describes how to verify Docker deployment, frontend
 availability, backend startup, and the current state of application functionality.
 
-Compared with the Milestone 3 branch, the current branch updates tests for data-backed pages, removes tests associated to removed features, and adds information on the state of test automation.
+Compared with the Milestone 4 branch, the current branch updates the automated tests.
 
-The items marked as "(M4 branch)" are new validation steps added for the M3 branch and should be prioritized when validating the admin-page changes.
+The items marked as "(M5 branch)" are new validation steps added for the M5 branch and should be prioritized.
 
 ## Setup
 
@@ -69,17 +69,12 @@ The password to be used for either account is the value of the SAMPLE_PASSWORD e
   - Setup: Sign in as a resident and open the credits page.
   - Execution: Review the balance and transaction history, then attempt a credit top-up using the mock form.
   - Validation: The page should display data from the current session/backend and the top-up flow should behave as a local demo path rather than a real payment checkout. The "Add Credits" form validates the card number (the input must have 16 digits), expiration date (the input must be a valid MM/YY date) and security code (the input must have between 3 and 4 digits) fields.
+  - Note that we did not implement live payment integration.
 
 - **Settings / profile**
   - Setup: Sign in as a resident and open the settings page.
   - Execution: Review the account/profile information.
   - Validation: The name, email, username and phone number of the logged-in user are present and these fields are read-only.
-
-### Non-admin features that are still not fully testable
-
-The following frontend elements are visible in the current branch but should not be treated as complete, production-ready features:
-- Payment checkout: the credits form exists, but it is still a mock/demo flow and should not be tested as a live payment integration.
-- Static dashboard/help/demo content: some cards and helper copy are present for orientation but are not backed by full product logic.
 
 ### Deployment and smoke tests
 
@@ -142,7 +137,7 @@ Expected result:
 
 ## Manual Front-End Tests
 
-### M3 admin page changes (M3 branch)
+### Building manager tests
 
 - **Admin access and navigation**
     - Setup: Start the app and sign in with an admin account.
@@ -151,7 +146,7 @@ Expected result:
 
 - **Admin maintenance request management**
     - Setup: Sign in as an admin and ensure at least one maintenance request exists.
-    - Execution: Open the maintenance page, choose an existing request, and change its status (for example to "Contractor Requested" or "Resolved").
+    - Execution: Open the maintenance page, choose an existing request, and change its status (for example to "New" or "Resolved").
     - Validation: The status update is reflected in the UI and persists after refreshing the page.
 
 - **Admin  facility management**
@@ -183,11 +178,9 @@ Expected result:
     - Test case 2: Login function as a resident
         1) Setup: Open the login page.
         2) Execution:
-            - Enter a valid username, e-mail and password combination (for M2, any username, e-mail and password
-              combination is valid) in their respective fields,
+            - Enter a valid username, e-mail and password combination in their respective fields,
             - Press the “Log in” button twice.
-        3) Validation: The user should be navigated to the resident dashboard page on the second click (This is a known
-           bug issue and we will fix it).
+        3) Validation: The user should be navigated to the resident dashboard page.
     - Test case 3: Login function as an admin
         1) Setup: Open the login page.
         2) Execution:
@@ -199,11 +192,11 @@ Expected result:
   - Test case 1: Viewing user information as a Resident:
     1) Setup: Follow the instructions to log in as a Resident as detailed in Test case 2 for the Login page.
     2) Execution: Navigate to the "Settings" page using the "menu" button in the upper left hand corner.
-    3) Validation: The username and email that the user has inputted should be one of the following displayed. (Name and phone number are hardcoded with default values: "Lem Lemmings" and "12345678")
+    3) Validation: The username and email that the user has inputted should be one of the following displayed.
 - **Personal information form:**
-    - As of M4, the form is implemented as read-only fields. See the corresponding tests in "Settings / Profile" above.
+    - As of M5, the form is implemented as read-only fields. This is intended. See the corresponding tests in "Settings / Profile" above.
 - **Payment information form:**
-    - As of M4, the form is implemented in the front-end with field validation. See the corresponding tests in "Credits / Balance" above.
+    - As of M5, the form is implemented in the front-end with field validation. See the corresponding tests in "Credits / Balance" above.
 - **Shared facilities page, resident view:**
     - Test case 1: UI elements
         1) Setup: None
@@ -217,7 +210,7 @@ Expected result:
             - Log in as a valid resident.
             - Navigate to the "Credits" page
             - Follow the instructions detailed in the test plans for "Credits page" and ensure the balance has at least
-              1 dollar worth of credits. (For M4, 1 credit costs $0.01, and booking a slot costs 5 credits)
+              1 dollar worth of credits. (1 credit costs $0.01, and booking a slot costs 5 credits)
             - Navigate to the “Facilities” page.
             - Select a machine that you wish to book. 
             - A modal window should open with a list of times.
@@ -249,7 +242,7 @@ Expected result:
             - Select a machine you wish to view the status of. 
             - Click the Submit button below
         3) Validation:
-            - A dialog window should pop up, stating that at the moment the machine is "idle" (For M2, responses are hardcoded)
+            - A dialog window should pop up, stating that at the moment the machine is "available"
 - **Credits page, resident view:**
     - Test case 1: UI elements
         1) Setup: None.
@@ -268,7 +261,7 @@ Expected result:
         3) Validation: If the payment is accepted, then a new entry in the Payment History section appears with the
            provided card number, the current date and the provided amount.
     - Test case 4: Rejected payment
-        - (Payment verification not implemented as of M4)
+        - (Payment verification not implemented)
 - **Maintenance requests page, resident view:**
     - Test case 1: UI elements
         1) Setup: None
@@ -285,9 +278,9 @@ Expected result:
            “confirm” in the maintenance request creation form creates a new entry in the maintenance requests list with
            a “new” status.
     - Test case 3: Maintenance request edition form
-        - (Not implemented as part of M4)
+        - (Not implemented)
     - Test case 4: “Remove” button
-        - (Not implemented as part of M4)
+        - (Not implemented)
 - **Maintenance requests page, building manager view:**
     - Test case 1: UI elements
         1) Setup: None
@@ -300,7 +293,7 @@ Expected result:
 
 ## Manual Back-End Tests
 
-### M4 admin backend checks (M4 branch)
+### Building manager back-end tests
 
 - **Admin-only route access**
     - Setup: Create one resident account and one admin account.
@@ -408,7 +401,7 @@ Expected result:
 
 ## Manual IoT Tests
 
-### M4 Manual IoT Tests
+### Manual IoT Tests
 
 **Background**
 
@@ -474,7 +467,7 @@ Bugs that have been found before the M4 submission date have been recorded as gi
 Please view them for instructions on how to reproduce them.
 
 ## Automated Tests
-Recommended M3 validation commands:
+Recommended M5 validation commands:
 
 ```bash
 cd frontend
