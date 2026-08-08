@@ -8,7 +8,7 @@ const mosquittoURI = process.env.IS_DOCKER !== undefined ? "mqtt://host.docker.i
 const options = {
     fileReadMode: {type: "boolean", short: "f", default: false},
     uuid: {type: "string", short: "u"},
-    type: {type: "string", short: "e"},
+    type: {type: "string", short: "c"},
     topic: {type: "string", short: "t"}
 }
 
