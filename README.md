@@ -5,371 +5,111 @@
 - Team Name: Team IDK
 - Project Name: SmartAPT
 - Team Members:
-  - Janet Song 
-  - James  
-  - Zhuoyan Qiu 
-  - Gale Kanegae Penha 
+  - Janet Song
+  - James
+  - Leo Qiu
+  - Gale Kanegae Penha
 
 ## Project Description
 
-SmartAPT is an apartment building and facilities management platform for
-residents and building managers. The goal is to let residents book shared
-facilities, submit maintenance requests, view building notices, and manage
-facility status data in one place.
+SmartAPT is an apartment and facilities management platform built for residents and building managers. It helps residents book shared amenities, submit maintenance requests, monitor facility activity, and manage account-related information in one place. Building managers can review requests, manage admin workflows, and oversee system-level operations.
 
-## Milestone 5 Branch
+This README reflects the current main branch version of the project and the active repository layout rather than an older milestone-specific branch snapshot.
 
-- Branch: `Milestone5` (or the submitted branch link for this milestone)
-- This README documents the Milestone 5 submission state and Docker deployment.
-- The Milestone 4, 2 and Milestone 3 sections below remain for comparison with prior-stage functionality.
+## Tech Stack
 
-## Docker Instructions
+- Frontend: React, Vite, TypeScript, Material UI
+- Backend: Node.js, Express, TypeScript
+- Database: MongoDB
+- Messaging: MQTT / Mosquitto
+- Containerization: Docker Compose
 
-This project is deployable with Docker Desktop using the root `docker-compose.yml` file.
+## Repository Structure
 
-### Required setup (Docker instructions)
+```text
+.
+├── backend/              # Express API, auth, business logic, database models
+├── frontend/             # React app for resident and admin interfaces
+├── doc/                  # Related project documentation and test plans
+├── mosquitto/            # MQTT broker configuration
+├── mqtt-listener-app/    # Mock service for MQTT event listening
+├── mqtt-test-app/        # Test app for simulated IoT/facility events
+├── screenshots/          # UI screenshots used by docs
+├── docker-compose.yml    # Full local stack setup
+├── README.md             # Project overview and setup guide
+└── .env.example          # Example environment template
+```
 
-1. In the repository root, place the actual `.env` file provided by Canvas.
+## Prerequisites
 
-### Build and run
+- Docker Desktop or Docker Engine
+- A `.env` file in the repository root with the required project environment values
 
-From the repository root:
+> Important: Do not commit the real `.env` file to Git. Keep it local only.
+
+## Getting Started
+
+From the repository root, start the app with:
 
 ```bash
 docker compose up --build
 ```
 
-Use the same command again after a code change to rebuild the containers. 
-To stop and remove the running containers:
+This builds and runs the frontend, backend, MongoDB, and MQTT-related services.
+
+To stop the stack:
 
 ```bash
 docker compose down
 ```
 
-### App URLs
+## Local App URLs
 
 - Frontend: http://localhost:5173
-- Backend base URL: http://localhost:3000
+- Backend API: http://localhost:3000
 - MongoDB: localhost:27017
+- MQTT Broker: localhost:1883
 
-> **Important:** Do not store `.env` in GitHub. Only `.env.example` is tracked in this repo.
+## Default Admin Account
 
-### Admin access and testing
+The project includes a seeded local admin account for development and testing:
 
-The current M5 branch includes protected admin routes for the building-manager experience with stricter admin provisioning.
+- Email: `admin@smartapt.local`
+- Password: `pass.word`
 
-1. Open the app at http://localhost:5173 and navigate to the login page.
-2. Admin accounts can only be created by an existing admin or through the auth backend; there is no public admin sign-up flow.
-   To log in as an admin/building manager, input the following into the login form:
-    - Email: admin@smartapt.local
-    - Password: pass.word
-3. After successful admin authentication, the app routes the admin user to the dashboard at /admin/dashboard.
-4. On the upper right corner of the dashboard, you should see 2 buttons: "Review Queue", and "Create admin account". 
-   Clicking on the latter is the only way to access admin account creation. 
-5. If you want to confirm access control, sign in as a resident user and verify that admin-only routes are blocked.
+Access to admin-only routes is protected and intended for building-manager workflows.
 
-### Testing:
+## Main Features
 
-To view the test plans and instructions on how to perform them, navigate to: `Milestone5/team07/doc`.
-There you should see all documentation relevant to testing of the project app and the mock IoT test app.
+- Resident login and role-based access control
+- Shared facility booking and reservation scheduling
+- Maintenance request submission and progress tracking
+- Admin dashboard and manager-side operations
+- Building notices and resident-facing communication
+- Laundry credit and account-related resident functionality
+- MQTT-backed mock facility / IoT integration
 
-# M5 Documentation:
+## Testing and Documentation
 
-## Milestone 5 - Goals:
+- Backend tests are under `backend/test/`
+- Additional project documentation is located in `doc/`
+- Test and validation notes can be found in `doc/test-plan.md`
+- Design-stage documentation and milestone-by-milestone design context are preserved in the branch README history for Milestone 1 through Milestone 5.
 
-- #### M0/M1 Goals:
+## Development Notes
 
-- ##### Goals met: 
-  - Submission, ranking, and handling of maintenance requests 
-  - Multiple authenticated views 
-  - Mock integration with IoT APIs - demonstrated by the facility booking system
-  - Laundry credits system 
-  
-- ##### Goals unmet: 
-    - Payment portal for rent and services (Marked as a stretch goal).
-    - Live Activity Data of space / facility usage and other stats. 
-    - Receiving notices from Building Managers/Admin.
-    - Managing Building Access. 
-    - Email / Notification system for Bookings and Notices (Marked as a stretch goal).
-    - Unit Management Page - Access Codes, Rooms, etc.
-    - Settings - Changing password, updating profile data, toggle notification channels.
-  
-- We were able to meet core goals which included mocking integration with IoT APIs and multiple authenticated views. 
-- However, other features like displaying live activity data, notice board were scrapped due to time. 
+- Frontend code lives in `frontend/src/`
+- Backend code and API logic live in `backend/src/`
+- The project is configured for local Docker-driven development and demonstration workflows
 
-    
-## Milestone 5 - Key Features:
-- Facility Booking + Reservation time slot autogeneration  
-  ![Facility booking overview](screenshots/Screenshot%202026-08-07%20at%2010.25.27%E2%80%AFPM.png)
-  
-  ![Facility booking reservation slots](screenshots/Screenshot%202026-08-07%20at%2010.25.41%E2%80%AFPM.png)
-- Role-Based UI/UX  
-  ![Role-based UI/UX](screenshots/Screenshot%202026-08-07%20at%2010.23.29%E2%80%AFPM.png)
-- Maintenance Request Creation + Status Progression  
-  ![Maintenance request creation](screenshots/Screenshot%202026-08-07%20at%2010.26.54%E2%80%AFPM.png)
-  
-  ![Maintenance request list](screenshots/Screenshot%202026-08-07%20at%2010.28.09%E2%80%AFPM.png)
-  
-  ![Maintenance request details](screenshots/Screenshot%202026-08-07%20at%2010.28.25%E2%80%AFPM.png)
-  
-  ![Maintenance status update](screenshots/Screenshot%202026-08-07%20at%2010.40.42%E2%80%AFPM.png)
-  
-  ![Maintenance workflow](screenshots/Screenshot%202026-08-07%20at%2010.41.13%E2%80%AFPM.png)
-- Admin Account Creation  
-  ![Admin account creation step 1](screenshots/Screenshot%202026-08-07%20at%2010.29.13%E2%80%AFPM.png)
-  
-  ![Admin account creation step 2](screenshots/Screenshot%202026-08-07%20at%2010.29.55%E2%80%AFPM.png)
-  
-  ![Admin account creation confirmation](screenshots/Screenshot%202026-08-07%20at%2010.30.28%E2%80%AFPM.png)
+## Quick Start Summary
 
-## Milestone 5 - Non Trivial Elements:
-- Multiple authenticated views - Resident & Building Manager/Admin (FINISHED):
-  - Account creation, logging in as a Resident or a Building Manager/Admin has been implemented.
-  - API Routes are guarded by role-based authentication and authorization middleware, and jwt refresh and access tokens.
-  - Role-based authorization is also secured on the frontend with Page route guards.
-- Mock integration with IoT APIs (FINISHED):
-  - One of our members created a MQTT pipeline that established a working connection between server and mock IoT app.
-  - Timeslots for each machine are auto-generated and sent through MQTT to the server and displayed on the UI.
-  - When a resident makes a reservations, the notification is also sent to the listening test app through MQTT. 
-  - The test app can also update machine statuses by sending a message to the server which is then displayed on the UI.
-- Submission, ranking, and handling of maintenance requests and notices (PARTIAL FINISHED):
-  - Submission, ranking, and status progression of maintenance requests were implemented.
-  - We decided to drop notices since they added very little to the user experience and also due to time.
+```bash
+# from the repo root
+cp .env.example .env
+# fill in the required environment values
 
-## Final Release:
+docker compose up --build
+```
 
-#### Summary of M5 Highlights: 
-| Feature Name & Scope                          | Feature Type    | Status as of M5 | Description & Technical Implementation                                                                                                                                                        |
-|:----------------------------------------------|:----------------|:----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Role-Based Authentication Gateway**         | Standard        | Implemented     | Supports form submission. Currently accepts valid email/password structures and routes user sessions to respective Resident/Manager dashboards. Passwords are encrypted on transit/storage.   |
-| **Shared Facilities Scheduling System**       | **Non-Trivial** | **Dropped**     | Core business logic layer checks for time-slot conflicts. Handles "Reserve" actions for available devices (e.g., Laundry Machines) and enforces state locks during active bookings.           |
-| **Notice / Announcement Management**          | Standard        | **Dropped**     | Building managers can create, edit, and publish multi-line notices. Enforces "Unread" tracking on the database level for residents until opened.                                              |
-| **Apartment Identity Verification**           | **Non-Trivial** | **Dropped**     | Implements the unique room validation mechanic. Apartment profiles are strictly leveraged as a backend verification gate rather than a public directory page to protect privacy.              |
-| **Admin-restricted Views and Functions**      | **Non-Trivial** | Implemented     | Protected admin routes and manager-facing pages are present for dashboard, facilities, and maintenance requests. Admin accounts are provisioned through authenticated admin/auth flows.       |
-| **Resident Role Dashboard**                   | Standard        | Implemented     | Resident-facing pages for bookings, maintenance requests, notices, credits, settings, and help are available.                                                                                 |
-| **Role-Based Authentication / Authorization** | Standard        | Implemented     | Login, admin signup, protected routes, and role validation are wired through JWT-based auth middleware and page route guards.                                                                 |
-| **Facility & Booking Management**             | Standard        | Implemented     | Resident booking flows and admin facility views exist, residents can book time slots, admins can see facility slot usage stats and view all reservations made by upcoming times / service id. |
-| **Maintenance Request Triage**                | Standard        | Implemented     | Residents can submit requests and managers can review/update request status.                                                                                                                  |
-| **Backend / Docker Stability**                | Standard        | Implemented     | Docker Compose runs MongoDB, backend, frontend, and MQTT infrastructure reliably for local development.                                                                                       |
-| **Live Activity Data of Facilities**          | Standard        | **Dropped**     | Residents can view live activity data of facilities on the Facilities Booking Page                                                                                                            |
-
-### Admin Dashboard UI updates
-
-- **Left-aligned metric cards:** Metric and priority cards on the admin dashboard are left-aligned for easier scanning and improved readability.
-- **Consistent status colors:** Status visuals now follow a consistent color scheme — light red for urgent items, yellow for pending/open items, and green for resolved/completed items.
-- **Stronger emphasis & badges:** Important actionable items (pending/urgent) have stronger visual emphasis using colored card backgrounds, icons, and status badges.
-- **Unified maintenance status labels:** Admin and resident maintenance requests now use the same simplified status set across views: `New`, `In Progress`, and `Completed`.
-- **Admin status flow simplified:** Admin request controls now advance/rewind through only `New`, `In Progress`, and `Completed`, instead of the previous multiple intermediate states.
-- **Files updated:** See frontend changes in [frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx](frontend/src/pages/common/buildingManager/AdminDashboardPage.tsx#L1), [frontend/src/pages/common/buildingManager/AdminMaintenancePage.tsx](frontend/src/pages/common/buildingManager/AdminMaintenancePage.tsx#L1), [frontend/src/context/api/apiServices/maintenanceRequestApi.ts](frontend/src/context/api/apiServices/maintenanceRequestApi.ts#L1), and [frontend/src/App.css](frontend/src/App.css#L1).
-- **How to view:** Start the frontend and open the admin dashboard at `/admin/dashboard` (e.g., http://localhost:5173/admin/dashboard) to review the updated UI.
-
-
-- The updated auth behavior was verified through live backend requests for invalid signup and mismatched login attempts.
-- The frontend build was also verified successfully after the form and error-handling updates.
-
-# M2, M3, M4 Documentation: 
-
-## Milestone 2 Functionality
-
-This milestone delivers the initial functional prototype (MVP) of SmartAPT, bridging user management, shared facility scheduling, and maintenance coordination. Below is the explicit breakdown of functionality state and classification as required by M2 criteria:
-
-### Feature Breakdown & Implementation Status
-
-| Feature Name & Scope                    | Feature Type | Status in M2 | Description & Technical Implementation |
-|:----------------------------------------| :--- | :--- | :--- |
-| **Dockerized Stack Orchestration**      | Standard | **Fully Functional** | Frontend (Vite/Nginx), Backend (Node.js/Express), and Database (MongoDB) are containerized and fully networked via Docker Compose. |
-| **Role-Based Authentication Gateway**   | Standard | **Partially Functional** | Supports form submission. Currently accepts valid email/password structures and routes user sessions to respective Resident/Manager dashboards. Passwords are encrypted on transit/storage. |
-| **Shared Facilities Scheduling System** | **Non-Trivial** | **Prototype / Mocked UI** | Core business logic layer checks for time-slot conflicts. Handles "Reserve" actions for available devices (e.g., Laundry Machines) and enforces state locks during active bookings. |
-| **Maintenance Request Pipeline**        | Standard | **Partially Functional** | Residents can populate forms with categories (Plumbing, HVAC, Electrical) and set "Emergency" priorities. Building Managers can view the aggregated list with unit numbers and mutate ticket statuses. |
-| **Broadcast Notice Board**              | Standard | **Partially Functional** | Building managers can create, edit, and publish multi-line notices. Enforces "Unread" tracking on the database level for residents until opened. |
-| **Apartment Identity Verification**     | **Non-Trivial** | **Backend Logic Active** | Implements the unique room validation mechanic. Apartment profiles are strictly leveraged as a backend verification gate rather than a public directory page to protect privacy. |
-
-
----
-
-### Feature Usage Instructions (How to Use & Demo)
-
-To evaluate the prototype operations post-Docker startup, follow these interface pathways:
-
-#### 1. Authentication & Role Navigation
-- Navigate to `http://localhost:5173`. 
-- Enter any standard email format (e.g., `resident@smartapt.com` or `manager@smartapt.com`) and password.
-- **Resident Landing:** Redirects to the resident dashboard containing the facility scheduling grid, unread announcement list, and personal maintenance log.
-- **Building Manager Landing:** Grants administrative access to device configurations and incoming maintenance ticket triage panels.
-
-#### 2. Managing Shared Facilities (Admin & Resident Flow)
-- **As Admin:** Access the "Facilities" tab. Click **"Add Device"** to append new infrastructure (e.g., "Dryer B") or toggle the **"Available"** checkbox via **"Edit Device"** to manually take a broken machine offline.
-- **As Resident:** Access the "Facilities" tab to view real-time availability. If a device is unreserved, click **"Reserve"** and specify the desired date/time block.
-
-#### 3. Maintenance Reporting & Triage
-- **As Resident:** Click **"Create Request"**, select a category from the dropdown, specify your room location/issue description, and hit confirm to dispatch.
-- **As Admin:** Open the main "Maintenance" view to audit incoming requests. Select an entry and click **"Edit"** to escalate the status lifecycle from `New` $\rightarrow$ `Contractor Requested` $\rightarrow$ `Resolved`.
-
-#### 4. Publishing Announcements
-- **As Admin:** Under the "Notices" page, use **"Create Notice"** to broadcast building-wide updates. Use **"Edit"** to modify existing announcements, which automatically forces a database reset to mark the notice as "Unread" for all resident feeds.
-
----
-
-## Milestone 3 Functionality
-
-This milestone documents the near-submittable Milestone 3 branch state. It builds on the Milestone 2 prototype by adding a building manager admin console, improved role-based auth, and richer manager/resident workflows.
-
-### Feature Breakdown & Implementation Status
-
-| Feature Name & Scope | Feature Type | Status in M3 | Description |
-| :--- | :--- | :--- | :--- |
-| **Admin Management Console** | Non-Trivial | **Partially implemented** | Protected admin routes and manager-facing pages are present for dashboard, facilities, maintenance, notices, settings, and help. Access codes and resident-management pages have been removed from the admin interface, and admin accounts are provisioned through authenticated admin/auth flows. |
-| **Resident Role Dashboard** | Standard | **Implemented** | Resident-facing pages for bookings, maintenance requests, notices, credits, settings, and help are available. |
-| **Role-Based Authentication / Authorization** | Standard | **Implemented** | Login, admin signup, protected routes, and role validation are wired through JWT-based auth middleware. |
-| **Facility & Booking Management** | Standard | **Partially implemented** | Resident booking flows and admin facility views exist, but some interaction details and management workflows are still being refined. |
-| **Maintenance Request Triage** | Standard | **Implemented** | Residents can submit requests and managers can review/update request status. |
-| **Notice / Announcement Management** | Standard | **Partially implemented** | Manager notice pages and resident notice views exist; unread/read behavior should be verified manually during review. |
-| **Backend / Docker Stability** | Standard | **Implemented** | Docker Compose runs MongoDB, backend, frontend, and MQTT infrastructure reliably for local development. |
-
-## Resident-facing changes in Milestone3 branch
-
-Compared with the Milestone 2 branch, the current branch is less demo-like and more data-driven for resident workflows. The main differences are:
-- Resident login and route handling now follow the same role-aware flow as the rest of the app, rather than relying on a single generic landing page.
-- Facility booking, maintenance submission, and notice viewing are now backed by the shared backend and sample data, so they can be exercised in a more realistic local flow.
-- The credits page now exposes balance and history information in a more structured way, although the checkout experience is still a mock/demo flow rather than a real payment integration.
-- The resident settings area now includes account/profile and notification-related sections, but the notification controls remain visual placeholders rather than persisted preferences.
-
-### Non-admin feature status and limitations 
-
-The following parts are visible in the frontend but should not be treated as fully implemented product features yet:
-- Notification center and push notification behavior: the UI can show notification-related elements, but there is no real inbox, delivery pipeline, or persistent notification state.
-- Notice read/unread flow: the resident notices page is available, but the read-state behaviour and follow-up alerts are still limited and should be tested as a partial workflow rather than a complete notification system.
-- Credit checkout and payment processing: the form is present and can be exercised locally, but it is still a mock/demo flow and should not be validated as a live payment integration.
-- Some dashboard cards, help text, and settings panels are still static or demo-oriented and should be considered UI placeholders until they are backed by real data or persistence.
-
-### How to verify Milestone 3 functionality
-
-#### Residents:
-1. Start the stack with `docker compose up --build` and open `http://localhost:5173`.
-2. Create an account by clicking on the sign-up link for residents located below the login-form. 
-3. Enter appropriate values in the fields and click the sign-up button.
-4. To log in back to your newly create account, use the same username, email, and password that you chose to create the account. 
-5. After signing up for the first time or after logging back in, verify the resident dashboard pages for bookings, maintenance, notices, credits, and account settings. Keep in mind that notification-related widgets and any static help/demo content are not yet full features.
-
-#### Admin:
-1. Use an existing admin account from seeded sample data or create an admin account through the auth backend; public admin signup is not available.
-2. Log in through the normal login page and verify that the admin is routed to /admin/dashboard after authentication.
-3. Verify the admin dashboard, facilities, maintenance, notices, and settings pages. The admin interface no longer exposes access codes or resident-management pages.
-4. After logging in as an admin, confirm that admin-only navigation and status update workflows function correctly.
-
-5. Verify that notice visibility, request status updates, and resident/admin navigation work as expected in the running app.
-
-6. To confirm that role authorization and authentication are working as intended, you can try copying one of the page URIs specific to the admin interface. Then log out and log back in as a resident and paste the URI into the address bar.
-
-## Milestone 4 Functionality
-
-This milestone focuses on polishing the existing resident experience and tightening authentication reliability. Compared with the Milestone 3 state, the work prioritizes correctness and product clarity rather than introducing a large number of new feature areas.
-
-### Scope changes
-
-- No major new product domain was added in this milestone; the effort was concentrated on refining features already present in the Milestone 3 branch.
-- The resident-facing experience was simplified by removing static UI elements that were not backed by a fully implemented workflow.
-- Notices are being removed as we do not plan to implement them due to them adding little to the end user experience and due to lack of time.
-- Rooms and residents are being removed as they serve no purpose in the current state of the application.
-- The admin interface no longer exposes resident pages or the create-resident function; those features were deleted from the admin UI.
-- The admin facilities page has been updated and remains part of the admin dashboard experience.
-
-### New functionality and improvements
-
-- Resident view cleanup: the resident dashboard and navigation now avoid surfacing notices and other static/demo components that were not fully implemented, making the UI more aligned with the current backend capabilities.
-- Admin login flow relocate: admin authentication now routes admins directly into the admin dashboard rather than using a separate admin login page.
-- Admin account creation control: admin accounts can only be created by an existing admin or through the auth backend, with no public admin signup flow.
-- Stronger authentication validation: signup now rejects invalid email formats, and login requires the provided username and email to belong to the same account before access is granted.
-- Account identity enforcement: user registration now enforces a unique email address per account rather than relying on username uniqueness alone, which improves account creation reliability and prevents duplicate accounts from being created with the same email.
-- Clearer auth feedback: backend authentication responses now return specific validation messages so the frontend can show more precise login/signup error feedback, including helpful guidance for malformed email addresses.
-- Middleware-based auth refactor: role-based authorization checks were moved into the middleware layer so the auth routes follow the existing middleware pattern more cleanly.
-- Frontend auth form improvements: the login and signup forms were updated to surface backend validation errors directly in the UI and to present consistent, user-friendly messages for invalid email input.
-- Admin account creation refactor: admin account creation has been moved to admin-only pages and protected auth flows to prevent unauthorized admin onboarding.
-- IoT reservation messages: an IoT Response message has been added when a service is booked.
-- Reservation slot autogeneration: reservation slots are autogenerated a set number of days ahead at a set time every day.
-- Reservation slot removal: old reservation slots are cleaned up at the same time.
-- Reservation slot sorting: reservation slots are now filtered based on being in the past, and are ordered by time and date in the UI.
-- Authentication refresh tokens: refresh tokens have been added to the authentication token system.
-- Datatype refactor: backend datatypes have been streamlined to prevent type mismatch.
-
-## Standard Features (Design Alignment)
-
-In alignment with the Milestone 1 design and the current M3 state, the submission includes the following structural deliverables:
-* **Decoupled Service Architecture:** Front-end pages and back-end routers are separated into distinct application layers.
-* **Persistent Document Storage:** MongoDB-backed collections store bookings, notices, maintenance requests, and user-related data for local development and testing.
-* **Environment Sandboxing:** `.env.example` is available as a template, while the real environment file stays private and out of source control.
-* **Role-Based Access Control:** Resident and admin users are routed through protected pages and role-aware middleware.
-* **Payment / Credit Flow:** The current implementation includes a mock-style credits flow for demo purposes; it does not yet integrate a production payment provider.
-
-## Test Plan
-
-Detailed test instructions are available in `doc/test-plan.md`.
-
-## XSS Report
-
-XSS Security Assessment - conduct an XSS scan of your application and report the results, prioritizing and addressing any vulnerabilities.
-
-### List of Tests For Each Page:
-- #### Login:
-    - Test 1: No-SQL injection:
-      - Setup:
-        - Create an account through the sign-up link
-        - Fill out any required fields.
-        - Record username, email and password, used to create the account.
-      - Execution:
-        - Input the username and email used to create the account.
-        - In the password field, input: “${ne: null}”
-      - Expected Result:
-        - The login request should be rejected and the client unable to gain access to the dashboard.
-- #### Sign Up as Resident:
-    - Test 1: Script Injection:
-      - Setup:
-        - Navigate to the sign-up link.
-        - Fill out all required fields, but leave the name field blank.
-        - In the name field, input “<script>alert(“1”)</script>.
-      - Execution:
-        - Submit the information in the signup form
-      - Expected Result:
-        - The user will successfully sign up.
-        - No alert dialog message with “1” should appear.
-- #### Maintenance Request Page
-  - Test 1: Script Injection:
-    - Setup:
-      - Create an account or login using the instructions in the previous test above.
-      - Navigate to the Maintenance Requests page.
-      - Fill out the fields using the drop-down options.
-      - Input “<script>alert("5")</script>” in any text input field
-    - Execution:
-      - Submit the information in the form
-    - Expected Result:
-      - The request will successfully be submitted.
-      - No alert dialog message with “5” should appear.
-- #### Credits Amount Page
-  - Test 1: Script Injection:
-    - Setup:
-      - Create an account or login using the instructions in the previous test above.
-      - Navigate to Credits page.
-      - Input a number in the “amount” field.
-      - Input “<script>alert("6")</script>” in any text input field
-    - Execution:
-      - Submit the information in the form
-    - Expected Result:
-      - The balance will be successfully updated by whatever amount the client chose.
-      - No alert dialog message with “6” should appear.
-      
-#### Alerts (To be resolved):
-- CSP Header not set.
-- 8-medium risks identified by ZAP.
-- 7-low risks identified by ZAP.
-
-
-### What the TA should verify
-
-- Docker deployment works from the `frontend` folder.
-- Frontend is accessible at `http://localhost:5173`.
-- Backend service starts successfully on `http://localhost:3000`.
-- `.env` is not stored in GitHub and `.env.example` is present.
-
-## Bug Tracking
-
-Bugs are tracked as GitHub Issues in this repository. The issue tracker contains the date, creator, expected behavior, actual behavior, reproduction steps, and status.
+Then open http://localhost:5173 to begin using the app.
