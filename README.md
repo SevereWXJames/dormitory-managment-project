@@ -94,7 +94,13 @@ Access to admin-only routes is protected and intended for building-manager workf
 - Backend tests are under `backend/test/`
 - Additional project documentation is located in `doc/`
 - Test and validation notes can be found in `doc/test-plan.md`
-- Design-stage documentation and milestone-by-milestone design context are preserved in the branch README history for Milestone 1 through Milestone 5.
+- Design-stage documentation and milestone-by-milestone design context are preserved in the branch README history for
+- [Milestone 1 Branch](../../tree/Milestone1) 
+- [Milestone 2 Branch](../../tree/Milestone2)
+- [Milestone 3 Branch](../../tree/Milestone3)
+- [Milestone 4 Branch](../../tree/Milestone4)
+- [Milestone 5 Branch](../../tree/Milestone5)
+
 
 ## Development Notes
 
