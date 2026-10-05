@@ -1,0 +1,19 @@
+{
+  "rooms": [
+    {
+      "_id": "room0",
+      "roomName": "test-unit-1",
+      "verificationCode": "abcd"
+    },
+    {
+      "_id": "room1",
+      "roomName": "test-unit-2",
+      "verificationCode": "abcd"
+    },
+    {
+      "_id": "room2",
+      "roomName": "test-unit-3",
+      "verificationCode": "abcd"
+    }
+  ]
+}

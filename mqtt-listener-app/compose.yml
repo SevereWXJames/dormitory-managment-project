@@ -1,0 +1,9 @@
+services:
+  mqtt-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      IS_DOCKER: "true"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -1,0 +1,40 @@
+{
+  "maintenanceRequests": [
+    {
+      "createdBy": "507f191e810c19729de860ea",
+      "title": "title1",
+      "description": "description description description",
+      "type": "plumbing",
+      "status": "new",
+      "priority": "prio2",
+      "location": ""
+    },
+    {
+      "createdBy": "507f191e810c19729de860ea",
+      "title": "title2",
+      "description": "description description description",
+      "type": "electrical",
+      "status": "inProgress",
+      "priority": "prio1",
+      "location": "Bedroom"
+    },
+    {
+      "createdBy": "507f191e810c19729de860eb",
+      "title": "title3",
+      "description": "description description description",
+      "type": "misc",
+      "status": "completed",
+      "priority": "prio0",
+      "location": "Kitchen"
+    },
+    {
+      "createdBy": "507f191e810c19729de860ea",
+      "title": "hvac - thermostat broken",
+      "description": "Thermostat does not turn on heater",
+      "type": "hvac",
+      "status": "inProgress",
+      "priority": "prio0",
+      "location": ""
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    profiles:
+      - production
+    environment:
+      - TZ=America/Vancouver
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      #dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - BACKEND_PORT=3000
+      - TZ=America/Vancouver
+    profiles:
+      - production
+
+  backend_test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile_test
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    profiles:
+      - test
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/logs:/mosquitto/log
+    ports:
+      - "1883:1883"
+volumes:
+  mongo-data: {}

@@ -1,0 +1,22 @@
+{
+  "transactions": [
+    {
+      "userId": "507f191e810c19729de860ea",
+      "description": "Added credits",
+      "transaction": 100,
+      "date": "2026-08-03T10:30:00.000Z"
+    },
+    {
+      "userId": "507f191e810c19729de860eb",
+      "description": "Added credits",
+      "transaction": 200,
+      "date": "2026-08-03T10:30:00.000Z"
+    },
+    {
+      "userId": "507f191e810c19729de860ec",
+      "description": "Added credits",
+      "transaction": 300,
+      "date": "2026-08-03T10:30:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "maintenanceRequestStatuses": [
+    {
+      "_id": "new",
+      "text": "New",
+      "order": 1
+    },
+    {
+      "_id": "investigating",
+      "text": "Investigating",
+      "order": 2
+    },
+    {
+      "_id": "working",
+      "text": "Working",
+      "order": 3
+    },
+    {
+      "_id": "done",
+      "text": "Done",
+      "order": 4
+    },
+    {
+      "_id": "inProgress",
+      "text": "In Progress",
+      "order": 2.5
+    },
+    {
+      "_id": "completed",
+      "text": "Completed",
+      "order": 4.5
+    }
+  ]
+}

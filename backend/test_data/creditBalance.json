@@ -1,0 +1,16 @@
+{
+  "creditBalances": [
+    {
+      "userId": "507f191e810c19729de860ea",
+      "balanceCents": 100
+    },
+    {
+      "userId": "507f191e810c19729de860eb",
+      "balanceCents": 10000
+    },
+    {
+      "userId": "507f191e810c19729de860ec",
+      "balanceCents": 10000
+    }
+  ]
+}
